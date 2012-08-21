@@ -1,3 +1,5 @@
+#ifndef QHULL_LIST_H
+#define QHULL_LIST_H
 
 typedef long int entry_t;
 typedef long int index_t;
@@ -36,3 +38,4 @@ list_t findValueListInList(const list_t value_list, const list_t list);
 entry_t findValueInList(const entry_t entry, const list_t list);
 void printList(const list_t list);
 
+#endif /* QHULL_LIST_H */

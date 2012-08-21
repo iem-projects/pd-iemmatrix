@@ -70,6 +70,7 @@ void iemtx_pow_setup(void); /* mtx_pow.c */
 void iemtx_powtodb_setup(void); /* mtx_powtodb.c */
 void iemtx_print_setup(void); /* mtx_print.c */
 void iemtx_prod_setup(void); /* mtx_prod.c */
+void iemtx_qhull_setup(void); /* mtx_qhull.c */
 void iemtx_qr_setup(void); /* mtx_qr.c */
 void iemtx_rand_setup(void); /* mtx_rand.c */
 void iemtx_repmat_setup(void); /* mtx_repmat.c */

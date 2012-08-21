@@ -72,6 +72,7 @@ void iemmatrix_sources_setup(void)
 	iemtx_powtodb_setup(); /* mtx_powtodb.c */
 	iemtx_print_setup(); /* mtx_print.c */
 	iemtx_prod_setup(); /* mtx_prod.c */
+	iemtx_qhull_setup(); /* mtx_qhull.c */
 	iemtx_qr_setup(); /* mtx_qr.c */
 	iemtx_rand_setup(); /* mtx_rand.c */
 	iemtx_repmat_setup(); /* mtx_repmat.c */

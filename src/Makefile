@@ -21,7 +21,8 @@ TESTDIR=../tests
 # ????: 
 # ALIAS: alias-objects, MUST NOT be linked statically into iemmatrix.pd_linux
 
-CORESRC=$(LIBRARY_NAME)_binops.c $(LIBRARY_NAME)_utility.c
+CORESRC=$(LIBRARY_NAME)_binops.c $(LIBRARY_NAME)_utility.c \
+	mtx_qhull/list.c mtx_qhull/vectors.c mtx_qhull/zhull.c
 LHELPERSRC=$(LIBRARY_NAME).c $(LIBRARY_NAME)_sources.c
 PDOBJECTSRC=$(sort $(filter-out $(LHELPERSRC) $(CORESRC), $(filter %.c, $(wildcard *.c))))
 ALIASSRC=$(subst ../alias/,,$(sort $(filter %.c, $(wildcard ../alias/*.c))))
@@ -82,7 +83,7 @@ library: $(LIBRARY_NAME)
 
 
 clean:
-	-rm -f *.$(EXT) *.o 
+	-rm -f *.$(EXT) *.o */*.o
 
 METAFILE = ../iemmatrix-meta.pd
 

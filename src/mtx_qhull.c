@@ -18,9 +18,6 @@
 #include "mtx_qhull/list.h"
 #include "mtx_qhull/vectors.h"
 #include "mtx_qhull/zhull.h"
-#include "mtx_qhull/list.c"
-#include "mtx_qhull/vectors.c"
-#include "mtx_qhull/zhull.c"
 
 static t_class *mtx_qhull_class;
 
@@ -112,6 +109,8 @@ static void mTXQhullMatrix(MTXQhull *xo, t_symbol *s,
                 SETFLOAT(xo->list,(float)xo->hull_size);
                 SETFLOAT(xo->list+1,(float)3);
                 for (i=0; i<xo->hull_size; i++) {
+                  t_atom*ap=xo->list+2+3*i;
+                  float f=(float)getEntry(getFacetByIndex(xo->zh->facets,i)->corners,0)+1;
                     SETFLOAT(xo->list+2+3*i, (float)getEntry(
                                 getFacetByIndex(xo->zh->facets,i)->corners,0)+1);
                     SETFLOAT(xo->list+3+3*i, (float)getEntry(

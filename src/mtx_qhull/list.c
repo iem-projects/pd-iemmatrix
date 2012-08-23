@@ -1,4 +1,8 @@
 
+#include "list.h"
+#include <stdlib.h>
+#include <stdio.h>
+
 // memory things:
 list_t emptyList(void) {
     list_t generated_list;

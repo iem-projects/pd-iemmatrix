@@ -1,3 +1,8 @@
+#include "vectors.h"
+#include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
+
 
 vector_t initVector (float x, float y, float z) {
     vector_t vec={x, y, z};

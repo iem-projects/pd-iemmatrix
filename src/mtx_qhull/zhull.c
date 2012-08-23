@@ -1,5 +1,11 @@
+#include "zhull.h"
+
+#include <stdlib.h>
+#include <stdio.h>
+
 #define TOL 1e-7
 #define MAXIT 1000000
+
 
 
 vector_t averageListedPoints(const points_t points, const list_t list) {

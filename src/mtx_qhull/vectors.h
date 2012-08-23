@@ -1,3 +1,9 @@
+#ifndef QHULL_VECTORS_H
+#define QHULL_VECTORS_H
+
+#include <sys/types.h>
+#include "list.h"
+
 typedef struct vec_ {
     float c[3];
 } vector_t;
@@ -38,3 +44,5 @@ plane_t planeFromListedPoints(points_t points, list_t list);
 
 void printPlane(plane_t p);
 void printVector(vector_t v);
+
+#endif /* QHULL_VECTORS_H */

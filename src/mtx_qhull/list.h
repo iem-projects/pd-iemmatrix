@@ -1,6 +1,8 @@
 #ifndef QHULL_LIST_H
 #define QHULL_LIST_H
 
+#include <sys/types.h>
+
 typedef long int entry_t;
 typedef long int index_t;
 

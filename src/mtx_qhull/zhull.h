@@ -1,3 +1,9 @@
+#ifndef QHULL_ZHULL_H
+#define QHULL_ZHULL_H
+
+#include <sys/types.h>
+#include "list.h"
+#include "vectors.h"
 
 typedef struct facet_ {
     plane_t plane;
@@ -23,3 +29,7 @@ zhull_t zhullInitPoints(const float *x, const float *y,
         const float *z, const size_t num_points);
 void printFacet(const zhull_t * const zh, 
       const facet_t * const f);
+
+facet_t *getFacetByIndex(const list_t facets, const index_t index);
+
+#endif /* QHULL_ZHULL_H */

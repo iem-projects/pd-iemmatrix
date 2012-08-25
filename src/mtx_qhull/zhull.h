@@ -1,9 +1,16 @@
 #ifndef QHULL_ZHULL_H
 #define QHULL_ZHULL_H
 
-#include <sys/types.h>
-#include "list.h"
 #include "vectors.h"
+#include "list.h"
+#include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
+#define TOL_OUTSIDEPOINT 1e-7
+#define TOL_INSIDEPOINT  -1e-7
+#define TOL_DEGENERATE  1e-6
+#define MAXIT 1000000
+
 
 typedef struct facet_ {
     plane_t plane;
@@ -23,13 +30,13 @@ typedef struct zhull_ {
 } zhull_t;
 
 void calculateZHull(zhull_t *zh,int maxit);
+index_t getTriangleCorner(const zhull_t * const zh,
+        const index_t triangle_idx,
+        const index_t corner_idx);
 void printZhull(const zhull_t * const  zh);
 void freeZhull(zhull_t *zh);
 zhull_t zhullInitPoints(const float *x, const float *y, 
         const float *z, const size_t num_points);
 void printFacet(const zhull_t * const zh, 
       const facet_t * const f);
-
-facet_t *getFacetByIndex(const list_t facets, const index_t index);
-
 #endif /* QHULL_ZHULL_H */

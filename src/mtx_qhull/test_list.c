@@ -6,7 +6,7 @@ int main(char **argv, int argc) {
    list_t l1=emptyList();
    list_t l2=emptyList();
    list_t l3=emptyList();
-   int x[]={0, 2, 4, 6};
+   entry_t x[]={0, 2, 4, 6};
 
    printf("empty list:\n");
    printList(l1);

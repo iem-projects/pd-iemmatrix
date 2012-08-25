@@ -1,15 +1,17 @@
 #ifndef QHULL_LIST_H
 #define QHULL_LIST_H
+#include <stdio.h>
+#include <stdlib.h>
 
 #include <sys/types.h>
 
 typedef long int entry_t;
 typedef long int index_t;
-
 typedef struct list_ {
     entry_t *entries;
     size_t length;
 } list_t;
+
 
 // memory things:
 list_t emptyList(void);
@@ -38,6 +40,7 @@ int inList(const entry_t entry, const list_t list);
 int notInList(const entry_t entry, const list_t list);
 list_t findValueListInList(const list_t value_list, const list_t list);
 entry_t findValueInList(const entry_t entry, const list_t list);
+void uniquefyListEntries(list_t *list);
 void printList(const list_t list);
 
 #endif /* QHULL_LIST_H */

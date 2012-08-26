@@ -65,18 +65,23 @@ facet_t *getFacetByPointer(const entry_t ptr) {
 }
 
 void getHorizonEdgeByIndex(index_t *corners,
-        const list_t horizon_fcts, const list_t horizon_fcts_edges, 
-        const index_t index) {
+        const list_t horizon_fcts, const list_t horizon_fcts_edges,
+        const list_t other_horizon_edges, const index_t index) {
     index_t i=(index+getLength(horizon_fcts_edges))
         %getLength(horizon_fcts_edges);
     facet_t *f = getFacetByIndex(horizon_fcts,i);
     index_t j=getEntry(horizon_fcts_edges,i);
 
-    corners[0]=getEntry(f->corners, j);
-    if (getLength(f->corners)>0) 
-        corners[1]=getEntry(f->corners, (j+1) % getLength(f->corners));
-    else 
-        corners[1]=corners[0];
+    if (f==0) {
+        corners[0]=getEntry(horizon_fcts_edges,i);
+        corners[1]=getEntry(other_horizon_edges,i);
+    } else {
+        corners[0]=getEntry(f->corners, j);
+        if (getLength(f->corners)>0) 
+            corners[1]=getEntry(f->corners, (j+1) % getLength(f->corners));
+        else 
+            corners[1]=corners[0];
+    }
 }
 
 
@@ -199,7 +204,8 @@ void dividePointsBetweenNewFacets (
             if (getLength(point_inside_facet_list)>0) {
                 for (j=0; j<getLength(point_inside_facet_list); j++) {
                     f=getFacetByIndex(point_inside_facet_list,j);
-                    appendToList(&(f->insideset),getEntry(assoc,i));
+                    if (notInList(getEntry(assoc,i),f->insideset))
+                        appendToList(&(f->insideset),getEntry(assoc,i));
                 }
                 appendListToList(&(zh->facets_with_insidepoints),point_inside_facet_list);
                 uniquefyListEntries(&(zh->facets_with_insidepoints));
@@ -262,13 +268,20 @@ void zhullInitialFacets(zhull_t *zh) {
 }
 
 void printHorizonEdges(list_t *horizon_fcts, 
-        list_t *horizon_fcts_edges) {
+        list_t *horizon_fcts_edges, 
+        list_t *other_horizon_edges) {
     index_t i;
     index_t c1[2];
+    list_t list_for_printing=emptyList();
 
-    printf("horizon edges: ");
+    printf("horizon : ");
+    printList(*horizon_fcts);
+    printList(*horizon_fcts_edges);
+    printList(*other_horizon_edges);
+    printf("\n horizon edges: ");
     for (i=0; i<getLength(*horizon_fcts_edges); i++) {
-        getHorizonEdgeByIndex(c1, *horizon_fcts, *horizon_fcts_edges, i);
+        getHorizonEdgeByIndex(c1, *horizon_fcts, *horizon_fcts_edges,
+               *other_horizon_edges, i);
         printf(", %d->%d",c1[0],c1[1]);
     }
     printf("\n");
@@ -276,7 +289,8 @@ void printHorizonEdges(list_t *horizon_fcts,
 
 
 void sortHorizonEdges(list_t *horizon_fcts, 
-        list_t *horizon_fcts_edges) {
+        list_t *horizon_fcts_edges, 
+        list_t *other_horizon_edges) {
     index_t i,j;
     facet_t *fi;
     index_t ei;
@@ -286,20 +300,44 @@ void sortHorizonEdges(list_t *horizon_fcts,
     if (getLength(*horizon_fcts_edges)==0)
         return;
     for (i=0; i<getLength(*horizon_fcts_edges)-1; i++) {
-        getHorizonEdgeByIndex(c1, *horizon_fcts, *horizon_fcts_edges, i);
+        getHorizonEdgeByIndex(c1, *horizon_fcts, *horizon_fcts_edges,
+               *other_horizon_edges, i);
         for (j=i+1; j<getLength(*horizon_fcts_edges); j++) {
-            getHorizonEdgeByIndex(c2, *horizon_fcts, *horizon_fcts_edges, j);
-            if (c1[1]==c2[0]) { //found edge continuation: swap positions
+            getHorizonEdgeByIndex(c2, *horizon_fcts, *horizon_fcts_edges, 
+                    *other_horizon_edges, j);
+            if ((c1[1]==c2[0])&&(c1[0]!=c2[1])) { 
+                //found edge continuation w/o u-turn: swap positions
                 ei=getEntry(*horizon_fcts,j);
                 setEntry(*horizon_fcts,j,getEntry(*horizon_fcts,i+1));
                 setEntry(*horizon_fcts,i+1,ei);
                 ei=getEntry(*horizon_fcts_edges,j);
                 setEntry(*horizon_fcts_edges,j,getEntry(*horizon_fcts_edges,i+1));
                 setEntry(*horizon_fcts_edges,i+1,ei);
+                ei=getEntry(*other_horizon_edges,j);
+                setEntry(*other_horizon_edges,j,getEntry(*other_horizon_edges,i+1));
+                setEntry(*other_horizon_edges,i+1,ei);
                 break;
             }
-            // HIER MUSS MEHR LOGIK HINEIN: HORIZONT KANN
-            // FEHLER BEINHALTEN
+        }
+        if (j==getLength(*horizon_fcts_edges)) {
+            // edge continuation requires u-turn 
+            for (j=i+1; j<getLength(*horizon_fcts_edges); j++) {
+                getHorizonEdgeByIndex(c2, *horizon_fcts, *horizon_fcts_edges, 
+                        *other_horizon_edges, j);
+                if (c1[1]==c2[0]) { 
+                    //found edge continuation w/o return: swap positions
+                    ei=getEntry(*horizon_fcts,j);
+                    setEntry(*horizon_fcts,j,getEntry(*horizon_fcts,i+1));
+                    setEntry(*horizon_fcts,i+1,ei);
+                    ei=getEntry(*horizon_fcts_edges,j);
+                    setEntry(*horizon_fcts_edges,j,getEntry(*horizon_fcts_edges,i+1));
+                    setEntry(*horizon_fcts_edges,i+1,ei);
+                    ei=getEntry(*other_horizon_edges,j);
+                    setEntry(*other_horizon_edges,j,getEntry(*other_horizon_edges,i+1));
+                    setEntry(*other_horizon_edges,i+1,ei);
+                    break;
+                }
+            }
         }
     }
 }
@@ -309,84 +347,126 @@ void removeVisibleFacetsGetHorizonAndAvailablePoints(
         facet_t *f,
         list_t *horizon_fcts, 
         list_t *horizon_fcts_edges,
+        list_t *other_horizon_edges,
         list_t *avail_points) {
 
-    index_t i,j,k;
+    index_t j,k;
     facet_t *n;
     float d;
     list_t visible_fcts = emptyList();
     list_t fcts_to_visit = emptyList();
     list_t fcts_visited = emptyList();
+//    list_t list_for_printing = emptyList();
 
     *avail_points = emptyList();
     *horizon_fcts = emptyList();
     *horizon_fcts_edges = emptyList();
+    *other_horizon_edges = emptyList();
 
-    i=0;
+    d=distancePointPlane(getPoint(zh->pts,point_index),f->plane);
+//    printf("distance %5.2f\n",d);
     appendToList(&fcts_to_visit,(entry_t)f);
-    if (getLength(fcts_to_visit)==0)
-        return;
-    do {
-        f=getFacetByIndex(fcts_to_visit,0);
-        d=distancePointPlane(getPoint(zh->pts,point_index),f->plane);
-        if (d>=TOL_OUTSIDEPOINT) { // visible facet 
+    if (d>=TOL_OUTSIDEPOINT) { 
+        while (getLength(fcts_to_visit)>0) { 
+            // visiting only visible facets
+            // horizon: edges to invisible or coincident neighbors
+            f=getFacetByIndex(fcts_to_visit,0);
             appendToList(&visible_fcts,(entry_t)f);
             appendListToList(avail_points, f->outsideset);
             for (j=0; j<getLength(f->neighbors); j++) {
                 n=getFacetByIndex(f->neighbors,j);
                 d=distancePointPlane(getPoint(zh->pts,point_index),n->plane);
-                if (d>=TOL_INSIDEPOINT)
+                if (d>=TOL_OUTSIDEPOINT) {  // visit visible neighbors
                     appendToList(&fcts_to_visit,(entry_t)n);
-                else {
-                    // invisible neighbor: horizon edge found
+                }
+                else { // horizon: coincident or invisible neighbors 
                     k=getEntry(f->corners,(j+1)%getLength(f->corners));
                     k=findValueInList(k,n->corners);
                     appendToList(horizon_fcts,(entry_t)n);
                     appendToList(horizon_fcts_edges,k);
-                 }
+                    appendToList(other_horizon_edges,getNumPoints(zh->pts));
+                }
             }
-        } 
-        else if (d>=TOL_INSIDEPOINT) { // coincident facet
-            for (j=0; j<getLength(f->neighbors); j++) {
-                // is point outside polygon? searching edges.
-                d=distancePointLineOnPlane(getPoint(zh->pts,point_index),
-                        getLine(zh,f,j),f->plane);
-                if (d>=TOL_OUTSIDEPOINT) { // point outside edge: register horizon edge
-                    appendToList(horizon_fcts,(entry_t)f);
-                    appendToList(horizon_fcts_edges,j);
-                    // exceptional: initial facet with opposing normal 
-                    if (innerProduct(f->plane.normal, getFacetByIndex(f->neighbors,j)->plane.normal)<
-                           -1.0f+TOL_OUTSIDEPOINT) 
-                        appendToList(&fcts_to_visit,(entry_t)
-                                getFacetByIndex(f->neighbors,j));
-                } // otherwise point is discared 
-            }
+            removeValueFromList(&fcts_to_visit,(entry_t)f);
+            appendToList(&fcts_visited,(entry_t)f);
+            removeValueListFromList(&fcts_to_visit,fcts_visited);
         }
-        appendToList(&fcts_visited,(entry_t)f);
-        removeValueListFromList(&fcts_to_visit,fcts_visited);
-    } while (getLength(fcts_to_visit)>0);
-
-//    printf("removing facets");
-//    indices_for_printing=findValueListInList(visible_fcts, zh->facets);
-//    printList(indices_for_printing);
-//    freeList(&indices_for_printing);
-    removeFacetByPointerList(zh,visible_fcts);
-    freeList(&visible_fcts);
-    freeList(&fcts_to_visit);
-    sortHorizonEdges(horizon_fcts, horizon_fcts_edges);
-//    printHorizonEdges(horizon_fcts, horizon_fcts_edges);
+//        printf("removing facets\n");
+//        list_for_printing=findValueListInList(visible_fcts,zh->facets);
+//        printList(list_for_printing);
+//        freeList(&list_for_printing);
+        removeFacetByPointerList(zh,visible_fcts);
+        freeList(&visible_fcts);
+        freeList(&fcts_to_visit);
+        freeList(&fcts_visited);
+        sortHorizonEdges(horizon_fcts, horizon_fcts_edges, other_horizon_edges);
+//        printHorizonEdges(horizon_fcts,horizon_fcts_edges,other_horizon_edges);
+    }
+    else if (d>=TOL_INSIDEPOINT) {
+        // all coincident surfaces shall be removed
+        // horizon might not be defined by facets
+        while (getLength(fcts_to_visit)>0) {
+            f=getFacetByIndex(fcts_to_visit,0);
+            appendToList(&visible_fcts,(entry_t)f);
+            appendListToList(avail_points, f->outsideset);
+            appendListToList(avail_points, f->insideset);
+            for (j=0;j<getLength(f->neighbors);j++) {
+                n=getFacetByIndex(f->neighbors,j);
+                d=distancePointPlane(getPoint(zh->pts,point_index),n->plane);
+                if (d>=TOL_INSIDEPOINT) { // coincident facet 
+                    if (notInList((entry_t)n,visible_fcts)) 
+                        appendToList(&fcts_to_visit,(entry_t)n);
+                    if ((innerProduct(f->plane.normal,n->plane.normal)<
+                            -1.0f+TOL_DEGENERATE)&&
+                            (distancePointLineOnPlane(getPoint(zh->pts,point_index),
+                                                      getLine(zh,f,j),
+                                                      f->plane)<TOL_INSIDEPOINT)) {
+                        // coincident facets with opposite surface orientation
+                        // yield an edge to keep despite all facets will be removed 
+                        // as soon as edge is invisible to point
+                        appendToList(horizon_fcts,0);
+                        appendToList(other_horizon_edges,
+                                getEntry(f->corners,j));
+                        appendToList(horizon_fcts_edges,
+                                getEntry(f->corners,(j+1)%getLength(f->corners)));                
+                    }
+                }
+                else { // invisible facet forms horizon that persists
+                    k=getEntry(f->corners,(j+1)%getLength(f->corners));
+                    k=findValueInList(k,n->corners);
+                    appendToList(horizon_fcts,(entry_t)n);
+                    appendToList(horizon_fcts_edges,k);
+                    appendToList(other_horizon_edges,getNumPoints(zh->pts));
+                }
+            }
+            removeValueFromList(&fcts_to_visit,(entry_t)f);
+            appendToList(&fcts_visited,(entry_t)f);
+            removeValueListFromList(&fcts_to_visit,fcts_visited);
+        }
+//        printf("removing facets\n");
+//        list_for_printing=findValueListInList(visible_fcts,zh->facets);
+//        printList(list_for_printing);
+//        freeList(&list_for_printing);
+        removeFacetByPointerList(zh,visible_fcts);
+        sortHorizonEdges(horizon_fcts, horizon_fcts_edges,other_horizon_edges);
+//        printHorizonEdges(horizon_fcts,horizon_fcts_edges,other_horizon_edges);
+        freeList(&visible_fcts);
+        freeList(&fcts_to_visit);
+        freeList(&fcts_visited);
+    }
 }
 
 void initNewFacets(zhull_t *zh, index_t point_index,
         list_t new_facets, list_t horizon_fcts,
-        list_t horizon_fcts_edges) {
+        list_t horizon_fcts_edges, list_t other_horizon_edges) {
     index_t i,j;
     entry_t array[3];
 
     array[0]=point_index;
     for (i=0; i<getLength(new_facets); i++) {
         // corners
-        getHorizonEdgeByIndex(array,horizon_fcts, horizon_fcts_edges,i);
+        getHorizonEdgeByIndex(array,horizon_fcts, horizon_fcts_edges,
+                other_horizon_edges,i);
         array[2]=array[1];
         array[1]=array[0];
         array[0]=array[2];
@@ -401,18 +481,34 @@ void initNewFacets(zhull_t *zh, index_t point_index,
         j=(i+1) % getLength(horizon_fcts);
         array[2]=getEntry(new_facets,j);
         // old neighbor
-        array[0]=getEntry(horizon_fcts,i);
+        if (getEntry(horizon_fcts,i)!=0) {
+            array[0]=getEntry(horizon_fcts,i);
+            setEntry(getFacetByIndex(horizon_fcts,i)->neighbors,
+                    getEntry(horizon_fcts_edges,i), getEntry(new_facets,i));
+        }
+        else {
+            // registring at new neighbor where there
+            // is no old one: degenerate 2D case
+           for (j=0;j<getLength(horizon_fcts_edges);j++) {
+               if ((getEntry(horizon_fcts_edges,i)==getEntry(other_horizon_edges,j))&&
+                       (getEntry(horizon_fcts_edges,j)==getEntry(other_horizon_edges,i)))
+                   break;
+           }
+           array[0]=getEntry(new_facets,j);
+           setEntry(getFacetByIndex(new_facets,j)->neighbors,
+                    0, getEntry(new_facets,i));
+        }
+
         getFacetByIndex(new_facets,i)->neighbors=
             initList(array,3);
 
-        removeValueFromList(&(getFacetByIndex(horizon_fcts,i)->insideset),point_index);
-        if (getLength(getFacetByIndex(horizon_fcts,i)->insideset)==0) {
-            removeValueFromList(&(zh->facets_with_insidepoints),(entry_t)getFacetByIndex(horizon_fcts,i));
+        // removing inside points at (potential) horizon facet if point index is one
+        if (getFacetByIndex(horizon_fcts,i)!=0) {
+            removeValueFromList(&(getFacetByIndex(horizon_fcts,i)->insideset),point_index);
+            if (getLength(getFacetByIndex(horizon_fcts,i)->insideset)==0) {
+                removeValueFromList(&(zh->facets_with_insidepoints),(entry_t)getFacetByIndex(horizon_fcts,i));
+            }
         }
-
-        // registering at old neighbor:
-        setEntry(getFacetByIndex(horizon_fcts,i)->neighbors,
-                getEntry(horizon_fcts_edges,i), getEntry(new_facets,i));
 
         // initializing normal vectors and lists
         getFacetByIndex(new_facets,i)->plane = 
@@ -426,14 +522,14 @@ void initNewFacets(zhull_t *zh, index_t point_index,
 
 void makePyramidFacetsToHorizon(zhull_t *zh, index_t point_index, 
         list_t horizon_fcts, list_t horizon_fcts_edges,
-        list_t avail_points) {
+        list_t other_horizon_edges, list_t avail_points) {
     list_t new_facets = appendNewFacets(zh, getLength(horizon_fcts_edges));
 //    printf("making new pyramid of %d facets\n",getLength(horizon_fcts_edges));
-    initNewFacets(zh,point_index,new_facets,horizon_fcts,horizon_fcts_edges);
-    //    printf("available points: ");
-    //    printList(avail_points);
-    //    printf("new facets : ");
-    //    printList(new_facets);
+    initNewFacets(zh,point_index,new_facets,horizon_fcts,horizon_fcts_edges,other_horizon_edges);
+/*        printf("available points: ");
+        printList(avail_points);
+        printf("new facets : ");
+        printList(new_facets);*/
     dividePointsBetweenNewFacets(zh, avail_points, new_facets);
     freeList(&new_facets);
 }
@@ -446,6 +542,7 @@ void calculateZHull(zhull_t *zh,int maxit) {
     int cnt=0;
     list_t horizon_fcts=emptyList();
     list_t horizon_fcts_edges=emptyList();
+    list_t other_horizon_edges=emptyList();
     list_t available_points=emptyList();
     if (maxit>MAXIT)
         maxit=MAXIT;
@@ -468,15 +565,17 @@ void calculateZHull(zhull_t *zh,int maxit) {
                 f=getFacetByIndex(zh->facets_with_outsidepoints,fli);
                 pi=f->farthest_outside_point;
             }
+//            printf("point %d\n",pi);
             removeVisibleFacetsGetHorizonAndAvailablePoints(zh,pi,f,
-                    &horizon_fcts, &horizon_fcts_edges,
+                    &horizon_fcts, &horizon_fcts_edges,&other_horizon_edges,
                     &available_points);
             removeValueFromList(&available_points, pi);
             makePyramidFacetsToHorizon(zh,pi,horizon_fcts,horizon_fcts_edges,
-                    available_points);
+                    other_horizon_edges,available_points);
 //            printZhull(zh);
             freeList(&horizon_fcts);
             freeList(&horizon_fcts_edges);
+            freeList(&other_horizon_edges);
             freeList(&available_points);
             fli++;
         }
@@ -486,7 +585,7 @@ void calculateZHull(zhull_t *zh,int maxit) {
 void printZhull(const zhull_t * const zh) {
     index_t fi;
     list_t indices = emptyList();
-    printf("zhull from %d points\n", getNumPoints(zh->pts));
+/*     printf("zhull from %d points\n", getNumPoints(zh->pts));
     printf("facets with outsidepoints: ");
     indices=findValueListInList(zh->facets_with_outsidepoints,zh->facets);
     printList(indices);
@@ -495,6 +594,7 @@ void printZhull(const zhull_t * const zh) {
     indices=findValueListInList(zh->facets_with_insidepoints,zh->facets);
     printList(indices);
     freeList(&indices);
+    */
     printf("zhull has %d facets\n", getLength(zh->facets));
     for (fi=0; fi<getLength(zh->facets); fi++) {
         printf("facet %d<%d>: ",fi,getFacetByIndex(zh->facets,fi));

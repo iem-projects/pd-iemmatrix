@@ -131,7 +131,6 @@
 #X obj 396 64 mtx_print;
 #X msg 278 37 matrix 8 3 0 0 0 0 0 1 0 1 0 0 1 1 1 0 0 1 0 1 1 1 0
 1 1 1;
-#X obj 293 74 mtx_roll -1;
 #X obj 388 256 mtx_print;
 #N canvas 0 0 624 397 makepolygon 0;
 #X obj 75 114 mtx_:;
@@ -182,6 +181,10 @@
 #X obj 386 184 t a b;
 #X msg 48 161 matrix 5 3 0 0 0 1 0 0 0 1 0 1 1 0 0.5 0.5 0;
 #X msg 322 136 9;
+#X obj -102 271 ../../abs/mtx_randperm;
+#X obj -103 229 t a a;
+#X obj -103 250 mtx_size;
+#X obj -101 293 mtx_*;
 #X connect 1 0 2 0;
 #X connect 2 0 1 0;
 #X connect 3 0 4 0;
@@ -241,7 +244,7 @@
 #X connect 48 0 38 0;
 #X connect 49 0 48 0;
 #X connect 50 0 27 0;
-#X connect 50 0 61 0;
+#X connect 50 0 60 0;
 #X connect 51 0 38 0;
 #X connect 52 0 37 0;
 #X connect 53 0 55 0;
@@ -250,13 +253,16 @@
 #X connect 54 2 53 0;
 #X connect 55 0 56 0;
 #X connect 56 0 57 0;
-#X connect 59 0 60 0;
-#X connect 60 0 38 0;
-#X connect 60 0 58 0;
-#X connect 62 0 65 0;
-#X connect 63 0 38 0;
-#X connect 64 0 63 1;
-#X connect 65 0 63 0;
-#X connect 65 1 64 0;
-#X connect 66 0 38 0;
-#X connect 67 0 62 0;
+#X connect 59 0 38 0;
+#X connect 61 0 64 0;
+#X connect 62 0 38 0;
+#X connect 63 0 62 1;
+#X connect 64 0 62 0;
+#X connect 64 1 63 0;
+#X connect 65 0 38 0;
+#X connect 66 0 61 0;
+#X connect 67 0 70 0;
+#X connect 68 0 69 0;
+#X connect 68 1 70 1;
+#X connect 69 0 67 0;
+#X connect 70 0 54 0;

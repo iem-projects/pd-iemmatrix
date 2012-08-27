@@ -66,8 +66,10 @@ size_t getLength(const list_t list) {
 entry_t getEntry(const list_t list, const index_t index) {
     if ((index>=0)&&(index<getLength(list)))
         return list.entries[index];
-    else
-        return 0;
+    else {
+      entry_t result={0};
+        return result;
+    }
 }
 
 void setEntry(const list_t list, const index_t index, const entry_t entry) {
@@ -76,7 +78,7 @@ void setEntry(const list_t list, const index_t index, const entry_t entry) {
 }
 
 
-list_t initList(entry_t *entries, const size_t length) {
+list_t initList(const entry_t *entries, const size_t length) {
     index_t i;
     list_t l = allocateList(length);
     if (l.entries!=0) 
@@ -84,28 +86,42 @@ list_t initList(entry_t *entries, const size_t length) {
             setEntry(l,i,entries[i]);
     return l;
 }
+list_t initListIndex(const index_t *entries, const size_t length) {
+  index_t i;
+  list_t l = allocateList(length);
+  if (l.entries!=0) 
+    for (i=0; i<(index_t)length; i++) 
+      setEntry(l,i,entry_makeIndex(entries[i]));
+  return l;
+}
 
-list_t initListFromTo(const entry_t start, const entry_t stop) {
+
+
+list_t initListFromTo(const index_t start, const index_t stop) {
+    entry_t e;
     index_t i;
     size_t length;
-    entry_t c;
+    index_t c;
     int incr;
     if (stop>=start) {
-        length=(size_t) (stop-start+1);
+      length=(size_t) (stop-start+1);
         incr=1;
     } else {
-        length=(size_t) (start-stop+1);
-        incr=-1;
+      length=(size_t) (start-stop+1);
+      incr=-1;
     }
     list_t l = allocateList(length);
-    if (l.entries!=0) 
-        for (i=0,c=start; i<length; i++, c+=incr) 
-            setEntry(l,i,c);
+    if (l.entries!=0) {
+      for (i=0,c=start; i<length; i++, c+=incr) {
+        entry_setIndex(&e, c);
+        setEntry(l,i,e);
+      }
+    }
     return l;
 }
 
 list_t initConstantList(const entry_t c, const size_t length){
-    entry_t i;
+    index_t i;
     list_t l = allocateList(length);
     if (l.entries!=0) 
         for (i=0; i<length; i++)
@@ -115,7 +131,7 @@ list_t initConstantList(const entry_t c, const size_t length){
 
 
 list_t duplicateList(const list_t list_in) {
-    entry_t i;
+    index_t i;
     list_t list_out=emptyList();
     list_out = allocateList(getLength(list_in));
     for (i=0; i<getLength(list_out); i++) 
@@ -125,7 +141,7 @@ list_t duplicateList(const list_t list_in) {
 
 list_t mergeLists(const list_t list1, const list_t list2) {
     list_t list_out;
-    entry_t i,j;
+    index_t i,j;
     list_out = allocateList(getLength(list1)+ getLength(list2));
     if (list_out.entries!=0) {
         for (i=0; i<getLength(list1); i++) 
@@ -140,7 +156,10 @@ list_t getSubList(const list_t list, const list_t indices) {
     index_t i;
     list_t new_list = allocateList(getLength(indices));
     for (i=0; i<getLength(new_list); i++) {
-        setEntry(new_list,i,getEntry(list,getEntry(indices,i)));
+        entry_t e1=getEntry(indices,i);
+        setEntry(new_list,i,
+                 getEntry(list,entry_getIndex(&e1))
+                 );
     }
 }
 
@@ -172,7 +191,7 @@ void appendToList(list_t *list, const entry_t entry) {
     }
 }
 
-void removeEntryFromList(list_t *list, const index_t index) {
+void removeIndexFromList(list_t *list, const index_t index) {
     index_t i,j;
     for (i=j=0; i<getLength(*list); i++) {
         if (i!=index) 
@@ -185,8 +204,9 @@ void removeEntryFromList(list_t *list, const index_t index) {
 void removeValueFromList(list_t *list, const entry_t entry) {
     index_t i,j;
     for (j=i=0; i<getLength(*list); i++) {
-        if (getEntry(*list,i)!=entry) 
-            setEntry(*list, j++, getEntry(*list,i));
+      entry_t e1=getEntry(*list,i);
+      if (!entry_equals(&e1, &entry)) 
+        setEntry(*list, j++, getEntry(*list,i));
     }
     reallocateList(list,j);
 }
@@ -204,9 +224,11 @@ void appendListToList(list_t *list1, const list_t list2) {
 
 void removeEntryListFromList(list_t *list, const list_t indices) {
     index_t i,j;
-    for (i=j=0; i<getLength(*list); i++)  
-        if (notInList(i,indices)) 
-            setEntry(*list, j++, getEntry(*list,i));
+    for (i=j=0; i<getLength(*list); i++) {
+      entry_t e={i};
+      if (notInList(e,indices)) 
+        setEntry(*list, j++, getEntry(*list,i));
+    }
     reallocateList(list,j);
 }
 
@@ -215,8 +237,11 @@ void removeValueListFromList(list_t *list, const list_t excl_list) {
     int keep;
     for (j=i=0; i<getLength(*list); i++) {
         keep=1;
-        for (k=0; k<getLength(excl_list); k++) 
-            keep=(keep)&&(getEntry(*list,i)!=getEntry(excl_list,k));
+        for (k=0; k<getLength(excl_list); k++) {
+          entry_t e1=getEntry(*list, i);
+          entry_t e2=getEntry( excl_list, k);
+          keep=(keep)&&(!entry_equals(&e1, &e2));
+        }
         if (keep)
             setEntry(*list, j++, getEntry(*list,i));
     }
@@ -237,29 +262,35 @@ void reverseList(list_t * const list) {
 
 int inList(const entry_t entry, const list_t list) {
     index_t i;
-    for (i=0; i<getLength(list); i++) 
-        if (getEntry(list,i)==entry)
-            return 1;
+    for (i=0; i<getLength(list); i++) {
+      entry_t e1=getEntry(list,i);
+      if(entry_equals(&e1, &entry))
+        return 1;
+    }
     return 0;
 }
 
-entry_t findValueInList(const entry_t entry, const list_t list) {
+index_t findValueInList(const entry_t entry, const list_t list) {
     index_t i;
-    for (i=0; i<getLength(list); i++) 
-        if (entry==getEntry(list,i))
-            return i;
-    return getLength(list);  
+    for (i=0; i<getLength(list); i++) {
+      entry_t e1=getEntry(list,i);
+      if(entry_equals(&e1, &entry))
+        return i;
+    }
+    return i;
 }
 
 void uniquefyListEntries(list_t *list)  {
     index_t i,j,k;
-    int keep;
     k=0;
     for (j=0; j<getLength(*list); j++) {
-        keep=1;
-        for (i=0; (i<k)&&(keep); i++)  
-            keep = (keep)&&(list->entries[j]!=list->entries[i]);
-        if (keep) {
+        for (i=0; i<k; i++) {
+          entry_t e1=list->entries[j];
+          entry_t e2=list->entries[i];
+          if(entry_equals(&e1, &e2))
+            break;
+        }
+        if (i==k) {
             list->entries[i++]=list->entries[j];
             k++;
         }
@@ -271,27 +302,36 @@ list_t findValueListInList(const list_t value_list,
         const list_t list) {
     list_t l=emptyList();
     index_t i,j;
-    for (i=0; i<getLength(value_list); i++) 
-        appendToList(&l,findValueInList(
-                    getEntry(value_list,i),list));
+    for (i=0; i<getLength(value_list); i++) {
+      index_t idx=findValueInList(getEntry(value_list,i),list);
+      entry_t e;
+      entry_setIndex(&e, idx);
+      appendToList(&l, e);
+    }
     return l;
 }
 
 int notInList(const entry_t entry, const list_t list) {
     index_t i;
-    for (i=0; i<getLength(list); i++) 
-        if (getEntry(list,i)==entry)
-            return 0;
+    for (i=0; i<getLength(list); i++) {
+      entry_t e=getEntry(list, i);
+      if (entry_equals(&e, &entry))
+        return 0;
+    }
     return 1;
 }
 
 void printList(list_t const list) {
-    entry_t i;
-    printf("[list]_%d=[",list.length);
-    if (getLength(list)>0)
-        printf("%d",getEntry(list,0));
-    for (i=1; i<list.length; i++) 
-        printf(", %d",getEntry(list,i));
+    index_t i;
+    const size_t len=getLength(list);
+    printf("[list]_%d=[",len);
+    if (len>0) {
+      print_entry(getEntry(list,0));
+    } 
+    for (i=1; i<len; i++) {
+      printf(", ");
+      print_entry(getEntry(list,i));
+    }
     printf("]\n");
 }
 

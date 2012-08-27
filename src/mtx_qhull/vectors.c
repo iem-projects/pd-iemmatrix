@@ -172,7 +172,8 @@ vector_t averageListedPoints(const points_t points, const list_t list) {
     index_t i;
     vector_t m = initVector(0.0f, 0.0f, 0.0f);
     for (i=0; i<getLength(list); i++) {
-        m=addVectors(getPoint(points,getEntry(list,i)),m);
+      entry_t e=getEntry(list,i);
+      m=addVectors(getPoint(points,entry_getIndex(&e)),m);
     }
     m=scaleVector(m,1.0f/((float)getLength(list)));
     return m;
@@ -184,10 +185,12 @@ vector_t normalOfListedPoints(const points_t points, const list_t list) {
     vector_t d1,d2,c;
     index_t i;
     for (i=1; i<=getLength(list); i++) {
-        d1=subtractVectors(getPoint(points,getEntry(list,i-1)),m);
-        d2=subtractVectors(getPoint(points,getEntry(list,i%getLength(list))),m);
-        c=crossProduct(d1,d2);
-        n=addVectors(c,n);
+      entry_t e=getEntry(list,i-1);
+      d1=subtractVectors(getPoint(points,entry_getIndex(&e)),m);
+      e=getEntry(list,i%getLength(list));
+      d2=subtractVectors(getPoint(points,entry_getIndex(&e)),m);
+      c=crossProduct(d1,d2);
+      n=addVectors(c,n);
     }
     return n;
 }
@@ -198,9 +201,12 @@ vector_t directionOfListedPoints(const points_t points, const list_t list) {
     vector_t d,c;
     index_t i;
     for (i=1; i<getLength(list); i++) {
-        d=subtractVectors(getPoint(points,getEntry(list,i-1)),
-                getPoint(points,getEntry(list,i)));
-        dir=addVectors(d,dir);
+      entry_t e1=getEntry(list,i-1);
+      entry_t e2=getEntry(list,i  );
+
+      d=subtractVectors(getPoint(points,entry_getIndex(&e1)),
+                        getPoint(points,entry_getIndex(&e2)));
+      dir=addVectors(d,dir);
     }
     return dir;
 }

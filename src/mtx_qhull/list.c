@@ -224,7 +224,7 @@ void appendListToList(list_t *list1, const list_t list2) {
     index_t i,j;
     const size_t siz_old = getLength(*list1);
     reallocateList(list1, getLength(*list1) + getLength(list2));
-    for (i=siz_old, j=0; i<getLength(*list1); i++, j++) 
+    for (i=siz_old, j=0; i<getLength(*list1); i++, j++)  
         setEntry(*list1,i,getEntry(list2,j));
 }
 

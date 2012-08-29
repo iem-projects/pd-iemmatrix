@@ -176,6 +176,7 @@ void freeZhull(zhull_t *zh) {
         freeFacets(zh);
         freeList(&(zh->facets_with_insidepoints));
         freeList(&(zh->facets_with_outsidepoints));
+        freeList(&(zh->used_pts));
         freePoints(&(zh->pts));
     }
 }
@@ -206,6 +207,7 @@ zhull_t zhullInitPoints(const float *x, const float *y,
     zh.facets=emptyList();
     zh.facets_with_outsidepoints=emptyList();
     zh.facets_with_insidepoints=emptyList();
+    zh.used_pts=emptyList();
     return zh;
 }
 

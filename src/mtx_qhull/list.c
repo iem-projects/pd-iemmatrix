@@ -2,6 +2,20 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+/*
+ *  list operations for zhull
+ *
+ * Copyright (c) 2012, Franz Zotter,
+ * with friendly help from
+ * IOhannes zmoelnig
+ * for variable entry types
+ * in entry.h
+ * IEM, Graz, Austria
+ * 
+ *
+ */
+
+
 // memory things:
 list_t emptyList(void) {
     list_t generated_list;
@@ -16,7 +30,6 @@ list_t allocateList(const size_t length) {
         generated_list.entries= (entry_t*) malloc(length*sizeof(entry_t));
         if (generated_list.entries!=0) {
             generated_list.length=length;
-            //          printf("got list %li\n",generated_list.entries);
         } 
     }
     return generated_list;
@@ -26,7 +39,7 @@ void reallocateList(list_t *list,
         const size_t length) {
     entry_t *old_entries = list->entries;
     if (length>0) {
-        if (list->length==0) 
+        if (getLength(*list)==0) 
             *list = allocateList(length);
         else {
             if (list->length != length)
@@ -39,18 +52,11 @@ void reallocateList(list_t *list,
     } 
     else 
         freeList(list);
-    /*    if ((list->entries!=old_entries)&&(old_entries!=0)) {
-          if (list->entries!=0)
-          printf("moved %li by realloc to %li\n",old_entries,list->entries);
-          else
-          printf("freed %li by realloc\n", old_entries);
-          }*/
 }
 
 
 void freeList(list_t *list) {
     if (list->entries!=0) {
-        //        printf("deleting list %li\n",list->entries);
         free(list->entries);
     }
     list->entries=0;
@@ -72,24 +78,27 @@ entry_t getEntry(const list_t list, const index_t index) {
     }
 }
 
-void setEntry(const list_t list, const index_t index, const entry_t entry) {
+void setEntry(const list_t list, const index_t index, 
+        const entry_t entry) {
     if ((index>=0)&&(index<getLength(list)))
         list.entries[index]=entry;
 }
 
 
-list_t initList(const entry_t *entries, const size_t length) {
+list_t initList(const entry_t *entries, 
+        const size_t length) {
     index_t i;
     list_t l = allocateList(length);
-    if (l.entries!=0) 
+    if (getLength(l)!=0) 
         for (i=0; i<(index_t)length; i++) 
             setEntry(l,i,entries[i]);
     return l;
 }
+
 list_t initListIndex(const index_t *entries, const size_t length) {
   index_t i;
   list_t l = allocateList(length);
-  if (l.entries!=0) 
+  if (getLength(l)!=0) 
     for (i=0; i<(index_t)length; i++) 
       setEntry(l,i,entry_makeIndex(entries[i]));
   return l;
@@ -111,7 +120,7 @@ list_t initListFromTo(const index_t start, const index_t stop) {
       incr=-1;
     }
     list_t l = allocateList(length);
-    if (l.entries!=0) {
+    if (getLength(l)!=0) {
       for (i=0,c=start; i<length; i++, c+=incr) {
         entry_setIndex(&e, c);
         setEntry(l,i,e);
@@ -123,7 +132,7 @@ list_t initListFromTo(const index_t start, const index_t stop) {
 list_t initConstantList(const entry_t c, const size_t length){
     index_t i;
     list_t l = allocateList(length);
-    if (l.entries!=0) 
+    if (getLength(l)!=0) 
         for (i=0; i<length; i++)
             setEntry(l,i,c);
     return l;
@@ -143,7 +152,7 @@ list_t mergeLists(const list_t list1, const list_t list2) {
     list_t list_out;
     index_t i,j;
     list_out = allocateList(getLength(list1)+ getLength(list2));
-    if (list_out.entries!=0) {
+    if (getLength(list_out)>=getLength(list1)) {
         for (i=0; i<getLength(list1); i++) 
             setEntry(list_out,i,getEntry(list1,i));
         for (j=0; i<getLength(list_out); i++, j++) 
@@ -184,9 +193,9 @@ list_t getSubListFromTo(const list_t list, const index_t start,
 }
 
 void appendToList(list_t *list, const entry_t entry) {
-    const index_t i=(index_t)getLength(*list);
+    const size_t i=getLength(*list);
     reallocateList(list,getLength(*list)+1);
-    if (getLength(*list)>(size_t)i) {
+    if (getLength(*list)>i) {
         setEntry(*list,i,entry);
     }
 }
@@ -213,13 +222,10 @@ void removeValueFromList(list_t *list, const entry_t entry) {
 
 void appendListToList(list_t *list1, const list_t list2) {
     index_t i,j;
-    size_t siz_old = getLength(*list1);
-    siz_old=list1->length;
+    const size_t siz_old = getLength(*list1);
     reallocateList(list1, getLength(*list1) + getLength(list2));
-    if (getLength(*list1)>siz_old) {
-        for (i=siz_old, j=0; i<list1->length; i++, j++) 
-            setEntry(*list1,i,getEntry(list2,j));
-    }
+    for (i=siz_old, j=0; i<getLength(*list1); i++, j++) 
+        setEntry(*list1,i,getEntry(list2,j));
 }
 
 void removeEntryListFromList(list_t *list, const list_t indices) {

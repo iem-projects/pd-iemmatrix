@@ -4,6 +4,20 @@
 #include <sys/types.h>
 #include <stdio.h>
 
+
+/*
+ *  variable entry types for
+ *  list operations in zhull
+ *
+ * Copyright (c) 2012, IOhannes zmoelnig,
+ * with friendly help from
+ * IEM, Graz, Austria
+ * 
+ *
+ */
+
+
+
 typedef size_t index_t;
 
 typedef union {

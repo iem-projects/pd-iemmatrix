@@ -7,6 +7,20 @@
 
 #include "entry.h"
 
+/*
+ *  list operations for zhull
+ *
+ * Copyright (c) 2012, Franz Zotter,
+ * with friendly help from
+ * IOhannes zmoelnig
+ * for variable entry types
+ * in entry.h
+ * IEM, Graz, Austria
+ * 
+ *
+ */
+
+
 typedef struct list_ {
     entry_t *entries;
     size_t length;

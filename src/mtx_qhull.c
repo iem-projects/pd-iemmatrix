@@ -23,10 +23,11 @@ typedef struct MTXQhull_ MTXQhull;
 struct MTXQhull_  {
     t_object x_obj;
     t_outlet *outl;
+    t_outlet *outl_fl;
     t_atom *list;
     size_t size;
     size_t hull_size;
-    int iter;
+//    int iter;
     zhull_t *zh;
 };
 
@@ -42,22 +43,23 @@ static void deleteMTXQhull(MTXQhull *xo) {
     }
 }
 
-void mTXQhullSetIterations(MTXQhull *xo, t_float f) {
+/*void mTXQhullSetIterations(MTXQhull *xo, t_float f) {
     xo->iter=(int)f;
     if (xo->iter<0)
         xo->iter=0;
-}
+}*/
 
 static void *newMTXQhull(t_symbol *s, int argc, t_atom *argv) {
     int nmax;
     MTXQhull *xo = (MTXQhull *) pd_new (mtx_qhull_class);
     xo->outl = outlet_new (&xo->x_obj, gensym("matrix"));
+    xo->outl_fl = outlet_new (&xo->x_obj, gensym("float"));
     xo->zh=0;
     xo->list=0;
     xo->size=0;
-    xo->iter=0;
-    if (argc>0)
-        mTXQhullSetIterations(xo,atom_getfloat(argv));
+//    xo->iter=0;
+//    if (argc>0)
+//        mTXQhullSetIterations(xo,atom_getfloat(argv));
     return ((void *) xo);
 }
 
@@ -92,7 +94,8 @@ static void mTXQhullMatrix(MTXQhull *xo, t_symbol *s,
                 z[i]=atom_getfloat(argv++);
             }
             *(xo->zh)=zhullInitPoints(x,y,z,rows);	
-            calculateZHull(xo->zh,xo->iter);
+            i=calculateZHull(xo->zh);
+            outlet_float(xo->outl_fl, (float)i);
             free(x);
             free(y);
             free(z);
@@ -141,7 +144,7 @@ static void mTXQhullMatrix(MTXQhull *xo, t_symbol *s,
     }
 }
 
-void mtx_qhull_setup (void) {
+static void mtx_qhull_setup (void) {
     mtx_qhull_class = class_new (
             gensym("mtx_qhull"),
             (t_newmethod) newMTXQhull,
@@ -149,7 +152,7 @@ void mtx_qhull_setup (void) {
             sizeof(MTXQhull),
             CLASS_DEFAULT, A_GIMME, 0);
     class_addmethod(mtx_qhull_class, (t_method) mTXQhullMatrix, gensym("matrix"), A_GIMME, 0);
-    class_addfloat(mtx_qhull_class, (t_method) mTXQhullSetIterations);
+//    class_addfloat(mtx_qhull_class, (t_method) mTXQhullSetIterations);
 }
 
 void iemtx_qhull_setup(void){

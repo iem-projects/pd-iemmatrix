@@ -1,12 +1,21 @@
 #include "vectors.h"
+/*
+ *  vector operations for zhull
+ *
+ * Copyright (c) 2012, Franz Zotter
+ * IEM, Graz, Austria
+ * 
+ *
+ */
 
 
-vector_t initVector (float x, float y, float z) {
+
+vector_t initVector (const float x, const float y, const float z) {
     vector_t vec={x, y, z};
     return vec;
 }
 
-float lengthVector(vector_t v) {
+float lengthVector(const vector_t v) {
     return sqrtf(v.c[0]*v.c[0]+v.c[1]*v.c[1]+v.c[2]*v.c[2]);
 }
 vector_t normalizeVector(vector_t v) {
@@ -17,33 +26,36 @@ vector_t normalizeVector(vector_t v) {
     return v;
 }
 
-plane_t initPlane (vector_t normal, vector_t point) {
+plane_t initPlane (vector_t normal, const vector_t point) {
     plane_t plane;
     plane.point = point;
     plane.normal = normalizeVector(normal);
     return plane;
 }
 
-line_t initLine (vector_t direction, vector_t point) {
+line_t initLine (vector_t direction, const vector_t point) {
     line_t line;
     line.point = point;
     line.direction = normalizeVector(direction);
     return line;
 }
 
+points_t allocatePoints (const size_t num_points) {
+    points_t points;
+    points.v = (vector_t *) malloc(sizeof(vector_t)*num_points);
+    if (points.v!=0)
+        points.num_points = num_points;
+    return points;
+}
+
 points_t initPoints (const float *x,
         const float *y, const float *z, 
-        size_t num_points) {
-    points_t points;
+        const size_t num_points) {
+    points_t points = allocatePoints(num_points);
     size_t i;
 
-    points.v = (vector_t*) malloc (sizeof(vector_t)*num_points);
-    if (points.v!=0) {
-//        printf("created %li\n",points.v);
-        points.num_points = num_points;
-        for (i=0; i<num_points; i++) {
-            points.v[i] = initVector(x[i],y[i],z[i]);
-        }
+    for (i=0; i<getNumPoints(points); i++) {
+        points.v[i] = initVector(x[i],y[i],z[i]);
     }
     return points; 
 }
@@ -58,7 +70,36 @@ void freePoints (points_t *points) {
     }
 }
 
-vector_t crossProduct (vector_t v1, vector_t v2) {
+void reallocatePoints (points_t *points, const size_t num_points) {
+    if ((num_points>0)&&(points!=0)) {
+        if (getNumPoints(*points)==0)
+            *points=allocatePoints(num_points);
+        else {
+            points->v = (vector_t *) realloc(points->v,sizeof(vector_t)*num_points);
+            if (points->v!=0) 
+                points->num_points=num_points;
+            else
+                points->num_points=0;
+        }
+        if (points->v!=0)
+            points->num_points = num_points;
+    }
+    else 
+        freePoints(points);
+}
+
+void appendPoints(points_t *points,
+        const float *x, const float *y, 
+        const float *z, const size_t num_points) {
+    const size_t n=getNumPoints(*points);
+    size_t i,j;
+    reallocatePoints(points,getNumPoints(*points)+num_points);
+    for (i=n,j=0; i<getNumPoints(*points); i++, j++) {
+        points->v[i] = initVector(x[j],y[j],z[j]);
+    }
+}
+
+vector_t crossProduct (const vector_t v1, const vector_t v2) {
     vector_t cp;
     cp.c[0]= v1.c[1]*v2.c[2]-v1.c[2]*v2.c[1];
     cp.c[1]=-v1.c[0]*v2.c[2]+v1.c[2]*v2.c[0];
@@ -66,7 +107,7 @@ vector_t crossProduct (vector_t v1, vector_t v2) {
     return cp;
 }
 
-float innerProduct (vector_t v1, vector_t v2) {
+float innerProduct (const vector_t v1, const vector_t v2) {
     return v1.c[0]*v2.c[0] + v1.c[1]*v2.c[1] + v1.c[2]*v2.c[2];
 }
 
@@ -76,24 +117,24 @@ float distancePointPoint(const vector_t a,
     return lengthVector(d);
 }
 
-float distancePointPlane (vector_t point, plane_t plane) {
+float distancePointPlane (const vector_t point, const plane_t plane) {
     return innerProduct(point, plane.normal) - 
         innerProduct(plane.point, plane.normal);
 }
 
-float distancePointLine (vector_t point, line_t line) {
+float distancePointLine (const vector_t point, const line_t line) {
     return lengthVector(crossProduct(line.direction,
                 subtractVectors(point,line.point)));
 }
 
-float distancePointLineOnPlane (vector_t point, 
-        line_t line, plane_t plane) {
+float distancePointLineOnPlane (vector_t const point, 
+        const line_t line, const plane_t plane) {
     vector_t normal_in_plane = normalizeVector(crossProduct(
                 line.direction, plane.normal));
     return innerProduct(subtractVectors(point,line.point),normal_in_plane);
 }
 
-vector_t addVectors(vector_t v1, vector_t v2) {
+vector_t addVectors(const vector_t v1, const vector_t v2) {
     vector_t v3;
     v3.c[0]=v1.c[0]+v2.c[0];
     v3.c[1]=v1.c[1]+v2.c[1];
@@ -101,7 +142,7 @@ vector_t addVectors(vector_t v1, vector_t v2) {
     return v3;
 }
 
-vector_t subtractVectors(vector_t v1, vector_t v2) {
+vector_t subtractVectors(const vector_t v1, const vector_t v2) {
     vector_t v3;
     v3.c[0]=v1.c[0]-v2.c[0];
     v3.c[1]=v1.c[1]-v2.c[1];
@@ -109,7 +150,7 @@ vector_t subtractVectors(vector_t v1, vector_t v2) {
     return v3;
 }
 
-vector_t scaleVector(vector_t v1, float f) {
+vector_t scaleVector(vector_t v1, const float f) {
     vector_t v2;
     v2.c[0]=f*v1.c[0];
     v2.c[1]=f*v1.c[1];
@@ -227,18 +268,18 @@ line_t lineFromListedPoints(const points_t points, const list_t list) {
     return l;
 }
 
-void printVector(vector_t v) {
+void printVector(const vector_t v) {
    printf("[%5.2f,%5.2f,%5.2f], ", v.c[0],v.c[1],v.c[2]);
 }
 
-void printPlane(plane_t p) {
+void printPlane(const plane_t p) {
    printf("n=");
    printVector(p.normal);
    printf(", p=");
    printVector(p.point);
 }
 
-void printLine(line_t l) {
+void printLine(const line_t l) {
    printf("d=");
    printVector(l.direction);
    printf(", p=");

@@ -45,7 +45,7 @@ static void legendre_second_recurrence (double *costheta, LegendreWorkSpace *wl)
    // P_n^m with m=n
    for (n=1; n<=wl->nmax; n++) {
       for (m=0; m<n; m++) {
-	 if (m<=n-2) {
+	 if (m+2<=n) {
 	    for (l=0,l0=0; l<wl->l; l++,l0+=incr) {
 	       wl->p[l0+n0+m] = (
 		     (2*n-1) * costheta[l] * wl->p[l0+nmo0+m]

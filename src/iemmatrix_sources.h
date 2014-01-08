@@ -9,6 +9,7 @@ void iematrix_setup(void); /* matrix.c */
 void iemtx_abs_setup(void); /* mtx_abs.c */
 void iemtx_add_setup(void); /* mtx_add.c */
 void iemtx_and_setup(void); /* mtx_and.c */
+void iemtx_atan2_setup(void); /* mtx_atan2.c */
 void iemtx_atan_setup(void); /* mtx_atan.c */
 void iemtx_bessel_setup(void); /* mtx_bessel.c */
 void iemtx_bitand_setup(void); /* mtx_bitand.c */

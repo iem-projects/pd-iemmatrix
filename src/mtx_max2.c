@@ -109,7 +109,7 @@ static void mtx_max2_float(t_mtx_binmtx *x, t_float f)
   n=row2*col2;
 
   while(n--){
-    SETFLOAT(ap, f+atom_getfloat(ap2++));
+    SETFLOAT(ap, (f>atom_getfloat(ap2))?f:atom_getfloat(ap2));
     ap++;
   }
   

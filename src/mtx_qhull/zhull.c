@@ -337,7 +337,7 @@ static void printHorizonEdges(list_t *horizon_fcts,
     for (i=0; i<getLength(*horizon_fcts_edges); i++) {
         getHorizonEdgeByIndex(c1, *horizon_fcts, *horizon_fcts_edges,
                *other_horizon_edges, i);
-        printf(", %ul->%ul",(unsigned long)c1[0],(unsigned long)c1[1]);
+        printf(", %lu->%lu",(unsigned long)c1[0],(unsigned long)c1[1]);
     }
     printf("\n");
 }
@@ -623,7 +623,7 @@ static void appendExteriorPoints(zhull_t *zh) {
     printf("\n");
     for (i=0; i<getLength(zh->facets); i++) {
         f=getFacetByIndex(zh->facets,i);
-        printf("distance of plane %ul, d=%5.2f\n",(unsigned long)i,
+        printf("distance of plane %lu, d=%5.2f\n",(unsigned long)i,
                 distancePointPlane(center,f->plane));
         if (distancePointPlane(center,f->plane)>-0.5f) {
             appendToList(&facet_delete_list,entry_makePointer(f));
@@ -702,9 +702,9 @@ void printZhull(const zhull_t * const zh) {
     printList(indices);
     freeList(&indices);
     */
-    printf("zhull has %ul facets\n", (unsigned long)getLength(zh->facets));
+    printf("zhull has %lu facets\n", (unsigned long)getLength(zh->facets));
     for (fi=0; fi<getLength(zh->facets); fi++) {
-      printf("facet %ul<%p>: ",(unsigned long)fi,getFacetByIndex(zh->facets,fi));
+      printf("facet %lu<%p>: ",(unsigned long)fi,getFacetByIndex(zh->facets,fi));
       printFacet(zh,getFacetByIndex(zh->facets,fi));
     }
 }
@@ -725,6 +725,6 @@ void printFacet(const zhull_t * const zh,
     printf("neighbors: ");
     printList(indices);
     freeList(&indices);
-    printf("pt %ul with maxdist %5.2f\n",(unsigned long)(f->farthest_outside_point), f->maxdistance);
+    printf("pt %lu with maxdist %5.2f\n",(unsigned long)(f->farthest_outside_point), f->maxdistance);
 }
 

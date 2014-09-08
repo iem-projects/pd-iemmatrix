@@ -173,6 +173,11 @@ dnl
 dnl  OK, checks which machines are here now
 dnl this needs some rethinking when cross-compiling (?)
 dnl
+
+# OSX
+AC_CHECK_LDFLAGS([-bundle -undefined suppress -flat_namespace])
+
+# un*x
 AC_CHECK_LDFLAGS([-shared])
 
 if test `uname -s` = Linux; 
@@ -198,11 +203,6 @@ then
     enable_lpt="no";
   fi
 fi
-
-#AC_CHECK_LDFLAGS([-dynamiclib -mmacosx-version-min=10.3 -undefined dynamic_lookup],
-#                  ,
-	          AC_CHECK_LDFLAGS([-bundle -undefined suppress -flat_namespace])
-#                 )
 
 if test `uname | sed -e 's/^MINGW.*/NT/'` = NT ; 
 then

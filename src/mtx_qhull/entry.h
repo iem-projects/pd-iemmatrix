@@ -85,7 +85,7 @@ static
 void print_entry(const entry_t e) {
     switch(e.typ) {
   case INDEX:
-    printf("%d", e.val.i);
+    printf("%ul", (unsigned long)(e.val.i));
     return;
   case POINTER:
     printf("0x%p", e.val.p);

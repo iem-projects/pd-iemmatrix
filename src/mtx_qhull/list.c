@@ -170,6 +170,7 @@ list_t getSubList(const list_t list, const list_t indices) {
                  getEntry(list,entry_getIndex(&e1))
                  );
     }
+    return new_list;
 }
 
 list_t getSubListFromTo(const list_t list, const index_t start, 
@@ -257,7 +258,7 @@ void removeValueListFromList(list_t *list, const list_t excl_list) {
 void reverseList(list_t * const list) {
     index_t i,j;
     entry_t v;
-    const cnt = getLength(*list)/ 2;
+    const size_t cnt = getLength(*list)/ 2;
     if (cnt>0)
         for (i=0, j=getLength(*list)-1; i<cnt; i++, j--) {
             v=getEntry(*list,i);
@@ -330,7 +331,7 @@ int notInList(const entry_t entry, const list_t list) {
 void printList(list_t const list) {
     index_t i;
     const size_t len=getLength(list);
-    printf("[list]_%d=[",len);
+    printf("[list]_%d=[",(int)len);
     if (len>0) {
       print_entry(getEntry(list,0));
     } 

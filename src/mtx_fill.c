@@ -291,6 +291,7 @@ static void mTXFillMatrix (MTXfill *mtx_fill_obj, t_symbol *s,
 	    return;
 	 }
 	 break;
+      case DONT_FILL_JUST_PASS: break;
    }
    if (mtx_fill_obj->size == 0) {
       post("mtx_fill: no matrix defined for filling");
@@ -309,6 +310,7 @@ static void mTXFillMatrix (MTXfill *mtx_fill_obj, t_symbol *s,
 	 writeIndexedValuesIntoMatrix (mtx_fill_obj->num_idcs_used,
 	       mtx_fill_obj->index, fill_mtx,list_out+2);
 	 break;
+      case DONT_FILL_JUST_PASS: break;
    }
    mTXFillBang(mtx_fill_obj);
 }

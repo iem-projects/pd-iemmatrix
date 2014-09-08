@@ -337,7 +337,7 @@ static void printHorizonEdges(list_t *horizon_fcts,
     for (i=0; i<getLength(*horizon_fcts_edges); i++) {
         getHorizonEdgeByIndex(c1, *horizon_fcts, *horizon_fcts_edges,
                *other_horizon_edges, i);
-        printf(", %d->%d",c1[0],c1[1]);
+        printf(", %ul->%ul",(unsigned long)c1[0],(unsigned long)c1[1]);
     }
     printf("\n");
 }
@@ -612,7 +612,7 @@ static void makePyramidFacetsToHorizon(zhull_t *zh, index_t point_index,
     freeList(&new_facets);
 }
 
-static appendExteriorPoints(zhull_t *zh) {
+static void appendExteriorPoints(zhull_t *zh) {
     index_t i;
     vector_t center = initVector(0.0f,0.0f,0.0f);
     list_t facet_delete_list=emptyList();
@@ -623,7 +623,7 @@ static appendExteriorPoints(zhull_t *zh) {
     printf("\n");
     for (i=0; i<getLength(zh->facets); i++) {
         f=getFacetByIndex(zh->facets,i);
-        printf("distance of plane %d, d=%5.2f\n",i,
+        printf("distance of plane %ul, d=%5.2f\n",(unsigned long)i,
                 distancePointPlane(center,f->plane));
         if (distancePointPlane(center,f->plane)>-0.5f) {
             appendToList(&facet_delete_list,entry_makePointer(f));
@@ -702,10 +702,10 @@ void printZhull(const zhull_t * const zh) {
     printList(indices);
     freeList(&indices);
     */
-    printf("zhull has %d facets\n", getLength(zh->facets));
+    printf("zhull has %ul facets\n", (unsigned long)getLength(zh->facets));
     for (fi=0; fi<getLength(zh->facets); fi++) {
-        printf("facet %d<%d>: ",fi,getFacetByIndex(zh->facets,fi));
-        printFacet(zh,getFacetByIndex(zh->facets,fi));
+      printf("facet %ul<%p>: ",(unsigned long)fi,getFacetByIndex(zh->facets,fi));
+      printFacet(zh,getFacetByIndex(zh->facets,fi));
     }
 }
 
@@ -725,6 +725,6 @@ void printFacet(const zhull_t * const zh,
     printf("neighbors: ");
     printList(indices);
     freeList(&indices);
-    printf("pt %d with maxdist %5.2f\n",f->farthest_outside_point, f->maxdistance);
+    printf("pt %ul with maxdist %5.2f\n",(unsigned long)(f->farthest_outside_point), f->maxdistance);
 }
 

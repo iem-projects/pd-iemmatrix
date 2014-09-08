@@ -53,8 +53,8 @@ static void getTFloatMatrix (int rows, int columns, t_float ***mtx, t_float **ar
    if (!size)
       return;
    
-   if (*array=ptr=(t_float *)calloc(size, sizeof(t_float))) {
-      if (*mtx=dptr=(t_float **)calloc(rows, sizeof(t_float *))) {
+   if ((*array=ptr=(t_float *)calloc(size, sizeof(t_float)))) {
+      if ((*mtx=dptr=(t_float **)calloc(rows, sizeof(t_float *)))) {
 	 for(;rows-- ; ptr+=columns) {
 	    *dptr++ = ptr;
 	 }

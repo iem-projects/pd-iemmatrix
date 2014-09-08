@@ -139,17 +139,18 @@ static void mTXreverseMatrix (MTXreverse *mtx_reverse_obj, t_symbol *s,
    list_out += 2;
    copyList (size, argv, list_out);
 
-   if ((mtx_reverse_obj->reverse_mode == 0)) {
+   switch(mtx_reverse_obj->reverse_mode) {
+   case 0:
      for (count = columns; count--; list_out++)
        reverseListStep (size, columns, list_out);
-   }
-   else if (mtx_reverse_obj->reverse_mode == 1) {
+     break;
+   case 1:
      for (count = rows; count--; list_out += columns) 
        reverseList (columns, list_out);
-   }
-   else 
+     break;
+   default:
      reverseList (size, list_out); 
-   
+   }   
    list_out = mtx_reverse_obj->list_out;
 
    SETSYMBOL(list_out, gensym("matrix"));

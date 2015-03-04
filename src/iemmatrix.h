@@ -61,11 +61,13 @@
 # include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#ifndef VERSION
 #ifdef PACKAGE_VERSION
 # define VERSION PACKAGE_VERSION
 #else
 # define VERSION "(unknown)"
 #endif
+#endif /* VERSION */
 
 #include <math.h>
 #include <stdio.h>

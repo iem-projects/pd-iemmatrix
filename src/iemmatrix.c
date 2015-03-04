@@ -18,7 +18,10 @@ void iemmatrix_setup(){
   post("");
   post("iemmatrix "VERSION);
   post("\tobjects for manipulating 2d-matrices");
-  post("\t(c) IOhannes m zmölnig, Thomas Musil, Franz Zotter :: iem, 2001-2011");
+  post("\t(c) 2001-2015 iem");
+  post("\t\tIOhannes m zmölnig");
+  post("\t\tThomas Musil");
+  post("\t\tFranz Zotter");
   post("\tcompiled "__DATE__" : "__TIME__);
   post("");
 

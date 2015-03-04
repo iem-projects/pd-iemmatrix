@@ -12,7 +12,7 @@ ls -1 */*.pd | sed 's/\.pd/;/' > $RUNTESTS_TXT
 
 IEMMATRIX="-lib ../iemmatrix -path ../abs/"
 
-function run_nogui() {
+run_nogui() {
  pd $IEMMATRIX -nogui runtests_nogui.pd > ${RUNTESTS_LOG}.$$ 2>&1 
  NUMTESTS=`grep -c . $RUNTESTS_TXT`
  echo "regression-test: ${NUMTESTS} tests total" >>  ${RUNTESTS_LOG}.$$
@@ -26,7 +26,7 @@ function run_nogui() {
  echo
 }
 
-function run_withgui() {
+run_withgui() {
  pd $IEMMATRIX -stderr runtests.pd 2>&1 | tee ${RUNTESTS_LOG}
 }
 

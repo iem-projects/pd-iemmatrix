@@ -4,9 +4,8 @@ Installation/Compilation instructions for "iemmatrix"
 
 1) linux (and other autoconf-systems):
 ======================================
-	"cd" into iemmatrix/src/
-	run "aclocal"
-	run "autoconf"
+	"cd" into iemmatrix/
+	run "./autogen.sh"
 	run "./configure" (see "./configure --help" for valid options)
 	run "make"
 	run "make install"

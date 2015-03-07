@@ -51,7 +51,7 @@
 #endif /* __WIN32__ */
 
 
-#include "m_pd.h"
+#include <m_pd.h>
 
 #ifndef M_PI
 

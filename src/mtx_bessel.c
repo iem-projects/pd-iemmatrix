@@ -14,7 +14,7 @@
  */
 
 #include "iemmatrix.h"
-#include "math.h"
+#include <math.h>
 #include <stdlib.h>
 #ifdef HAVE_GSL_BESSEL
 #include <gsl/gsl_sf_bessel.h>

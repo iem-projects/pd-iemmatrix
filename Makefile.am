@@ -27,9 +27,20 @@ AM_LDFLAGS+=
 
 noinst_LTLIBRARIES = libiemmatrixCore.la
 libiemmatrixCore_la_SOURCES=\
+	src/iemmatrix.h \
+	src/iemmatrix_sources.h src/mtx_binop_generic.h \
 	src/iemmatrix_binops.c \
-	src/iemmatrix_utility.c \
-        src/mtx_qhull/list.c src/mtx_qhull/vectors.c src/mtx_qhull/zhull.c
+	src/iemmatrix_utility.c
+
+## qhull-stuff
+libiemmatrixCore_la_SOURCES+=\
+	src/mtx_qhull/entry.h \
+	src/mtx_qhull/list.h \
+        src/mtx_qhull/list.c \
+	src/mtx_qhull/vectors.h \
+	src/mtx_qhull/vectors.c \
+	src/mtx_qhull/zhull.h \
+	src/mtx_qhull/zhull.c
 
 iemmatrix_la_CPPFLAGS=-DIEMMATRIX_LIBRARY $(AM_CPPFLAGS)
 
@@ -293,6 +304,12 @@ mtx_sndfileread_la_LIBADD =libiemmatrixCore.la
 mtx_sort_la_SOURCES=src/mtx_sort.c
 mtx_sort_la_LIBADD =libiemmatrixCore.la
 mtx_spherical_harmonics_la_SOURCES=src/mtx_spherical_harmonics.c
+mtx_spherical_harmonics_la_SOURCES+= \
+	src/mtx_spherical_harmonics/chebyshev12.c src/mtx_spherical_harmonics/chebyshev12.h \
+	src/mtx_spherical_harmonics/legendre_a.c src/mtx_spherical_harmonics/legendre_a.h \
+	src/mtx_spherical_harmonics/sharmonics.c src/mtx_spherical_harmonics/sharmonics.h \
+	src/mtx_spherical_harmonics/sharmonics_normalization.c src/mtx_spherical_harmonics/sharmonics_normalization.h \
+	src/mtx_spherical_harmonics/sph_radial.c src/mtx_spherical_harmonics/sph_radial.h
 mtx_spherical_harmonics_la_LIBADD =libiemmatrixCore.la
 mtx_spherical_radial_la_SOURCES=src/mtx_spherical_radial.c
 mtx_spherical_radial_la_LIBADD =libiemmatrixCore.la

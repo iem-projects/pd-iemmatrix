@@ -20,9 +20,8 @@ Installation/Compilation instructions for "iemmatrix"
 	
 2) mac OS-X:
 ============
-	there is nothing special in the code, so it should compile out of the box:
-	"cd" to iemmatrix/src
-	run "./bootstrap.sh; ./configure; make" (for further details please see "1) linux")
+	there is nothing special in the code, so it should compile out of the
+	box (for generic instructions, please see "1) linux")
 	building with a special version of Pd:
 		to build iemmatrix with your special version of Pd, you should specify the path to your Pd ressources
 		(e.g. "./configure --with-pd=/Applications/Pd.app/Contents/Resources")
@@ -44,8 +43,8 @@ Installation/Compilation instructions for "iemmatrix"
 	http://lists.puredata.info/pipermail/pd-list/2005-05/028266.html
 	i will support a makefile for msvc as soon as i boot into windows again
 
-CrossCompilation for w32 with MinGW (http://www.mingw.org) on linux-systems
-	you need a cross-compilation tool-chain for windows (there is a debian-package mingw32)
+CrossCompilation for w32 with MinGW-w64 (http://www.mingw.org) on linux-systems
+	you need a cross-compilation tool-chain for windows (there is a debian-package mingw-w64)
 	run "./configure" and specify the path to your windows installation of pd
 	the simplest way is to give the PDPATH via the "--with-pd=PDPATH" flag; you have to make 
 	sure that the pd-sources are in PDPATH/src and the compiled pd-binaries in PDPATH/bin
@@ -53,14 +52,14 @@ CrossCompilation for w32 with MinGW (http://www.mingw.org) on linux-systems
 	to your "m_pd.h" (with --includedir) and to your "pd.lib" (with --libdir)
 	don't forget to override the default extension ("pd_linux" on linux-systems) with the more appropriate "dll".
 	on bash this looks like:
-	 % ./configure --disable-PIC --with-extension=dll --host=i586-mingw32msvc --with-pd=/path/to/w32-pd/
+	 % ./configure --with-extension=dll --host=i686-w64-mingw32 --with-pd=/path/to/w32-pd/
 	now run "make" and enjoy.
 	
 
 
 5) FreeBSD et al:
 =================
-	i don't know, but why it shouldn't run there ?
-	try the configure in iemmatrix/src (see 1)linux for more information)
+	i don't know, but why shouldn't it run there ?
+	try autotools (see "1) linux" for more information)
 	and report any success or failure
 

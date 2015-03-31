@@ -26,13 +26,17 @@ static int makeseed(void)
   random_nextseed = random_nextseed * 435898247 + 938284287;
   return (random_nextseed & 0x7fffffff);
 }
+static inline t_float getrand(int *val)
+{
+  t_float f=(((t_float)(((*val=*val*435898247+382842987)&0x7fffffff)-0x40000000))*(t_float)(0.5/0x40000000)+0.5);
+  return f;
+  
+}
 static void mtx_rand_random(t_matrix *x)
 {
   long size = x->row * x->col;
   t_atom *ap=x->atombuffer+2;
-  int val = x->current_row;
-  while(size--)SETFLOAT(ap+size, ((float)(((val=val*435898247+382842987)&0x7fffffff)-0x40000000))*(float)(0.5/0x40000000)+0.5);
-  x->current_row=val;
+  while(size--)SETFLOAT(ap+size, getrand(&x->current_row));
 }
 
 static void mtx_rand_list(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
@@ -55,8 +59,12 @@ static void mtx_rand_matrix(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 }
 static void mtx_rand_bang(t_matrix *x)
 {
-  mtx_rand_random(x);
-  matrix_bang(x);
+  if(0==x->col || 0==x->row) {
+    outlet_float(x->x_obj.ob_outlet, getrand(&x->current_row));
+  } else {
+    mtx_rand_random(x);
+    matrix_bang(x);
+  }
 }
 static void *mtx_rand_new(t_symbol *s, int argc, t_atom *argv)
 {

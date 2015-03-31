@@ -88,15 +88,14 @@ dnl Replace `main' with a function in -lstk:
 dnl AC_CHECK_LIB([stk], [main], [STK=yes])
 
 tmp_pddll_LIBS=$LIBS
-AC_CHECK_LIB([:pd.dll], [nullfn], have_pddll="yes", have_pddll="no")
+AC_CHECK_LIB([:pd.dll], [nullfn], [have_pddll="yes"], [have_pddll="no"])
 LIBS=$tmp_pddll_LIBS
 
-if test "x$have_pddll" = "xyes"
-then
+AS_IF([test "x$have_pddll" = "xyes"],[
   EXTRA_LTFLAGS="$EXTRA_LTFLAGS -Xlinker -l:pd.dll"
-else
+  ],[
   AC_CHECK_LIB([pd], [nullfn])
-fi
+])
 
 dnl Checks for header files.
 AC_HEADER_STDC
@@ -147,97 +146,89 @@ else
 fi
 AC_MSG_RESULT([$EXTENSION])
 
-
 have_pd="no"
 AC_CHECK_HEADERS([pd/m_pd.h m_pd.h], [have_pd="yes"])
-if test "x${have_pd}" = "xno"
-then
+AS_IF([test "x${have_pd}" = "xno"],[
 AC_ERROR([m_pd.h is desperately needed!
         install pd and/or use
         "--with-pd=</path/to/pd/>"])
-fi
+])
 
 AC_ARG_WITH([fftw], AC_HELP_STRING([--without-fftw], [compile without FFTW]))
-if test "xno" != "x${with_fftw}" ; then
+AS_IF([test "xno" != "x${with_fftw}" ],[
 have_fftw="no"
 have_fftw3="no"
-AC_CHECK_LIB([fftw3],
-	     [fftw_execute],
-	     [AC_CHECK_HEADER([fftw3.h],
-		[have_fftw3="yes"],
-		)])
-fi
-if test "xyes" = "x${have_fftw3}"; then
+AC_CHECK_LIB([fftw3],[fftw_execute])
+AS_IF([test "x$ac_cv_lib_fftw3_fftw_execute" = "xyes"],
+      [AC_CHECK_HEADER([fftw3.h], [have_fftw3="yes"])])
+])
+AS_IF([test "xyes" = "x${have_fftw3}"],[
    have_fftw="yes"
    AC_DEFINE(HAVE_LIBFFTW3, 1, [Define to 1 if you have the `fftw3' library (-lfftw3).])
-fi
-if test "xyes" = "x${have_fftw}"; then
+])
+AS_IF([test "xyes" = "x${have_fftw}"],[
 dnl   AC_DEFINE(HAVE_LIBFFTW,1,[Define to 1 if you have the `fftw' library (e.g. -lfftw3).])
    AC_DEFINE(USE_FFTW, 1, [can we use fftw?])
-fi
+])
 
 AM_CONDITIONAL(HAVE_FFTW, [test "x${have_fftw}" = "xyes"])
 
 dnl for soundfile reading (and writing, if we do that...)
 AC_ARG_WITH([sndfile], AC_HELP_STRING([--without-sndfile], [compile without libsndfile support]))
-have_sndfile="no"
-if test "xno" != "x${with_sndfile}" ; then
-   AC_CHECK_LIB([sndfile], [sf_close], [have_sndfile="yes"])
-fi
-if test "xyes" = "x${have_sndfile}"; then
+AS_IF([test "xno" != "x${with_sndfile}"],[
+   AC_CHECK_LIB([sndfile], [sf_close])
+])
+AS_IF([test "xyes" = "x${ac_cv_lib_sndfile_sf_close}"],[
    AC_DEFINE(HAVE_LIBSNDFILE,1,[Define to 1 if you have the `sndfile' library (-lsndfile).])
-fi
-AM_CONDITIONAL(HAVE_SNDFILE, [test "x${have_sndfile}" = "xyes"])
-
+])
+AM_CONDITIONAL(HAVE_SNDFILE, [test "xyes" = "x${ac_cv_lib_sndfile_sf_close}"])
 
 
 dnl for gnu scientific library -lgsl:
 AC_ARG_WITH([gsl], AC_HELP_STRING([--without-gsl], [compile without GNU Scientific Library]))
-have_gsl="no"
-have_gsl_cblas="no"
-have_gsl_eigen="no"
-have_gsl_bessel="no"
-if test "xno" != "x${with_gsl}" ; then
-   AC_CHECK_LIB([gslcblas], [cblas_dgemm],[have_gsl_cblas="yes"])
-   AC_CHECK_LIB([gsl], [gsl_blas_dgemm],[have_gsl="yes"])
-   AC_CHECK_LIB([gsl], [gsl_eigen_nonsymm],[have_gsl_eigen="yes"])
-   AC_CHECK_LIB([gsl], [gsl_sf_bessel_Jn],[have_gsl_eigen="yes"])
-fi
-AM_CONDITIONAL(HAVE_GSL, [test "x${have_gsl}" = "xyes"])
-AM_CONDITIONAL(HAVE_GSL_CBLAS, [test "x${have_gsl_cblas}" = "xyes"])
-if test "xyes" = "x${have_gsl}"; then
+AS_IF([test "xno" != "x${with_gsl}"],[
+   AC_CHECK_LIB([gslcblas], [cblas_dgemm])
+   AC_CHECK_LIB([gsl], [gsl_blas_dgemm])
+   AS_IF([test "x${ac_cv_lib_gsl_gsl_blas_dgemm}" = "xyes"],[
+        AC_CHECK_LIB([gsl], [gsl_eigen_nonsymm], [:])
+        AC_CHECK_LIB([gsl], [gsl_sf_bessel_Jn], [:])
+   ])
+])
+AM_CONDITIONAL(HAVE_GSL, [test "x${ac_cv_lib_gsl_gsl_blas_dgemm}" = "xyes"])
+AM_CONDITIONAL(HAVE_GSL_CBLAS, [test "x${ac_cv_lib_gslcblas_cblas_dgemm}" = "xyes"])
+AS_IF([test "x${ac_cv_lib_gsl_gsl_blas_dgemm}" = "xyes"],[
    AC_DEFINE(HAVE_LIBGSL,1,[Define to 1 if you have the `gsl' library (-lgsl).])
-fi
-if test "xyes" = "x${have_gsl_cblas}"; then
+])
+AS_IF([test "x${ac_cv_lib_gslcblas_cblas_dgemm}" = "xyes"],[
    AC_DEFINE(HAVE_LIBGSLCBLAS,1,[Define to 1 if you have the `gslcblas' library (-lgslcblas).])
-fi
-if test "xyes" = "x${have_gsl_eigen}"; then
+])
+AS_IF([test "x${ac_cv_lib_gsl_gsl_eigen_nonsymm}" = "xyes"],[
    AC_DEFINE(HAVE_GSL_EIGEN_NONSYMM,1,[can gsl compute complex eigenvalues?])
-fi
-AM_CONDITIONAL(HAVE_GSL_EIGEN, [test "x${have_gsl_eigen}" = "xyes"])
-if test "xyes" = "x${have_gsl_bessel}"; then
+])
+AM_CONDITIONAL(HAVE_GSL_EIGEN, [test "x${ac_cv_lib_gsl_gsl_eigen_nonsymm}" = "xyes"])
+
+AS_IF([test "x${ac_cv_lib_gsl_gsl_sf_bessel_Jn}" = "xyes"],[
    AC_DEFINE(HAVE_GSL_BESSEL,1,[can gsl compute Bessel functions?])
-fi
-AM_CONDITIONAL(HAVE_GSL_BESSEL, [test "x${have_gsl_bessel}" = "xyes"])
+])
+AM_CONDITIONAL(HAVE_GSL_BESSEL, [test "x${ac_cv_lib_gsl_sf_bessel_Jn}" = "xyes"])
 
 
 dnl for math.h Bessel/Neumann functions
-have_math_bessel="no"
-AC_CHECK_LIB([m], [jn],have_math_bessel="yes")
-if test "xyes" = "x${have_math_bessel}"; then
+AC_CHECK_LIB([m], [jn])
+AS_IF([test "xyes" = "x${ac_cv_lib_m_jn}"],[
    AC_DEFINE(HAVE_MATH_BESSEL,1,[can math compute Bessel functions?])
-fi
-AM_CONDITIONAL(HAVE_MATH_BESSEL, [test "x${have_math_bessel}" = "xyes"])
+])
+AM_CONDITIONAL(HAVE_MATH_BESSEL, [test "x${ac_cv_lib_m_jn}" = "xyes"])
 
 
 
 AC_SUBST([CPPFLAGS])
 AC_SUBST([CFLAGS])
+AC_SUBST([LIBS])
 AC_SUBST([DEFS])
 AC_SUBST([ARCH_FLAG])
 AC_SUBST([LIBTOOL_DEPS])
 AC_SUBST([EXTRA_LTFLAGS])
-
 AC_SUBST(EXTENSION)
 
 AC_OUTPUT()

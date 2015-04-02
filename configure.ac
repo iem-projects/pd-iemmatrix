@@ -82,6 +82,14 @@ AC_CHECK_LIB([gdi32], [main])
 
 dnl Replace `main' with a function in -lm:
 AC_CHECK_LIB([m], [main])
+dnl for math.h Bessel/Neumann functions
+AC_CHECK_LIB([m], [jn])
+AS_IF([test "xyes" = "x${ac_cv_lib_m_jn}"],[
+   AC_DEFINE(HAVE_MATH_BESSEL,1,[can math compute Bessel functions?])
+])
+AM_CONDITIONAL(HAVE_MATH_BESSEL, [test "x${ac_cv_lib_m_jn}" = "xyes"])
+
+
 dnl Replace `main' with a function in -lpthread:
 dnl AC_CHECK_LIB([pthread], [main])
 dnl Replace `main' with a function in -lstk:
@@ -159,6 +167,10 @@ AS_IF([test "xno" != "x${with_fftw}" ],[
 have_fftw="no"
 have_fftw3="no"
 AC_CHECK_LIB([fftw3],[fftw_execute])
+AS_IF([test "x$ac_cv_lib_fftw3_fftw_execute" != "xyes"],[
+      AC_CHECK_LIB([fftw3-3],[fftw_execute])
+      ac_cv_lib_fftw3_fftw_execute=$ac_cv_lib_fftw3_3_fftw_execute
+     ])
 AS_IF([test "x$ac_cv_lib_fftw3_fftw_execute" = "xyes"],
       [AC_CHECK_HEADER([fftw3.h], [have_fftw3="yes"])])
 ])
@@ -211,15 +223,6 @@ AS_IF([test "x${ac_cv_lib_gsl_gsl_sf_bessel_Jn}" = "xyes"],[
    AC_DEFINE(HAVE_GSL_BESSEL,1,[can gsl compute Bessel functions?])
 ])
 AM_CONDITIONAL(HAVE_GSL_BESSEL, [test "x${ac_cv_lib_gsl_sf_bessel_Jn}" = "xyes"])
-
-
-dnl for math.h Bessel/Neumann functions
-AC_CHECK_LIB([m], [jn])
-AS_IF([test "xyes" = "x${ac_cv_lib_m_jn}"],[
-   AC_DEFINE(HAVE_MATH_BESSEL,1,[can math compute Bessel functions?])
-])
-AM_CONDITIONAL(HAVE_MATH_BESSEL, [test "x${ac_cv_lib_m_jn}" = "xyes"])
-
 
 
 AC_SUBST([CPPFLAGS])

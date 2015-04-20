@@ -167,12 +167,13 @@ AS_IF([test "xno" != "x${with_fftw}" ],[
 have_fftw="no"
 have_fftw3="no"
 AC_CHECK_LIB([fftw3],[fftw_execute])
-AS_IF([test "x$ac_cv_lib_fftw3_fftw_execute" != "xyes"],[
+  AS_IF([test "x$ac_cv_lib_fftw3_fftw_execute" != "xyes"],[
       AC_CHECK_LIB([fftw3-3],[fftw_execute])
       ac_cv_lib_fftw3_fftw_execute=$ac_cv_lib_fftw3_3_fftw_execute
-     ])
-AS_IF([test "x$ac_cv_lib_fftw3_fftw_execute" = "xyes"],
-      [AC_CHECK_HEADER([fftw3.h], [have_fftw3="yes"])])
+  ])
+  AS_IF([test "x$ac_cv_lib_fftw3_fftw_execute" = "xyes"],[
+      AC_CHECK_HEADERS([fftw3.h], [have_fftw3="yes"])
+  ])
 ])
 AS_IF([test "xyes" = "x${have_fftw3}"],[
    have_fftw="yes"
@@ -187,13 +188,21 @@ AM_CONDITIONAL(HAVE_FFTW, [test "x${have_fftw}" = "xyes"])
 
 dnl for soundfile reading (and writing, if we do that...)
 AC_ARG_WITH([sndfile], AC_HELP_STRING([--without-sndfile], [compile without libsndfile support]))
+have_sndfile="no"
 AS_IF([test "xno" != "x${with_sndfile}"],[
    AC_CHECK_LIB([sndfile], [sf_close])
+   AS_IF([test "x$ac_cv_lib_sndfile_sf_close" != "xyes"],[
+      AC_CHECK_LIB([sndfile-1],[sf_close])
+      ac_cv_lib_sndfile_sf_close=$ac_cv_lib_sndfile_1_sf_close
+   ])
+   AS_IF([test "x$ac_cv_lib_sndfile_sf_close" = "xyes"],[
+       AC_CHECK_HEADERS([sndfile.h], [have_sndfile="yes"])
+   ])
 ])
-AS_IF([test "xyes" = "x${ac_cv_lib_sndfile_sf_close}"],[
+AS_IF([test "xyes" = "x${have_sndfile}"],[
    AC_DEFINE(HAVE_LIBSNDFILE,1,[Define to 1 if you have the `sndfile' library (-lsndfile).])
 ])
-AM_CONDITIONAL(HAVE_SNDFILE, [test "xyes" = "x${ac_cv_lib_sndfile_sf_close}"])
+AM_CONDITIONAL(HAVE_SNDFILE, [test "xyes" = "x${have_sndfile}"])
 
 
 dnl for gnu scientific library -lgsl:

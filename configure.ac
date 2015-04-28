@@ -200,7 +200,8 @@ AS_IF([test "xno" != "x${with_sndfile}"],[
    ])
 ])
 AS_IF([test "xyes" = "x${have_sndfile}"],[
-   AC_DEFINE(HAVE_LIBSNDFILE,1,[Define to 1 if you have the `sndfile' library (-lsndfile).])
+   AC_DEFINE([HAVE_LIBSNDFILE],1,[Define to 1 if you have the `sndfile' library (-lsndfile).])
+   AC_DEFINE([HAVE_SNDFILE_H],1,[Define to 1 if you have the <sndfile.h> header file.])
 ])
 AM_CONDITIONAL(HAVE_SNDFILE, [test "xyes" = "x${have_sndfile}"])
 

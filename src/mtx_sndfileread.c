@@ -141,19 +141,21 @@ static void mtx_sndfileread_open (t_mtx_sndfileread *x, t_symbol *s, t_symbol*ty
 {
 #ifdef HAVE_SNDFILE_H
   char filenamebuf[MAXPDSTRING], *filenamebufptr;
-  char*dirname=canvas_getdir(x->x_canvas)->s_name;
   int fd;
 
   mtx_sndfileread_close(x);
 
   /* directory, filename, extension, dirresult, nameresult, unsigned int size, int bin */
-  if ((fd=open_via_path(dirname,
-                        s->s_name,"", filenamebuf, &filenamebufptr, MAXPDSTRING,0)) < 0 ) {
-    pd_error(x, "%s: failed to open %s", s->s_name, filenamebuf);
+  fd=canvas_open(x->x_canvas, s->s_name, "", filenamebuf, &filenamebufptr, MAXPDSTRING, 1);
+  if(fd<0){
+    pd_error(x, "failed to open %s : %s", s->s_name, filenamebuf);
     return;
   }
-  if (!(x->x_sndfileread = sf_open_fd (fd, SFM_READ, &x->x_sfinfo, 1))) {
-    pd_error(x, "%s: failed to sfopen %s", s->s_name, filenamebuf);
+  iemmatrix_fdclose(fd);
+  if(!filenamebufptr[-1])
+    filenamebufptr[-1]='/';
+  if (!(x->x_sndfileread = sf_open (filenamebuf, SFM_READ, &x->x_sfinfo))) {
+    pd_error(x, "failed to sfopen %s : %s", s->s_name, filenamebuf);
     mtx_sndfileread_close(x);
     return;
   }

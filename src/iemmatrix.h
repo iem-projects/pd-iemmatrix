@@ -197,6 +197,12 @@ t_matrixfloat*mtx_doTranspose(t_matrixfloat*output, int row, int col);
 t_matrixfloat*mtx_doMultiply(int rowA, t_matrixfloat*A, int colArowB, t_matrixfloat*B, int colB);
 
 
+/** wrapper functions in iemmatrix_utility.c
+ *
+ * iemmatrix_fdclose == sys_close
+ */
+int iemmatrix_fdclose(int fd);
+
 /* for debugging purposes */
 #define MARK	startpost("MARK[%s:%d@%s]", __FILE__, __LINE__, __FUNCTION__), post
 

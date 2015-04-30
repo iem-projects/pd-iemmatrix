@@ -16,6 +16,22 @@
   G.Holzmann: this has been in mtx_matrix.c before
               now here should be the shared code !!!
 */
+#if defined __linux__ || defined __APPLE__
+# define DL_OPEN
+#endif
+
+#ifdef DL_OPEN
+# define _GNU_SOURCE
+# include <dlfcn.h>
+#endif
+
+#if defined _WIN32
+# include <io.h>
+# include <windows.h>
+# define close _close
+#endif
+
+#include <unistd.h>
 
 #include "iemmatrix.h"
 
@@ -519,4 +535,30 @@ t_matrixfloat*mtx_doMultiply(int rowA, t_matrixfloat*A, int colArowB, t_matrixfl
     }
   }
   return result;
+}
+
+
+static void*get_function(const char*name) {
+#ifdef DL_OPEN
+  return (void*)dlsym(RTLD_DEFAULT, name);
+#elif defined _WIN32
+  return (void*)GetProcAddress( GetModuleHandle("pd.dll"), name);
+#else
+  // no loader for older Pd's....
+#endif
+  return NULL;
+}
+typedef int (*fdclose_fun_t)(int fd);
+static fdclose_fun_t get_sysclose() {
+  fdclose_fun_t my_close=(fdclose_fun_t)get_function("sys_close");
+  if(!my_close)
+    my_close=close;
+  return my_close;
+}
+
+
+int iemmatrix_fdclose(int fd) {
+  static fdclose_fun_t my_close=0;
+  if(!my_close)my_close=get_sysclose();
+  return my_close(fd);
 }

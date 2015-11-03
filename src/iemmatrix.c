@@ -14,6 +14,11 @@
 #include "iemmatrix.h"
 void iemmatrix_sources_setup(void);
 
+#ifndef BUILD_DATE
+# define BUILD_DATE "" __DATE__ " : " __TIME__
+#endif
+
+
 void iemmatrix_setup(){
   post("");
   post("iemmatrix "VERSION);
@@ -22,7 +27,7 @@ void iemmatrix_setup(){
   post("\t\tIOhannes m zmölnig");
   post("\t\tThomas Musil");
   post("\t\tFranz Zotter");
-  post("\tcompiled "__DATE__" : "__TIME__);
+  post("\tcompiled "BUILD_DATE);
   post("");
 
   iemmatrix_sources_setup();

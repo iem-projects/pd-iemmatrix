@@ -31,10 +31,19 @@ AC_PROG_LN_S
 AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 
-AC_ARG_WITH([pd],       [  --with-pd=</path/to/pd> where to look for pd-headers and and -libs])
-AC_ARG_WITH([extension],[  --with-extension=<ext>  enforce a certain extension for the dynamic library (e.g. dll)])
-AC_ARG_ENABLE([library],[  --enable-library        build iemmatrix as multi-object library (default, "yes"), as single-object externals ("no") or as both ("both")])
-AC_ARG_WITH([build-date],AC_HELP_STRING([--with-build-date=<str>], [alternative date string]))
+AC_ARG_WITH([pd],
+            AC_HELP_STRING([--with-pd=</path/to/pd>],
+                           [where to look for Pd-headers and and -libs]))
+AC_ARG_WITH([extension],
+            AC_HELP_STRING([--with-extension=<ext>],
+                           [enforce a certain extension for the dynamic library (e.g. dll)]))
+AC_ARG_ENABLE([library],
+            AC_HELP_STRING([--enable-library],
+                           [build iemmatrix as multi-object library (default, "yes"), as single-object externals ("no") or as both ("both")]))
+AC_ARG_WITH([build-date],
+            AC_HELP_STRING([--with-build-date=<str>],
+                           [alternative date string]))
+
 AM_CONDITIONAL([LIBRARY], [test "x${enable_library}" != "xno"])
 AM_CONDITIONAL([SINGLEOBJECTS], [test "x${enable_library}" = "xno" || test "x${enable_library}" = "xboth"])
 

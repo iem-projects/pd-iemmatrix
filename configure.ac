@@ -34,6 +34,7 @@ AC_PROG_LIBTOOL
 AC_ARG_WITH([pd],       [  --with-pd=</path/to/pd> where to look for pd-headers and and -libs])
 AC_ARG_WITH([extension],[  --with-extension=<ext>  enforce a certain extension for the dynamic library (e.g. dll)])
 AC_ARG_ENABLE([library],[  --enable-library        build iemmatrix as multi-object library (default, "yes"), as single-object externals ("no") or as both ("both")])
+AC_ARG_WITH([build-date],AC_HELP_STRING([--with-build-date=<str>], [alternative date string]))
 AM_CONDITIONAL([LIBRARY], [test "x${enable_library}" != "xno"])
 AM_CONDITIONAL([SINGLEOBJECTS], [test "x${enable_library}" = "xno" || test "x${enable_library}" = "xboth"])
 
@@ -234,6 +235,13 @@ AS_IF([test "x${ac_cv_lib_gsl_gsl_sf_bessel_Jn}" = "xyes"],[
 ])
 AM_CONDITIONAL(HAVE_GSL_BESSEL, [test "x${ac_cv_lib_gsl_sf_bessel_Jn}" = "xyes"])
 
+AC_MSG_CHECKING([build-date])
+AS_IF([test "x$with_build_date" = "xyes" ],[with_build_date=""])
+AS_IF([test "x$with_build_date" = "xno"  ],[with_build_date=""])
+AS_IF([test "x$with_build_date" != "x"  ],[ AC_DEFINE_UNQUOTED([BUILD_DATE], ["$with_build_date"], [user-defined build-date string])])
+## urgh, brackets need to be escaped with @<:@ and @:>@...
+AS_IF([test "x$with_build_date" != "x"  ],[ with_build_date="@<:@default@:>@" ])
+AC_MSG_RESULT([$with_build_date])
 
 AC_SUBST([CPPFLAGS])
 AC_SUBST([CFLAGS])

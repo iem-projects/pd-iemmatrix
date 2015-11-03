@@ -177,10 +177,10 @@ AC_CHECK_LIB([fftw3],[fftw_execute])
 ])
 AS_IF([test "xyes" = "x${have_fftw3}"],[
    have_fftw="yes"
-   AC_DEFINE(HAVE_LIBFFTW3, 1, [Define to 1 if you have the `fftw3' library (-lfftw3).])
+   AC_DEFINE(HAVE_LIBFFTW3, 1, [Define to 1 if you have the 'fftw3' library (-lfftw3).])
 ])
-AS_IF([test "xyes" = "x${have_fftw}"],[
-dnl   AC_DEFINE(HAVE_LIBFFTW,1,[Define to 1 if you have the `fftw' library (e.g. -lfftw3).])
+AS_IF([test "xyes" = "x${have_fftw}" ],[
+dnl   AC_DEFINE(HAVE_LIBFFTW,1,[Define to 1 if you have the 'fftw' library (e.g. -lfftw3).])
    AC_DEFINE(USE_FFTW, 1, [can we use fftw?])
 ])
 
@@ -200,7 +200,7 @@ AS_IF([test "xno" != "x${with_sndfile}"],[
    ])
 ])
 AS_IF([test "xyes" = "x${have_sndfile}"],[
-   AC_DEFINE([HAVE_LIBSNDFILE],1,[Define to 1 if you have the `sndfile' library (-lsndfile).])
+   AC_DEFINE([HAVE_LIBSNDFILE],1,[Define to 1 if you have the 'sndfile' library (-lsndfile).])
    AC_DEFINE([HAVE_SNDFILE_H],1,[Define to 1 if you have the <sndfile.h> header file.])
 ])
 AM_CONDITIONAL(HAVE_SNDFILE, [test "xyes" = "x${have_sndfile}"])
@@ -219,10 +219,10 @@ AS_IF([test "xno" != "x${with_gsl}"],[
 AM_CONDITIONAL(HAVE_GSL, [test "x${ac_cv_lib_gsl_gsl_blas_dgemm}" = "xyes"])
 AM_CONDITIONAL(HAVE_GSL_CBLAS, [test "x${ac_cv_lib_gslcblas_cblas_dgemm}" = "xyes"])
 AS_IF([test "x${ac_cv_lib_gsl_gsl_blas_dgemm}" = "xyes"],[
-   AC_DEFINE(HAVE_LIBGSL,1,[Define to 1 if you have the `gsl' library (-lgsl).])
+   AC_DEFINE(HAVE_LIBGSL,1,[Define to 1 if you have the 'gsl' library (-lgsl).])
 ])
 AS_IF([test "x${ac_cv_lib_gslcblas_cblas_dgemm}" = "xyes"],[
-   AC_DEFINE(HAVE_LIBGSLCBLAS,1,[Define to 1 if you have the `gslcblas' library (-lgslcblas).])
+   AC_DEFINE(HAVE_LIBGSLCBLAS,1,[Define to 1 if you have the 'gslcblas' library (-lgslcblas).])
 ])
 AS_IF([test "x${ac_cv_lib_gsl_gsl_eigen_nonsymm}" = "xyes"],[
    AC_DEFINE(HAVE_GSL_EIGEN_NONSYMM,1,[can gsl compute complex eigenvalues?])

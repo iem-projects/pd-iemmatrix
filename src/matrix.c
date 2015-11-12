@@ -109,7 +109,7 @@ static void matrix_read(t_matrix *x, t_symbol *filename)
 static void matrix_write(t_matrix *x, t_symbol *filename)
 {
   t_atom *ap=x->atombuffer+2;
-  char *filnam = (char*)getbytes(sizeof(char)*MAXPDSTRING);
+  char filnam[MAXPDSTRING];
   int rows = x->row, cols = x->col;
   FILE *f=0;
 
@@ -155,7 +155,6 @@ static void matrix_write(t_matrix *x, t_symbol *filename)
  end:
   /* close file */
   if (f) fclose(f);
-  if(filnam)freebytes(filnam, sizeof(char)*MAXPDSTRING);
 }
 
 static void matrix_list(t_matrix *x, t_symbol *s, int argc, t_atom *argv)

@@ -44,7 +44,9 @@ points_t allocatePoints (const size_t num_points) {
     points_t points;
     points.v = (vector_t *) malloc(sizeof(vector_t)*num_points);
     if (points.v!=0)
-        points.num_points = num_points;
+      points.num_points = num_points;
+    else
+      points.num_points = 0;
     return points;
 }
 

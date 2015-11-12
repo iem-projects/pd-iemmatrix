@@ -90,7 +90,7 @@ void legendre_a_free(LegendreWorkSpace *wl) {
 
 void legendre_a(double *theta, LegendreWorkSpace *wl) {
    unsigned int l,l0;
-   const int incr=(wl->nmax+1)*(wl->nmax+2)/2;
+   const int incr=wl?((wl->nmax+1)*(wl->nmax+2)/2):0;
    double *costheta;
    double *sintheta;
    

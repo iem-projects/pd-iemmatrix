@@ -39,7 +39,7 @@ void chebyshev12_free(Cheby12WorkSpace *wc) {
 
 void chebyshev12(double *phi, Cheby12WorkSpace *wc) {
    unsigned int l,l0,n;
-   const int incr=2*wc->nmax+1;
+   const int incr=wc?(2*wc->nmax+1):0;
    double *cosphi;
    double *sinphi;
    const double oneoversqrt2pi=1.0/sqrt(2.0*M_PI);

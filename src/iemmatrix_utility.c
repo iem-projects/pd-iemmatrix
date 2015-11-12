@@ -42,6 +42,7 @@ void setdimen(t_matrix *x, int row, int col)
 {
   x->col = col;
   x->row = row;
+  if(!x->atombuffer)return;
   SETFLOAT(x->atombuffer,   row);
   SETFLOAT(x->atombuffer+1, col);
 }
@@ -320,8 +321,7 @@ void matrix_row(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
       post("matrix: row index %d is out of range", r+1);
       return;
     }
-    
-    
+
   default:
     r=atom_getfloat(argv++)-1;
     if (argc--<col){

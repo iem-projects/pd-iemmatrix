@@ -299,14 +299,16 @@ void matrix_row(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 {
   t_atom *ap;
   int row=x->row, col=x->col;
-  int r;
+  int r, c;
   t_float f;
 
   switch (argc){
   case 0:
+    /* row: get all rows as lists */
     for (r=0;r<row;r++)outlet_list(x->x_obj.ob_outlet, gensym("row"), col, x->atombuffer+r*col+2);
     break;
   case 1:
+    /* row <index>: get row<index> as list */
     r=atom_getfloat(argv)-1;
     if ((r<0)||(r>=row)){
       post("matrix: row index %d is out of range", r+1);
@@ -315,6 +317,7 @@ void matrix_row(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
     outlet_list(x->x_obj.ob_outlet, gensym("row"), col, x->atombuffer+r*col+2);
     break;
   case 2:
+    /* row <index> <value>: set all elements of row<index> to <value> */
     r=atom_getfloat(argv)-1;
     f=atom_getfloat(argv+1);
     if ((r<0)||(r>=row)){
@@ -326,6 +329,7 @@ void matrix_row(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
     }
     break;
   default:
+    /* row <index> <value>...: set elements of row<index> to <value1> <value2> ... */
     r=atom_getfloat(argv++)-1;
     if (argc--<col){
       post("matrix: sparse rows not yet supported : use \"mtx_check\"");
@@ -335,11 +339,9 @@ void matrix_row(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
       post("matrix: row index %d is out of range", r+1);
       return;
     }
-    if (r==row) {
-    } else {
-      ap=x->atombuffer+2+col*r;
-      memcpy(ap, argv, col*sizeof(t_atom));
-    }
+    ap=x->atombuffer+2+col*r;
+    memcpy(ap, argv, col*sizeof(t_atom));
+    break;
   }
 }
 
@@ -348,9 +350,11 @@ void matrix_col(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
   t_atom *ap;
   int row=x->row, col=x->col;
   int c, r;
+  t_float f;
 
   switch (argc){
   case 0:
+    /* col: get all cols as lists */
     ap=(t_atom *)getbytes(row*sizeof(t_atom));
     for (c=0;c<col;c++) {
       for (r=0;r<row;r++)SETFLOAT(&ap[r], atom_getfloat(x->atombuffer+2+c+col*r));
@@ -359,6 +363,7 @@ void matrix_col(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
     freebytes(ap, row*sizeof(t_atom));
     break;
   case 1:
+    /* col <index>: get col<index> as list */
     ap=(t_atom *)getbytes(row*sizeof(t_atom));
     c=atom_getfloat(argv)-1;
     if ((c<0)||(c>=col)){
@@ -369,7 +374,20 @@ void matrix_col(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
     outlet_list(x->x_obj.ob_outlet, gensym("col"), row, ap);
     freebytes(ap, row*sizeof(t_atom));
     break;
+  case 2:
+    /* row <index> <value>: set all elements of row<index> to <value> */
+    c=atom_getint(argv)-1;
+    f=atom_getfloat(argv+1);
+    if ((c<0)||(c>=col)){
+      post("matrix: col index %d is out of range", c+1);
+      return;
+    }
+    for(r=0; r<row; r++){
+      SETFLOAT(x->atombuffer+2+c+r*col, f);
+    }
+    break;
   default:
+    /* row <index> <value>...: set elements of row<index> to <value1> <value2> ... */
     c=atom_getfloat(argv++)-1;
     if (argc--<row){
       post("matrix: sparse cols not yet supported : use \"mtx_check\"");

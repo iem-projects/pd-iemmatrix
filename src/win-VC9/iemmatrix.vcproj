@@ -46,7 +46,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="..\;&quot;$(ProgramFiles)\pd\src&quot;;..\..\..\..\..\pd\src"
-				PreprocessorDefinitions="PD;MSW;__WIN32__;IEMMATRIX;_USE_MATH_DEFINES;PACKAGE_VERSION=\&quot;0.2\&quot;"
+				PreprocessorDefinitions="PD;MSW;__WIN32__;IEMMATRIX;_USE_MATH_DEFINES;PACKAGE_VERSION=\&quot;0.3\&quot;"
 				RuntimeLibrary="0"
 				StructMemberAlignment="5"
 				PrecompiledHeaderFile=".\obj/iemmatrix.pch"

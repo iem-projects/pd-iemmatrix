@@ -46,9 +46,9 @@ static void mtx_bspline_resize(t_mtx_spline *x, int cols, int dim){
   if(x->x_x)freebytes(x->x_x, size); x->x_x=0;
 
   for(i=0; i<x->x_dimension; i++){
-    if(x->x_y&&x->x_y[i])freebytes(x->x_y[i], size); x->x_y[i]=0;
-    if(x->x_u&&x->x_u[i])freebytes(x->x_u[i], size); x->x_u[i]=0;
-    if(x->x_p&&x->x_p[i])freebytes(x->x_p[i], size); x->x_p[i]=0;
+    if(x->x_y&&x->x_y[i]){freebytes(x->x_y[i], size); x->x_y[i]=0;}
+    if(x->x_u&&x->x_u[i]){freebytes(x->x_u[i], size); x->x_u[i]=0;}
+    if(x->x_p&&x->x_p[i]){freebytes(x->x_p[i], size); x->x_p[i]=0;}
   }
   if(x->x_y)freebytes(x->x_y, x->x_dimension*sizeof(t_matrixfloat*)); x->x_y=0;
   if(x->x_u)freebytes(x->x_u, x->x_dimension*sizeof(t_matrixfloat*)); x->x_u=0;

@@ -16,7 +16,7 @@ matrix:
 
 before_install:
 - sudo apt-get update -qq
-- sudo apt-get install -qq puredata-dev libfftw3-dev libsndfile1-dev libgsl-dev
+- sudo apt-get install -qq puredata-dev libfftw3-dev libsndfile1-dev libgsl0-dev
 
 before_script:
   - ./autogen.sh

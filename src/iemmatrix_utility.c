@@ -321,7 +321,10 @@ void matrix_row(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
       post("matrix: row index %d is out of range", r+1);
       return;
     }
-
+    for(c=0; c<col; c++){
+      SETFLOAT(x->atombuffer+2+c+r*col, f);
+    }
+    break;
   default:
     r=atom_getfloat(argv++)-1;
     if (argc--<col){

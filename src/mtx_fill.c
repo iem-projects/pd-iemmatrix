@@ -227,6 +227,7 @@ static void mTXFillScalar (MTXfill *mtx_fill_obj, t_float f)
 	 post("mtx_fill: scalar fill for submatrices not supported yet");
 	 return;
 	 break;
+	 /* coverity[unterminated_case]: fall thru to matrix output */
       case FILL_INDEXED_ELEMENTS:
 	 if (mtx_fill_obj->max_index > mtx_fill_obj->size) {
 	    post("mtx_fill: index matrix index exceeds matrix borders");

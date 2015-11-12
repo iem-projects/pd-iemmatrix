@@ -85,13 +85,13 @@ static void *newMTXSph (t_symbol *s, int argc, t_atom *argv)
      whichfunction=fsym->s_name[0];
   switch (whichfunction) {
      default:
-     case 'j':
+     case 'J': case 'j':
         x->list_h_re_out = outlet_new (&x->x_obj, gensym("matrix"));
 	break;
-     case 'h':
+     case 'H': case 'h':
         x->list_h_re_out = outlet_new (&x->x_obj, gensym("matrix"));
 	/* coverity[unterminated_case]: H has both real&imag outlet */
-     case 'y':
+     case 'Y': case 'y':
         x->list_h_im_out = outlet_new (&x->x_obj, gensym("matrix"));
   }
   nmax=(int) atom_getfloat(argv+1);

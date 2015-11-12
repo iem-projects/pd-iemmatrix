@@ -35,11 +35,13 @@ void *newMtxEITilde(t_symbol *s, int argc, t_atom *argv)
    if (argc > 2) {
       sd = atom_getint(argv++);
       sg = argc-1;
-      sg = (sg<0)?0:sg;
-      sd = (sd<1)?1:sd;
    }
+   sg = (sg<0)?0:sg;
+   sd = (sd<1)?1:sd;
+
    x->sd=sd;
    x->sg=sg;
+
    x->se=(2*sd-1)*(2*sg-1);
    post("size delay %d, size gain %d",x->sd,x->sg);
 

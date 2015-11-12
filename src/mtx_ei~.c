@@ -43,7 +43,7 @@ void *newMtxEITilde(t_symbol *s, int argc, t_atom *argv)
    x->sg=sg;
 
    x->se=(2*sd-1)*(2*sg-1);
-   post("size delay %d, size gain %d",x->sd,x->sg);
+   logpost(x, 4, "size delay %d, size gain %d",x->sd,x->sg);
 
    x->list_out = (t_atom*) getbytes ((x->se + 2) * sizeof(t_atom));
    
@@ -51,7 +51,7 @@ void *newMtxEITilde(t_symbol *s, int argc, t_atom *argv)
       x->g = (t_float*) getbytes (x->sg*sizeof(t_float));
       for (sg=0;sg<x->sg;sg++){ 
          x->g[sg] = atom_getfloat (argv++);
-	 post("g[%d]=%f",sg,x->g[sg]);
+	 logpost(x, 4, "g[%d]=%f",sg,x->g[sg]);
       }
    }
 

@@ -83,7 +83,7 @@ static void mTXQhullMatrix(MTXQhull *xo, t_symbol *s,
   size=rows*columns;
 
   if ((rows<4)||(columns!=3)) {
-    pd_error(x, "[mtx_qhull]: requires an L x 3 matrix with at least L>=4");
+    pd_error(xo, "[mtx_qhull]: requires an L x 3 matrix with at least L>=4");
     return;
   }
   xo->zh = (zhull_t*)malloc(sizeof(zhull_t));
@@ -123,7 +123,7 @@ static void mTXQhullMatrix(MTXQhull *xo, t_symbol *s,
       free(xo->zh);
       xo->zh=0;
     } else {
-      pd_error(x, "[mtx_qhull]: memory problem, no operation!");
+      pd_error(xo, "[mtx_qhull]: memory problem, no operation!");
       xo->size=0;
       freeZhull(xo->zh);
       free(xo->zh);
@@ -143,7 +143,7 @@ static void mTXQhullMatrix(MTXQhull *xo, t_symbol *s,
       free(xo->zh);
     }
     xo->zh=0;
-    pd_error(x, "[mtx_qhull]: memory error, no operation!");
+    pd_error(xo, "[mtx_qhull]: memory error, no operation!");
   }
 }
 

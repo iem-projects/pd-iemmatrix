@@ -118,7 +118,7 @@ static void mtx_bspline_matrix2(t_mtx_spline *X, t_symbol *s, int argc,
   t_matrixfloat*dummy;
   int i,j;
   int N;
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(X, argc, argv, 0))return;
 
   row=atom_getfloat(argv);
   col=atom_getfloat(argv+1);

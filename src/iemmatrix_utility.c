@@ -35,7 +35,6 @@
 
 #include "iemmatrix.h"
 
-
 /* utility functions */
 
 void setdimen(t_matrix *x, int row, int col)
@@ -647,8 +646,8 @@ int iemmatrix_fdclose(int fd)
 
 int iemmatrix_check(void*object, int argc, t_atom*argv, unsigned int tests) {
   t_object*x=(t_object*)object;
-  t_symbol*s=atom_getsymbol(binbuf_getvec(x->te_binbuf));
-  char*objname=(s && s->s_name)?s->s_name:0;
+  t_symbol*s=(x && x->te_binbuf)?atom_getsymbol(binbuf_getvec(x->te_binbuf)):0;
+  const char*objname=(s && s->s_name)?s->s_name:0;
 
   int row=(argc>1)?atom_getfloat(argv+0):0;
   int col=(argc>1)?atom_getfloat(argv+1):0;
@@ -658,7 +657,6 @@ int iemmatrix_check(void*object, int argc, t_atom*argv, unsigned int tests) {
       IEMMATRIX_CHECK_CRIPPLED
       | IEMMATRIX_CHECK_DIMENSIONS
       | IEMMATRIX_CHECK_SPARSE;
-
   if ((tests & IEMMATRIX_CHECK_CRIPPLED) && argc<2) {
     if (objname)
       pd_error(x, "[%s]: crippled matrix", objname);
@@ -668,9 +666,9 @@ int iemmatrix_check(void*object, int argc, t_atom*argv, unsigned int tests) {
   }
   if ((tests & IEMMATRIX_CHECK_DIMENSIONS) && ((col<1)||(row<1))) {
     if (objname)
-      pd_error(x, "[%s]: invalid dimensions", objname);
+      pd_error(x, "[%s]: invalid dimensions %dx%d", objname, col, row);
     else
-      pd_error(x, "invalid dimensions");
+      pd_error(x, "invalid dimensions %dx%d", col, row);
     return 1;
   }
   if ((tests & IEMMATRIX_CHECK_SPARSE)&&(col*row>argc-2)) {

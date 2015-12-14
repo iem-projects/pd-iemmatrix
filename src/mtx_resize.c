@@ -41,8 +41,8 @@ static void mtx_resize_matrix(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
   int r = x->current_row, c = x->current_col;
   int R=0, ROW, COL;
 
-  if (argc<2){    post("mtx_add: crippled matrix");    return;  }
-  if ((col<1)||(row<1)) {    post("mtx_add: invalid dimensions");    return;  }
+  if (argc<2){    post("mtx_resize: crippled matrix");    return;  }
+  if ((col<1)||(row<1)) {    post("mtx_resize: invalid dimensions");    return;  }
   if (col*row>argc-2){    post("sparse matrix not yet supported : use \"mtx_check\"");    return;  }
 
   if (!r)r=row;

@@ -26,8 +26,8 @@ static void mtx_cholesky_matrix(t_matrix *x, t_symbol *s, int argc,
                                 t_atom *argv)
 {
   /* maybe we should do this in double or long double ? */
-  int row=atom_getfloat(argv);
-  int col=atom_getfloat(argv+1);
+  int row=atom_getint(argv);
+  int col=atom_getint(argv+1);
   int i, j, k, row2=row*row;
 
   t_matrixfloat *original, *cholesky;

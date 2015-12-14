@@ -22,8 +22,7 @@
 #X obj 429 238 log;
 #X obj 122 89 t b b;
 #X obj 222 433 print mtx_log;
-#X msg 222 392 for NaNs the behaviour different from [log] \, this
-no bug !;
+#X msg 222 392 for NaNs the behaviour is different from [log] \, this is no bug !;
 #X msg 122 354 1;
 #X obj 222 351 select 0;
 #X connect 0 0 21 0;

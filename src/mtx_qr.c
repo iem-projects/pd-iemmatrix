@@ -107,7 +107,6 @@ static void mTXQrMatrix (MTXQr *x, t_symbol *s,
                          int argc, t_atom *argv)
 {
   int rows, columns, size;
-  int in_size = argc-2;
   int m,n;
 
   if(iemmatrix_check(x, argc, argv, 0))return;
@@ -122,7 +121,7 @@ static void mTXQrMatrix (MTXQr *x, t_symbol *s,
   deleteMTXqr(x);
   allocMTXqr(x);
 
-  for (n=0; n<in_size; n++) {
+  for (n=0; n<size; n++) {
     x->a->data[n]=(double) atom_getfloat(argv++);
   }
 
@@ -131,14 +130,14 @@ static void mTXQrMatrix (MTXQr *x, t_symbol *s,
 
   SETFLOAT((x->list_r),(float) x->rows);
   SETFLOAT((x->list_r+1),(float) x->columns);
-  for (n=0,in_size=0; n<x->rows; n++) {
+  for (n=0,size=0; n<x->rows; n++) {
     for (m=0; m<n; m++) {
-      SETFLOAT((x->list_r+2+in_size), 0);
-      in_size++;
+      SETFLOAT((x->list_r+2+size), 0);
+      size++;
     }
     for (; m<x->columns; m++) {
-      SETFLOAT((x->list_r+2+in_size), (float) x->a->data[in_size]);
-      in_size++;
+      SETFLOAT((x->list_r+2+size), (float) x->a->data[size]);
+      size++;
     }
   }
 

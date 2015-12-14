@@ -105,7 +105,6 @@ static void mTXShMatrix (MTXSh *x, t_symbol *s,
                          int argc, t_atom *argv)
 {
   int rows, columns, size;
-  int in_size = argc-2;
   unsigned int n;
 
   /* size check */
@@ -132,10 +131,10 @@ static void mTXShMatrix (MTXSh *x, t_symbol *s,
   if (x->ws!=0) {
     int n;
     sharmonics(x->phi, x->theta, x->ws);
-    in_size=x->l*(x->nmax+1)*(x->nmax+1);
+    size=x->l*(x->nmax+1)*(x->nmax+1);
     SETFLOAT(x->list_sh,(float)x->l);
     SETFLOAT(x->list_sh+1,(float)(x->nmax+1)*(x->nmax+1));
-    for (n=0; n<in_size; n++) {
+    for (n=0; n<size; n++) {
       SETFLOAT(x->list_sh+n+2,(float)x->ws->y[n]);
     }
     mTXShBang(x);
@@ -195,7 +194,6 @@ static void mTXChMatrix (MTXCh *x, t_symbol *s,
                          int argc, t_atom *argv)
 {
   int rows, columns, size;
-  int in_size = argc-2;
   unsigned int n;
 
   /* size check */
@@ -219,10 +217,10 @@ static void mTXChMatrix (MTXCh *x, t_symbol *s,
     if (x->wc!=0) {
       int n;
       chebyshev12(x->phi, x->wc);
-      in_size=x->l*(2*x->nmax+1);
+      size=x->l*(2*x->nmax+1);
       SETFLOAT(x->list_ch,(float)x->l);
       SETFLOAT(x->list_ch+1,(float)(2*x->nmax+1));
-      for (n=0; n<in_size; n++) {
+      for (n=0; n<size; n++) {
         SETFLOAT(x->list_ch+n+2,(float)x->wc->t[n]);
       }
       mTXChBang(x);

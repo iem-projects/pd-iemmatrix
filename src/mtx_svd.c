@@ -129,7 +129,6 @@ static void mTXSvdMatrix (MTXSvd *x, t_symbol *s,
                           int argc, t_atom *argv)
 {
   int rows, columns, size;
-  int in_size = argc-2;
   int n;
   if(iemmatrix_check(x, argc, argv, 0))return;
   rows = atom_getint (argv++);
@@ -148,7 +147,7 @@ static void mTXSvdMatrix (MTXSvd *x, t_symbol *s,
   deleteMTXusvw(x);
   allocMTXusvw(x);
 
-  for (n=0; n<in_size; n++) {
+  for (n=0; n<size; n++) {
     x->u->data[n]=(double) atom_getfloat(argv++);
   }
 
@@ -156,7 +155,7 @@ static void mTXSvdMatrix (MTXSvd *x, t_symbol *s,
 
   SETFLOAT((x->list_u),(float) x->rows);
   SETFLOAT((x->list_u+1),(float) x->columns);
-  for (n=0; n<in_size; n++) {
+  for (n=0; n<size; n++) {
     SETFLOAT((x->list_u+2+n), (float) x->u->data[n]);
   }
 
@@ -166,8 +165,8 @@ static void mTXSvdMatrix (MTXSvd *x, t_symbol *s,
 
   SETFLOAT((x->list_v),(float) x->columns);
   SETFLOAT((x->list_v+1),(float) x->columns);
-  in_size=x->columns*x->columns;
-  for (n=0; n<in_size; n++) {
+  size=x->columns*x->columns;
+  for (n=0; n<size; n++) {
     SETFLOAT((x->list_v+n+2), (float) x->v->data[n]);
   }
 

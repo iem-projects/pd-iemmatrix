@@ -163,7 +163,6 @@ static void mTXEigMatrix (MTXEig *x, t_symbol *s,
                           int argc, t_atom *argv)
 {
   int rows, columns, size;
-  int in_size = argc-2;
   int n,m;
   float f;
 
@@ -184,7 +183,7 @@ static void mTXEigMatrix (MTXEig *x, t_symbol *s,
   deleteMTXqlw(x);
   allocMTXqlw(x);
 
-  for (n=0; n<in_size; n++) {
+  for (n=0; n<size; n++) {
     x->a->data[n]=(double) atom_getfloat(argv++);
   }
 
@@ -198,7 +197,7 @@ static void mTXEigMatrix (MTXEig *x, t_symbol *s,
     SETFLOAT((x->list_q_im),(float) x->size);
     SETFLOAT((x->list_q_re+1),(float) x->size);
     SETFLOAT((x->list_q_im+1),(float) x->size);
-    for (n=0; n<in_size; n++) {
+    for (n=0; n<size; n++) {
       SETFLOAT((x->list_q_im+2+n), (float) x->q->data[2*n+1]);
       SETFLOAT((x->list_q_re+2+n), (float) x->q->data[2*n]);
     }

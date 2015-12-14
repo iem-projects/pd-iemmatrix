@@ -24,7 +24,7 @@ before_script:
   - ./configure
   # implement Coverity Scan with before_script instead of addons.coverity_scan
   # to work around too-early quota check by the coverity_scan addon
-  - if [[ -n $COVERITY_SCAN_PROJECT_NAME ]] ; then curl -s 'https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh' | bash || true ; fi
+  - if [[ -n $COVERITY_SCAN_PROJECT_NAME ]] ; then curl -s 'https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh' | bash || cat cov-int/scm_log.txt || true ; fi
 
 script:
 - make

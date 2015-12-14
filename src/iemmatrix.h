@@ -17,7 +17,7 @@
 
 /*
  * Copyright (c) Thomas Musil; IEM KUG, Graz, Austria; 2001-2005
- * Copyright (c) IOhannes m zmölnig (forum::für::umläute), IEM KUG, Graz, Austria; 2001-2005
+ * Copyright (c) IOhannes m zmÃ¶lnig (forum::fÃ¼r::umlÃ¤ute), IEM KUG, Graz, Austria; 2001-2005
  *
  * For information on usage and redistribution, and for a DISCLAIMER OF ALL
  * WARRANTIES, see the file, "LICENSE.txt," in this distribution.

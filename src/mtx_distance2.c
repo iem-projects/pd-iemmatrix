@@ -44,7 +44,7 @@ static void mtx_distance2_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
     row2=row;
     col2=col;
   } else if (col!=col2) {
-    post("mtx_distance2: matrix dimensions do not match");
+    pd_error(x, "[mtx_distance2]: matrix dimensions do not match");
     return;
   }
 

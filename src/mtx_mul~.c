@@ -76,7 +76,7 @@ static void matrix_multilde_matrix_set(t_matrix_multilde *x, int argc,
     pd_error(x, "[mtx_*~]: bad matrix: <int:out_rows> <int:in_cols> !");
     return;
   }
-  if(!iemmatrix_check(x, argc, argc 0))return;
+  if(iemmatrix_check(x, argc, argv, 0))return;
 
   row = atom_getint(argv);
   argv++;

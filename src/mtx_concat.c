@@ -108,7 +108,7 @@ static void mTXConcatDoRowConcatenation (MTXconcat *mtx_concat_obj,
   t_atom *ptr_out;
 
   if (mtx1->row != mtx2->row) {
-    post("mtx_concat: row-mode: matrices must have same number of rows!");
+    pd_error(mtx_concat_obj, "[mtx_concat]: row-mode: matrices must have same number of rows!");
     return;
   }
   adjustsize (mtx_out, mtx1->row, mcols);
@@ -130,7 +130,7 @@ static void mTXConcatDoColConcatenation (MTXconcat *mtx_concat_obj,
   t_atom *ptr_out;
 
   if (mtx1->col != mtx2->col) {
-    post("mtx_concat: col-mode: matrices must have same number of columns!");
+    pd_error(mtx_concat_obj, "[mtx_concat]: col-mode: matrices must have same number of columns!");
     return;
   }
   adjustsize (mtx_out, mrows, mtx1->col);
@@ -158,13 +158,7 @@ static void mTXConcatMatrix (MTXconcat *mtx_concat_obj, t_symbol *s,
   t_matrix *mtx_out = &mtx_concat_obj->mtx_out;
 
   /* size check */
-  if (!size) {
-    post("mtx_concat: invalid dimensions");
-    return;
-  } else if (list_size<size) {
-    post("mtx_concat: sparse matrix not yet supported: use \"mtx_check\"");
-    return;
-  }
+  if(iemmatrix_check(mtx_concat_obj, argc, argv, 0))return;
   mtx_in1->row = rows;
   mtx_in1->col = columns;
   mtx_in1->atombuffer = argv;

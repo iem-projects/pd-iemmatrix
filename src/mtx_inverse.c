@@ -26,12 +26,7 @@ static void mtx_inverse_matrix(t_matrix *x, t_symbol *s, int argc,
   int err=0;
 
   t_matrixfloat *original, *inverted;
-
-  if(row*col+2>argc) {
-    post("mtx_print : sparse matrices not yet supported : use \"mtx_check\"");
-    return;
-  }
-
+  if(iemmatrix_check(x, argc, argv, 0))return;
   /* reserve memory for outputting afterwards */
   adjustsize(x, col, row);
 

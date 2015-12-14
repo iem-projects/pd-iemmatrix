@@ -51,13 +51,9 @@ static void mtx_gauss_matrix(t_matrix *x, t_symbol *s, int argc,
   t_matrixfloat *original;
   t_matrixfloat *a1, *a2;  /* dummy pointers */
 
-
-  if(row*col+2>argc) {
-    post("mtx_print : sparse matrices not yet supported : use \"mtx_check\"");
-    return;
-  }
+  if(iemmatrix_check(x, argc, argv, 0))return;
   if (row!=col) {
-    post("mtx_gauss: only square matrices can be gauss eliminated");
+    pd_error(x, "[mtx_gauss]: only square matrices can be gauss eliminated");
     return;
   }
 

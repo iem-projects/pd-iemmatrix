@@ -76,7 +76,7 @@ static void mtx_dispersive_dline_set_lambda(t_mtx_dispersive_dline *x,
   if ((f<1.0f)&&(f>-1.0f)) {
     x->lambda = f;
   } else {
-    post("mtx_dispersive_dline: stable allpass coefficient must be -1<lambda<1");
+    pd_error(x, "[mtx_dispersive_dline]: stable allpass coefficient must be -1<lambda<1");
   }
 }
 
@@ -118,29 +118,29 @@ static void mtx_dispersive_dline_resize(t_mtx_dispersive_dline *x,
     channels=(int)atom_getfloat(argv+1);
     size=length*channels;
     if ((channels<1)||(channels>1000)) {
-      post("mtx_dispersive_dline: number of channels (input rows) must lie between 1 and 1000!");
+      pd_error(x, "[mtx_dispersive_dline]: number of channels (input rows) must lie between 1 and 1000!");
       return;
     }
   }
 
   if ((length<1)||(length>10000)) {
-    post("mtx_dispersive_dline: length not between 1 and 10000!");
+    pd_error(x, "[mtx_dispersive_dline]: length not between 1 and 10000!");
     return;
   }
   if ((x->size!=size)) {
     mtx_dispersive_dline_delete(x);
     if(!(x->list_out=(t_atom*) getbytes(sizeof(t_atom)*(size+2)))) {
-      post("mtx_dispersive_dline: out of memory");
+      pd_error(x, "[mtx_dispersive_dline]: out of memory");
       mtx_dispersive_dline_delete(x);
       return;
     }
     if(!(x->tap=(t_float*) getbytes(sizeof(t_float)*size))) {
-      post("mtx_dispersive_dline: out of memory");
+      pd_error(x, "[mtx_dispersive_dline]: out of memory");
       mtx_dispersive_dline_delete(x);
       return;
     }
     if(!(x->z = (t_float*) getbytes(sizeof(t_float)*size))) {
-      post("mtx_dispersive_dline: out of memory");
+      pd_error(x, "[mtx_dispersive_dline]: out of memory");
       mtx_dispersive_dline_delete(x);
       return;
     }
@@ -173,17 +173,15 @@ static void mtx_dispersive_dline_matrix(t_mtx_dispersive_dline *x,
   int c,n,n2;
   t_atom resize_msg[2];
 
-  if (channels*samples>argc) {
-    post("mtx_dispersive_dline: corrupt matrix passed");
-    return;
-  }
-  post("%d samples, %d channels",samples,channels);
+  if(iemmatrix_check(x, argc, argv, 0))return;
+
+  logpost(x, 4, "%d samples, %d channels",samples,channels);
 
   SETFLOAT(resize_msg,(t_float)x->length);
   SETFLOAT(resize_msg+1,(t_float)channels);
   mtx_dispersive_dline_resize(x,gensym("resize"),2,resize_msg);
 
-  post("%d new size",x->size);
+  logpost(x, 4, "%d new size",x->size);
 
   argv+=2;
   for (c=0, n2=0; c<x->size; c+=x->length) {

@@ -111,13 +111,12 @@ static void mtxIFFTMatrixCold (MtxIFFT *x, t_symbol *s,
   t_float *f_im = x->f_im;
 
   /* fftsize check */
-  if (!size) {
-    post("mtx_ifft: invalid dimensions");
-  } else if (in_size<size) {
-    post("mtx_ifft: sparse matrix not yet supported: use \"mtx_check\"");
-  } else if (columns < 4) {
-    post("mtx_ifft: matrix must have at least 4 columns");
-  } else if (columns == (1 << ilog2(columns))) {
+  if(iemmatrix_check(x, argc, argv, 0))return;
+  if (columns < 4) {
+    pd_error(x, "[mtx_ifft]: matrix must have at least 4 columns");
+    return;
+  }
+  if (columns == (1 << ilog2(columns))) {
     /* ok, prepare real-part of FFT! */
 
     x->renorm_fac = 1.0f / columns;
@@ -138,9 +137,8 @@ static void mtxIFFTMatrixCold (MtxIFFT *x, t_symbol *s,
     readFloatFromList (size, argv, f_im);
 
   } else {
-    post("mtx_rowfft: rowvector size no power of 2!");
+    post("mtx_ifft: rowvector size no power of 2!");
   }
-
 }
 
 
@@ -159,13 +157,13 @@ static void mtxIFFTMatrixHot (MtxIFFT *x, t_symbol *s,
 
   /* fftsize check */
   if (!size) {
-    post("mtx_ifft: invalid dimensions");
+    pd_error(x, "[mtx_ifft]: invalid dimensions");
   } else if (in_size<size) {
-    post("mtx_ifft: sparse matrix not yet supported: use \"mtx_check\"");
+    pd_error(x, "[mtx_ifft]: sparse matrix not yet supported: use \"mtx_check\"");
   } else if (size != x->size) {
-    post("mtx_ifft: left matrix has other dimensions than right matrix");
+    pd_error(x, "[mtx_ifft]: left matrix has other dimensions than right matrix");
   } else if (columns < 4) {
-    post("mtx_ifft: matrix must have at least 4 columns");
+    pd_error(x, "[mtx_ifft]: matrix must have at least 4 columns");
   } else if (columns == (1 << ilog2(columns))) {
     /* ok, do the FFT! */
 
@@ -201,7 +199,7 @@ static void mtxIFFTMatrixHot (MtxIFFT *x, t_symbol *s,
     outlet_anything(x->list_re_out, gensym("matrix"),
                     x->size+2, list_re);
   } else {
-    post("mtx_rowfft: rowvector size no power of 2!");
+    pd_error(x, "[mtx_ifft]: rowvector size no power of 2!");
   }
 
 }

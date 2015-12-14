@@ -118,7 +118,7 @@ static void mTXFillIndexMatrix (MTXfill *mtx_fill_obj, t_symbol *s,
 
   if (list_size == 0) {
     if ((rows<1) || (columns<1)) {
-      post("mtx_fill: row and column indices must be >0");
+      pd_error(mtx_fill_obj, "[mtx_fill]: row and column indices must be >0");
       mtx_fill_obj->fill_type = DONT_FILL_JUST_PASS;
       return;
     }
@@ -187,13 +187,7 @@ static void mTXBigMatrix (MTXfill *mtx_fill_obj, t_symbol *s,
   t_atom *list_out = mtx_fill_obj->list_out;
 
   /* size check */
-  if (!size) {
-    post("mtx_fill: invalid dimensions");
-    return;
-  } else if (list_size<size) {
-    post("mtx_fill: sparse matrix not yet supported: use \"mtx_check\"");
-    return;
-  }
+  if(iemmatrix_check(mtx_fill_obj, argc, argv, 0))return;
 
   if (size != mtx_fill_obj->size) {
     if (!list_out) {
@@ -236,17 +230,17 @@ static void mTXFillScalar (MTXfill *mtx_fill_obj, t_float f)
 
   switch (mtx_fill_obj->fill_type) {
   case FILL_SUBMATRIX:
-    post("mtx_fill: scalar fill for submatrices not supported yet");
+    pd_error(mtx_fill_obj, "[mtx_fill]: scalar fill for submatrices not supported yet");
     return;
     break;
   /* coverity[unterminated_case]: fall thru to matrix output */
   case FILL_INDEXED_ELEMENTS:
     if (mtx_fill_obj->max_index > mtx_fill_obj->size) {
-      post("mtx_fill: index matrix index exceeds matrix borders");
+      pd_error(mtx_fill_obj, "[mtx_fill]: index matrix index exceeds matrix borders");
       return;
     }
     if (mtx_fill_obj->size == 0) {
-      post("mtx_fill: no matrix defined for filling");
+      pd_error(mtx_fill_obj, "[mtx_fill]: no matrix defined for filling");
       return;
     }
     /* main part */
@@ -279,27 +273,27 @@ static void mTXFillMatrix (MTXfill *mtx_fill_obj, t_symbol *s,
 
   /* size check */
   if (!list_size) {
-    post("mtx_fill: invalid dimensions");
+    pd_error(mtx_fill_obj, "[mtx_fill]: invalid dimensions");
     return;
   }
   switch (mtx_fill_obj->fill_type) {
   case FILL_SUBMATRIX:
     if (list_size < fill_size) {
-      post("mtx_fill: sparse matrix not yet supported: use \"mtx_check\"");
+      pd_error(mtx_fill_obj, "[mtx_fill]: sparse matrix not yet supported: use \"mtx_check\"");
       return;
     }
     if ((stopcol > columns) ||
         (stoprow > rows)) {
-      post("mtx_fill: fill matrix index exceeds matrix borders");
+      pd_error(mtx_fill_obj, "[mtx_fill]: fill matrix index exceeds matrix borders");
       return;
     }
     break;
   case FILL_INDEXED_ELEMENTS:
     if (list_size < mtx_fill_obj->num_idcs_used) {
-      post("mtx_fill: fill matrix smaller than indexing vector");
+      pd_error(mtx_fill_obj, "[mtx_fill]: fill matrix smaller than indexing vector");
       return;
     } else if (mtx_fill_obj->max_index > mtx_fill_obj->size) {
-      post("mtx_fill: index matrix index exceeds matrix borders");
+      pd_error(mtx_fill_obj, "[mtx_fill]: index matrix index exceeds matrix borders");
       return;
     }
     break;
@@ -307,7 +301,7 @@ static void mTXFillMatrix (MTXfill *mtx_fill_obj, t_symbol *s,
     break;
   }
   if (mtx_fill_obj->size == 0) {
-    post("mtx_fill: no matrix defined for filling");
+    pd_error(mtx_fill_obj, "[mtx_fill]: no matrix defined for filling");
     return;
   }
 

@@ -124,11 +124,11 @@ static void mtx_min2_float(t_mtx_binmtx *x, t_float f)
 }
 static void *mtx_min2_new(t_symbol *s, int argc, t_atom *argv)
 {
-  if (argc>1) {
-    post("mtx_min2 : extra arguments ignored");
-  }
   if (argc) {
     t_mtx_binscalar *x = (t_mtx_binscalar *)pd_new(mtx_min2scalar_class);
+    if (argc>1) {
+      pd_error(x, "[mtx_min2]: extra arguments ignored");
+    }
     floatinlet_new(&x->x_obj, &x->f);
     x->f = atom_getfloatarg(0, argc, argv);
     outlet_new(&x->x_obj, 0);

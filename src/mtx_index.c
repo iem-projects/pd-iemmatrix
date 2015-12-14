@@ -128,13 +128,7 @@ static void mTXIndexRightMatrix (MTXindex *mtx_index_obj, t_symbol *s,
   int max;
 
   /* size check */
-  if (!size) {
-    post("mtx_index: invalid dimensions");
-    return;
-  } else if (list_size<size) {
-    post("mtx_index: sparse matrix not yet supported: use \"mtx_check\"");
-    return;
-  }
+  if(iemmatrix_check(mtx_index_obj, argc, argv, 0))return;
 
   if (size != mtx_index_obj->index_size) {
     if (!index_in) {
@@ -176,20 +170,14 @@ static void mTXIndexMatrix (MTXindex *mtx_index_obj, t_symbol *s,
   int *indx = mtx_index_obj->index_in;
 
   /* size check */
-  if (!size) {
-    post("mtx_index: invalid dimensions");
-    return;
-  } else if (list_size<size) {
-    post("mtx_index: sparse matrix not yet supported: use \"mtx_check\"");
-    return;
-  }
+  if(iemmatrix_check(mtx_index_obj, argc, argv, 0))return;
 
   if (size < mtx_index_obj->max_index) {
-    post("mtx_index: index exceeds matrix dimensions");
+    pd_error(mtx_index_obj, "[mtx_index]: index exceeds matrix dimensions");
     return;
   }
   if ((!indx)||(mtx_index_obj->index_size == 0)) {
-    post("mtx_index: index with what? no right matrix defined");
+    pd_error(mtx_index_obj, "[mtx_index]: index with what? no right matrix defined");
     return;
   }
   /* main part */

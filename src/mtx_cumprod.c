@@ -76,7 +76,7 @@ static void *newMTXCumprod (t_symbol *s, int argc, t_atom *argv)
         if (argv[1].a_type != A_SYMBOL) {
           mTXSetCumprodDirection (mtx_cumprod_obj, atom_getfloat (argv+1));
         } else {
-          post("mtx_cumprod: 2nd arg ignored. supposed to be float");
+          pd_error(mtx_cumprod_obj, "[mtx_cumprod]: 2nd arg ignored. supposed to be float");
         }
       }
     } else {
@@ -85,7 +85,7 @@ static void *newMTXCumprod (t_symbol *s, int argc, t_atom *argv)
         if (argv[1].a_type == A_SYMBOL) {
           mTXSetCumprodMode (mtx_cumprod_obj, atom_getsymbol (argv+1));
         } else {
-          post("mtx_cumprod: 2nd arg ignored. supposed to be symbolic, e.g. \"row\", \"col\", \":\"");
+          pd_error(mtx_cumprod_obj, "[mtx_cumprod]: 2nd arg ignored. supposed to be symbolic, e.g. \"row\", \"col\", \":\"");
         }
       }
     }
@@ -169,13 +169,8 @@ static void mTXCumprodMatrix (MTXCumprod *mtx_cumprod_obj, t_symbol *s,
   int count;
 
   /* size check */
-  if (!size) {
-    post("mtx_cumprod: invalid dimensions");
-    return;
-  } else if (list_size<size) {
-    post("mtx_cumprod: sparse matrix not yet supported: use \"mtx_check\"");
-    return;
-  } else if ((!x)||(!list_out)||(!y)) {
+  if(iemmatrix_check(mtx_cumprod_obj, argc, argv, 0))return;
+  if ((!x)||(!list_out)||(!y)) {
     if (!x) {
       x = (t_float *) getbytes (sizeof (t_float) * (size));
     }

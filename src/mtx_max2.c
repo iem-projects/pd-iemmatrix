@@ -76,7 +76,7 @@ static void mtx_max2_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   }
 
   if ((col!=x->m2.col)||(row!=x->m2.row)) {
-    post("mtx_max2: matrix dimensions do not match");
+    pd_error(x, "[mtx_max2]: matrix dimensions do not match");
     /* LATER SOLVE THIS */
     return;
   }
@@ -122,11 +122,11 @@ static void mtx_max2_float(t_mtx_binmtx *x, t_float f)
 }
 static void *mtx_max2_new(t_symbol *s, int argc, t_atom *argv)
 {
-  if (argc>1) {
-    post("mtx_max2 : extra arguments ignored");
-  }
   if (argc) {
     t_mtx_binscalar *x = (t_mtx_binscalar *)pd_new(mtx_max2scalar_class);
+    if (argc>1) {
+      pd_error(x, "[mtx_max2]: extra arguments ignored");
+    }
     floatinlet_new(&x->x_obj, &x->f);
     x->f = atom_getfloatarg(0, argc, argv);
     outlet_new(&x->x_obj, 0);

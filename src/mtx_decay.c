@@ -91,7 +91,7 @@ static void *newMTXDecay (t_symbol *s, int argc, t_atom *argv)
     mTXSetDecayMode (mtx_decay_obj, atom_getsymbol(argv+first_sym));
   }
   if (sym_count > 1) {
-    post("mtx_decay: args after pos %d ignored. supposed to be non-symbolic",
+    pd_error(mtx_decay_obj, "[mtx_decay]: args after pos %d ignored. supposed to be non-symbolic",
          first_sym);
     argc = first_sym+1;
   }
@@ -193,13 +193,8 @@ static void mTXDecayMatrix (MTXDecay *mtx_decay_obj, t_symbol *s,
   int count;
 
   /* size check */
-  if (!size) {
-    post("mtx_decay: invalid dimensions");
-    return;
-  } else if (list_size<size) {
-    post("mtx_decay: sparse matrix not yet supported: use \"mtx_check\"");
-    return;
-  } else if ((!x)||(!list_out)||(!y)) {
+  if(iemmatrix_check(mtx_decay_obj, argc, argv, 0))return;
+  if ((!x)||(!list_out)||(!y)) {
     if (!x) {
       x = (t_float *) getbytes (sizeof (t_float) * (size));
     }

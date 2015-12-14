@@ -134,7 +134,7 @@ static void mTXSphMatrix (MTXSph *x, t_symbol *s,
 
 
   /* size check */
-  iemmatrix_check(x, argc, argv, 0);
+  if(iemmatrix_check(x, argc, argv, 0))return;
   if ((rows!=1)||(columns<1)) {
     pd_error(x, "[mtx_spherical_radial]: 1*L matrix expected with kr and h vector, but got more rows/no entries");
     return;

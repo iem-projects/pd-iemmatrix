@@ -19,16 +19,17 @@ static void mtx_diegg_matrix(t_matrix *x, t_symbol *s, int argc,
   int row=atom_getfloat(argv++);
   int col=atom_getfloat(argv++);
   int length=(col<row)?col:row, n=length;
-  t_atom *ap = (t_atom *)getbytes(length * sizeof(t_atom)), *dummy=ap;
-  if(row*col>argc-2) {
-    post("mtx_diegg: sparse matrices not yet supported : use \"mtx_check\"");
-  } else {
-    for(n=0; n<length; n++, dummy++) {
-      int index=(n+1)*(col-1);
-      SETFLOAT(dummy, atom_getfloat(argv+index));
-    }
-    outlet_list(x->x_obj.ob_outlet, gensym("diegg"), length, ap);
+  t_atom *ap = 0, *dummy=0;
+  if(iemmatrix_check(x, argc, argv, 0))return;
+  ap=(t_atom *)getbytes(length * sizeof(t_atom));
+  dummy=ap;
+
+  for(n=0; n<length; n++, dummy++) {
+    int index=(n+1)*(col-1);
+    SETFLOAT(dummy, atom_getfloat(argv+index));
   }
+  outlet_list(x->x_obj.ob_outlet, gensym("diegg"), length, ap);
+
   freebytes(ap, (length * sizeof(t_atom)));
 }
 static void *mtx_diegg_new(t_symbol *s, int argc, t_atom *argv)

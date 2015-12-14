@@ -153,13 +153,7 @@ static void mTXMinMaxMatrix (MTXminmax *mtx_minmax_obj, t_symbol *s,
   int elements_out;
 
   /* size check */
-  if (!size) {
-    post("mtx_minmax: invalid dimensions");
-    return;
-  } else if ((argc-2)<size) {
-    post("mtx_minmax: sparse matrix not yet supported: use \"mtx_check\"");
-    return;
-  }
+  if(iemmatrix_check(mtx_minmax_obj, argc, argv, 0))return;
 
   if (size != mtx_minmax_obj->size) {
     if (!minlist_out) {

@@ -176,15 +176,7 @@ static void mTXConvKernelMatrix (MTXConv *mtx_conv_obj, t_symbol *s,
   int columns_k = atom_getint (argv++);
   int in_size = argc-2;
   int size_k = rows_k * columns_k;
-
-  if (!size_k) {
-    post ("mtx_conv: invalid matrix dimensions!");
-    return;
-  }
-  if (in_size < size_k) {
-    post("mtx_conv: sparse matrix not yet supported: use \"mtx_check\"");
-    return;
-  }
+  if(iemmatrix_check(mtx_conv_obj, argc, argv, 0))return;
 
   if ((rows_k != mtx_conv_obj->rows_k)
       || (columns_k != mtx_conv_obj->columns_k)) {
@@ -194,7 +186,7 @@ static void mTXConvKernelMatrix (MTXConv *mtx_conv_obj, t_symbol *s,
     getTFloatMatrix (rows_k, columns_k, &mtx_conv_obj->k,
                      &mtx_conv_obj->k_array);
     if ((!mtx_conv_obj->k)||(!mtx_conv_obj->k_array)) {
-      post("mtx_conv: memory allocation failed!");
+      pd_error(mtx_conv_obj, "[mtx_conv]: memory allocation failed!");
       return;
     }
     mtx_conv_obj->rows_k = rows_k;
@@ -246,13 +238,13 @@ static void mTXConvMatrix (MTXConv *mtx_conv_obj, t_symbol *s,
 
   /* fftsize check */
   if (!size) {
-    post("mtx_conv: invalid dimensions");
+    pd_error(mtx_conv_obj, "[mtx_conv]: invalid dimensions");
     return;
   }  else if (in_size<size) {
-    post("mtx_conv: sparse matrix not yet supported: use \"mtx_check\"");
+    pd_error(mtx_conv_obj, "[mtx_conv]: sparse matrix not yet supported: use \"mtx_check\"");
     return;
   }  else if (!size_k) {
-    post("mtx_conv: no valid filter kernel defined");
+    pd_error(mtx_conv_obj, "[mtx_conv]: no valid filter kernel defined");
     return;
   }
 
@@ -262,7 +254,7 @@ static void mTXConvMatrix (MTXConv *mtx_conv_obj, t_symbol *s,
                           &mtx_conv_obj->x, &mtx_conv_obj->x_array);
     getTFloatMatrix (rows, columns, &mtx_conv_obj->x, &mtx_conv_obj->x_array);
     if ((!mtx_conv_obj->x)||(!mtx_conv_obj->x_array)) {
-      post("mtx_conv: memory allocation failed!");
+      pd_error(mtx_conv_obj, "[mtx_conv]: memory allocation failed!");
       return;
     }
     mtx_conv_obj->size = size;
@@ -280,7 +272,7 @@ static void mTXConvMatrix (MTXConv *mtx_conv_obj, t_symbol *s,
     getTFloatMatrix (rows_y, columns_y, &mtx_conv_obj->y,
                      &mtx_conv_obj->y_array);
     if ((!mtx_conv_obj->y)||(!mtx_conv_obj->y_array)) {
-      post("mtx_conv: memory allocation failed!");
+      pd_error(mtx_conv_obj, "[mtx_conv]: memory allocation failed!");
       return;
     }
     mtx_conv_obj->size_y = size_y;
@@ -294,7 +286,7 @@ static void mTXConvMatrix (MTXConv *mtx_conv_obj, t_symbol *s,
     }
     mtx_conv_obj->list = list_ptr;
     if (!list_ptr) {
-      post("mtx_conv: memory allocation failed!");
+      pd_error(mtx_conv_obj, "[mtx_conv]: memory allocation failed!");
       return;
     }
 

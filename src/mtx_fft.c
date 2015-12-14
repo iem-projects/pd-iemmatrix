@@ -103,12 +103,9 @@ static void mtxFFTMatrixCold (MtxFFT *x, t_symbol *s,
   t_float *f_im = x->f_im;
 
   /* fftsize check */
-  if (!size) {
-    post("mtx_fft: invalid dimensions");
-  } else if (in_size<size) {
-    post("mtx_fft: sparse matrix not yet supported: use \"mtx_check\"");
-  } else if (columns < 4) {
-    post("mtx_fft: matrix must have at least 4 columns");
+  if(iemmatrix_check(x, argc, argv, 0))return;
+  if (columns < 4) {
+    pd_error(x, "[mtx_fft]: matrix must have at least 4 columns");
   } else if (columns == (1 << ilog2(columns))) {
     /* ok, prepare real-part of FFT! */
 
@@ -128,9 +125,8 @@ static void mtxFFTMatrixCold (MtxFFT *x, t_symbol *s,
     readFloatFromList (size, argv, f_im);
 
   } else {
-    post("mtx_rowfft: rowvector size no power of 2!");
+    pd_error(x, "[mtx_fft]: rowvector size no power of 2!");
   }
-
 }
 
 
@@ -148,14 +144,11 @@ static void mtxFFTMatrixHot (MtxFFT *x, t_symbol *s,
   t_float *f_im = x->f_im;
 
   /* fftsize check */
-  if (!size) {
-    post("mtx_fft: invalid dimensions");
-  } else if (in_size<size) {
-    post("mtx_fft: sparse matrix not yet supported: use \"mtx_check\"");
-  } else if (size != x->size) {
-    post("mtx_fft: left matrix has other dimensions than right matrix");
+  if(iemmatrix_check(x, argc, argv, 0))return;
+  if (size != x->size) {
+    pd_error(x, "[mtx_fft]: left matrix has other dimensions than right matrix");
   } else if (columns < 4) {
-    post("mtx_fft: matrix must have at least 4 columns");
+    pd_error(x, "[mtx_fft]: matrix must have at least 4 columns");
   } else if (columns == (1 << ilog2(columns))) {
     /* ok, do the FFT! */
 
@@ -189,7 +182,7 @@ static void mtxFFTMatrixHot (MtxFFT *x, t_symbol *s,
     outlet_anything(x->list_re_out, gensym("matrix"),
                     x->size+2, list_re);
   } else {
-    post("mtx_rowfft: rowvector size no power of 2!");
+    pd_error(x, "[mtx_fft]: rowvector size no power of 2!");
   }
 
 }

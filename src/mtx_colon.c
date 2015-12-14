@@ -67,7 +67,7 @@ static void mTXColonList (MTXColon *mtx_colon_obj, t_symbol *s,
     stopval = atom_getfloat(argv++);
     step = 1.0f;
   } else {
-    post("mtx_colon: wrong number of input arguments");
+    pd_error(mtx_colon_obj, "[mtx_colon]: wrong number of input arguments");
     return;
   }
 
@@ -105,14 +105,8 @@ static void mTXColonMtx (MTXColon *mtx_colon_obj, t_symbol *s,
   int list_size = argc - 2;
   t_atom *list_ptr = argv;
   t_atom *list_out = mtx_colon_obj->list_out;
-
-  if (!size) {
-    post("mtx_colon: invalid matrix dimensions");
-    return;
-  } else if (list_size<size) {
-    post("mtx_colon: sparse matrix not yet supported: use \"mtx_check\"");
-    return;
-  } else if (!list_out) {
+  if(iemmatrix_check(mtx_colon_obj, argc, argv, 0))return;
+  if (!list_out) {
     list_out = (t_atom*) getbytes (sizeof (t_atom) * (size+2));
   } else if (size != mtx_colon_obj->size) {
     list_out = (t_atom*) resizebytes (list_out,

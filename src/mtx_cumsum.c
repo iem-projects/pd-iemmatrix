@@ -75,7 +75,7 @@ static void *newMTXCumsum (t_symbol *s, int argc, t_atom *argv)
         if (argv[1].a_type != A_SYMBOL) {
           mTXSetCumsumDirection (mtx_cumsum_obj, atom_getfloat (argv+1));
         } else {
-          post("mtx_cumsum: 2nd arg ignored. supposed to be float");
+          pd_error(mtx_cumsum_obj, "[mtx_cumsum]: 2nd arg ignored. supposed to be float");
         }
       }
     } else {
@@ -84,7 +84,7 @@ static void *newMTXCumsum (t_symbol *s, int argc, t_atom *argv)
         if (argv[1].a_type == A_SYMBOL) {
           mTXSetCumsumMode (mtx_cumsum_obj, atom_getsymbol (argv+1));
         } else {
-          post("mtx_cumsum: 2nd arg ignored. supposed to be symbolic, e.g. \"row\", \"col\", \":\"");
+          pd_error(mtx_cumsum_obj, "[mtx_cumsum]: 2nd arg ignored. supposed to be symbolic, e.g. \"row\", \"col\", \":\"");
         }
       }
     }
@@ -168,13 +168,8 @@ static void mTXCumsumMatrix (MTXCumsum *mtx_cumsum_obj, t_symbol *s,
   int count;
 
   /* size check */
-  if (!size) {
-    post("mtx_cumsum: invalid dimensions");
-    return;
-  } else if (list_size<size) {
-    post("mtx_cumsum: sparse matrix not yet supported: use \"mtx_check\"");
-    return;
-  } else if ((!x)||(!list_out)||(!y)) {
+  if(iemmatrix_check(mtx_cumsum_obj, argc, argv, 0))return;
+  if ((!x)||(!list_out)||(!y)) {
     if (!x) {
       x = (t_float *) getbytes (sizeof (t_float) * (size));
     }

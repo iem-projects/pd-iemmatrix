@@ -78,7 +78,7 @@ static void *newMTXFind (t_symbol *s, int argc, t_atom *argv)
         if (argv[1].a_type != A_SYMBOL) {
           mTXSetFindDirection (mtx_find_obj, atom_getfloat (argv+1));
         } else {
-          post("mtx_find: 2nd arg ignored. supposed to be float");
+          pd_error(mtx_find_obj, "[mtx_find]: 2nd arg ignored. supposed to be float");
         }
       }
     } else {
@@ -87,7 +87,7 @@ static void *newMTXFind (t_symbol *s, int argc, t_atom *argv)
         if (argv[1].a_type == A_SYMBOL) {
           mTXSetFindMode (mtx_find_obj, atom_getsymbol (argv+1));
         } else {
-          post("mtx_find: 2nd arg ignored. supposed to be symbolic, e.g. \"row\", \"col\", \":\", \"mtx\"");
+          pd_error(mtx_find_obj, "[mtx_find]: 2nd arg ignored. supposed to be symbolic, e.g. \"row\", \"col\", \":\", \"mtx\"");
         }
       }
     }
@@ -248,13 +248,7 @@ static void mTXFindMatrix (MTXfind *mtx_find_obj, t_symbol *s,
   int columns_out;
 
   /* size check */
-  if (!size) {
-    post("mtx_find: invalid dimensions");
-    return;
-  } else if (list_size<size) {
-    post("mtx_find: sparse matrix not yet supported: use \"mtx_check\"");
-    return;
-  }
+  if(iemmatrix_check(mtx_find_obj, argc, argv, 0))return;
 
   if (size != mtx_find_obj->size) {
     if (!list_out) {

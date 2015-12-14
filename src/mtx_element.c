@@ -33,20 +33,9 @@ static void mtx_element_matrix(t_matrix *x, t_symbol *s, int argc,
                                t_atom *argv)
 {
   int row, col;
-  if (argc<2) {
-    post("matrix : corrupt matrix passed");
-    return;
-  }
+  if(iemmatrix_check(x, argc, argv, 0))return;
   row = atom_getfloat(argv);
   col = atom_getfloat(argv+1);
-  if ((row<1)||(col<1)) {
-    post("matrix : corrupt matrix passed");
-    return;
-  }
-  if (row*col > argc-2) {
-    post("matrix: sparse matrices not yet supported : use \"mtx_check\"");
-    return;
-  }
   matrix_matrix2(x, s, argc, argv);
   matrix_bang(x);
 }

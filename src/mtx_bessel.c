@@ -135,74 +135,66 @@ static void mTXBesselMatrix (MTXBessel *x, t_symbol *s,
   int in_size = argc-2;
   int n,m,ofs;
 
+  /* size check */
+  if(iemmatrix_check(x, argc, argv, 0))return;
 
 #if defined HAVE_MATH_BESSEL || defined HAVE_GSL_BESSEL
 
-  /* size check */
-  if (!size) {
-    post("mtx_bessel: invalid dimensions");
-  } else if (in_size<size) {
-    post("mtx_bessel: sparse matrix not yet supported: use \"mtx_check\"");
-  } else if ((rows!=1)||(columns<1)) {
-    post("mtx_bessel: 1 X L matrix expected with kr and h vector, but got more rows/no entries");
-  } else {
-    if (x->l!=columns) {
-      deleteMTXBesseldata(x);
-      x->l=columns;
-      allocMTXBesseldata(x);
-    }
-    for (n=0; n<x->l; n++) {
-      x->kr[n]=(double) atom_getfloat(argv+n);
-    }
+  if (x->l!=columns) {
+    deleteMTXBesseldata(x);
+    x->l=columns;
+    allocMTXBesseldata(x);
+  }
+  for (n=0; n<x->l; n++) {
+    x->kr[n]=(double) atom_getfloat(argv+n);
+  }
 
 #ifdef HAVE_GSL_BESSEL
-    if (x->h_re!=0)
-      for (m=0; m<x->l; m++)
-        for (n=0; n<x->nmax+1; n++) {
-          x->h_re[n+m*(x->nmax+1)]=gsl_sf_bessel_Jn(n,x->kr[m]);
-        }
+  if (x->h_re!=0)
+    for (m=0; m<x->l; m++)
+      for (n=0; n<x->nmax+1; n++) {
+	x->h_re[n+m*(x->nmax+1)]=gsl_sf_bessel_Jn(n,x->kr[m]);
+      }
 
-    if (x->h_im!=0)
-      for (m=0; m<x->l; m++)
-        for (n=0; n<x->nmax+1; n++) {
-          x->h_im[n+m*(x->nmax+1)]=gsl_sf_bessel_Yn(n,x->kr[m]);
-        }
+  if (x->h_im!=0)
+    for (m=0; m<x->l; m++)
+      for (n=0; n<x->nmax+1; n++) {
+	x->h_im[n+m*(x->nmax+1)]=gsl_sf_bessel_Yn(n,x->kr[m]);
+      }
 #else
-    if (x->h_re!=0)
-      for (m=0; m<x->l; m++)
-        for (n=0; n<x->nmax+1; n++) {
-          x->h_re[n+m*(x->nmax+1)]=jn(n,x->kr[m]);
-        }
+  if (x->h_re!=0)
+    for (m=0; m<x->l; m++)
+      for (n=0; n<x->nmax+1; n++) {
+	x->h_re[n+m*(x->nmax+1)]=jn(n,x->kr[m]);
+      }
 
-    if (x->h_im!=0)
-      for (m=0; m<x->l; m++)
-        for (n=0; n<x->nmax+1; n++) {
-          x->h_im[n+m*(x->nmax+1)]=yn(n,x->kr[m]);
-        }
+  if (x->h_im!=0)
+    for (m=0; m<x->l; m++)
+      for (n=0; n<x->nmax+1; n++) {
+	x->h_im[n+m*(x->nmax+1)]=yn(n,x->kr[m]);
+      }
 #endif
 
 
-    if (x->h_re!=0) {
-      SETFLOAT(x->list_h_re+1,(float)(x->nmax+1));
-      SETFLOAT(x->list_h_re,(float)x->l);
-      for (n=0; n<x->l*(x->nmax+1); n++) {
-        SETFLOAT(x->list_h_re+n+2,(float)x->h_re[n]);
-      }
+  if (x->h_re!=0) {
+    SETFLOAT(x->list_h_re+1,(float)(x->nmax+1));
+    SETFLOAT(x->list_h_re,(float)x->l);
+    for (n=0; n<x->l*(x->nmax+1); n++) {
+      SETFLOAT(x->list_h_re+n+2,(float)x->h_re[n]);
     }
-
-    if (x->h_im!=0) {
-      SETFLOAT(x->list_h_im+1,(float)(x->nmax+1));
-      SETFLOAT(x->list_h_im,(float)x->l);
-      for (n=0; n<x->l*(x->nmax+1); n++) {
-        SETFLOAT(x->list_h_im+n+2,(float)x->h_im[n]);
-      }
-    }
-
-    mTXBesselBang(x);
   }
 
+  if (x->h_im!=0) {
+    SETFLOAT(x->list_h_im+1,(float)(x->nmax+1));
+    SETFLOAT(x->list_h_im,(float)x->l);
+    for (n=0; n<x->l*(x->nmax+1); n++) {
+      SETFLOAT(x->list_h_im+n+2,(float)x->h_im[n]);
+    }
+  }
+
+  mTXBesselBang(x);
 #else
-  post("mtx_bessel: implementation requires math.h that implements jn and yn Bessel functions or gsl_sf_bessel.h");
+  pd_error("[mtx_bessel]: implementation requires math.h that implements jn and yn Bessel functions or gsl_sf_bessel.h");
 #endif
 }
 

@@ -31,13 +31,9 @@ static void mtx_cholesky_matrix(t_matrix *x, t_symbol *s, int argc,
   int i, j, k, row2=row*row;
 
   t_matrixfloat *original, *cholesky;
-
-  if(row*col+2>argc) {
-    post("mtx_print : sparse matrices not yet supported : use \"mtx_check\"");
-    return;
-  }
+  if(iemmatrix_check(x, argc, argv, 0))return;
   if (row!=col) {
-    post("mtx_cholesky: only symmetric and positive definite matrices can be cholesky-decomposed");
+    pd_error(x, "[mtx_cholesky]: only symmetric and positive definite matrices can be cholesky-decomposed");
     return;
   }
 
@@ -65,7 +61,7 @@ static void mtx_cholesky_matrix(t_matrix *x, t_symbol *s, int argc,
       sum+=lik*lik;
     }
     if((result=original[i*(col+1)]-sum)<0) {
-      post("[mtx_cholesky]: only symmetric and positive definite matrices can be cholesky-decomposed");
+      pd_error(x, "[mtx_cholesky]: only symmetric and positive definite matrices can be cholesky-decomposed");
       return;
     }
     result=sqrtf(result); /* LATER check whether this is real */

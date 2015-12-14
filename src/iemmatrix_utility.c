@@ -54,11 +54,11 @@ void adjustsize(t_matrix *x, int desiredRow, int desiredCol)
   int col=x->col, row=x->row;
 
   if (desiredRow<1) {
-    post("cannot make less than 1 rows");
+    pd_error(x, "matrix: cannot make less than 1 rows");
     desiredRow=1;
   }
   if (desiredCol<1) {
-    post("cannot make less than 1 columns");
+    pd_error(x, "matrix: cannot make less than 1 columns");
     desiredCol=1;
   }
 
@@ -126,21 +126,9 @@ void matrix_bang(t_matrix *x)
 void matrix_matrix2(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 {
   int row, col;
-
-  if (argc<2) {
-    post("matrix : corrupt matrix passed");
-    return;
-  }
+  if(iemmatrix_check(x, argc, argv, 0))return;
   row = atom_getfloat(argv);
   col = atom_getfloat(argv+1);
-  if ((row<1)||(col<1)) {
-    post("matrix : corrupt matrix passed");
-    return;
-  }
-  if (row*col > argc-2) {
-    post("matrix: sparse matrices not yet supported : use \"mtx_check\"");
-    return;
-  }
 
   /* this is fast and dirty, MAYBE make it slow and clean */
   /* or, to clean matrices, use the mtx_check object */
@@ -281,7 +269,7 @@ void matrix_diag(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
   int col=argc;
   argv+=argc-1;
   if (argc<1) {
-    post("matrix: no diagonale present");
+    pd_error(x, "matrix: no diagonale present");
     return;
   }
   adjustsize(x, argc, argc);
@@ -299,7 +287,7 @@ void matrix_diegg(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
   int col=argc;
   argv+=argc-1;
   if (argc<1) {
-    post("matrix: no dieggonale present");
+    pd_error(x, "matrix: no dieggonale present");
     return;
   }
   adjustsize(x, argc, argc);
@@ -335,7 +323,7 @@ void matrix_row(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
     /* row <index>: get row<index> as list */
     r=atom_getfloat(argv)-1;
     if ((r<0)||(r>=row)) {
-      post("matrix: row index %d is out of range", r+1);
+      pd_error(x, "matrix: row index %d is out of range", r+1);
       return;
     }
     outlet_list(x->x_obj.ob_outlet, gensym("row"), col, x->atombuffer+r*col+2);
@@ -345,7 +333,7 @@ void matrix_row(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
     r=atom_getfloat(argv)-1;
     f=atom_getfloat(argv+1);
     if ((r<0)||(r>=row)) {
-      post("matrix: row index %d is out of range", r+1);
+      pd_error(x, "matrix: row index %d is out of range", r+1);
       return;
     }
     for(c=0; c<col; c++) {
@@ -356,11 +344,11 @@ void matrix_row(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
     /* row <index> <value>...: set elements of row<index> to <value1> <value2> ... */
     r=atom_getfloat(argv++)-1;
     if (argc--<col) {
-      post("matrix: sparse rows not yet supported : use \"mtx_check\"");
+      pd_error(x, "matrix: sparse rows not yet supported : use \"mtx_check\"");
       return;
     }
     if ((r<0)||(r>=row)) {
-      post("matrix: row index %d is out of range", r+1);
+      pd_error(x, "matrix: row index %d is out of range", r+1);
       return;
     }
     ap=x->atombuffer+2+col*r;
@@ -393,7 +381,7 @@ void matrix_col(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
     ap=(t_atom *)getbytes(row*sizeof(t_atom));
     c=atom_getfloat(argv)-1;
     if ((c<0)||(c>=col)) {
-      post("matrix: col index %d is out of range", c+1);
+      pd_error(x, "matrix: col index %d is out of range", c+1);
       return;
     }
     for (r=0; r<row; r++) {
@@ -407,7 +395,7 @@ void matrix_col(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
     c=atom_getint(argv)-1;
     f=atom_getfloat(argv+1);
     if ((c<0)||(c>=col)) {
-      post("matrix: col index %d is out of range", c+1);
+      pd_error(x, "matrix: col index %d is out of range", c+1);
       return;
     }
     for(r=0; r<row; r++) {
@@ -418,11 +406,11 @@ void matrix_col(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
     /* row <index> <value>...: set elements of row<index> to <value1> <value2> ... */
     c=atom_getfloat(argv++)-1;
     if (argc--<row) {
-      post("matrix: sparse cols not yet supported : use \"mtx_check\"");
+      pd_error(x, "matrix: sparse cols not yet supported : use \"mtx_check\"");
       return;
     }
     if ((c<0)||(c>=col)) {
-      post("matrix: col index %d is out of range", c+1);
+      pd_error(x, "matrix: col index %d is out of range", c+1);
       return;
     }
     argv+=argc-1;
@@ -451,11 +439,11 @@ void matrix_element(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
   case 1:
     r=c=atom_getfloat(argv)-1;
     if ((r<0)||(r>=row)) {
-      post("matrix: row index %d is out of range", r+1);
+      pd_error(x, "matrix: row index %d is out of range", r+1);
       return;
     }
     if ((c<0)||(c>=col)) {
-      post("matrix: col index %d is out of range", c+1);
+      pd_error(x, "matrix: col index %d is out of range", c+1);
       return;
     }
     outlet_float(x->x_obj.ob_outlet, atom_getfloat(x->atombuffer+2+c+r*col));
@@ -464,11 +452,11 @@ void matrix_element(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
     r=atom_getfloat(argv++)-1;
     c=atom_getfloat(argv++)-1;
     if ((r<0)||(r>=row)) {
-      post("matrix: row index %d is out of range", r+1);
+      pd_error(x, "matrix: row index %d is out of range", r+1);
       return;
     }
     if ((c<0)||(c>=col)) {
-      post("matrix: col index %d is out of range", c+1);
+      pd_error(x, "matrix: col index %d is out of range", c+1);
       return;
     }
     outlet_float(x->x_obj.ob_outlet, atom_getfloat(x->atombuffer+2+c+r*col));
@@ -477,11 +465,11 @@ void matrix_element(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
     r=atom_getfloat(argv++)-1;
     c=atom_getfloat(argv++)-1;
     if ((r<0)||(r>=row)) {
-      post("matrix: row index %d is out of range", r+1);
+      pd_error(x, "matrix: row index %d is out of range", r+1);
       return;
     }
     if ((c<0)||(c>=col)) {
-      post("matrix: col index %d is out of range", c+1);
+      pd_error(x, "matrix: col index %d is out of range", c+1);
       return;
     }
     SETFLOAT(x->atombuffer+2+c+r*col, atom_getfloat(argv));

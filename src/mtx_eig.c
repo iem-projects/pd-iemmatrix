@@ -172,51 +172,48 @@ static void mTXEigMatrix (MTXEig *x, t_symbol *s,
 #ifdef HAVE_GSL_EIGEN_NONSYMM
   gsl_complex c;
   /* size check */
-  if (!size) {
-    post("mtx_eig: invalid dimensions");
-  } else if (in_size<size) {
-    post("mtx_eig: sparse matrix not yet supported: use \"mtx_check\"");
-  } else if (rows!=columns) {
-    post("mtx_eig: Eigendecomposition works for square matrices only!");
-  } else {
-    size=rows;
-    x->size=size;
-
-    deleteMTXqlw(x);
-    allocMTXqlw(x);
-
-    for (n=0; n<in_size; n++) {
-      x->a->data[n]=(double) atom_getfloat(argv++);
-    }
-
-    switch (x->withevs) {
-    case WITHOUTEVS:
-      gsl_eigen_nonsymm(x->a,x->l,x->w);
-      break;
-    case WITHEVS:
-      gsl_eigen_nonsymmv(x->a,x->l,x->q,x->wv);
-      SETFLOAT((x->list_q_re),(float) x->size);
-      SETFLOAT((x->list_q_im),(float) x->size);
-      SETFLOAT((x->list_q_re+1),(float) x->size);
-      SETFLOAT((x->list_q_im+1),(float) x->size);
-      for (n=0; n<in_size; n++) {
-        SETFLOAT((x->list_q_im+2+n), (float) x->q->data[2*n+1]);
-        SETFLOAT((x->list_q_re+2+n), (float) x->q->data[2*n]);
-      }
-      break;
-    }
-
-    for (n=0; n<x->size; n++) {
-      f=(float) GSL_VECTOR_IMAG(x->l, n);
-      SETFLOAT((x->list_l_im+n), f);
-      f=(float) GSL_VECTOR_REAL(x->l, n);
-      SETFLOAT((x->list_l_re+n), f);
-    }
-
-    mTXEigBang(x);
+  if(iemmatrix_check(x, argc, argv, 0))return;
+  if (rows!=columns) {
+    pd_error(x, "[mtx_eig]: Eigendecomposition works for square matrices only!");
+    return;
   }
+  size=rows;
+  x->size=size;
+
+  deleteMTXqlw(x);
+  allocMTXqlw(x);
+
+  for (n=0; n<in_size; n++) {
+    x->a->data[n]=(double) atom_getfloat(argv++);
+  }
+
+  switch (x->withevs) {
+  case WITHOUTEVS:
+    gsl_eigen_nonsymm(x->a,x->l,x->w);
+    break;
+  case WITHEVS:
+    gsl_eigen_nonsymmv(x->a,x->l,x->q,x->wv);
+    SETFLOAT((x->list_q_re),(float) x->size);
+    SETFLOAT((x->list_q_im),(float) x->size);
+    SETFLOAT((x->list_q_re+1),(float) x->size);
+    SETFLOAT((x->list_q_im+1),(float) x->size);
+    for (n=0; n<in_size; n++) {
+      SETFLOAT((x->list_q_im+2+n), (float) x->q->data[2*n+1]);
+      SETFLOAT((x->list_q_re+2+n), (float) x->q->data[2*n]);
+    }
+    break;
+  }
+
+  for (n=0; n<x->size; n++) {
+    f=(float) GSL_VECTOR_IMAG(x->l, n);
+    SETFLOAT((x->list_l_im+n), f);
+    f=(float) GSL_VECTOR_REAL(x->l, n);
+    SETFLOAT((x->list_l_re+n), f);
+  }
+
+  mTXEigBang(x);
 #else
-  post("mtx_eig: implementation requires more recent gsl version to handle nonsymmetric matrices");
+  pd_error(x, "[mtx_eig]: implementation requires more recent gsl version to handle nonsymmetric matrices");
 #endif
 
 }

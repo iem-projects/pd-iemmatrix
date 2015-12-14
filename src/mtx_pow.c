@@ -35,7 +35,7 @@ static void mtx_powelement_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
     return;
   }
   if ((col!=x->m2.col)||(row!=x->m2.row)) {
-    post("matrix dimension do not match");    /* LATER SOLVE THIS */
+    pd_error(x, "[mtx_.^]: matrix dimension do not match");    /* LATER SOLVE THIS */
     return;
   }
 
@@ -58,7 +58,7 @@ static void mtx_powelement_float(t_mtx_binmtx *x, t_float f)
   int row2, col2, n;
 
   if (!m2->atombuffer) {
-    post("power by what ?");
+    pd_error(x, "[mtx_.^]: power by what ?");
     return;
   }
 
@@ -118,18 +118,18 @@ static void mtx_powscalar_list(t_mtx_binscalar *x, t_symbol *s, int argc,
 
 static void *mtx_pow_new(t_symbol *s, int argc, t_atom *argv)
 {
-  if (argc>1) {
-    post("mtx_pow : extra arguments ignored");
-  }
   if (argc) {
-    /* scalar powision */
+    /* scalar power */
     t_mtx_binscalar *x = (t_mtx_binscalar *)pd_new(mtx_powscalar_class);
+    if (argc>1) {
+      pd_error(x, "[mtx_pow]: extra arguments ignored");
+    }
     floatinlet_new(&x->x_obj, &x->f);
     x->f = atom_getfloatarg(0, argc, argv);
     outlet_new(&x->x_obj, 0);
     return(x);
   } else {
-    /* element powision */
+    /* element power */
     t_matrix *x = (t_matrix *)pd_new(mtx_powelement_class);
     inlet_new(&x->x_obj, &x->x_obj.ob_pd, gensym("matrix"), gensym(""));
     outlet_new(&x->x_obj, 0);

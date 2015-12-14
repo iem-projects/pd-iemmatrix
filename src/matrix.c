@@ -36,22 +36,9 @@ static t_class *matrix_class;
 static void matrix_matrix(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 {
   int row, col;
-
-  if (argc<2) {
-    post("matrix : corrupt matrix passed");
-    return;
-  }
+  if(iemmatrix_check(x, argc, argv, 0))return;
   row = atom_getfloat(argv);
   col = atom_getfloat(argv+1);
-  if ((row<1)||(col<1)) {
-    post("matrix : corrupt matrix passed");
-    return;
-  }
-  if (row*col > argc-2) {
-    post("matrix: sparse matrices not yet supported : use \"mtx_check\"");
-    return;
-  }
-
   matrix_matrix2(x, s, argc, argv);
   matrix_bang(x);
 }
@@ -170,13 +157,12 @@ static void matrix_list(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 {
   /* like matrix, but without col/row information, so the previous size is kept */
   int row=x->row, col=x->col;
-
   if(!row*col) {
-    post("matrix : unknown matrix dimensions");
+    pd_error(x, "[matrix]: unknown matrix dimensions");
     return;
   }
   if (argc<row*col) {
-    post("matrix: sparse matrices not yet supported : use \"mtx_check\" !");
+    pd_error(x, "[matrix]: sparse matrices not yet supported : use [mtx_check]!");
     return;
   }
 

@@ -22,7 +22,8 @@
 
 static t_class *mtx_cholesky_class;
 
-static void mtx_cholesky_matrix(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
+static void mtx_cholesky_matrix(t_matrix *x, t_symbol *s, int argc,
+                                t_atom *argv)
 {
   /* maybe we should do this in double or long double ? */
   int row=atom_getfloat(argv);
@@ -31,11 +32,11 @@ static void mtx_cholesky_matrix(t_matrix *x, t_symbol *s, int argc, t_atom *argv
 
   t_matrixfloat *original, *cholesky;
 
-  if(row*col+2>argc){
+  if(row*col+2>argc) {
     post("mtx_print : sparse matrices not yet supported : use \"mtx_check\"");
     return;
   }
-  if (row!=col){
+  if (row!=col) {
     post("mtx_cholesky: only symmetric and positive definite matrices can be cholesky-decomposed");
     return;
   }
@@ -48,20 +49,22 @@ static void mtx_cholesky_matrix(t_matrix *x, t_symbol *s, int argc, t_atom *argv
   original=matrix2float(argv);
 
   /* 2 set the cholesky matrix to zero */
-  for(i=0; i<row2; i++)cholesky[i]=0.;
+  for(i=0; i<row2; i++) {
+    cholesky[i]=0.;
+  }
 
   /* 3 do the cholesky decomposition */
-  for(i=0; i<col; i++){
+  for(i=0; i<col; i++) {
     /* 3a get the diagonal element */
     /* l_ii=sqrt(a_ii-sum(k=1..i-1)((l_ik)^2)) */
     t_matrixfloat sum=0.;
     t_matrixfloat result=0.f;
 
-    for(k=0; k<i; k++){
+    for(k=0; k<i; k++) {
       t_matrixfloat lik=cholesky[k*col+i];
       sum+=lik*lik;
     }
-    if((result=original[i*(col+1)]-sum)<0){
+    if((result=original[i*(col+1)]-sum)<0) {
       post("[mtx_cholesky]: only symmetric and positive definite matrices can be cholesky-decomposed");
       return;
     }
@@ -69,13 +72,13 @@ static void mtx_cholesky_matrix(t_matrix *x, t_symbol *s, int argc, t_atom *argv
     cholesky[i*(col+1)]=result;
     /* 3b get the other elements within this row/col */
     /* l_ji=(a_ji-sum(k=1..i-1)(l_jk*l_ik))/l_ii */
-    for(j=i+1; j<row; j++){
+    for(j=i+1; j<row; j++) {
       sum=0.;
-      for(k=0; k<i; k++){
-	t_matrixfloat ljk=cholesky[k*col+j];
-	t_matrixfloat lik=cholesky[k*col+i];
+      for(k=0; k<i; k++) {
+        t_matrixfloat ljk=cholesky[k*col+j];
+        t_matrixfloat lik=cholesky[k*col+i];
 
-	sum+=ljk*lik;
+        sum+=ljk*lik;
       }
       cholesky[i*row+j]=(original[i*col+j]-sum)/result;
     }
@@ -102,13 +105,16 @@ static void *mtx_cholesky_new(t_symbol *s, int argc, t_atom *argv)
 }
 void mtx_cholesky_setup(void)
 {
-  mtx_cholesky_class = class_new(gensym("mtx_cholesky"), (t_newmethod)mtx_cholesky_new, 
-				(t_method)matrix_free, sizeof(t_matrix), 0, A_GIMME, 0);
+  mtx_cholesky_class = class_new(gensym("mtx_cholesky"),
+                                 (t_newmethod)mtx_cholesky_new,
+                                 (t_method)matrix_free, sizeof(t_matrix), 0, A_GIMME, 0);
   class_addbang  (mtx_cholesky_class, matrix_bang);
-  class_addmethod(mtx_cholesky_class, (t_method)mtx_cholesky_matrix, gensym("matrix"), A_GIMME, 0);
+  class_addmethod(mtx_cholesky_class, (t_method)mtx_cholesky_matrix,
+                  gensym("matrix"), A_GIMME, 0);
 
 }
 
-void iemtx_cholesky_setup(void){
+void iemtx_cholesky_setup(void)
+{
   mtx_cholesky_setup();
 }

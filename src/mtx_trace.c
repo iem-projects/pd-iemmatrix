@@ -15,8 +15,7 @@
 
 /* mtx_trace */
 static t_class *mtx_trace_class;
-typedef struct _mtx_trace
-{
+typedef struct _mtx_trace {
   t_object x_obj;
   t_float trace;
 } t_mtx_trace;
@@ -24,14 +23,18 @@ static void mtx_trace_bang(t_mtx_trace *x)
 {
   outlet_float(x->x_obj.ob_outlet, x->trace);
 }
-static void mtx_trace_matrix(t_mtx_trace *x, t_symbol *s, int argc, t_atom *argv)
+static void mtx_trace_matrix(t_mtx_trace *x, t_symbol *s, int argc,
+                             t_atom *argv)
 {
   int row=atom_getfloat(argv++);
   int col=atom_getfloat(argv++);
   int length=(col<row)?col:row;
   t_float trace = 0;
-  if(row*col>argc-2)post("mtx_trace: sparse matrices not yet supported : use \"mtx_check\"");
-  else while(length--)trace+=atom_getfloat(argv+length*(col+1));
+  if(row*col>argc-2) {
+    post("mtx_trace: sparse matrices not yet supported : use \"mtx_check\"");
+  } else while(length--) {
+      trace+=atom_getfloat(argv+length*(col+1));
+    }
   x->trace=trace;
   mtx_trace_bang(x);
 }
@@ -44,10 +47,12 @@ static void *mtx_trace_new(t_symbol *s, int argc, t_atom *argv)
 }
 void mtx_trace_setup(void)
 {
-  mtx_trace_class = class_new(gensym("mtx_trace"), (t_newmethod)mtx_trace_new, 
-			      0, sizeof(t_mtx_trace), 0, A_GIMME, 0);
+  mtx_trace_class = class_new(gensym("mtx_trace"),
+                              (t_newmethod)mtx_trace_new,
+                              0, sizeof(t_mtx_trace), 0, A_GIMME, 0);
   class_addbang  (mtx_trace_class, mtx_trace_bang);
-  class_addmethod(mtx_trace_class, (t_method)mtx_trace_matrix, gensym("matrix"), A_GIMME, 0);
+  class_addmethod(mtx_trace_class, (t_method)mtx_trace_matrix,
+                  gensym("matrix"), A_GIMME, 0);
 
 }
 

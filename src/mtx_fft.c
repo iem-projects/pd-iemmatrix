@@ -18,8 +18,7 @@
 static t_class *mtx_fft_class;
 
 typedef struct _MtxFFT_ MtxFFT;
-struct _MtxFFT_
-{
+struct _MtxFFT_ {
   t_object x_obj;
   int size;
 
@@ -28,21 +27,25 @@ struct _MtxFFT_
 
   t_outlet *list_re_out;
   t_outlet *list_im_out;
-   
+
   t_atom *list_re;
   t_atom *list_im;
 };
 
-static void deleteMtxFFT (MtxFFT *x) 
+static void deleteMtxFFT (MtxFFT *x)
 {
-  if (x->f_re)
-     free (x->f_re);
-  if (x->f_im) 
-     free (x->f_im);
-  if (x->list_re)
-     free (x->list_re);
-  if (x->list_im)
-     free (x->list_im);
+  if (x->f_re) {
+    free (x->f_re);
+  }
+  if (x->f_im) {
+    free (x->f_im);
+  }
+  if (x->list_re) {
+    free (x->list_re);
+  }
+  if (x->list_im) {
+    free (x->list_im);
+  }
 }
 
 static void *newMtxFFT (t_symbol *s, int argc, t_atom *argv)
@@ -55,9 +58,9 @@ static void *newMtxFFT (t_symbol *s, int argc, t_atom *argv)
   x->size=0;
   x->f_re=x->f_im=0;
   x->list_re=x->list_im=0;
-  
+
   return ((void *) x);
-} 
+}
 
 static void mtxFFTBang (MtxFFT *x)
 {
@@ -69,23 +72,26 @@ static void mtxFFTBang (MtxFFT *x)
 
 static void zeroFloatArray (int n, t_float *f)
 {
-  while (n--)
+  while (n--) {
     *f++ = 0.0f;
+  }
 }
 
-static void writeFloatIntoList (int n, t_atom *l, t_float *f) 
+static void writeFloatIntoList (int n, t_atom *l, t_float *f)
 {
-  for (;n--;f++, l++) 
+  for (; n--; f++, l++) {
     SETFLOAT (l, *f);
+  }
 }
-static void readFloatFromList (int n, t_atom *l, t_float *f) 
+static void readFloatFromList (int n, t_atom *l, t_float *f)
 {
-  while (n--) 
+  while (n--) {
     *f++ = atom_getfloat (l++);
+  }
 }
 
-static void mtxFFTMatrixCold (MtxFFT *x, t_symbol *s, 
-			      int argc, t_atom *argv)
+static void mtxFFTMatrixCold (MtxFFT *x, t_symbol *s,
+                              int argc, t_atom *argv)
 {
   int rows = atom_getint (argv++);
   int columns = atom_getint (argv++);
@@ -97,14 +103,13 @@ static void mtxFFTMatrixCold (MtxFFT *x, t_symbol *s,
   t_float *f_im = x->f_im;
 
   /* fftsize check */
-  if (!size)
+  if (!size) {
     post("mtx_fft: invalid dimensions");
-  else if (in_size<size)
+  } else if (in_size<size) {
     post("mtx_fft: sparse matrix not yet supported: use \"mtx_check\"");
-  else if (columns < 4){
+  } else if (columns < 4) {
     post("mtx_fft: matrix must have at least 4 columns");
-  }
-  else if (columns == (1 << ilog2(columns))) {
+  } else if (columns == (1 << ilog2(columns))) {
     /* ok, prepare real-part of FFT! */
 
     /* memory things */
@@ -122,15 +127,15 @@ static void mtxFFTMatrixCold (MtxFFT *x, t_symbol *s,
     /* main part */
     readFloatFromList (size, argv, f_im);
 
-  }
-  else
+  } else {
     post("mtx_rowfft: rowvector size no power of 2!");
+  }
 
 }
 
 
-static void mtxFFTMatrixHot (MtxFFT *x, t_symbol *s, 
-			      int argc, t_atom *argv)
+static void mtxFFTMatrixHot (MtxFFT *x, t_symbol *s,
+                             int argc, t_atom *argv)
 {
   int rows = atom_getint (argv++);
   int columns = atom_getint (argv++);
@@ -143,25 +148,24 @@ static void mtxFFTMatrixHot (MtxFFT *x, t_symbol *s,
   t_float *f_im = x->f_im;
 
   /* fftsize check */
-  if (!size)
+  if (!size) {
     post("mtx_fft: invalid dimensions");
-  else if (in_size<size)
+  } else if (in_size<size) {
     post("mtx_fft: sparse matrix not yet supported: use \"mtx_check\"");
-  else if (size != x->size)
-     post("mtx_fft: left matrix has other dimensions than right matrix");
-  else if (columns < 4){
+  } else if (size != x->size) {
+    post("mtx_fft: left matrix has other dimensions than right matrix");
+  } else if (columns < 4) {
     post("mtx_fft: matrix must have at least 4 columns");
-  }
-  else if (columns == (1 << ilog2(columns))) {
+  } else if (columns == (1 << ilog2(columns))) {
     /* ok, do the FFT! */
-    
+
     /* main part */
     readFloatFromList (size, argv, f_re);
 
     fft_count = rows;
     list_re += 2;
     list_im += 2;
-    while (fft_count--){ 
+    while (fft_count--) {
       mayer_fft (columns, f_re, f_im);
       writeFloatIntoList (columns, list_re, f_re);
       writeFloatIntoList (columns, list_im, f_im);
@@ -173,36 +177,39 @@ static void mtxFFTMatrixHot (MtxFFT *x, t_symbol *s,
 
     list_re = x->list_re;
     list_im = x->list_im;
-      
+
     SETSYMBOL(list_re, gensym("matrix"));
     SETSYMBOL(list_im, gensym("matrix"));
     SETFLOAT(list_re, rows);
     SETFLOAT(list_im, rows);
     SETFLOAT(list_re+1, columns);
     SETFLOAT(list_im+1, columns);
-    outlet_anything(x->list_im_out, gensym("matrix"), 
-		    x->size+2, list_im);
-    outlet_anything(x->list_re_out, gensym("matrix"), 
-		    x->size+2, list_re);
-  }
-  else
+    outlet_anything(x->list_im_out, gensym("matrix"),
+                    x->size+2, list_im);
+    outlet_anything(x->list_re_out, gensym("matrix"),
+                    x->size+2, list_re);
+  } else {
     post("mtx_rowfft: rowvector size no power of 2!");
+  }
 
 }
 
 void mtx_fft_setup (void)
 {
-  mtx_fft_class = class_new 
-    (gensym("mtx_fft"),
-     (t_newmethod) newMtxFFT,
-     (t_method) deleteMtxFFT,
-     sizeof (MtxFFT),
-     CLASS_DEFAULT, A_GIMME, 0);
+  mtx_fft_class = class_new
+                  (gensym("mtx_fft"),
+                   (t_newmethod) newMtxFFT,
+                   (t_method) deleteMtxFFT,
+                   sizeof (MtxFFT),
+                   CLASS_DEFAULT, A_GIMME, 0);
   class_addbang (mtx_fft_class, (t_method) mtxFFTBang);
-  class_addmethod (mtx_fft_class, (t_method) mtxFFTMatrixHot, gensym("matrix"), A_GIMME,0);
-  class_addmethod (mtx_fft_class, (t_method) mtxFFTMatrixCold, gensym(""), A_GIMME,0);
+  class_addmethod (mtx_fft_class, (t_method) mtxFFTMatrixHot,
+                   gensym("matrix"), A_GIMME,0);
+  class_addmethod (mtx_fft_class, (t_method) mtxFFTMatrixCold, gensym(""),
+                   A_GIMME,0);
 }
 
-void iemtx_fft_setup(void){
+void iemtx_fft_setup(void)
+{
   mtx_fft_setup();
 }

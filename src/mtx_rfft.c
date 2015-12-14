@@ -26,8 +26,7 @@ enum ComplexPart { REALPART=0,  IMAGPART=1};
 #endif
 
 typedef struct _MTXRfft_ MTXRfft;
-struct _MTXRfft_
-{
+struct _MTXRfft_ {
   t_object x_obj;
   int size;
   int size2;
@@ -44,34 +43,41 @@ struct _MTXRfft_
 
   t_outlet *list_re_out;
   t_outlet *list_im_out;
-   
+
   t_atom *list_re;
   t_atom *list_im;
 };
 
-static void deleteMTXRfft (MTXRfft *x) 
+static void deleteMTXRfft (MTXRfft *x)
 {
 #ifdef USE_FFTW
   int n;
   if (x->fftplan) {
-     for (n=0; n<x->rows; n++) 
-	fftw_destroy_plan(x->fftplan[n]);
-     free(x->fftplan);
+    for (n=0; n<x->rows; n++) {
+      fftw_destroy_plan(x->fftplan[n]);
+    }
+    free(x->fftplan);
   }
-  if (x->f_out)
-     free(x->f_out);
-  if (x->f_in)
-     free(x->f_in);
+  if (x->f_out) {
+    free(x->f_out);
+  }
+  if (x->f_in) {
+    free(x->f_in);
+  }
 #else
-  if (x->f_re)
-     free (x->f_re);
-  if (x->f_im) 
-     free (x->f_im);
+  if (x->f_re) {
+    free (x->f_re);
+  }
+  if (x->f_im) {
+    free (x->f_im);
+  }
 #endif
-  if (x->list_re)
-     free (x->list_re);
-  if (x->list_im)
-     free (x->list_im);
+  if (x->list_re) {
+    free (x->list_re);
+  }
+  if (x->list_im) {
+    free (x->list_im);
+  }
 }
 
 static void *newMTXRfft (t_symbol *s, int argc, t_atom *argv)
@@ -90,9 +96,9 @@ static void *newMTXRfft (t_symbol *s, int argc, t_atom *argv)
   x->f_re=x->f_im=0;
 #endif
   x->list_re=x->list_im=0;
-  
+
   return ((void *) x);
-} 
+}
 
 static void mTXRfftBang (MTXRfft *x)
 {
@@ -102,7 +108,7 @@ static void mTXRfftBang (MTXRfft *x)
   }
 }
 
-static void fftRestoreImag (int n, t_float *re, t_float *im) 
+static void fftRestoreImag (int n, t_float *re, t_float *im)
 {
   t_float *im2;
   n >>= 1;
@@ -120,47 +126,54 @@ static void fftRestoreImag (int n, t_float *re, t_float *im)
 
 static void zeroFloatArray (int n, t_float *f)
 {
-  while (n--)
+  while (n--) {
     *f++ = 0.0f;
+  }
 }
 
-static void writeFloatIntoList (int n, t_atom *l, t_float *f) 
+static void writeFloatIntoList (int n, t_atom *l, t_float *f)
 {
-  for (;n--;f++, l++) 
+  for (; n--; f++, l++) {
     SETFLOAT (l, *f);
+  }
 }
 
-static void readFloatFromList (int n, t_atom *l, t_float *f) 
+static void readFloatFromList (int n, t_atom *l, t_float *f)
 {
-  while (n--) 
+  while (n--) {
     *f++ = atom_getfloat (l++);
+  }
 }
 
 #ifdef USE_FFTW
-static void writeFFTWComplexPartIntoList (int n, t_atom *l, fftw_complex *c, enum ComplexPart p) 
+static void writeFFTWComplexPartIntoList (int n, t_atom *l,
+    fftw_complex *c, enum ComplexPart p)
 {
-   t_float f;
+  t_float f;
   while (n--) {
-     f=(t_float)c[n][p];
+    f=(t_float)c[n][p];
     SETFLOAT (l+n, f);
   }
 }
-static void readDoubleFromList (int n, t_atom *l, double *f) 
+static void readDoubleFromList (int n, t_atom *l, double *f)
 {
-  while (n--) 
+  while (n--) {
     *f++ = (double)atom_getfloat (l++);
+  }
 }
 #endif
 
-static void mTXRfftMatrix (MTXRfft *x, t_symbol *s, 
-			      int argc, t_atom *argv)
+static void mTXRfftMatrix (MTXRfft *x, t_symbol *s,
+                           int argc, t_atom *argv)
 {
   int rows = atom_getint (argv++);
   int columns = atom_getint (argv++);
-  int columns_re = (columns>>1)+1; /* N/2+1 samples needed for real part of realfft */
+  int columns_re = (columns>>1)
+                   +1; /* N/2+1 samples needed for real part of realfft */
   int size = rows * columns;
   int in_size = argc-2;
-  int size2 = columns_re * rows + 2; /* +2 since the list also contains matrix row+col */
+  int size2 = columns_re * rows +
+              2; /* +2 since the list also contains matrix row+col */
   int fft_count;
   t_atom *list_re = x->list_re;
   t_atom *list_im = x->list_im;
@@ -173,34 +186,35 @@ static void mTXRfftMatrix (MTXRfft *x, t_symbol *s,
 #endif
 
   /* fftsize check */
-  if (!size)
+  if (!size) {
     post("mtx_rfft: invalid dimensions");
-  else if (in_size<size)
+  } else if (in_size<size) {
     post("mtx_rfft: sparse matrix not yet supported: use \"mtx_check\"");
-  else if (columns < 4){
+  } else if (columns < 4) {
     post("mtx_rfft: matrix must have at least 4 columns");
-  }
-  else if (columns == (1 << ilog2(columns))) {
+  } else if (columns == (1 << ilog2(columns))) {
     /* ok, do the FFT! */
 
     /* memory things */
 #ifdef USE_FFTW
-    if ((x->rows!=rows)||(columns!=x->fftn)){
-       f_out=(fftw_complex*)realloc(f_out, sizeof(fftw_complex)*(size2-2));
-       f_in=(double*)realloc(f_in, sizeof(double)*size);
-       x->f_in = f_in;
-       x->f_out = f_out;
-       for (fft_count=0; fft_count<x->rows; fft_count++) {
-          fftw_destroy_plan(x->fftplan[fft_count]);
-       }
-       x->fftplan = (fftw_plan*)realloc(x->fftplan, sizeof(fftw_plan)*rows);
-       for (fft_count=0; fft_count<rows; fft_count++, f_in+=columns, f_out+=columns_re) {
-	  x->fftplan[fft_count] = fftw_plan_dft_r2c_1d (columns,f_in,f_out,FFTW_ESTIMATE);
-       }
-       x->fftn=columns;
-       x->rows=rows;
-       f_in=x->f_in;
-       f_out=x->f_out;
+    if ((x->rows!=rows)||(columns!=x->fftn)) {
+      f_out=(fftw_complex*)realloc(f_out, sizeof(fftw_complex)*(size2-2));
+      f_in=(double*)realloc(f_in, sizeof(double)*size);
+      x->f_in = f_in;
+      x->f_out = f_out;
+      for (fft_count=0; fft_count<x->rows; fft_count++) {
+        fftw_destroy_plan(x->fftplan[fft_count]);
+      }
+      x->fftplan = (fftw_plan*)realloc(x->fftplan, sizeof(fftw_plan)*rows);
+      for (fft_count=0; fft_count<rows;
+           fft_count++, f_in+=columns, f_out+=columns_re) {
+        x->fftplan[fft_count] = fftw_plan_dft_r2c_1d (columns,f_in,f_out,
+                                FFTW_ESTIMATE);
+      }
+      x->fftn=columns;
+      x->rows=rows;
+      f_in=x->f_in;
+      f_out=x->f_out;
     }
 #else
     f_re=(t_float*)realloc(f_re, sizeof(t_float)*size);
@@ -225,7 +239,7 @@ static void mTXRfftMatrix (MTXRfft *x, t_symbol *s,
 
     list_re += 2;
     list_im += 2;
-    for (fft_count=0;fft_count<rows;fft_count++){ 
+    for (fft_count=0; fft_count<rows; fft_count++) {
 #ifdef USE_FFTW
       fftw_execute(x->fftplan[fft_count]);
       writeFFTWComplexPartIntoList(columns_re,list_re,f_out,REALPART);
@@ -245,35 +259,37 @@ static void mTXRfftMatrix (MTXRfft *x, t_symbol *s,
 
     list_re = x->list_re;
     list_im = x->list_im;
-      
+
     SETSYMBOL(list_re, gensym("matrix"));
     SETSYMBOL(list_im, gensym("matrix"));
     SETFLOAT(list_re, rows);
     SETFLOAT(list_im, rows);
     SETFLOAT(list_re+1, columns_re);
     SETFLOAT(list_im+1, columns_re);
-    outlet_anything(x->list_im_out, gensym("matrix"), 
-		    x->size2, list_im);
-    outlet_anything(x->list_re_out, gensym("matrix"), 
-		    x->size2, list_re);
-  }
-  else
+    outlet_anything(x->list_im_out, gensym("matrix"),
+                    x->size2, list_im);
+    outlet_anything(x->list_re_out, gensym("matrix"),
+                    x->size2, list_re);
+  } else {
     post("mtx_rowfft: rowvector size no power of 2!");
+  }
 
 }
 
 void mtx_rfft_setup (void)
 {
-  mtx_rfft_class = class_new 
-    (gensym("mtx_rfft"),
-     (t_newmethod) newMTXRfft,
-     (t_method) deleteMTXRfft,
-     sizeof (MTXRfft),
-     CLASS_DEFAULT, A_GIMME, 0);
+  mtx_rfft_class = class_new
+                   (gensym("mtx_rfft"),
+                    (t_newmethod) newMTXRfft,
+                    (t_method) deleteMTXRfft,
+                    sizeof (MTXRfft),
+                    CLASS_DEFAULT, A_GIMME, 0);
   class_addbang (mtx_rfft_class, (t_method) mTXRfftBang);
-  class_addmethod (mtx_rfft_class, (t_method) mTXRfftMatrix, gensym("matrix"), A_GIMME,0);
+  class_addmethod (mtx_rfft_class, (t_method) mTXRfftMatrix,
+                   gensym("matrix"), A_GIMME,0);
 }
 
-void iemtx_rfft_setup(void){
+void iemtx_rfft_setup(void)
+{
   mtx_rfft_setup();
 }

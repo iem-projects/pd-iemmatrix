@@ -17,22 +17,24 @@
 /* column-wise product
  */
 static t_class *mtx_prod_class;
-static void mtx_prod_matrix(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
+static void mtx_prod_matrix(t_matrix *x, t_symbol *s, int argc,
+                            t_atom *argv)
 {
   int row=atom_getfloat(argv++);
   int col=atom_getfloat(argv++);
   int n;
 
-  if(row*col>argc-2)post("mtx_prod: sparse matrices not yet supported : use \"mtx_check\"");
-  else {
+  if(row*col>argc-2) {
+    post("mtx_prod: sparse matrices not yet supported : use \"mtx_check\"");
+  } else {
     t_atom *ap = (t_atom *)getbytes(col * sizeof(t_atom)), *dummy=ap;
 
-    for(n=0;n<col;n++, dummy++){
+    for(n=0; n<col; n++, dummy++) {
       int i=row;
       t_float f=1.f;
       t_atom*ap2=argv+n;
-      while(i--){
-	f*=atom_getfloat(ap2+col*i);
+      while(i--) {
+        f*=atom_getfloat(ap2+col*i);
       }
       SETFLOAT(dummy, f);
     }
@@ -42,9 +44,12 @@ static void mtx_prod_matrix(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
     freebytes(ap, (col * sizeof(t_atom)));
   }
 }
-static void mtx_prod_list(t_matrix *x, t_symbol *s, int argc, t_atom *argv){
+static void mtx_prod_list(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
+{
   t_float f=1.f;
-  while(argc--)f*=atom_getfloat(argv++);
+  while(argc--) {
+    f*=atom_getfloat(argv++);
+  }
   outlet_float(x->x_obj.ob_outlet, f);
 }
 
@@ -60,12 +65,14 @@ static void *mtx_prod_new(void)
 }
 void mtx_prod_setup(void)
 {
-  mtx_prod_class = class_new(gensym("mtx_prod"), (t_newmethod)mtx_prod_new, 
-			     (t_method)matrix_free, sizeof(t_matrix), 0, A_GIMME, 0);
+  mtx_prod_class = class_new(gensym("mtx_prod"), (t_newmethod)mtx_prod_new,
+                             (t_method)matrix_free, sizeof(t_matrix), 0, A_GIMME, 0);
   class_addlist  (mtx_prod_class, mtx_prod_list);
-  class_addmethod(mtx_prod_class, (t_method)mtx_prod_matrix, gensym("matrix"), A_GIMME, 0);
+  class_addmethod(mtx_prod_class, (t_method)mtx_prod_matrix,
+                  gensym("matrix"), A_GIMME, 0);
 
 }
-void iemtx_prod_setup(void){
+void iemtx_prod_setup(void)
+{
   mtx_prod_setup();
 }

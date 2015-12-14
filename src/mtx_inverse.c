@@ -16,7 +16,8 @@
 /* mtx_inverse */
 static t_class *mtx_inverse_class;
 
-static void mtx_inverse_matrix(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
+static void mtx_inverse_matrix(t_matrix *x, t_symbol *s, int argc,
+                               t_atom *argv)
 {
   /* maybe we should do this in double or long double ? */
   int row=atom_getfloat(argv);
@@ -26,7 +27,7 @@ static void mtx_inverse_matrix(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 
   t_matrixfloat *original, *inverted;
 
-  if(row*col+2>argc){
+  if(row*col+2>argc) {
     post("mtx_print : sparse matrices not yet supported : use \"mtx_check\"");
     return;
   }
@@ -37,25 +38,27 @@ static void mtx_inverse_matrix(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
   /* 1. extract values of A to float-buf */
   original=matrix2float(argv);
 
-  if (row==col){
+  if (row==col) {
     /* fine, the matrix is square */
     inverted=mtx_doInvert(original, row, &err);
   } else {
     /* we'll have to do the pseudo-inverse:
      * P=A'*inv(A*A') if row<col
-     * P=inv(A'*A)*A' if col<row 
+     * P=inv(A'*A)*A' if col<row
      */
     t_matrixfloat*transposed, *invertee;
     int inverteeCol=0;
     transposed=mtx_doTranspose(original, row, col);
-    if(row>col){
+    if(row>col) {
       inverteeCol=col;
       invertee  =mtx_doMultiply(col, transposed, row, original, col);
-      inverted  =mtx_doMultiply(col, mtx_doInvert(invertee, col, &err), col, transposed, row);
+      inverted  =mtx_doMultiply(col, mtx_doInvert(invertee, col, &err), col,
+                                transposed, row);
     } else {
       inverteeCol=row;
       invertee  =mtx_doMultiply(row, original, col, transposed, row);
-      inverted  =mtx_doMultiply(col, transposed, row, mtx_doInvert(invertee, row, &err), row);
+      inverted  =mtx_doMultiply(col, transposed, row, mtx_doInvert(invertee, row,
+                                &err), row);
     }
     freebytes(transposed, sizeof(t_matrixfloat)*col*row);
     freebytes(invertee  , sizeof(t_matrixfloat)*inverteeCol*inverteeCol);
@@ -67,9 +70,11 @@ static void mtx_inverse_matrix(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
   /* 3b destroy the buffers */
   freebytes(original, sizeof(t_matrixfloat)*row*col);
 
-  if(err){
+  if(err) {
     outlet_bang(x->x_outlet);
-    pd_error(x, "mtx_inverse: couldn't really invert the matrix !!! %d error%c", err, (err-1)?'s':0);
+    pd_error(x,
+             "mtx_inverse: couldn't really invert the matrix !!! %d error%c", err,
+             (err-1)?'s':0);
   }
 
   /* 3c output the atombuf; */
@@ -88,13 +93,16 @@ static void *mtx_inverse_new(t_symbol *s, int argc, t_atom *argv)
 }
 void mtx_inverse_setup(void)
 {
-  mtx_inverse_class = class_new(gensym("mtx_inverse"), (t_newmethod)mtx_inverse_new, 
+  mtx_inverse_class = class_new(gensym("mtx_inverse"),
+                                (t_newmethod)mtx_inverse_new,
                                 (t_method)matrix_free, sizeof(t_matrix), 0, A_GIMME, 0);
   class_addbang  (mtx_inverse_class, matrix_bang);
-  class_addmethod(mtx_inverse_class, (t_method)mtx_inverse_matrix, gensym("matrix"), A_GIMME, 0);
+  class_addmethod(mtx_inverse_class, (t_method)mtx_inverse_matrix,
+                  gensym("matrix"), A_GIMME, 0);
 
 }
 
-void iemtx_inverse_setup(void){
+void iemtx_inverse_setup(void)
+{
   mtx_inverse_setup();
 }

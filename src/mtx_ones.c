@@ -32,9 +32,13 @@ static void *mtx_ones_new(t_symbol *s, int argc, t_atom *argv)
     row=atom_getfloat(argv++);
     col=atom_getfloat(argv);
   }
-  if(col<0)col=0;
-  if(row<0)row=0;
-  if (col*row){
+  if(col<0) {
+    col=0;
+  }
+  if(row<0) {
+    row=0;
+  }
+  if (col*row) {
     x->atombuffer = (t_atom *)getbytes((col*row+2)*sizeof(t_atom));
     setdimen(x, row, col);
     matrix_set(x, 1);
@@ -43,14 +47,16 @@ static void *mtx_ones_new(t_symbol *s, int argc, t_atom *argv)
 }
 void mtx_ones_setup(void)
 {
-  mtx_ones_class = class_new(gensym("mtx_ones"), (t_newmethod)mtx_ones_new, 
-			     (t_method)matrix_free, sizeof(t_matrix), 0, A_GIMME, 0);
+  mtx_ones_class = class_new(gensym("mtx_ones"), (t_newmethod)mtx_ones_new,
+                             (t_method)matrix_free, sizeof(t_matrix), 0, A_GIMME, 0);
   class_addlist(mtx_ones_class, matrix_ones);
   class_addbang(mtx_ones_class, matrix_bang);
-  class_addmethod(mtx_ones_class, (t_method)matrix_ones, gensym("matrix"), A_GIMME, 0);
+  class_addmethod(mtx_ones_class, (t_method)matrix_ones, gensym("matrix"),
+                  A_GIMME, 0);
 
 
 }
-void iemtx_ones_setup(void){
+void iemtx_ones_setup(void)
+{
   mtx_ones_setup();
 }

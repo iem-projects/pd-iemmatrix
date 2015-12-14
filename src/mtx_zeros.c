@@ -32,9 +32,13 @@ static void *mtx_zeros_new(t_symbol *s, int argc, t_atom *argv)
     row=atom_getfloat(argv++);
     col=atom_getfloat(argv);
   }
-  if(col<0)col=0;
-  if(row<0)row=0;
-  if (col*row){
+  if(col<0) {
+    col=0;
+  }
+  if(row<0) {
+    row=0;
+  }
+  if (col*row) {
     x->atombuffer = (t_atom *)getbytes((col*row+2)*sizeof(t_atom));
     setdimen(x, row, col);
     matrix_set(x, 0);
@@ -43,14 +47,17 @@ static void *mtx_zeros_new(t_symbol *s, int argc, t_atom *argv)
 }
 void mtx_zeros_setup(void)
 {
-  mtx_zeros_class = class_new(gensym("mtx_zeros"), (t_newmethod)mtx_zeros_new, 
-			      (t_method)matrix_free, sizeof(t_matrix), 0, A_GIMME, 0);
+  mtx_zeros_class = class_new(gensym("mtx_zeros"),
+                              (t_newmethod)mtx_zeros_new,
+                              (t_method)matrix_free, sizeof(t_matrix), 0, A_GIMME, 0);
   class_addlist(mtx_zeros_class, matrix_zeros);
   class_addbang(mtx_zeros_class, matrix_bang);
-  class_addmethod(mtx_zeros_class, (t_method)matrix_zeros, gensym("matrix"), A_GIMME, 0);
+  class_addmethod(mtx_zeros_class, (t_method)matrix_zeros, gensym("matrix"),
+                  A_GIMME, 0);
 
 
 }
-void iemtx_zeros_setup(void){
+void iemtx_zeros_setup(void)
+{
   mtx_zeros_setup();
 }

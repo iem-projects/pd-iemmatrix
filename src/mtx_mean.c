@@ -17,7 +17,8 @@
 /* mtx_mean */
 static t_class *mtx_mean_class;
 
-static void mtx_mean_matrix(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
+static void mtx_mean_matrix(t_matrix *x, t_symbol *s, int argc,
+                            t_atom *argv)
 {
   int row=atom_getfloat(argv++);
   int col=atom_getfloat(argv++);
@@ -28,11 +29,13 @@ static void mtx_mean_matrix(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
   adjustsize(x, 1, col);
   op=x->atombuffer;
 
-  while(c--){
+  while(c--) {
     sum=0;
     ip=argv+col-c-1;
     r=row;
-    while(r--)sum+=atom_getfloat(ip+col*r);
+    while(r--) {
+      sum+=atom_getfloat(ip+col*r);
+    }
     SETFLOAT(op, sum*factor);
     op++;
   }
@@ -49,9 +52,10 @@ static void *mtx_mean_new(void)
 }
 void mtx_mean_setup(void)
 {
-  mtx_mean_class = class_new(gensym("mtx_mean"), (t_newmethod)mtx_mean_new, 
-			     (t_method)matrix_free, sizeof(t_matrix), 0, 0, 0);
-  class_addmethod(mtx_mean_class, (t_method)mtx_mean_matrix, gensym("matrix"), A_GIMME, 0);
+  mtx_mean_class = class_new(gensym("mtx_mean"), (t_newmethod)mtx_mean_new,
+                             (t_method)matrix_free, sizeof(t_matrix), 0, 0, 0);
+  class_addmethod(mtx_mean_class, (t_method)mtx_mean_matrix,
+                  gensym("matrix"), A_GIMME, 0);
 
 }
 

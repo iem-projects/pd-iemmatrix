@@ -28,15 +28,18 @@ static int makeseed(void)
 }
 static inline t_float getrand(int *val)
 {
-  t_float f=(((t_float)(((*val=*val*435898247+382842987)&0x7fffffff)-0x40000000))*(t_float)(0.5/0x40000000)+0.5);
+  t_float f=(((t_float)(((*val=*val*435898247+382842987)&0x7fffffff)
+                        -0x40000000))*(t_float)(0.5/0x40000000)+0.5);
   return f;
-  
+
 }
 static void mtx_rand_random(t_matrix *x)
 {
   long size = x->row * x->col;
   t_atom *ap=x->atombuffer+2;
-  while(size--)SETFLOAT(ap+size, getrand(&x->current_row));
+  while(size--) {
+    SETFLOAT(ap+size, getrand(&x->current_row));
+  }
 }
 
 static void mtx_rand_list(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
@@ -44,14 +47,19 @@ static void mtx_rand_list(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
   int row = atom_getfloat(argv++);
   int col = atom_getfloat(argv++);
 
-  if(!argv)return;
-  if(argc==1)col=row;
+  if(!argv) {
+    return;
+  }
+  if(argc==1) {
+    col=row;
+  }
 
   adjustsize(x, row, col);
   mtx_rand_random(x);
   matrix_bang(x);
 }
-static void mtx_rand_matrix(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
+static void mtx_rand_matrix(t_matrix *x, t_symbol *s, int argc,
+                            t_atom *argv)
 {
   matrix_matrix2(x, s, argc, argv);
   mtx_rand_random(x);
@@ -76,26 +84,29 @@ static void *mtx_rand_new(t_symbol *s, int argc, t_atom *argv)
   x->current_row=makeseed();
 
   if (argc) {
-	row=atom_getfloat(argv);
-	col=(argc>1)?atom_getfloat(argv+1):row;
-	adjustsize(x, row, col);
-	mtx_rand_random(x);
+    row=atom_getfloat(argv);
+    col=(argc>1)?atom_getfloat(argv+1):row;
+    adjustsize(x, row, col);
+    mtx_rand_random(x);
   }
   return (x);
 }
 void mtx_rand_setup(void)
 {
-  mtx_rand_class = class_new(gensym("mtx_rand"), (t_newmethod)mtx_rand_new, 
-			     (t_method)matrix_free, sizeof(t_matrix), 0, A_GIMME, 0);
-  class_addmethod(mtx_rand_class, (t_method)mtx_rand_matrix, gensym("matrix"), A_GIMME, 0);
+  mtx_rand_class = class_new(gensym("mtx_rand"), (t_newmethod)mtx_rand_new,
+                             (t_method)matrix_free, sizeof(t_matrix), 0, A_GIMME, 0);
+  class_addmethod(mtx_rand_class, (t_method)mtx_rand_matrix,
+                  gensym("matrix"), A_GIMME, 0);
   class_addlist  (mtx_rand_class, mtx_rand_list);
   class_addbang  (mtx_rand_class, mtx_rand_bang);
 
-  class_addmethod(mtx_rand_class, (t_method)mtx_rand_seed, gensym("seed"), A_FLOAT, 0);
+  class_addmethod(mtx_rand_class, (t_method)mtx_rand_seed, gensym("seed"),
+                  A_FLOAT, 0);
 
 }
 
-void iemtx_rand_setup(void){
+void iemtx_rand_setup(void)
+{
   mtx_rand_setup();
 }
 

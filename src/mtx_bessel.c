@@ -23,8 +23,7 @@
 static t_class *mtx_bessel_class;
 
 typedef struct _MTXBessel_ MTXBessel;
-struct _MTXBessel_
-{
+struct _MTXBessel_ {
   t_object x_obj;
   t_outlet *list_h_re_out;
   t_outlet *list_h_im_out;
@@ -37,36 +36,41 @@ struct _MTXBessel_
   size_t l;
 };
 
-static void allocMTXBesseldata (MTXBessel *x) 
+static void allocMTXBesseldata (MTXBessel *x)
 {
-   x->kr=(double*)calloc(x->l,sizeof(double));
-   if (x->list_h_re_out!=0) {
-      x->list_h_re=(t_atom*)calloc(x->l*(x->nmax+1)+2,sizeof(t_atom));
-      x->h_re=(double*)calloc(x->l*(x->nmax+1),sizeof(double));
-   }
-   if (x->list_h_im_out!=0) {
-      x->list_h_im=(t_atom*)calloc(x->l*(x->nmax+1)+2,sizeof(t_atom));
-      x->h_im=(double*)calloc(x->l*(x->nmax+1),sizeof(double));
-   }
+  x->kr=(double*)calloc(x->l,sizeof(double));
+  if (x->list_h_re_out!=0) {
+    x->list_h_re=(t_atom*)calloc(x->l*(x->nmax+1)+2,sizeof(t_atom));
+    x->h_re=(double*)calloc(x->l*(x->nmax+1),sizeof(double));
+  }
+  if (x->list_h_im_out!=0) {
+    x->list_h_im=(t_atom*)calloc(x->l*(x->nmax+1)+2,sizeof(t_atom));
+    x->h_im=(double*)calloc(x->l*(x->nmax+1),sizeof(double));
+  }
 }
 
-static void deleteMTXBesseldata (MTXBessel *x) 
+static void deleteMTXBesseldata (MTXBessel *x)
 {
-   if (x->kr!=0)
-      free(x->kr);
-   if (x->h_re!=0)
-      free(x->h_re);
-   if (x->h_im!=0)
-      free(x->h_im);
-   if (x->list_h_re!=0)
-      free(x->list_h_re);
-   if (x->list_h_im!=0)
-      free(x->list_h_im);
-   x->list_h_re=0;
-   x->list_h_im=0;
-   x->h_re=0;
-   x->h_im=0;
-   x->kr=0;
+  if (x->kr!=0) {
+    free(x->kr);
+  }
+  if (x->h_re!=0) {
+    free(x->h_re);
+  }
+  if (x->h_im!=0) {
+    free(x->h_im);
+  }
+  if (x->list_h_re!=0) {
+    free(x->list_h_re);
+  }
+  if (x->list_h_im!=0) {
+    free(x->list_h_im);
+  }
+  x->list_h_re=0;
+  x->list_h_im=0;
+  x->h_re=0;
+  x->h_im=0;
+  x->kr=0;
 }
 
 static void *newMTXBessel (t_symbol *s, int argc, t_atom *argv)
@@ -75,48 +79,55 @@ static void *newMTXBessel (t_symbol *s, int argc, t_atom *argv)
   char whichfunction = 'j';
   t_symbol *fsym;
   MTXBessel *x = (MTXBessel *) pd_new (mtx_bessel_class);
-  x->list_h_re = 0; 
-  x->list_h_im = 0; 
-  x->list_h_im_out = 0; 
-  x->list_h_re_out = 0; 
-  x->kr = 0; 
-  x->h_re = 0; 
-  x->h_im = 0; 
+  x->list_h_re = 0;
+  x->list_h_im = 0;
+  x->list_h_im_out = 0;
+  x->list_h_re_out = 0;
+  x->kr = 0;
+  x->h_re = 0;
+  x->h_im = 0;
   x->l=0;
   fsym=atom_getsymbol(argv);
-  if (fsym->s_name!=0)
-     whichfunction=fsym->s_name[0];
+  if (fsym->s_name!=0) {
+    whichfunction=fsym->s_name[0];
+  }
   switch (whichfunction) {
-     default:
-     case 'J': case 'j':
-        x->list_h_re_out = outlet_new (&x->x_obj, gensym("matrix"));
-	break;
-     case 'H': case 'h':
-        x->list_h_re_out = outlet_new (&x->x_obj, gensym("matrix"));
-	/* coverity[unterminated_case]: H has both real&imag outlet */
-     case 'Y': case 'y':
-        x->list_h_im_out = outlet_new (&x->x_obj, gensym("matrix"));
+  default:
+  case 'J':
+  case 'j':
+    x->list_h_re_out = outlet_new (&x->x_obj, gensym("matrix"));
+    break;
+  case 'H':
+  case 'h':
+    x->list_h_re_out = outlet_new (&x->x_obj, gensym("matrix"));
+  /* coverity[unterminated_case]: H has both real&imag outlet */
+  case 'Y':
+  case 'y':
+    x->list_h_im_out = outlet_new (&x->x_obj, gensym("matrix"));
   }
   nmax=(int) atom_getfloat(argv+1);
-  if (nmax<0)
-     nmax=0;
+  if (nmax<0) {
+    nmax=0;
+  }
   x->nmax=nmax;
-  
+
   return ((void *) x);
-} 
+}
 
 static void mTXBesselBang (MTXBessel *x)
 {
   if (x->list_h_im!=0) {
-    outlet_anything(x->list_h_im_out, gensym("matrix"), x->l*(x->nmax+1)+2, x->list_h_im);
+    outlet_anything(x->list_h_im_out, gensym("matrix"), x->l*(x->nmax+1)+2,
+                    x->list_h_im);
   }
   if (x->list_h_re!=0) {
-    outlet_anything(x->list_h_re_out, gensym("matrix"), x->l*(x->nmax+1)+2, x->list_h_re);
+    outlet_anything(x->list_h_re_out, gensym("matrix"), x->l*(x->nmax+1)+2,
+                    x->list_h_re);
   }
 }
 
-static void mTXBesselMatrix (MTXBessel *x, t_symbol *s, 
-			      int argc, t_atom *argv)
+static void mTXBesselMatrix (MTXBessel *x, t_symbol *s,
+                             int argc, t_atom *argv)
 {
   int rows = atom_getint (argv++);
   int columns = atom_getint (argv++);
@@ -128,60 +139,66 @@ static void mTXBesselMatrix (MTXBessel *x, t_symbol *s,
 #if defined HAVE_MATH_BESSEL || defined HAVE_GSL_BESSEL
 
   /* size check */
-  if (!size) 
+  if (!size) {
     post("mtx_bessel: invalid dimensions");
-  else if (in_size<size) 
+  } else if (in_size<size) {
     post("mtx_bessel: sparse matrix not yet supported: use \"mtx_check\"");
-  else if ((rows!=1)||(columns<1))
-     post("mtx_bessel: 1 X L matrix expected with kr and h vector, but got more rows/no entries");
-  else {
-     if (x->l!=columns) {
-        deleteMTXBesseldata(x);
-        x->l=columns;
-        allocMTXBesseldata(x);
-     }
-     for (n=0;n<x->l;n++) {
-        x->kr[n]=(double) atom_getfloat(argv+n);
-     }
- 
-#ifdef HAVE_GSL_BESSEL 
-     if (x->h_re!=0) 
-        for (m=0;m<x->l;m++)
-           for (n=0;n<x->nmax+1;n++)
-              x->h_re[n+m*(x->nmax+1)]=gsl_sf_bessel_Jn(n,x->kr[m]);
+  } else if ((rows!=1)||(columns<1)) {
+    post("mtx_bessel: 1 X L matrix expected with kr and h vector, but got more rows/no entries");
+  } else {
+    if (x->l!=columns) {
+      deleteMTXBesseldata(x);
+      x->l=columns;
+      allocMTXBesseldata(x);
+    }
+    for (n=0; n<x->l; n++) {
+      x->kr[n]=(double) atom_getfloat(argv+n);
+    }
 
-     if (x->h_im!=0) 
-        for (m=0;m<x->l;m++)
-           for (n=0;n<x->nmax+1;n++)
-              x->h_im[n+m*(x->nmax+1)]=gsl_sf_bessel_Yn(n,x->kr[m]);
+#ifdef HAVE_GSL_BESSEL
+    if (x->h_re!=0)
+      for (m=0; m<x->l; m++)
+        for (n=0; n<x->nmax+1; n++) {
+          x->h_re[n+m*(x->nmax+1)]=gsl_sf_bessel_Jn(n,x->kr[m]);
+        }
+
+    if (x->h_im!=0)
+      for (m=0; m<x->l; m++)
+        for (n=0; n<x->nmax+1; n++) {
+          x->h_im[n+m*(x->nmax+1)]=gsl_sf_bessel_Yn(n,x->kr[m]);
+        }
 #else
-     if (x->h_re!=0) 
-        for (m=0;m<x->l;m++)
-           for (n=0;n<x->nmax+1;n++)
-              x->h_re[n+m*(x->nmax+1)]=jn(n,x->kr[m]);
+    if (x->h_re!=0)
+      for (m=0; m<x->l; m++)
+        for (n=0; n<x->nmax+1; n++) {
+          x->h_re[n+m*(x->nmax+1)]=jn(n,x->kr[m]);
+        }
 
-     if (x->h_im!=0) 
-        for (m=0;m<x->l;m++)
-           for (n=0;n<x->nmax+1;n++)
-              x->h_im[n+m*(x->nmax+1)]=yn(n,x->kr[m]);
+    if (x->h_im!=0)
+      for (m=0; m<x->l; m++)
+        for (n=0; n<x->nmax+1; n++) {
+          x->h_im[n+m*(x->nmax+1)]=yn(n,x->kr[m]);
+        }
 #endif
 
-     
-     if (x->h_re!=0) {
-        SETFLOAT(x->list_h_re+1,(float)(x->nmax+1));
-        SETFLOAT(x->list_h_re,(float)x->l);
-	for (n=0;n<x->l*(x->nmax+1);n++)
-           SETFLOAT(x->list_h_re+n+2,(float)x->h_re[n]);
-     }
-     
-     if (x->h_im!=0) {
-        SETFLOAT(x->list_h_im+1,(float)(x->nmax+1));
-        SETFLOAT(x->list_h_im,(float)x->l);
-	for (n=0;n<x->l*(x->nmax+1);n++)
-           SETFLOAT(x->list_h_im+n+2,(float)x->h_im[n]);
-     }
 
-     mTXBesselBang(x);
+    if (x->h_re!=0) {
+      SETFLOAT(x->list_h_re+1,(float)(x->nmax+1));
+      SETFLOAT(x->list_h_re,(float)x->l);
+      for (n=0; n<x->l*(x->nmax+1); n++) {
+        SETFLOAT(x->list_h_re+n+2,(float)x->h_re[n]);
+      }
+    }
+
+    if (x->h_im!=0) {
+      SETFLOAT(x->list_h_im+1,(float)(x->nmax+1));
+      SETFLOAT(x->list_h_im,(float)x->l);
+      for (n=0; n<x->l*(x->nmax+1); n++) {
+        SETFLOAT(x->list_h_im+n+2,(float)x->h_im[n]);
+      }
+    }
+
+    mTXBesselBang(x);
   }
 
 #else
@@ -191,17 +208,19 @@ static void mTXBesselMatrix (MTXBessel *x, t_symbol *s,
 
 void mtx_bessel_setup (void)
 {
-  mtx_bessel_class = class_new 
-    (gensym("mtx_bessel"),
-     (t_newmethod) newMTXBessel,
-     (t_method) deleteMTXBesseldata,
-     sizeof (MTXBessel),
-     CLASS_DEFAULT, A_GIMME, 0);
+  mtx_bessel_class = class_new
+                     (gensym("mtx_bessel"),
+                      (t_newmethod) newMTXBessel,
+                      (t_method) deleteMTXBesseldata,
+                      sizeof (MTXBessel),
+                      CLASS_DEFAULT, A_GIMME, 0);
   class_addbang (mtx_bessel_class, (t_method) mTXBesselBang);
-  class_addmethod (mtx_bessel_class, (t_method) mTXBesselMatrix, gensym("matrix"), A_GIMME,0);
+  class_addmethod (mtx_bessel_class, (t_method) mTXBesselMatrix,
+                   gensym("matrix"), A_GIMME,0);
 }
 
-void iemtx_bessel_setup(void){
+void iemtx_bessel_setup(void)
+{
   mtx_bessel_setup();
 }
 

@@ -32,27 +32,35 @@ static void *mtx_egg_new(t_symbol *s, int argc, t_atom *argv)
     row=atom_getfloat(argv++);
     col=atom_getfloat(argv);
   }
-  if(col<0)col=0;
-  if(row<0)row=0;
-  if (col*row){
+  if(col<0) {
+    col=0;
+  }
+  if(row<0) {
+    row=0;
+  }
+  if (col*row) {
     int n = (col<row)?col:row;
     x->atombuffer = (t_atom *)getbytes((col*row+2)*sizeof(t_atom));
     setdimen(x, row, col);
     matrix_set(x, 0);
-    while(n--)SETFLOAT(x->atombuffer+2+(n+1)*(col-1), 1);
+    while(n--) {
+      SETFLOAT(x->atombuffer+2+(n+1)*(col-1), 1);
+    }
   }
   return (x);
 }
 void mtx_egg_setup(void)
 {
-  mtx_egg_class = class_new(gensym("mtx_egg"), (t_newmethod)mtx_egg_new, 
-			    (t_method)matrix_free, sizeof(t_matrix), 0, A_GIMME, 0);
+  mtx_egg_class = class_new(gensym("mtx_egg"), (t_newmethod)mtx_egg_new,
+                            (t_method)matrix_free, sizeof(t_matrix), 0, A_GIMME, 0);
   class_addlist(mtx_egg_class, matrix_egg);
   class_addbang(mtx_egg_class, matrix_bang);
-  class_addmethod(mtx_egg_class, (t_method)matrix_egg, gensym("matrix"), A_GIMME, 0);
+  class_addmethod(mtx_egg_class, (t_method)matrix_egg, gensym("matrix"),
+                  A_GIMME, 0);
 
 
 }
-void iemtx_egg_setup(void){
+void iemtx_egg_setup(void)
+{
   mtx_egg_setup();
 }

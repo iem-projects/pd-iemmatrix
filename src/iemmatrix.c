@@ -19,7 +19,8 @@ void iemmatrix_sources_setup(void);
 #endif
 
 
-void iemmatrix_setup(){
+void iemmatrix_setup()
+{
   post("");
   post("iemmatrix "VERSION);
   post("\tobjects for manipulating 2d-matrices");

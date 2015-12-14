@@ -16,7 +16,8 @@
 /* mtx_check */
 static t_class *mtx_check_class;
 
-static void mtx_check_matrix(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
+static void mtx_check_matrix(t_matrix *x, t_symbol *s, int argc,
+                             t_atom *argv)
 {
   int row=atom_getfloat(argv);
   int col=atom_getfloat(argv+1);
@@ -31,18 +32,18 @@ static void mtx_check_matrix(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
     argv+=2;
     ap=x->atombuffer+2;
     n=argc;
-    while(n--){
+    while(n--) {
       t_float f = atom_getfloat(argv++);
       SETFLOAT(ap, f);
       ap++;
-    }    
+    }
     matrix_bang(x);
   } else {
     SETFLOAT(argv, row);
     SETFLOAT(argv+1, col);
     ap=argv+2;
     n=length;
-    while(n--){
+    while(n--) {
       t_float f = atom_getfloat(ap);
       SETFLOAT(ap, f);
       ap++;
@@ -62,10 +63,12 @@ static void *mtx_check_new(t_symbol *s, int argc, t_atom *argv)
 
 void mtx_check_setup(void)
 {
-  mtx_check_class = class_new(gensym("mtx_check"), (t_newmethod)mtx_check_new, 
-			      (t_method)matrix_free, sizeof(t_matrix), 0, A_GIMME, 0);
+  mtx_check_class = class_new(gensym("mtx_check"),
+                              (t_newmethod)mtx_check_new,
+                              (t_method)matrix_free, sizeof(t_matrix), 0, A_GIMME, 0);
   class_addbang  (mtx_check_class, matrix_bang);
-  class_addmethod(mtx_check_class, (t_method)mtx_check_matrix, gensym("matrix"), A_GIMME, 0);
+  class_addmethod(mtx_check_class, (t_method)mtx_check_matrix,
+                  gensym("matrix"), A_GIMME, 0);
 
 }
 

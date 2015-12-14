@@ -19,21 +19,31 @@
 
 static t_class *mtx_dbtorms_class;
 
-static void mtx_dbtorms_matrix(t_mtx_binmtx *x, t_symbol *s, int argc, t_atom *argv)
+static void mtx_dbtorms_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
+                               t_atom *argv)
 {
   int row=atom_getfloat(argv++);
   int col=atom_getfloat(argv++);
   t_atom *m;
   int n = argc-2;
 
-  if (argc<2){    post("mtx_dbtorms: crippled matrix");    return;  }
-  if ((col<1)||(row<1)) {    post("mtx_dbtorms: invalid dimensions");    return;  }
-  if (col*row>argc-2){    post("sparse matrix not yet supported : use \"mtx_check\"");    return;  }
+  if (argc<2) {
+    post("mtx_dbtorms: crippled matrix");
+    return;
+  }
+  if ((col<1)||(row<1)) {
+    post("mtx_dbtorms: invalid dimensions");
+    return;
+  }
+  if (col*row>argc-2) {
+    post("sparse matrix not yet supported : use \"mtx_check\"");
+    return;
+  }
 
   adjustsize(&x->m, row, col);
   m =  x->m.atombuffer+2;
 
-  while(n--){
+  while(n--) {
     t_float f=atom_getfloat(argv++);
     t_float v=0;
     f=(f>485)?485:f;
@@ -42,10 +52,12 @@ static void mtx_dbtorms_matrix(t_mtx_binmtx *x, t_symbol *s, int argc, t_atom *a
     m++;
   }
 
-  outlet_anything(x->x_obj.ob_outlet, gensym("matrix"), argc, x->m.atombuffer);
+  outlet_anything(x->x_obj.ob_outlet, gensym("matrix"), argc,
+                  x->m.atombuffer);
 }
 
-static void mtx_dbtorms_list(t_mtx_binscalar *x, t_symbol *s, int argc, t_atom *argv)
+static void mtx_dbtorms_list(t_mtx_binscalar *x, t_symbol *s, int argc,
+                             t_atom *argv)
 {
   int n=argc;
   t_atom *m;
@@ -53,7 +65,7 @@ static void mtx_dbtorms_list(t_mtx_binscalar *x, t_symbol *s, int argc, t_atom *
   adjustsize(&x->m, 1, argc);
   m = x->m.atombuffer;
 
-  while(n--){
+  while(n--) {
     t_float f=atom_getfloat(argv++);
     t_float v=0;
     f=(f>485)?485:f;
@@ -77,9 +89,11 @@ static void *mtx_dbtorms_new(t_symbol *s)
 
 void mtx_dbtorms_setup(void)
 {
-  mtx_dbtorms_class = class_new(gensym("mtx_dbtorms"), (t_newmethod)mtx_dbtorms_new, (t_method)mtx_binmtx_free,
-				   sizeof(t_mtx_binmtx), 0, A_GIMME, 0);
-  class_addmethod(mtx_dbtorms_class, (t_method)mtx_dbtorms_matrix, gensym("matrix"), A_GIMME, 0);
+  mtx_dbtorms_class = class_new(gensym("mtx_dbtorms"),
+                                (t_newmethod)mtx_dbtorms_new, (t_method)mtx_binmtx_free,
+                                sizeof(t_mtx_binmtx), 0, A_GIMME, 0);
+  class_addmethod(mtx_dbtorms_class, (t_method)mtx_dbtorms_matrix,
+                  gensym("matrix"), A_GIMME, 0);
   class_addlist  (mtx_dbtorms_class, mtx_dbtorms_list);
   class_addbang  (mtx_dbtorms_class, mtx_binmtx_bang);
 

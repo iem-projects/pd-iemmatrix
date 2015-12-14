@@ -183,7 +183,6 @@ static void mTXBigMatrix (MTXfill *mtx_fill_obj, t_symbol *s,
   int rows = atom_getint (argv);
   int columns = atom_getint (argv+1);
   int size = rows * columns;
-  int list_size = argc - 2;
   t_atom *list_out = mtx_fill_obj->list_out;
 
   /* size check */

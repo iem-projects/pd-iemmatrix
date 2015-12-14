@@ -94,7 +94,6 @@ static void mtxFFTMatrixCold (MtxFFT *x, t_symbol *s,
                               int argc, t_atom *argv)
 {
   int rows, columns, size;
-  int in_size = argc-2;
   t_atom *list_re = x->list_re;
   t_atom *list_im = x->list_im;
   t_float *f_re = x->f_re;
@@ -136,7 +135,6 @@ static void mtxFFTMatrixHot (MtxFFT *x, t_symbol *s,
                              int argc, t_atom *argv)
 {
   int rows, columns, size;
-  int in_size = argc-2;
   int fft_count;
   t_atom *list_re = x->list_re;
   t_atom *list_im = x->list_im;

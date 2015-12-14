@@ -32,10 +32,7 @@ static void mtx_element_list2(t_matrix *x, t_floatarg f1, t_floatarg f2)
 static void mtx_element_matrix(t_matrix *x, t_symbol *s, int argc,
                                t_atom *argv)
 {
-  int row, col;
   if(iemmatrix_check(x, argc, argv, 0))return;
-  row = atom_getfloat(argv);
-  col = atom_getfloat(argv+1);
   matrix_matrix2(x, s, argc, argv);
   matrix_bang(x);
 }

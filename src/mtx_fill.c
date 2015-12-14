@@ -278,7 +278,7 @@ static void mTXFillMatrix (MTXfill *mtx_fill_obj, t_symbol *s,
   switch (mtx_fill_obj->fill_type) {
   case FILL_SUBMATRIX:
     if (list_size < fill_size) {
-      pd_error(mtx_fill_obj, "[mtx_fill]: sparse matrix not yet supported: use \"mtx_check\"");
+      pd_error(mtx_fill_obj, "[mtx_fill]: sparse matrix not yet supported: use [mtx_check]");
       return;
     }
     if ((stopcol > columns) ||

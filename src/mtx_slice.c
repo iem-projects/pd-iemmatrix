@@ -48,7 +48,7 @@ static void mTXSliceIndexList (MTXslice *mtx_slice_obj, t_symbol *s,
   t_symbol *endsym = gensym("end");
 
   if (argc<4) {
-    post("mtx_slice: invalid index vector: <startrow><startcol><stoprow><stopcol>");
+    pd_error(mtx_slice_obj, "[mtx_slice]: invalid index vector: <startrow><startcol><stoprow><stopcol>");
     return;
   }
   startrow = atom_getint(&argv[0]);
@@ -70,13 +70,13 @@ static void mTXSliceIndexList (MTXslice *mtx_slice_obj, t_symbol *s,
 
   if (((startrow<1) && (atom_getsymbol(&argv[0])!=endsym)) ||
       ((startcol<1) && (atom_getsymbol(&argv[1])!=endsym))) {
-    post("mtx_slice: row and column indices must be >0, or misused \"end\" keyword");
+    pd_error(mtx_slice_obj, "[mtx_slice]: row and column indices must be >0, or misused \"end\" keyword");
     return;
   }
 
   if (((startrow>stoprow) && (atom_getsymbol(&argv[2])!=endsym)) ||
       ((startcol>stopcol) && (atom_getsymbol (&argv[3])!=endsym))) {
-    post("mtx_slice: start_index<stop_index for rows and columns, or misused \"end\" keyword");
+    pd_error(mtx_slice_obj, "[mtx_slice]: start_index<stop_index for rows and columns, or misused \"end\" keyword");
     return;
   }
 
@@ -149,28 +149,23 @@ static void mTXSliceMatrix (MTXslice *mtx_slice_obj, t_symbol *s,
   int slicecols, slicerows, slicesize;
 
   /* size check */
-  if (!size) {
-    post("mtx_slice: invalid dimensions");
-    return;
-  } else if (list_size<size) {
-    post("mtx_slice: sparse matrix not yet supported: use \"mtx_check\"");
-    return;
-  }
+  if(iemmatrix_check(mtx_slice_obj, argc, argv, 0))return;
+
   startrow = (startrow==-1)?rows:startrow;
   startcol = (startcol==-1)?columns:startcol;
   stoprow = (stoprow==-1)?rows:stoprow;
   stopcol = (stopcol==-1)?columns:stopcol;
   if ((!startrow)||(!startcol)) {
-    post("mtx_slice: indices must be >0");
+    pd_error(mtx_slice_obj, "[mtx_slice]: indices must be >0");
     return;
   }
   if ((stopcol > columns) ||
       (stoprow > rows)) {
-    post("mtx_slice: slice index exceeds matrix dimensions");
+    pd_error(mtx_slice_obj, "[mtx_slice]: slice index exceeds matrix dimensions");
     return;
   }
   if ((stoprow<startrow) || (stopcol<startcol)) {
-    post("mtx_slice: start_index<stop_index for rows and columns, or misused \"end\" keyword");
+    pd_error(mtx_slice_obj, "[mtx_slice]: start_index<stop_index for rows and columns, or misused \"end\" keyword");
     return;
   }
   slicerows = stoprow-startrow+1;

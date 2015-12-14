@@ -23,26 +23,23 @@ static void mtx_sum_matrix(t_matrix *x, t_symbol *s, int argc,
   int row=atom_getfloat(argv++);
   int col=atom_getfloat(argv++);
   int n;
+  if(iemmatrix_check(x, argc, argv, 0))return;
 
-  if(row*col>argc-2) {
-    post("mtx_sum: sparse matrices not yet supported : use \"mtx_check\"");
-  } else {
-    t_atom *ap = (t_atom *)getbytes(col * sizeof(t_atom)), *dummy=ap;
+  t_atom *ap = (t_atom *)getbytes(col * sizeof(t_atom)), *dummy=ap;
 
-    for(n=0; n<col; n++, dummy++) {
-      int i=row;
-      t_float f=0.f;
-      t_atom*ap2=argv+n;
-      while(i--) {
-        f+=atom_getfloat(ap2+col*i);
-      }
-      SETFLOAT(dummy, f);
+  for(n=0; n<col; n++, dummy++) {
+    int i=row;
+    t_float f=0.f;
+    t_atom*ap2=argv+n;
+    while(i--) {
+      f+=atom_getfloat(ap2+col*i);
     }
-
-    outlet_list(x->x_obj.ob_outlet, gensym("prod"), col, ap);
-
-    freebytes(ap, (col * sizeof(t_atom)));
+    SETFLOAT(dummy, f);
   }
+
+  outlet_list(x->x_obj.ob_outlet, gensym("prod"), col, ap);
+
+  freebytes(ap, (col * sizeof(t_atom)));
 }
 static void mtx_sum_list(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 {

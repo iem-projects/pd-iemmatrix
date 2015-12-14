@@ -112,39 +112,34 @@ static void mTXShMatrix (MTXSh *x, t_symbol *s,
 
 
   /* size check */
-  if (!size) {
-    post("mtx_spherical_harmonics: invalid dimensions");
-  } else if (in_size<size) {
-    post("mtx_spherical_harmonics: sparse matrix not yet supported: use \"mtx_check\"");
-  } else if ((rows!=2)||(columns<1)) {
-    post("mtx_spherical_harmonics: 2 X L matrix expected with phi and theta vector, but got more rows/no entries");
-  } else {
-    if (x->l!=columns) {
-      deleteMTXShdata(x);
-      x->l=columns;
-      allocMTXShdata(x);
-    }
-    for (n=0; n<x->l; n++) {
-      x->phi[n]=(double) atom_getfloat(argv+n);
-      x->theta[n]=(double) atom_getfloat(argv+columns+n);
-    }
-
-    if (x->ws!=0) {
-      int n;
-      sharmonics(x->phi, x->theta, x->ws);
-      in_size=x->l*(x->nmax+1)*(x->nmax+1);
-      SETFLOAT(x->list_sh,(float)x->l);
-      SETFLOAT(x->list_sh+1,(float)(x->nmax+1)*(x->nmax+1));
-      for (n=0; n<in_size; n++) {
-        SETFLOAT(x->list_sh+n+2,(float)x->ws->y[n]);
-      }
-      mTXShBang(x);
-    } else {
-      post("mtx_spherical_harmonics: memory error, no operation");
-    }
+  if(iemmatrix_check(x, argc, argv, 0))return;
+  if ((rows!=2)||(columns<1)) {
+    pd_error(x, "[mtx_spherical_harmonics]: 2 X L matrix expected with phi and theta vector, but got more rows/no entries");
+    return;
+  }
+  if (x->l!=columns) {
+    deleteMTXShdata(x);
+    x->l=columns;
+    allocMTXShdata(x);
+  }
+  for (n=0; n<x->l; n++) {
+    x->phi[n]=(double) atom_getfloat(argv+n);
+    x->theta[n]=(double) atom_getfloat(argv+columns+n);
   }
 
-
+  if (x->ws!=0) {
+    int n;
+    sharmonics(x->phi, x->theta, x->ws);
+    in_size=x->l*(x->nmax+1)*(x->nmax+1);
+    SETFLOAT(x->list_sh,(float)x->l);
+    SETFLOAT(x->list_sh+1,(float)(x->nmax+1)*(x->nmax+1));
+    for (n=0; n<in_size; n++) {
+      SETFLOAT(x->list_sh+n+2,(float)x->ws->y[n]);
+    }
+    mTXShBang(x);
+  } else {
+    pd_error(x, "mtx_spherical_harmonics: memory error, no operation");
+  }
 }
 
 static void allocMTXChdata (MTXCh *x)
@@ -205,12 +200,9 @@ static void mTXChMatrix (MTXCh *x, t_symbol *s,
 
 
   /* size check */
-  if (!size) {
-    post("mtx_circular_harmonics: invalid dimensions");
-  } else if (in_size<size) {
-    post("mtx_circular_harmonics: sparse matrix not yet supported: use \"mtx_check\"");
-  } else if ((rows!=1)||(columns<1)) {
-    post("mtx_circular_harmonics: 1 X L matrix expected with phi vector, but got more rows/no entries");
+  if(iemmatrix_check(x, argc, argv, 0))return;
+  if ((rows!=1)||(columns<1)) {
+    pd_error(x, "[mtx_circular_harmonics]: 1*L matrix expected with phi vector, but got more rows/no entries");
   } else {
     if (x->l!=columns) {
       deleteMTXChdata(x);
@@ -232,7 +224,7 @@ static void mTXChMatrix (MTXCh *x, t_symbol *s,
       }
       mTXChBang(x);
     } else {
-      post("mtx_circular_harmonics: memory error, no operation");
+      pd_error(x, "[mtx_circular_harmonics]: memory error, no operation");
     }
   }
 

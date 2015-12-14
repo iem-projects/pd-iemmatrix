@@ -30,11 +30,11 @@ static void mtx_trace_matrix(t_mtx_trace *x, t_symbol *s, int argc,
   int col=atom_getfloat(argv++);
   int length=(col<row)?col:row;
   t_float trace = 0;
-  if(row*col>argc-2) {
-    post("mtx_trace: sparse matrices not yet supported : use \"mtx_check\"");
-  } else while(length--) {
-      trace+=atom_getfloat(argv+length*(col+1));
-    }
+  if(iemmatrix_check(x, argc, argv, 0))return;
+
+  while(length--) {
+    trace+=atom_getfloat(argv+length*(col+1));
+  }
   x->trace=trace;
   mtx_trace_bang(x);
 }

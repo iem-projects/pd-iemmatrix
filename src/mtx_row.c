@@ -27,21 +27,7 @@ static void mtx_row_float(t_matrix *x, t_floatarg f)
 static void mtx_row_matrix(t_matrix *x, t_symbol *s, int argc,
                            t_atom *argv)
 {
-  int row, col;
-  if (argc<2) {
-    post("matrix : corrupt matrix passed");
-    return;
-  }
-  row = atom_getfloat(argv);
-  col = atom_getfloat(argv+1);
-  if ((row<1)||(col<1)) {
-    post("matrix : corrupt matrix passed");
-    return;
-  }
-  if (row*col > argc-2) {
-    post("matrix: sparse matrices not yet supported : use \"mtx_check\"");
-    return;
-  }
+  if(iemmatrix_check(x, argc, argv, 0))return;
   matrix_matrix2(x, s, argc, argv);
   matrix_bang(x);
 }
@@ -51,7 +37,7 @@ static void mtx_row_list(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
     t_float f=atom_getfloat(argv);
     t_atom *ap=x->atombuffer+2+(x->current_row-1)*x->col;
     if (x->current_row>x->row) {
-      post("mtx_row : too high a row is to be set");
+      pd_error(x, "[mtx_row]: too high a row is to be set");
       return;
     }
     if (x->current_row) {
@@ -66,11 +52,11 @@ static void mtx_row_list(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
   }
 
   if (argc<x->col) {
-    post("mtx_row : row length is too small for %dx%d-matrix", x->row, x->col);
+    pd_error(x, "[mtx_row]: row length is too small for %dx%d-matrix", x->row, x->col);
     return;
   }
   if (x->current_row>x->row) {
-    post("mtx_row : too high a row is to be set");
+    pd_error(x, "[mtx_row]: too high a row is to be set");
     return;
   }
   if(x->current_row) {

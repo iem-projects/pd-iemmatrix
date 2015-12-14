@@ -23,11 +23,7 @@ static void mtx_scroll_matrix(t_matrix *x, t_symbol *s, int argc,
   int row=atom_getfloat(argv++);
   int col=atom_getfloat(argv++);
   int rowscroll = ((int)x->f%row+row)%row;
-
-  if(row*col>argc-2) {
-    post("mtx_scroll: sparse matrices not yet supported : use \"mtx_check\"");
-    return;
-  }
+  if(iemmatrix_check(x, argc, argv, 0))return;
   adjustsize(x, row, col);
 
   memcpy(x->atombuffer+2, argv+(row-rowscroll)*col,

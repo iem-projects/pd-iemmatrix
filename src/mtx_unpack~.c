@@ -114,25 +114,16 @@ static void mTxUnPackTildeMatrix (mtx_unpack_tilde *x, t_symbol *s,
                                   int argc, t_atom *argv)
 {
   int rows, cols;
-  if (argc<2) {
-    post("[mtx_unpack~]: corrupt matrix passed!");
-    x->rows=0;
-    x->cols=0;
-  } else {
-    rows=(int) atom_getfloat (argv++);
-    cols=(int) atom_getfloat (argv++);
-    argc-=2;
-    if ((rows<1)||(cols<1)||(rows*cols < argc)) {
-      post("[mtx_unpack~]: corrupt matrix passed!");
-      x->rows=0;
-      x->cols=0;
-    } else {
-      x->rows=rows;
-      x->cols=cols;
-      x->list_in=argv;
-      x->perform_fcn=mTxUnPackTildePerformActive;
-    }
-  }
+  x->rows=0;
+  x->cols=0;
+  if(iemmatrix_check(x, argc, argv, 0))return;
+  rows=(int) atom_getfloat (argv++);
+  cols=(int) atom_getfloat (argv++);
+  argc-=2;
+  x->rows=rows;
+  x->cols=cols;
+  x->list_in=argv;
+  x->perform_fcn=mTxUnPackTildePerformActive;
 }
 
 static void mTxUnPackTildeDsp (mtx_unpack_tilde *x, t_signal **sp)

@@ -98,7 +98,7 @@ static void mTXQrBang (MTXQr *x)
   if (x->list_q) {
     outlet_anything(x->list_r_out, gensym("matrix"), x->rows*x->columns+2,
                     x->list_r);
-    post("mtx_qr: implementation outputs only R currently! Q has to be implemented...");
+    pd_error(x, "[mtx_qr]: implementation outputs only R currently! Q has to be implemented...");
     // outlet_anything(x->list_q_out, gensym("matrix"), x->rows*x->rows+2, x->list_q);
   }
 }
@@ -112,76 +112,69 @@ static void mTXQrMatrix (MTXQr *x, t_symbol *s,
   int in_size = argc-2;
   int m,n;
 
+  if(iemmatrix_check(x, argc, argv, 0))return;
 
 #ifdef HAVE_LIBGSL
-  /* size check */
-  if (!size) {
-    post("mtx_qr: invalid dimensions");
-  } else if (in_size<size) {
-    post("mtx_qr: sparse matrix not yet supported: use \"mtx_check\"");
-  } else {
-    x->rows=rows;
-    x->columns=columns;
+  x->rows=rows;
+  x->columns=columns;
 
-    deleteMTXqr(x);
-    allocMTXqr(x);
+  deleteMTXqr(x);
+  allocMTXqr(x);
 
-    for (n=0; n<in_size; n++) {
-      x->a->data[n]=(double) atom_getfloat(argv++);
-    }
-
-    gsl_linalg_QR_decomp(x->a,x->tau);
-
-
-    SETFLOAT((x->list_r),(float) x->rows);
-    SETFLOAT((x->list_r+1),(float) x->columns);
-    for (n=0,in_size=0; n<x->rows; n++) {
-      for (m=0; m<n; m++) {
-        SETFLOAT((x->list_r+2+in_size), 0);
-        in_size++;
-      }
-      for (; m<x->columns; m++) {
-        SETFLOAT((x->list_r+2+in_size), (float) x->a->data[in_size]);
-        in_size++;
-      }
-    }
-
-    SETFLOAT((x->list_q),(float) x->rows);
-    SETFLOAT((x->list_q+1),(float) x->rows);
-
-//      TODO: Housholder transformations have to be decoded from
-//
-//      x->tau and lower triangular part of x->a.
-//
-//      with L=min(rows,columns)
-//
-//      Matrix multiplications have to be done:
-//
-//      Q=QL QL-1 ... Q1
-//
-//      using the matrix factors
-//
-//      Qi = I - tau[i] vi^T vi
-//
-//      employing the dyadic vector product of
-//
-//         [   0    ]
-//         [   :    ]
-//         [   0    ]
-//      vi=[A[i+1,i]]
-//         [A[i+1,i]]
-//         [   :    ]
-//         [ A[L,i] ]
-//
-//      on itself (out of x->a),
-//      and the scalar tau[i] in the vector x->tau.
-
-    mTXQrBang(x);
+  for (n=0; n<in_size; n++) {
+    x->a->data[n]=(double) atom_getfloat(argv++);
   }
-#else
-  post("mtx_qr: implementation requires gsl");
-#endif
 
+  gsl_linalg_QR_decomp(x->a,x->tau);
+
+
+  SETFLOAT((x->list_r),(float) x->rows);
+  SETFLOAT((x->list_r+1),(float) x->columns);
+  for (n=0,in_size=0; n<x->rows; n++) {
+    for (m=0; m<n; m++) {
+      SETFLOAT((x->list_r+2+in_size), 0);
+      in_size++;
+    }
+    for (; m<x->columns; m++) {
+      SETFLOAT((x->list_r+2+in_size), (float) x->a->data[in_size]);
+      in_size++;
+    }
+  }
+
+  SETFLOAT((x->list_q),(float) x->rows);
+  SETFLOAT((x->list_q+1),(float) x->rows);
+
+  //      TODO: Housholder transformations have to be decoded from
+  //
+  //      x->tau and lower triangular part of x->a.
+  //
+  //      with L=min(rows,columns)
+  //
+  //      Matrix multiplications have to be done:
+  //
+  //      Q=QL QL-1 ... Q1
+  //
+  //      using the matrix factors
+  //
+  //      Qi = I - tau[i] vi^T vi
+  //
+  //      employing the dyadic vector product of
+  //
+  //         [   0    ]
+  //         [   :    ]
+  //         [   0    ]
+  //      vi=[A[i+1,i]]
+  //         [A[i+1,i]]
+  //         [   :    ]
+  //         [ A[L,i] ]
+  //
+  //      on itself (out of x->a),
+  //      and the scalar tau[i] in the vector x->tau.
+
+  mTXQrBang(x);
+#else
+  pd_error(x, "[mtx_qr]: implementation requires gsl");
+#endif
 }
 
 void mtx_qr_setup (void)

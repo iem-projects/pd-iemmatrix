@@ -79,73 +79,70 @@ static void mTXQhullMatrix(MTXQhull *xo, t_symbol *s,
   float *z;
 
   /* size check */
-  if (!size) {
-    post("mtx_qhull: invalid dimensions");
-  } else if (in_size<size) {
-    post("mtx_qhull: sparse matrix not yet supported: use \"mtx_check\"");
-  } else if ((rows<4)||(columns!=3)) {
-    post("mtx_qhull: requires an L x 3 matrix with at least L>=4");
-  } else {
-    xo->zh = (zhull_t*)malloc(sizeof(zhull_t));
-    x=(float*)malloc(rows*sizeof(float));
-    y=(float*)malloc(rows*sizeof(float));
-    z=(float*)malloc(rows*sizeof(float));
-    if ((x!=0)&&(y!=0)&&(z!=0)&&(xo->zh!=0)) {
-      for (i=0; i<rows; i++) {
-        x[i]=atom_getfloat(argv++);
-        y[i]=atom_getfloat(argv++);
-        z[i]=atom_getfloat(argv++);
-      }
-      *(xo->zh)=zhullInitPoints(x,y,z,rows);
-      i=calculateZHull(xo->zh);
-      outlet_float(xo->outl_fl, (float)i);
-      free(x);
-      free(y);
-      free(z);
-      xo->hull_size=getLength(xo->zh->facets);
-      if (xo->list==0) {
-        xo->list = (t_atom*)malloc((xo->hull_size*3+2)*sizeof(t_atom));
-      } else {
-        xo->list = (t_atom*)realloc(xo->list,(xo->hull_size*3+2)*sizeof(t_atom));
-      }
-      if(xo->list!=0) {
-        xo->size=(xo->hull_size*3+2);
-        SETFLOAT(xo->list,(float)xo->hull_size);
-        SETFLOAT(xo->list+1,(float)3);
-        for (i=0; i<xo->hull_size; i++) {
-          SETFLOAT(xo->list+2+3*i, (float)getTriangleCorner(xo->zh,i,0)+1);
-          SETFLOAT(xo->list+3+3*i, (float)getTriangleCorner(xo->zh,i,1)+1);
-          SETFLOAT(xo->list+4+3*i, (float)getTriangleCorner(xo->zh,i,2)+1);
-        }
-        outlet_anything(xo->outl, gensym("matrix"),
-                        xo->size, xo->list);
-        freeZhull(xo->zh);
-        free(xo->zh);
-        xo->zh=0;
-      } else {
-        post("mtx_qhull: memory problem, no operation!");
-        xo->size=0;
-        freeZhull(xo->zh);
-        free(xo->zh);
-        xo->zh=0;
-      }
-    } else {
-      if(x!=0) {
-        free(x);
-      }
-      if(y!=0) {
-        free(y);
-      }
-      if(z!=0) {
-        free(z);
-      }
-      if(xo->zh!=0) {
-        free(xo->zh);
-      }
-      xo->zh=0;
-      post("mtx_qhull: memory error, no operation!");
-    }
+  if(iemmatrix_check(x, argc, argv, 0))return;
 
+  if ((rows<4)||(columns!=3)) {
+    pd_error(x, "[mtx_qhull]: requires an L x 3 matrix with at least L>=4");
+    return;
+  }
+  xo->zh = (zhull_t*)malloc(sizeof(zhull_t));
+  x=(float*)malloc(rows*sizeof(float));
+  y=(float*)malloc(rows*sizeof(float));
+  z=(float*)malloc(rows*sizeof(float));
+  if ((x!=0)&&(y!=0)&&(z!=0)&&(xo->zh!=0)) {
+    for (i=0; i<rows; i++) {
+      x[i]=atom_getfloat(argv++);
+      y[i]=atom_getfloat(argv++);
+      z[i]=atom_getfloat(argv++);
+    }
+    *(xo->zh)=zhullInitPoints(x,y,z,rows);
+    i=calculateZHull(xo->zh);
+    outlet_float(xo->outl_fl, (float)i);
+    free(x);
+    free(y);
+    free(z);
+    xo->hull_size=getLength(xo->zh->facets);
+    if (xo->list==0) {
+      xo->list = (t_atom*)malloc((xo->hull_size*3+2)*sizeof(t_atom));
+    } else {
+      xo->list = (t_atom*)realloc(xo->list,(xo->hull_size*3+2)*sizeof(t_atom));
+    }
+    if(xo->list!=0) {
+      xo->size=(xo->hull_size*3+2);
+      SETFLOAT(xo->list,(float)xo->hull_size);
+      SETFLOAT(xo->list+1,(float)3);
+      for (i=0; i<xo->hull_size; i++) {
+	SETFLOAT(xo->list+2+3*i, (float)getTriangleCorner(xo->zh,i,0)+1);
+	SETFLOAT(xo->list+3+3*i, (float)getTriangleCorner(xo->zh,i,1)+1);
+	SETFLOAT(xo->list+4+3*i, (float)getTriangleCorner(xo->zh,i,2)+1);
+      }
+      outlet_anything(xo->outl, gensym("matrix"),
+		      xo->size, xo->list);
+      freeZhull(xo->zh);
+      free(xo->zh);
+      xo->zh=0;
+    } else {
+      pd_error(x, "[mtx_qhull]: memory problem, no operation!");
+      xo->size=0;
+      freeZhull(xo->zh);
+      free(xo->zh);
+      xo->zh=0;
+    }
+  } else {
+    if(x!=0) {
+      free(x);
+    }
+    if(y!=0) {
+      free(y);
+    }
+    if(z!=0) {
+      free(z);
+    }
+    if(xo->zh!=0) {
+      free(xo->zh);
+    }
+    xo->zh=0;
+    pd_error(x, "[mtx_qhull]: memory error, no operation!");
   }
 }
 

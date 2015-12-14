@@ -187,11 +187,11 @@ static void mTXRfftMatrix (MTXRfft *x, t_symbol *s,
 
   /* fftsize check */
   if (!size) {
-    post("mtx_rfft: invalid dimensions");
+    pd_error(x, "[mtx_rfft]: invalid dimensions");
   } else if (in_size<size) {
-    post("mtx_rfft: sparse matrix not yet supported: use \"mtx_check\"");
+    pd_error(x, "[mtx_rfft]: sparse matrix not yet supported: use \"mtx_check\"");
   } else if (columns < 4) {
-    post("mtx_rfft: matrix must have at least 4 columns");
+    pd_error(x, "[mtx_rfft]: matrix must have at least 4 columns");
   } else if (columns == (1 << ilog2(columns))) {
     /* ok, do the FFT! */
 
@@ -271,7 +271,7 @@ static void mTXRfftMatrix (MTXRfft *x, t_symbol *s,
     outlet_anything(x->list_re_out, gensym("matrix"),
                     x->size2, list_re);
   } else {
-    post("mtx_rowfft: rowvector size no power of 2!");
+    pd_error(x, "[mtx_rfft]: rowvector size no power of 2!");
   }
 
 }

@@ -39,7 +39,7 @@ static void mTXRepmatList (MTXrepmat *mtx_repmat_obj, t_symbol *s,
                            int argc, t_atom *argv)
 {
   if (argc!=2) {
-    post("mtx_repmat: there have to be exactly 2 arguments");
+    pd_error(mtx_repmat_obj, "[mtx_repmat]: there have to be exactly 2 arguments");
     return;
   }
   mtx_repmat_obj->repeat_rows = atom_getint(argv++);
@@ -115,13 +115,7 @@ static void mTXRepmatMatrix (MTXrepmat *mtx_repmat_obj, t_symbol *s,
   t_atom *list_out = mtx_repmat_obj->list_out;
 
   /* size check */
-  if (!size) {
-    post("mtx_repmat: invalid dimensions");
-    return;
-  } else if (list_size<size) {
-    post("mtx_repmat: sparse matrix not yet supported: use \"mtx_check\"");
-    return;
-  }
+  if(iemmatrix_check(mtx_repmat_obj, argc, argv, 0))return;
 
   mrows = rows * rep_rows;
   mcolumns = columns * rep_cols;

@@ -150,13 +150,13 @@ static void mTXRifftMatrixCold (MTXRifft *x, t_symbol *s,
 
   /* ifftsize check */
   if (columns_re < 3) {
-    post("mtx_rifft: matrix must have at least 3 columns");
+    pd_error(x, "[mtx_rifft]: matrix must have at least 3 columns");
   } else if (!size) {
-    post("mtx_rifft: invalid dimensions");
+    pd_error(x, "[mtx_rifft]: invalid dimensions");
   } else if (in_size < size2) {
-    post("mtx_rifft: sparse matrix not yet supported: use \"mtx_check\"");
+    pd_error(x, "[mtx_rifft]: sparse matrix not yet supported: use [mtx_check]");
   } else if (columns<4) {
-    post("mtx_rifft: too small matrices");
+    pd_error(x, "[mtx_rifft]: too small matrices");
   } else if (columns == (1 << ilog2(columns))) {
 
     /* memory things */
@@ -211,7 +211,7 @@ static void mTXRifftMatrixCold (MTXRifft *x, t_symbol *s,
     }
     /* do nothing else! */
   } else {
-    post("mtx_rifft: rowvector 2*(size+1) no power of 2!");
+    pd_error(x, "[mtx_rifft]: rowvector 2*(size+1) no power of 2!");
   }
 }
 
@@ -236,11 +236,11 @@ static void mTXRifftMatrixHot (MTXRifft *x, t_symbol *s,
   /* ifftsize check */
   if ((rows != x->rows) ||
       (columns_re != x->columns_re)) {
-    post("mtx_rifft: matrix dimensions do not match");
+    pd_error(x, "[mtx_rifft]: matrix dimensions do not match");
   } else if (in_size<size2) {
-    post("mtx_rifft: sparse matrix not yet supported: use \"mtx_check\"");
+    pd_error(x, "[mtx_rifft]: sparse matrix not yet supported: use [mtx_check]");
   } else if (!x->size2) {
-    post("mtx_rifft: invalid right side matrix");
+    pd_error(x, "[mtx_rifft]: invalid right side matrix");
   } else { /* main part */
     for (ifft_count=0; ifft_count<rows; ifft_count++) {
 #ifdef USE_FFTW

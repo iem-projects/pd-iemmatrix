@@ -25,11 +25,7 @@ static void mtx_roll_matrix(t_matrix *x, t_symbol *s, int argc,
   t_atom *ap;
   int colroll = ((int)x->f%col+col)%col;
   int c;
-
-  if(row*col>argc-2) {
-    post("mtx_roll: sparse matrices not yet supported : use \"mtx_check\"");
-    return;
-  }
+  if(iemmatrix_check(x, argc, argv, 0))return;
 
   adjustsize(x, row, col);
   ap = x->atombuffer+2;

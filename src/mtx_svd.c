@@ -133,52 +133,47 @@ static void mTXSvdMatrix (MTXSvd *x, t_symbol *s,
   int size = rows * columns;
   int in_size = argc-2;
   int n;
-
+  if(iemmatrix_check(x, argc, argv, 0))return;
 
 #ifdef HAVE_LIBGSL
   /* size check */
-  if (!size) {
-    post("mtx_svd: invalid dimensions");
-  } else if (in_size<size) {
-    post("mtx_svd: sparse matrix not yet supported: use \"mtx_check\"");
-  } else if (rows<columns) {
-    post("mtx_svd: gsl_linalg_SVD_decomp does not support M<N");
-  } else {
-    x->rows=rows;
-    x->columns=columns;
-
-    deleteMTXusvw(x);
-    allocMTXusvw(x);
-
-    for (n=0; n<in_size; n++) {
-      x->u->data[n]=(double) atom_getfloat(argv++);
-    }
-
-    gsl_linalg_SV_decomp(x->u,x->v,x->s,x->w);
-
-    SETFLOAT((x->list_u),(float) x->rows);
-    SETFLOAT((x->list_u+1),(float) x->columns);
-    for (n=0; n<in_size; n++) {
-      SETFLOAT((x->list_u+2+n), (float) x->u->data[n]);
-    }
-
-    for (n=0; n<x->columns; n++) {
-      SETFLOAT((x->list_s+n),(float) x->s->data[n]);
-    }
-
-    SETFLOAT((x->list_v),(float) x->columns);
-    SETFLOAT((x->list_v+1),(float) x->columns);
-    in_size=x->columns*x->columns;
-    for (n=0; n<in_size; n++) {
-      SETFLOAT((x->list_v+n+2), (float) x->v->data[n]);
-    }
-
-    mTXSvdBang(x);
+  if (rows<columns) {
+    pd_error(x, "[mtx_svd]: gsl_linalg_SVD_decomp does not support M<N");
+    return;
   }
-#else
-  post("mtx_svd: implementation requires gsl");
-#endif
+  x->rows=rows;
+  x->columns=columns;
 
+  deleteMTXusvw(x);
+  allocMTXusvw(x);
+
+  for (n=0; n<in_size; n++) {
+    x->u->data[n]=(double) atom_getfloat(argv++);
+  }
+
+  gsl_linalg_SV_decomp(x->u,x->v,x->s,x->w);
+
+  SETFLOAT((x->list_u),(float) x->rows);
+  SETFLOAT((x->list_u+1),(float) x->columns);
+  for (n=0; n<in_size; n++) {
+    SETFLOAT((x->list_u+2+n), (float) x->u->data[n]);
+  }
+
+  for (n=0; n<x->columns; n++) {
+    SETFLOAT((x->list_s+n),(float) x->s->data[n]);
+  }
+
+  SETFLOAT((x->list_v),(float) x->columns);
+  SETFLOAT((x->list_v+1),(float) x->columns);
+  in_size=x->columns*x->columns;
+  for (n=0; n<in_size; n++) {
+    SETFLOAT((x->list_v+n+2), (float) x->v->data[n]);
+  }
+
+  mTXSvdBang(x);
+#else
+  pd_error(x, "[mtx_svd]: implementation requires gsl");
+#endif
 }
 
 void mtx_svd_setup (void)

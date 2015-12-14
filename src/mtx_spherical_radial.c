@@ -134,50 +134,47 @@ static void mTXSphMatrix (MTXSph *x, t_symbol *s,
 
 
   /* size check */
-  if (!size) {
-    post("mtx_spherical_radial: invalid dimensions");
-  } else if (in_size<size) {
-    post("mtx_spherical_radial: sparse matrix not yet supported: use \"mtx_check\"");
-  } else if ((rows!=1)||(columns<1)) {
-    post("mtx_spherical_radial: 1 X L matrix expected with kr and h vector, but got more rows/no entries");
-  } else {
-    if (x->l!=columns) {
-      deleteMTXSphdata(x);
-      x->l=columns;
-      allocMTXSphdata(x);
-    }
-    for (n=0; n<x->l; n++) {
-      x->kr[n]=(double) atom_getfloat(argv+n);
-    }
-
-    if (x->h_re!=0)
-      for (n=0,ofs=0; n<x->l; n++,ofs+=x->nmax+1) {
-        sphBessel(x->kr[n], x->h_re+ofs, x->nmax);
-      }
-
-    if (x->h_im!=0)
-      for (n=0,ofs=0; n<x->l; n++,ofs+=x->nmax+1) {
-        sphNeumann(x->kr[n], x->h_im+ofs, x->nmax);
-      }
-
-    if (x->h_re!=0) {
-      SETFLOAT(x->list_h_re+1,(float)(x->nmax+1));
-      SETFLOAT(x->list_h_re,(float)x->l);
-      for (n=0; n<x->l*(x->nmax+1); n++) {
-        SETFLOAT(x->list_h_re+n+2,(float)x->h_re[n]);
-      }
-    }
-
-    if (x->h_im!=0) {
-      SETFLOAT(x->list_h_im+1,(float)(x->nmax+1));
-      SETFLOAT(x->list_h_im,(float)x->l);
-      for (n=0; n<x->l*(x->nmax+1); n++) {
-        SETFLOAT(x->list_h_im+n+2,(float)x->h_im[n]);
-      }
-    }
-
-    mTXSphBang(x);
+  iemmatrix_check(x, argc, argv, 0);
+  if ((rows!=1)||(columns<1)) {
+    pd_error(x, "[mtx_spherical_radial]: 1*L matrix expected with kr and h vector, but got more rows/no entries");
+    return;
   }
+  if (x->l!=columns) {
+    deleteMTXSphdata(x);
+    x->l=columns;
+    allocMTXSphdata(x);
+  }
+  for (n=0; n<x->l; n++) {
+    x->kr[n]=(double) atom_getfloat(argv+n);
+  }
+
+  if (x->h_re!=0)
+    for (n=0,ofs=0; n<x->l; n++,ofs+=x->nmax+1) {
+      sphBessel(x->kr[n], x->h_re+ofs, x->nmax);
+    }
+
+  if (x->h_im!=0)
+    for (n=0,ofs=0; n<x->l; n++,ofs+=x->nmax+1) {
+      sphNeumann(x->kr[n], x->h_im+ofs, x->nmax);
+    }
+
+  if (x->h_re!=0) {
+    SETFLOAT(x->list_h_re+1,(float)(x->nmax+1));
+    SETFLOAT(x->list_h_re,(float)x->l);
+    for (n=0; n<x->l*(x->nmax+1); n++) {
+      SETFLOAT(x->list_h_re+n+2,(float)x->h_re[n]);
+    }
+  }
+
+  if (x->h_im!=0) {
+    SETFLOAT(x->list_h_im+1,(float)(x->nmax+1));
+    SETFLOAT(x->list_h_im,(float)x->l);
+    for (n=0; n<x->l*(x->nmax+1); n++) {
+      SETFLOAT(x->list_h_im+n+2,(float)x->h_im[n]);
+    }
+  }
+
+  mTXSphBang(x);
 }
 
 void mtx_spherical_radial_setup (void)

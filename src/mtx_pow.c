@@ -26,7 +26,7 @@ static void mtx_powelement_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   t_atom *m;
   t_atom *m2 = x->m2.atombuffer+2;
   int n = argc-2;
-  if(iemmatrix_check(x, argc, argc, 0))return;
+  if(iemmatrix_check(x, argc, argv, 0))return;
   if (!(x->m2.col*x->m2.row)) {
     adjustsize(&x->m, row, col);
     matrix_set(&x->m, 0);
@@ -85,7 +85,7 @@ static void mtx_powscalar_matrix(t_mtx_binscalar *x, t_symbol *s, int argc,
   t_float factor = x->f;
   int row=atom_getfloat(argv++);
   int col=atom_getfloat(argv++);
-  if(iemmatrix_check(x, argc, argc, IEMMATRIX_CHECK_CRIPPLED))return;
+  if(iemmatrix_check(x, argc, argv, IEMMATRIX_CHECK_CRIPPLED))return;
 
   adjustsize(&x->m, row, col);
   m = x->m.atombuffer+2;

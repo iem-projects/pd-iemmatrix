@@ -23,11 +23,7 @@ static void mtx_transpose_matrix(t_matrix *x, t_symbol *s, int argc,
   int col=atom_getfloat(argv++);
   t_atom *ap;
   int r, c;
-
-  if(row*col>argc-2) {
-    post("mtx_transpose: sparse matrices not yet supported : use \"mtx_check\"");
-    return;
-  }
+  if(iemmatrix_check(x, argc, argv, 0))return;
   if (col*row!=x->col*x->row) {
     freebytes(x->atombuffer, (x->col*x->row+2)*sizeof(t_atom));
     x->atombuffer = (t_atom *)getbytes((row*col+2)*sizeof(t_atom));

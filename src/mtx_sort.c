@@ -85,7 +85,7 @@ static void *newMTXSort (t_symbol *s, int argc, t_atom *argv)
         if (argv[1].a_type != A_SYMBOL) {
           mTXSetSortDirection (mtx_sort_obj, atom_getfloat (argv+1));
         } else {
-          post("mtx_sort: 2nd arg ignored. supposed to be float");
+          pd_error(mtx_sort_obj, "[mtx_sort]: 2nd arg ignored. supposed to be float");
         }
       }
     } else {
@@ -94,7 +94,7 @@ static void *newMTXSort (t_symbol *s, int argc, t_atom *argv)
         if (argv[1].a_type == A_SYMBOL) {
           mTXSetSortMode (mtx_sort_obj, atom_getsymbol (argv+1));
         } else {
-          post("mtx_sort: 2nd arg ignored. supposed to be symbolic, e.g. \"row\", \"col\", \":\"");
+          pd_error(mtx_sort_obj, "[mtx_sort]: 2nd arg ignored. supposed to be symbolic, e.g. \"row\", \"col\", \":\"");
         }
       }
     }
@@ -261,13 +261,8 @@ static void mTXSortMatrix (MTXSort *mtx_sort_obj, t_symbol *s,
   int count;
 
   /* size check */
-  if (!size) {
-    post("mtx_sort: invalid dimensions");
-    return;
-  } else if (list_size<size) {
-    post("mtx_sort: sparse matrix not yet supported: use \"mtx_check\"");
-    return;
-  } else if ((!x)||(!list_out1)||(!list_out2)/*||(!y)*/) {
+  if(iemmatrix_check(x, argc, argv, 0))return;
+  if ((!x)||(!list_out1)||(!list_out2)/*||(!y)*/) {
     if (!x) {
       x = (t_float *) getbytes (sizeof (t_float) * (size));
     }

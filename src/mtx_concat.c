@@ -159,6 +159,7 @@ static void mTXConcatMatrix (MTXconcat *mtx_concat_obj, t_symbol *s,
 
   /* size check */
   if(iemmatrix_check(mtx_concat_obj, argc, argv, 0))return;
+
   mtx_in1->row = rows;
   mtx_in1->col = columns;
   mtx_in1->atombuffer = argv;

@@ -27,7 +27,7 @@ static void mtx_exp_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   col=atom_getint(argv++);
   n=row*col;
   adjustsize(&x->m, row, col);
-  m =  x->m.atombuffer+2;
+  m = x->m.atombuffer+2;
 
   while(n--) {
     t_float f = (t_float)exp(atom_getfloat(argv++));

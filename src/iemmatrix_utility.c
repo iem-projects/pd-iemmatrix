@@ -344,7 +344,7 @@ void matrix_row(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
     /* row <index> <value>...: set elements of row<index> to <value1> <value2> ... */
     r=atom_getfloat(argv++)-1;
     if (argc--<col) {
-      pd_error(x, "matrix: sparse rows not yet supported : use \"mtx_check\"");
+      pd_error(x, "matrix: sparse rows not yet supported : use [mtx_check]");
       return;
     }
     if ((r<0)||(r>=row)) {
@@ -406,7 +406,7 @@ void matrix_col(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
     /* row <index> <value>...: set elements of row<index> to <value1> <value2> ... */
     c=atom_getfloat(argv++)-1;
     if (argc--<row) {
-      pd_error(x, "matrix: sparse cols not yet supported : use \"mtx_check\"");
+      pd_error(x, "matrix: sparse cols not yet supported : use [mtx_check]");
       return;
     }
     if ((c<0)||(c>=col)) {

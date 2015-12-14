@@ -101,7 +101,7 @@ static void mtx_max2_float(t_mtx_binmtx *x, t_float f)
   int row2, col2, n;
 
   if (!m2->atombuffer) {
-    pd_error(x, "right-hand matrix is missing");
+    pd_error(x, "[mtx_max2]: right-hand matrix is missing");
     return;
   }
 

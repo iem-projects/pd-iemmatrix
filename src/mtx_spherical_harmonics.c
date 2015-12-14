@@ -138,7 +138,7 @@ static void mTXShMatrix (MTXSh *x, t_symbol *s,
     }
     mTXShBang(x);
   } else {
-    pd_error(x, "mtx_spherical_harmonics: memory error, no operation");
+    pd_error(x, "[mtx_spherical_harmonics]: memory error, no operation");
   }
 }
 

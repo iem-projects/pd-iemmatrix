@@ -53,7 +53,7 @@ static void mtx_element_matrix(t_matrix *x, t_symbol *s, int argc,
 static void mtx_element_float(t_matrix *x, t_floatarg f)
 {
   if(x->current_col>x->col || x->current_row>x->row) {
-    pd_error(x,"mtx_element: element position exceeds matrix dimensions");
+    pd_error(x,"[mtx_element]: element position exceeds matrix dimensions");
     return;
   }
   if(x->current_row == 0 && x->current_col == 0) {

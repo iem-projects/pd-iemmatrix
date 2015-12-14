@@ -73,9 +73,10 @@ static void matrix_multilde_matrix_set(t_matrix_multilde *x, int argc,
   t_float *matend = x->x_matend;
 
   if(argc<2) {
-    pd_error(x, "mtx_*~ : bad matrix: <int> out_rows <int> in_cols !");
+    pd_error(x, "[mtx_*~]: bad matrix: <int:out_rows> <int:in_cols> !");
     return;
   }
+  if(!iemmatrix_check(x, argc, argc 0))return;
 
   row = atom_getint(argv);
   argv++;
@@ -90,12 +91,8 @@ static void matrix_multilde_matrix_set(t_matrix_multilde *x, int argc,
   }
 
   if((col!=x->x_n_in)||(row!=x->x_n_out)) {
-    pd_error(x,"mtx_*~ : matrix dimensions do not match (%dx%d != %dx%d)!!",
+    pd_error(x,"[mtx_*~]: matrix dimensions do not match (%dx%d != %dx%d)!!",
              col, row, x->x_n_in, x->x_n_out);
-    return;
-  }
-  if(argc<row*col) {
-    pd_error(x,"mtx_*~ : reduced matrices not yet supported");
     return;
   }
 

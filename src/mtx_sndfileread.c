@@ -152,7 +152,7 @@ static void mtx_sndfileread_open (t_mtx_sndfileread *x, t_symbol *s,
   fd=canvas_open(x->x_canvas, s->s_name, "", filenamebuf, &filenamebufptr,
                  MAXPDSTRING, 1);
   if(fd<0) {
-    pd_error(x, "failed to open %s : %s", s->s_name, filenamebuf);
+    pd_error(x, "[mtx_sndfileread]: failed to open %s : %s", s->s_name, filenamebuf);
     return;
   }
   iemmatrix_fdclose(fd);
@@ -160,7 +160,7 @@ static void mtx_sndfileread_open (t_mtx_sndfileread *x, t_symbol *s,
     filenamebufptr[-1]='/';
   }
   if (!(x->x_sndfileread = sf_open (filenamebuf, SFM_READ, &x->x_sfinfo))) {
-    pd_error(x, "failed to sfopen %s : %s", s->s_name, filenamebuf);
+    pd_error(x, "[mtx_sndfileread]: failed to sfopen %s : %s", s->s_name, filenamebuf);
     mtx_sndfileread_close(x);
     return;
   }
@@ -175,19 +175,19 @@ static void mtx_sndfileread_frame (t_mtx_sndfileread *x)
   t_atom *ptr;
 
   if ((!x->x_sndfileread)||(x->num_chan<=0)) {
-    pd_error(x, "read_frame: no or damaged file opened for reading");
+    pd_error(x, "[mtx_sndfileread] read_frame: no or damaged file opened for reading");
     return;
   }
 
   if (!(x->x_float)||(x->num_frames<1)) {
     if(!(x->x_outlist=(t_atom*)getbytes(sizeof(t_atom)*(2+x->num_chan)))) {
-      pd_error(x,"read_frame: out of memory!");
+      pd_error(x, "[mtx_sndfileread] read_frame: out of memory!");
       return;
     }
     if (!(x->x_float=(float*)getbytes(sizeof(float)*x->num_chan))) {
       freebytes(x->x_outlist,sizeof(t_atom)*(2+x->num_chan));
       x->x_outlist=0;
-      pd_error(x,"read_frame: out of memory!!");
+      pd_error(x, "[mtx_sndfileread] read_frame: out of memory!!");
       return;
     }
     x->num_frames=1;
@@ -218,20 +218,20 @@ static void mtx_sndfileread_frames (t_mtx_sndfileread *x, t_float f)
   t_atom *ptr;
 
   if ((!x->x_sndfileread)||(x->num_chan<=0)) {
-    pd_error(x, "read_frames: no or damaged file opened for reading");
+    pd_error(x, "[mtx_sndfileread] read_frames: no or damaged file opened for reading");
     return;
   }
 
   if (!(x->x_float)||(x->num_frames<num_frames)) {
     if(!(x->x_outlist=(t_atom*)getbytes(sizeof(t_atom)*(2
                                         +num_frames*x->num_chan)))) {
-      pd_error(x,"read_frames: out of memory!");
+      pd_error(x, "[mtx_sndfileread] read_frames: out of memory!");
       return;
     }
     if (!(x->x_float=(float*)getbytes(sizeof(float)*num_frames*x->num_chan))) {
       freebytes(x->x_outlist,sizeof(t_atom)*(2+num_frames*x->num_chan));
       x->x_outlist=0;
-      pd_error(x,"read_frames: out of memory!!");
+      pd_error(x, "[mtx_sndfileread] read_frames: out of memory!!");
       return;
     }
     x->num_frames=num_frames;
@@ -276,7 +276,7 @@ static void *mtx_sndfileread_new(void)
 #ifdef HAVE_SNDFILE_H
   x->x_sndfileread=0;
 #else
-  pd_error(x,"[mtx_sndfileread] won't work: compiled without libsndfile!");
+  pd_error(x, "[mtx_sndfileread] won't work: compiled without libsndfile!");
 #endif
   x->num_chan=0;
   x->num_frames=0;

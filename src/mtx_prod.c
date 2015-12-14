@@ -25,7 +25,7 @@ static void mtx_prod_matrix(t_matrix *x, t_symbol *s, int argc,
   int n;
 
   if(row*col>argc-2) {
-    pd_error(x, "mtx_prod: sparse matrices not yet supported : use \"mtx_check\"");
+    pd_error(x, "[mtx_prod]: sparse matrices not yet supported : use \"mtx_check\"");
   } else {
     t_atom *ap = (t_atom *)getbytes(col * sizeof(t_atom)), *dummy=ap;
 

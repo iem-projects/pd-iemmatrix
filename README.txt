@@ -1,6 +1,8 @@
 iemmatrix - matrix objects for Pure Data
 ========================================
 
+homepage: https://git.iem.at/pd/iemmatrix
+
 
 
 Installation/Compilation instructions for "iemmatrix"

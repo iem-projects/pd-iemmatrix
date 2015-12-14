@@ -18,10 +18,9 @@
 #include <math.h>
 #include <stdlib.h>
 
-typedef struct _SHNorml_
-{
-   double *n;
-   size_t nmax;
+typedef struct _SHNorml_ {
+  double *n;
+  size_t nmax;
 } SHNorml;
 
 SHNorml *sharmonics_normalization_new (const size_t nmax);

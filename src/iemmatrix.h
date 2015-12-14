@@ -5,7 +5,7 @@
 /* ************************************* */
 
 /*
- * IEMMATRIX is a runtime-library 
+ * IEMMATRIX is a runtime-library
  * for miller s. puckette's realtime-computermusic-software "pure data"
  * therefore you NEED "pure data" to make any use of the IEMMATRIX external
  * (except if you want to use the code for other things)
@@ -109,8 +109,7 @@
 typedef double t_matrixfloat;
 
 /* the main class...*/
-typedef struct _matrix
-{
+typedef struct _matrix {
   t_object x_obj;
 
   int      row;
@@ -118,23 +117,22 @@ typedef struct _matrix
 
   t_atom *atombuffer;
 
-  int     current_row, current_col;  /* this makes things easy for the mtx_row & mtx_col...*/
+  int     current_row,
+          current_col;  /* this makes things easy for the mtx_row & mtx_col...*/
   t_float f;
 
   t_canvas *x_canvas; /* needed for file-reading */
   t_outlet *x_outlet; /* just in case somebody wants an outlet */
 } t_matrix;
 
-typedef struct _mtx_binscalar
-{
+typedef struct _mtx_binscalar {
   t_object x_obj;
 
   t_matrix m; /* the output matrix */
   t_float f;  /* the second input */
 } t_mtx_binscalar;
 
-typedef struct _mtx_binmtx
-{
+typedef struct _mtx_binmtx {
   t_object x_obj;
 
   t_matrix m;  /* the output matrix */
@@ -158,7 +156,8 @@ void float2matrix(t_atom *ap, t_matrixfloat *buffer);
 
 /* basic I/O functions */
 void matrix_bang(t_matrix *x); /* output the matrix stored in atombuffer */
-void matrix_matrix2(t_matrix *x, t_symbol *s, int argc, t_atom *argv); /* store the matrix in atombuffer */
+void matrix_matrix2(t_matrix *x, t_symbol *s, int argc,
+                    t_atom *argv); /* store the matrix in atombuffer */
 
 /* set data */
 void matrix_set(t_matrix *x, t_float f); /* set the entire matrix to "f" */
@@ -194,7 +193,8 @@ t_matrixfloat*mtx_doInvert(t_matrixfloat*input, int rowcol, int*error);
 /*  transpose a matrix */
 t_matrixfloat*mtx_doTranspose(t_matrixfloat*output, int row, int col);
 /*  multiply matrix A=[rowA*colA] with matrix B=[rowB*colB]; C=A*B; colA=rowB=colArowB */
-t_matrixfloat*mtx_doMultiply(int rowA, t_matrixfloat*A, int colArowB, t_matrixfloat*B, int colB);
+t_matrixfloat*mtx_doMultiply(int rowA, t_matrixfloat*A, int colArowB,
+                             t_matrixfloat*B, int colB);
 
 
 /** wrapper functions in iemmatrix_utility.c

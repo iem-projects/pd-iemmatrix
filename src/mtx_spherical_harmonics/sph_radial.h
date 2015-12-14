@@ -1,5 +1,5 @@
 /*
- * Recursive computation of (arbitrary degree) spherical Bessel/Neumann/Hankel functions, 
+ * Recursive computation of (arbitrary degree) spherical Bessel/Neumann/Hankel functions,
  * according to Gumerov and Duraiswami,
  * "The Fast Multipole Methods for the Helmholtz Equation in Three Dimensions",
  * Elsevier, 2005.

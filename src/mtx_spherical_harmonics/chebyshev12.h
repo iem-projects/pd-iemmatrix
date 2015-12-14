@@ -1,6 +1,6 @@
-/* 
- Evaluates all circular harmonics 
- at the angles phi up to the order nmax. 
+/*
+ Evaluates all circular harmonics
+ at the angles phi up to the order nmax.
  using the recurrence for the Chebyshev
  polynomials of the first and second kind
  T has the dimensions length(phi) x 2nmax+1
@@ -18,11 +18,10 @@
 #include <math.h>
 #include <stdlib.h>
 
-typedef struct _Cheby12WorkSpace_ 
-{
-   size_t nmax;
-   size_t l;
-   double *t;
+typedef struct _Cheby12WorkSpace_ {
+  size_t nmax;
+  size_t l;
+  double *t;
 } Cheby12WorkSpace;
 
 Cheby12WorkSpace *chebyshev12_alloc(const size_t nmax, const size_t l);

@@ -12,7 +12,7 @@
  * Copyright (c) 2012, IOhannes zmoelnig,
  * with friendly help from
  * IEM, Graz, Austria
- * 
+ *
  *
  */
 
@@ -37,39 +37,48 @@ typedef struct entry_ {
 } entry_t;
 
 static
-void entry_setIndex(entry_t*e, index_t i) {
+void entry_setIndex(entry_t*e, index_t i)
+{
   e->typ=INDEX;
   e->val.i=i;
 }
 static
-void entry_setPointer(entry_t*e, void*p) {
+void entry_setPointer(entry_t*e, void*p)
+{
   e->typ=POINTER;
   e->val.p=p;
 }
 static
-entry_t entry_makeIndex(index_t i) {
+entry_t entry_makeIndex(index_t i)
+{
   entry_t result;
   entry_setIndex(&result, i);
   return result;
 }
 static
-entry_t entry_makePointer(void*p) {
+entry_t entry_makePointer(void*p)
+{
   entry_t result;
   entry_setPointer(&result, p);
   return result;
 }
 
 static
-index_t entry_getIndex(const entry_t*e) {
+index_t entry_getIndex(const entry_t*e)
+{
   return (INDEX==e->typ)?e->val.i:0;
 }
 static
-void*entry_getPointer(const entry_t*e) {
+void*entry_getPointer(const entry_t*e)
+{
   return (POINTER==e->typ)?e->val.p:0;
 }
 static
-int entry_equals(const entry_t*e1, const entry_t*e2) {
-  if(e1->typ!=e2->typ)return 0;
+int entry_equals(const entry_t*e1, const entry_t*e2)
+{
+  if(e1->typ!=e2->typ) {
+    return 0;
+  }
   switch(e1->typ) {
   case INDEX:
     return (e1->val.i == e2->val.i);
@@ -82,8 +91,9 @@ int entry_equals(const entry_t*e1, const entry_t*e2) {
 }
 
 static
-void print_entry(const entry_t e) {
-    switch(e.typ) {
+void print_entry(const entry_t e)
+{
+  switch(e.typ) {
   case INDEX:
     printf("%lu", (unsigned long)(e.val.i));
     return;

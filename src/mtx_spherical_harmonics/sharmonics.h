@@ -1,5 +1,5 @@
 /*
- * Recursive computation of (arbitrary degree) spherical harmonics, 
+ * Recursive computation of (arbitrary degree) spherical harmonics,
  * according to Gumerov and Duraiswami,
  * "The Fast Multipole Methods for the Helmholtz Equation in Three Dimensions",
  * Elsevier, 2005.
@@ -20,16 +20,15 @@
 #include "chebyshev12.h"
 #include "sharmonics_normalization.h"
 
-typedef struct _SHWorkSpace_
-{
-   size_t nmax;
-   size_t l;
-   
-   double *y;
+typedef struct _SHWorkSpace_ {
+  size_t nmax;
+  size_t l;
 
-   SHNorml *wn;
-   Cheby12WorkSpace *wc;
-   LegendreWorkSpace *wl;
+  double *y;
+
+  SHNorml *wn;
+  Cheby12WorkSpace *wc;
+  LegendreWorkSpace *wl;
 
 } SHWorkSpace;
 

@@ -16,14 +16,14 @@
  * for variable entry types
  * in entry.h
  * IEM, Graz, Austria
- * 
+ *
  *
  */
 
 
 typedef struct list_ {
-    entry_t *entries;
-    size_t length;
+  entry_t *entries;
+  size_t length;
 } list_t;
 
 
@@ -42,8 +42,8 @@ list_t initConstantList(const entry_t c, const size_t length);
 list_t duplicateList(const list_t list_in);
 list_t mergeLists(const list_t list1, const list_t list2);
 list_t getSubList(const list_t list, const list_t indices);
-list_t getSubListFromTo(const list_t list, const index_t start, 
-      const index_t stop);
+list_t getSubListFromTo(const list_t list, const index_t start,
+                        const index_t stop);
 void appendToList(list_t *list, const entry_t entry);
 void removeValueFromList(list_t *list, const entry_t entry);
 void removeIndexFromList(list_t *list, const index_t index);

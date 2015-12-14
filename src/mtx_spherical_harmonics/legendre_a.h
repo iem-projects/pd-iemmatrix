@@ -1,6 +1,6 @@
-/* 
- 
- Evaluates all associated legendre functions 
+/*
+
+ Evaluates all associated legendre functions
  at the angles theta up to the order nmax
  using the three-term recurrence of the Legendre functions.
  P has dimensions length(theta) x (nmax+1)(nmax+2)
@@ -20,11 +20,10 @@
 #include <math.h>
 #include <stdlib.h>
 
-typedef struct _LegendreWorkSpace_
-{
-   size_t nmax;
-   size_t l;
-   double *p;
+typedef struct _LegendreWorkSpace_ {
+  size_t nmax;
+  size_t l;
+  double *p;
 } LegendreWorkSpace;
 
 LegendreWorkSpace *legendre_a_alloc(const size_t nmax, const size_t l);

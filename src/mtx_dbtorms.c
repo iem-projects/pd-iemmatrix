@@ -22,11 +22,13 @@ static t_class *mtx_dbtorms_class;
 static void mtx_dbtorms_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
                                t_atom *argv)
 {
-  int row=atom_getfloat(argv++);
-  int col=atom_getfloat(argv++);
+  int row, col, n;
   t_atom *m;
-  int n = argc-2;
   if(iemmatrix_check(x, argc, argv, 0))return;
+  row=atom_getint(argv+0);
+  col=atom_getint(argv+1);
+  n = argc-2;
+  argv+=2;
 
   adjustsize(&x->m, row, col);
   m =  x->m.atombuffer+2;

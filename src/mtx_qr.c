@@ -106,13 +106,14 @@ static void mTXQrBang (MTXQr *x)
 static void mTXQrMatrix (MTXQr *x, t_symbol *s,
                          int argc, t_atom *argv)
 {
-  int rows = atom_getint (argv++);
-  int columns = atom_getint (argv++);
-  int size = rows * columns;
+  int rows, columns, size;
   int in_size = argc-2;
   int m,n;
 
   if(iemmatrix_check(x, argc, argv, 0))return;
+  rows = atom_getint (argv++);
+  columns = atom_getint (argv++);
+  size = rows * columns;
 
 #ifdef HAVE_LIBGSL
   x->rows=rows;

@@ -22,11 +22,12 @@ static t_class *mtx_rmstodb_class;
 static void mtx_rmstodb_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
                                t_atom *argv)
 {
-  int row=atom_getfloat(argv++);
-  int col=atom_getfloat(argv++);
-  t_atom *m;
+  int row, col;
   int n = argc-2;
+  t_atom *m;
   if(iemmatrix_check(x, argc, argv, 0))return;
+  row=atom_getint(argv++);
+  col=atom_getint(argv++);
 
   adjustsize(&x->m, row, col);
   m =  x->m.atombuffer+2;

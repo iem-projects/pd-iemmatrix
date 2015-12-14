@@ -103,15 +103,14 @@ static void writeRepeatIntoMatrix (int repeat_rows, int repeat_cols,
 static void mTXRepmatMatrix (MTXrepmat *mtx_repmat_obj, t_symbol *s,
                              int argc, t_atom *argv)
 {
-  int rows = atom_getint (argv++);
-  int columns = atom_getint (argv++);
+  int rows = atom_getint (argv+0);
+  int columns = atom_getint (argv+1);
   int rep_rows = mtx_repmat_obj->repeat_rows;
   int rep_cols = mtx_repmat_obj->repeat_cols;
   int mrows = rows * rep_rows;
   int mcolumns = columns * rep_cols;
   int size = rows * columns;
-  int list_size = argc - 2;
-  t_atom *list_in = argv;
+  t_atom *list_in = argv+2;
   t_atom *list_out = mtx_repmat_obj->list_out;
 
   /* size check */

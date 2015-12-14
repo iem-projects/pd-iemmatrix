@@ -19,11 +19,12 @@ static t_class *mtx_transpose_class;
 static void mtx_transpose_matrix(t_matrix *x, t_symbol *s, int argc,
                                  t_atom *argv)
 {
-  int row=atom_getfloat(argv++);
-  int col=atom_getfloat(argv++);
+  int row, col;
   t_atom *ap;
   int r, c;
   if(iemmatrix_check(x, argc, argv, 0))return;
+  row=atom_getint(argv+0);
+  col=atom_getint(argv+1);
   if (col*row!=x->col*x->row) {
     freebytes(x->atombuffer, (x->col*x->row+2)*sizeof(t_atom));
     x->atombuffer = (t_atom *)getbytes((row*col+2)*sizeof(t_atom));
@@ -34,7 +35,7 @@ static void mtx_transpose_matrix(t_matrix *x, t_symbol *s, int argc,
   while(r--) {
     c=col;
     while(c--) {
-      t_float f = atom_getfloat(argv+r*col+c);
+      t_float f = atom_getfloat(argv+2+r*col+c);
       SETFLOAT(ap+c*row+r, f);
     }
   }

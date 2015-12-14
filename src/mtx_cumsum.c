@@ -157,11 +157,8 @@ static void cumSumReverse (int n, t_float *x, t_float *y)
 static void mTXCumsumMatrix (MTXCumsum *mtx_cumsum_obj, t_symbol *s,
                              int argc, t_atom *argv)
 {
-  int rows = atom_getint (argv++);
-  int columns = atom_getint (argv++);
-  int size = rows * columns;
-  int list_size = argc - 2;
-  t_atom *list_ptr = argv;
+  int rows, columns, size;
+  t_atom *list_ptr = argv+2;
   t_atom *list_out = mtx_cumsum_obj->list_out;
   t_float *x = mtx_cumsum_obj->x;
   t_float *y = mtx_cumsum_obj->y;
@@ -169,6 +166,10 @@ static void mTXCumsumMatrix (MTXCumsum *mtx_cumsum_obj, t_symbol *s,
 
   /* size check */
   if(iemmatrix_check(mtx_cumsum_obj, argc, argv, 0))return;
+  rows = atom_getint (argv+0);
+  columns = atom_getint (argv+1);
+  size = rows * columns;
+
   if ((!x)||(!list_out)||(!y)) {
     if (!x) {
       x = (t_float *) getbytes (sizeof (t_float) * (size));

@@ -21,12 +21,14 @@ static t_class *mtx_powelement_class, *mtx_powscalar_class;
 static void mtx_powelement_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
                                   t_atom *argv)
 {
-  int row=atom_getfloat(argv++);
-  int col=atom_getfloat(argv++);
+  int row, col, n;
   t_atom *m;
   t_atom *m2 = x->m2.atombuffer+2;
-  int n = argc-2;
   if(iemmatrix_check(x, argc, argv, 0))return;
+  row=atom_getint(argv++);
+  col=atom_getint(argv++);
+  n = row*col;
+
   if (!(x->m2.col*x->m2.row)) {
     adjustsize(&x->m, row, col);
     matrix_set(&x->m, 0);

@@ -69,17 +69,18 @@ static void *newMTXQhull(t_symbol *s, int argc, t_atom *argv)
 static void mTXQhullMatrix(MTXQhull *xo, t_symbol *s,
                            int argc, t_atom *argv)
 {
+  int rows, columns, size;
+
   int i;
-  int rows=atom_getint(argv++);
-  int columns=atom_getint(argv++);
-  int size=rows*columns;
-  int in_size=argc-2;
   float *x;
   float *y;
   float *z;
 
   /* size check */
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(xo, argc, argv, 0))return;
+  rows=atom_getint(argv++);
+  columns=atom_getint(argv++);
+  size=rows*columns;
 
   if ((rows<4)||(columns!=3)) {
     pd_error(x, "[mtx_qhull]: requires an L x 3 matrix with at least L>=4");

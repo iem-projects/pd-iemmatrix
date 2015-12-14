@@ -129,14 +129,14 @@ static void mTXBesselBang (MTXBessel *x)
 static void mTXBesselMatrix (MTXBessel *x, t_symbol *s,
                              int argc, t_atom *argv)
 {
-  int rows = atom_getint (argv++);
-  int columns = atom_getint (argv++);
-  int size = rows * columns;
-  int in_size = argc-2;
+  int rows, columns, size;
   int n,m,ofs;
 
   /* size check */
   if(iemmatrix_check(x, argc, argv, 0))return;
+  rows = atom_getint (argv++);
+  columns = atom_getint (argv++);
+  size = rows * columns;
 
 #if defined HAVE_MATH_BESSEL || defined HAVE_GSL_BESSEL
 

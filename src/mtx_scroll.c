@@ -20,10 +20,12 @@ static t_class *mtx_scroll_class;
 static void mtx_scroll_matrix(t_matrix *x, t_symbol *s, int argc,
                               t_atom *argv)
 {
-  int row=atom_getfloat(argv++);
-  int col=atom_getfloat(argv++);
-  int rowscroll = ((int)x->f%row+row)%row;
+  int row, col, rowscroll;
   if(iemmatrix_check(x, argc, argv, 0))return;
+
+  row=atom_getfloat(argv++);
+  col=atom_getfloat(argv++);
+  rowscroll = ((int)x->f%row+row)%row;
   adjustsize(x, row, col);
 
   memcpy(x->atombuffer+2, argv+(row-rowscroll)*col,

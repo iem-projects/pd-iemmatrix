@@ -101,9 +101,7 @@ static void multiplyVector (int n, t_float *f, t_float fac)
 static void mtxIFFTMatrixCold (MtxIFFT *x, t_symbol *s,
                                int argc, t_atom *argv)
 {
-  int rows = atom_getint (argv++);
-  int columns = atom_getint (argv++);
-  int size = rows * columns;
+  int rows, columns, size;
   int in_size = argc-2;
   t_atom *list_re = x->list_re;
   t_atom *list_im = x->list_im;
@@ -112,6 +110,10 @@ static void mtxIFFTMatrixCold (MtxIFFT *x, t_symbol *s,
 
   /* fftsize check */
   if(iemmatrix_check(x, argc, argv, 0))return;
+  rows = atom_getint (argv++);
+  columns = atom_getint (argv++);
+  size = rows * columns;
+
   if (columns < 4) {
     pd_error(x, "[mtx_ifft]: matrix must have at least 4 columns");
     return;

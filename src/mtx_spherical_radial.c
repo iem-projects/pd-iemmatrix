@@ -126,15 +126,16 @@ static void mTXSphBang (MTXSph *x)
 static void mTXSphMatrix (MTXSph *x, t_symbol *s,
                           int argc, t_atom *argv)
 {
-  int rows = atom_getint (argv++);
-  int columns = atom_getint (argv++);
-  int size = rows * columns;
-  int in_size = argc-2;
+  int rows, columns, size;
   unsigned int n,ofs;
-
 
   /* size check */
   if(iemmatrix_check(x, argc, argv, 0))return;
+
+  rows=atom_getint(argv++);
+  columns=atom_getint(argv++);
+  size = rows * columns;
+
   if ((rows!=1)||(columns<1)) {
     pd_error(x, "[mtx_spherical_radial]: 1*L matrix expected with kr and h vector, but got more rows/no entries");
     return;

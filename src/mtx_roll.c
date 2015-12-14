@@ -20,12 +20,13 @@ static t_class *mtx_roll_class;
 static void mtx_roll_matrix(t_matrix *x, t_symbol *s, int argc,
                             t_atom *argv)
 {
-  int row=atom_getfloat(argv++);
-  int col=atom_getfloat(argv++);
+  int row, col, colroll;
   t_atom *ap;
-  int colroll = ((int)x->f%col+col)%col;
   int c;
   if(iemmatrix_check(x, argc, argv, 0))return;
+  row=atom_getint(argv++);
+  col=atom_getint(argv++);
+  colroll = ((int)x->f%col+col)%col;
 
   adjustsize(x, row, col);
   ap = x->atombuffer+2;

@@ -26,12 +26,12 @@ static void mtx_trace_bang(t_mtx_trace *x)
 static void mtx_trace_matrix(t_mtx_trace *x, t_symbol *s, int argc,
                              t_atom *argv)
 {
-  int row=atom_getfloat(argv++);
-  int col=atom_getfloat(argv++);
-  int length=(col<row)?col:row;
+  int row, col, length;
   t_float trace = 0;
   if(iemmatrix_check(x, argc, argv, 0))return;
-
+  row=atom_getint(argv+0);
+  col=atom_getint(argv+1);
+  length=(col<row)?col:row;
   while(length--) {
     trace+=atom_getfloat(argv+length*(col+1));
   }

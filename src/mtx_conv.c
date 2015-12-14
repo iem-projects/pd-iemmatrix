@@ -172,11 +172,11 @@ static void mTXConvKernelMatrix (MTXConv *mtx_conv_obj, t_symbol *s,
                                  int argc,
                                  t_atom *argv)
 {
-  int rows_k = atom_getint (argv++);
-  int columns_k = atom_getint (argv++);
-  int in_size = argc-2;
-  int size_k = rows_k * columns_k;
+  int rows_k, columns_k, size_k;
   if(iemmatrix_check(mtx_conv_obj, argc, argv, 0))return;
+  rows_k = atom_getint (argv++);
+  columns_k = atom_getint (argv++);
+  size_k = rows_k * columns_k;
 
   if ((rows_k != mtx_conv_obj->rows_k)
       || (columns_k != mtx_conv_obj->columns_k)) {

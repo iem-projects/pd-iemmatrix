@@ -128,12 +128,13 @@ static void mTXSvdBang (MTXSvd *x)
 static void mTXSvdMatrix (MTXSvd *x, t_symbol *s,
                           int argc, t_atom *argv)
 {
-  int rows = atom_getint (argv++);
-  int columns = atom_getint (argv++);
-  int size = rows * columns;
+  int rows, columns, size;
   int in_size = argc-2;
   int n;
   if(iemmatrix_check(x, argc, argv, 0))return;
+  rows = atom_getint (argv++);
+  columns = atom_getint (argv++);
+  size=rows*columns;
 
 #ifdef HAVE_LIBGSL
   /* size check */

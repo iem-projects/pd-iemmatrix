@@ -118,11 +118,10 @@ static void writeIndexedValuesIntoList (int n, int *indx, t_atom *x,
 static void mTXIndexRightMatrix (MTXindex *mtx_index_obj, t_symbol *s,
                                  int argc, t_atom *argv)
 {
-  int rows = atom_getint (argv++);
-  int columns = atom_getint (argv++);
+  int rows = atom_getint (argv+0);
+  int columns = atom_getint (argv+1);
   int size = rows * columns;
-  int list_size = argc - 2;
-  t_atom *list_in = argv;
+  t_atom *list_in = argv + 2;
   t_atom *list_out = mtx_index_obj->list_out;
   int *index_in = mtx_index_obj->index_in;
   int max;
@@ -159,11 +158,10 @@ static void mTXIndexRightMatrix (MTXindex *mtx_index_obj, t_symbol *s,
 static void mTXIndexMatrix (MTXindex *mtx_index_obj, t_symbol *s,
                             int argc, t_atom *argv)
 {
-  int rows = atom_getint (argv++);
-  int columns = atom_getint (argv++);
+  int rows = atom_getint (argv+0);
+  int columns = atom_getint (argv+1);
   int size = rows * columns;
-  int list_size = argc - 2;
-  t_atom *list_in = argv;
+  t_atom *list_in = argv+2;
   t_atom *list_out = mtx_index_obj->list_out;
   int index_rows = mtx_index_obj->index_rows;
   int index_columns = mtx_index_obj->index_columns;

@@ -104,15 +104,17 @@ static void mTXShBang (MTXSh *x)
 static void mTXShMatrix (MTXSh *x, t_symbol *s,
                          int argc, t_atom *argv)
 {
-  int rows = atom_getint (argv++);
-  int columns = atom_getint (argv++);
-  int size = rows * columns;
+  int rows, columns, size;
   int in_size = argc-2;
   unsigned int n;
 
-
   /* size check */
   if(iemmatrix_check(x, argc, argv, 0))return;
+
+  rows = atom_getint (argv++);
+  columns = atom_getint (argv++);
+  size = rows * columns;
+
   if ((rows!=2)||(columns<1)) {
     pd_error(x, "[mtx_spherical_harmonics]: 2 X L matrix expected with phi and theta vector, but got more rows/no entries");
     return;
@@ -192,15 +194,16 @@ static void mTXChBang (MTXCh *x)
 static void mTXChMatrix (MTXCh *x, t_symbol *s,
                          int argc, t_atom *argv)
 {
-  int rows = atom_getint (argv++);
-  int columns = atom_getint (argv++);
-  int size = rows * columns;
+  int rows, columns, size;
   int in_size = argc-2;
   unsigned int n;
 
-
   /* size check */
   if(iemmatrix_check(x, argc, argv, 0))return;
+  rows = atom_getint (argv++);
+  columns = atom_getint (argv++);
+  size = rows * columns;
+
   if ((rows!=1)||(columns<1)) {
     pd_error(x, "[mtx_circular_harmonics]: 1*L matrix expected with phi vector, but got more rows/no entries");
   } else {

@@ -22,11 +22,12 @@ static t_class *mtx_not_class;
 static void mtx_not_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
                            t_atom *argv)
 {
-  int row=atom_getfloat(argv++);
-  int col=atom_getfloat(argv++);
+  int row, col, n;
   t_atom *m;
-  int n = argc-2;
   if(iemmatrix_check(x, argc, argv, 0))return;
+  row=atom_getint(argv++);
+  col=atom_getint(argv++);
+  n = row*col;
 
   adjustsize(&x->m, row, col);
   m =  x->m.atombuffer+2;

@@ -18,11 +18,14 @@ static t_class *mtx_diag_class;
 static void mtx_diag_matrix(t_matrix *x, t_symbol *s, int argc,
                             t_atom *argv)
 {
-  int row=atom_getfloat(argv++);
-  int col=atom_getfloat(argv++);
-  int length=(col<row)?col:row, n=length;
+  int row, col, length, n;
   t_atom *ap = 0, *dummy=0;
   if(iemmatrix_check(x, argc, argv, 0))return;
+
+  row=atom_getfloat(argv++);
+  col=atom_getfloat(argv++);
+  length=(col<row)?col:row;
+  n=length;
 
   ap=(t_atom *)getbytes(length * sizeof(t_atom));
   dummy=ap;

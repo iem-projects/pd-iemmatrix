@@ -20,12 +20,14 @@ static t_class *mtx_sum_class;
 static void mtx_sum_matrix(t_matrix *x, t_symbol *s, int argc,
                            t_atom *argv)
 {
-  int row=atom_getfloat(argv++);
-  int col=atom_getfloat(argv++);
+  int row, col;
   int n;
+  t_atom *ap = 0, *dummy=0;
   if(iemmatrix_check(x, argc, argv, 0))return;
+  row=atom_getint(argv++);
+  col=atom_getint(argv++);
 
-  t_atom *ap = (t_atom *)getbytes(col * sizeof(t_atom)), *dummy=ap;
+  dummy = ap = (t_atom *)getbytes(col * sizeof(t_atom));
 
   for(n=0; n<col; n++, dummy++) {
     int i=row;

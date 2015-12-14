@@ -182,11 +182,10 @@ static void deCayReverse (int n, t_float *x, t_float *y, t_float alpha)
 static void mTXDecayMatrix (MTXDecay *mtx_decay_obj, t_symbol *s,
                             int argc, t_atom *argv)
 {
-  int rows = atom_getint (argv++);
-  int columns = atom_getint (argv++);
+  int rows = atom_getint (argv+0);
+  int columns = atom_getint (argv+1);
   int size = rows * columns;
-  int list_size = argc - 2;
-  t_atom *list_ptr = argv;
+  t_atom *list_ptr = argv+2;
   t_atom *list_out = mtx_decay_obj->list_out;
   t_float *x = mtx_decay_obj->x;
   t_float *y = mtx_decay_obj->y;

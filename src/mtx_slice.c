@@ -136,11 +136,10 @@ static void writeSliceIntoList (int slicerows, const int slicecols,
 static void mTXSliceMatrix (MTXslice *mtx_slice_obj, t_symbol *s,
                             int argc, t_atom *argv)
 {
-  int rows = atom_getint (argv++);
-  int columns = atom_getint (argv++);
+  int rows = atom_getint (argv+0);
+  int columns = atom_getint (argv+1);
   int size = rows * columns;
-  int list_size = argc - 2;
-  t_atom *list_in = argv;
+  t_atom *list_in = argv+2;
   t_atom *list_out = mtx_slice_obj->list_out;
   int stopcol = mtx_slice_obj->slice_stopcol;
   int stoprow = mtx_slice_obj->slice_stoprow;

@@ -99,13 +99,15 @@ static void mTXColonList (MTXColon *mtx_colon_obj, t_symbol *s,
 static void mTXColonMtx (MTXColon *mtx_colon_obj, t_symbol *s,
                          int argc, t_atom *argv)
 {
-  int rows = atom_getint (argv++);
-  int columns = atom_getint (argv++);
-  int size = rows * columns;
-  int list_size = argc - 2;
-  t_atom *list_ptr = argv;
+  int rows, columns, size;
+
+  t_atom *list_ptr = argv+2;
   t_atom *list_out = mtx_colon_obj->list_out;
   if(iemmatrix_check(mtx_colon_obj, argc, argv, 0))return;
+  rows = atom_getint (argv+0);
+  columns = atom_getint (argv+1);
+  size = rows * columns;
+
   if (!list_out) {
     list_out = (t_atom*) getbytes (sizeof (t_atom) * (size+2));
   } else if (size != mtx_colon_obj->size) {

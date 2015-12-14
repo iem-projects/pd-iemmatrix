@@ -145,15 +145,16 @@ static void minmaxListRows (int rows, int columns, t_atom *x,
 static void mTXMinMaxMatrix (MTXminmax *mtx_minmax_obj, t_symbol *s,
                              int argc, t_atom *argv)
 {
-  int rows = atom_getint (argv++);
-  int columns = atom_getint (argv++);
-  int size = rows * columns;
+  int rows, columns, size;
   t_atom *maxlist_out = mtx_minmax_obj->maxlist_out;
   t_atom *minlist_out = mtx_minmax_obj->minlist_out;
   int elements_out;
 
   /* size check */
   if(iemmatrix_check(mtx_minmax_obj, argc, argv, 0))return;
+  rows = atom_getint(argv++);
+  columns = atom_getint(argv++);
+  size = rows * columns;
 
   if (size != mtx_minmax_obj->size) {
     if (!minlist_out) {

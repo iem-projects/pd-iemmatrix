@@ -162,9 +162,7 @@ static void mTXEigBang (MTXEig *x)
 static void mTXEigMatrix (MTXEig *x, t_symbol *s,
                           int argc, t_atom *argv)
 {
-  int rows = atom_getint (argv++);
-  int columns = atom_getint (argv++);
-  int size = rows * columns;
+  int rows, columns, size;
   int in_size = argc-2;
   int n,m;
   float f;
@@ -173,6 +171,9 @@ static void mTXEigMatrix (MTXEig *x, t_symbol *s,
   gsl_complex c;
   /* size check */
   if(iemmatrix_check(x, argc, argv, 0))return;
+  rows = atom_getint (argv++);
+  columns = atom_getint (argv++);
+  size=rows*columns;
   if (rows!=columns) {
     pd_error(x, "[mtx_eig]: Eigendecomposition works for square matrices only!");
     return;

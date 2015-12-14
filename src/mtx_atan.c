@@ -20,11 +20,12 @@ static t_class *mtx_atan_class;
 static void mtx_atan_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
                             t_atom *argv)
 {
-  int row=atom_getint(argv++);
-  int col=atom_getint(argv++);
+  int row, col, n;
   t_atom *m;
-  int n = row*col;
   if(iemmatrix_check(x, argc, argv, 0))return;
+  row=atom_getint(argv++);
+  col=atom_getint(argv++);
+  n = row*col;
 
   adjustsize(&x->m, row, col);
   m =  x->m.atombuffer+2;

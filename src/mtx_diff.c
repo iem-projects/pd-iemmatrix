@@ -150,11 +150,10 @@ static void diffReverse (int n, t_float *x, t_float *y)
 static void mTXdiffMatrix (MTXdiff *mtx_diff_obj, t_symbol *s,
                            int argc, t_atom *argv)
 {
-  int rows = atom_getint (argv++);
-  int columns = atom_getint (argv++);
+  int rows = atom_getint (argv+0);
+  int columns = atom_getint (argv+1);
   int size = rows * columns;
-  int list_size = argc - 2;
-  t_atom *list_ptr = argv;
+  t_atom *list_ptr = argv+2;
   t_atom *list_out = mtx_diff_obj->list_out;
   t_float *x = mtx_diff_obj->x;
   t_float *y = mtx_diff_obj->y;
@@ -162,6 +161,7 @@ static void mTXdiffMatrix (MTXdiff *mtx_diff_obj, t_symbol *s,
 
   /* size check */
   if(iemmatrix_check(mtx_diff_obj, argc, argv, 0))return;
+
   if ((!x)||(!list_out)||(!y)) {
     if (!x) {
       x = (t_float *) getbytes (sizeof (t_float) * (size));

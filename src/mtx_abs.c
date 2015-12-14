@@ -20,12 +20,13 @@ static t_class *mtx_abs_class;
 static void mtx_abs_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
                            t_atom *argv)
 {
-  int row=atom_getint(argv++);
-  int col=atom_getint(argv++);
   t_atom *m;
-  int n = row*col;
+  int n;
+  int row, col;
   if(iemmatrix_check(x, argc, argv, 0))return;
-
+  row=atom_getint(argv++);
+  col=atom_getint(argv++);
+  n = row*col;
   adjustsize(&x->m, row, col);
   m =  x->m.atombuffer+2;
 

@@ -249,11 +249,9 @@ static void indexingVector (int n, int m, t_symbol *sort_mode, t_float *i)
 static void mTXSortMatrix (MTXSort *mtx_sort_obj, t_symbol *s,
                            int argc, t_atom *argv)
 {
-  int rows = atom_getint (argv++);
-  int columns = atom_getint (argv++);
-  int size = rows * columns;
+  int rows, columns, size;
   int list_size = argc - 2;
-  t_atom *list_ptr = argv;
+  t_atom *list_ptr = argv + 2;
   t_atom *list_out1 = mtx_sort_obj->list_out1;
   t_atom *list_out2 = mtx_sort_obj->list_out2;
   t_float *x = mtx_sort_obj->x;
@@ -261,7 +259,11 @@ static void mTXSortMatrix (MTXSort *mtx_sort_obj, t_symbol *s,
   int count;
 
   /* size check */
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(mtx_sort_obj, argc, argv, 0))return;
+
+  rows = atom_getint (argv++);
+  columns = atom_getint (argv++);
+  size = rows * columns;
   if ((!x)||(!list_out1)||(!list_out2)/*||(!y)*/) {
     if (!x) {
       x = (t_float *) getbytes (sizeof (t_float) * (size));

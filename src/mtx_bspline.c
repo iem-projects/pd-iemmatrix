@@ -118,23 +118,10 @@ static void mtx_bspline_matrix2(t_mtx_spline *X, t_symbol *s, int argc,
   t_matrixfloat*dummy;
   int i,j;
   int N;
-
-  if (argc<2) {
-    error("mtx_bspline: crippled matrix");
-    return;
-  }
+  if(iemmatrix_check(x, argc, argv, 0))return;
 
   row=atom_getfloat(argv);
   col=atom_getfloat(argv+1);
-
-  if ((col<2)||(row<3)) {
-    error("mtx_bspline: invalid dimensions");
-    return;
-  }
-  if (col*row>argc-2) {
-    error("sparse matrix not yet supported : use \"mtx_check\"");
-    return;
-  }
 
   col--;
 

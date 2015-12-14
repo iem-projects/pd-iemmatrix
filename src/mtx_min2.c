@@ -29,11 +29,7 @@ static void mtx_min2scalar_matrix(t_mtx_binscalar *x, t_symbol *s,
   t_float offset=x->f;
   t_atom *buf;
   t_atom *ap=argv+2;
-
-  if(argc<2) {
-    post("mtx_min2: crippled matrix");
-    return;
-  }
+  if(iemmatrix_check(x, argc, argv, IEMMATRIX_CHECK_CRIPPLED))return;
   adjustsize(&x->m, row, col);
 
   buf=x->m.atombuffer+2;
@@ -73,19 +69,7 @@ static void mtx_min2_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   t_atom *m1 = argv+2;
   t_atom *m2 = x->m2.atombuffer+2;
   int n = argc-2;
-
-  if (argc<2) {
-    post("mtx_min2: crippled matrix");
-    return;
-  }
-  if ((col<1)||(row<1)) {
-    post("mtx_min2: invalid dimensions");
-    return;
-  }
-  if (col*row>argc-2) {
-    post("sparse matrix not yet supported : use \"mtx_check\"");
-    return;
-  }
+  if(iemmatrix_check(x, argc, argv, 0))return;
 
   if (!(x->m2.col*x->m2.row)) {
     outlet_anything(x->x_obj.ob_outlet, gensym("matrix"), argc, argv);
@@ -93,7 +77,7 @@ static void mtx_min2_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   }
 
   if ((col!=x->m2.col)||(row!=x->m2.row)) {
-    post("mtx_min2: matrix dimensions do not match");
+    pd_error(x, "[mtx_min2]: matrix dimensions do not match");
     /* LATER SOLVE THIS */
     return;
   }
@@ -118,7 +102,7 @@ static void mtx_min2_float(t_mtx_binmtx *x, t_float f)
   int row2, col2, n;
 
   if (!m2->atombuffer) {
-    pd_error(x, "right-hand matrix is missing");
+    pd_error(x, "[mtx_min2]: right-hand matrix is missing");
     return;
   }
 

@@ -24,19 +24,7 @@ static void mtx_abs_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   int col=atom_getint(argv++);
   t_atom *m;
   int n = row*col;
-
-  if (argc<2) {
-    post("mtx_abs: crippled matrix");
-    return;
-  }
-  if ((col<1)||(row<1)) {
-    post("mtx_abs: invalid dimensions");
-    return;
-  }
-  if (col*row>argc-2) {
-    post("sparse matrix not yet supported : use \"mtx_check\"");
-    return;
-  }
+  if(iemmatrix_check(x, argc, argv, 0))return;
 
   adjustsize(&x->m, row, col);
   m =  x->m.atombuffer+2;

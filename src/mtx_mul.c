@@ -36,27 +36,16 @@ static void mtx_mul_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   int row2, col2, n, r, c;
 
   if (!m2->atombuffer) {
-    pd_error(x, "right-hand matrix is missing");
+    pd_error(x, "[mtx_*]: right-hand matrix is missing");
     return;
   }
-  if (argc<2) {
-    pd_error(x, "crippled matrix");
-    return;
-  }
-  if ((col<1)||(row<1)) {
-    pd_error(x, "invalid dimensions");
-    return;
-  }
-  if (col*row>argc-2) {
-    pd_error(x, "sparse matrix not yet supported : use \"mtx_check\"");
-    return;
-  }
+  if(iemmatrix_check(x, argc, argv, 0))return;
 
   row2=atom_getfloat(m2->atombuffer);
   col2=atom_getfloat(m2->atombuffer+1);
 
   if (col!=row2) {
-    pd_error(x, "matrix dimensions do not match !");
+    pd_error(x, "[mtx_*]: matrix dimensions do not match !");
     return;
   }
 
@@ -83,7 +72,7 @@ static void mtx_mul_float(t_mtx_binmtx *x, t_float f)
   int row2, col2, n;
 
   if (!m2->atombuffer) {
-    pd_error(x, "right-hand matrix is missing");
+    pd_error(x, "[mtx_*]: right-hand matrix is missing");
     return;
   }
 
@@ -112,18 +101,7 @@ static void mtx_mulelement_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   t_atom *m2 = x->m2.atombuffer+2;
   int n = argc-2;
 
-  if (argc<2) {
-    pd_error(x, "crippled matrix");
-    return;
-  }
-  if ((col<1)||(row<1)) {
-    pd_error(x, "invalid dimensions");
-    return;
-  }
-  if (col*row>argc-2) {
-    pd_error(x, "sparse matrix not yet supported : use \"mtx_check\"");
-    return;
-  }
+  if(iemmatrix_check(x, argc, argv, 0))return;
   if (!(x->m2.col*x->m2.row)) {
     adjustsize(&x->m, row, col);
     matrix_set(&x->m, 0);
@@ -132,7 +110,7 @@ static void mtx_mulelement_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
     return;
   }
   if ((col!=x->m2.col)||(row!=x->m2.row)) {
-    pd_error(x, "matrix dimension do not match");    /* LATER SOLVE THIS */
+    pd_error(x, "[mtx_.*]: matrix dimension do not match");    /* LATER SOLVE THIS */
     return;
   }
 
@@ -158,10 +136,7 @@ static void mtx_mulscalar_matrix(t_mtx_binscalar *x, t_symbol *s, int argc,
   int row=atom_getfloat(argv++);
   int col=atom_getfloat(argv++);
 
-  if (argc<2) {
-    pd_error(x, "crippled matrix");
-    return;
-  }
+  if(iemmatrix_check(x, argc, argv, IEMMATRIX_CHECK_CRIPPLED))return;
   adjustsize(&x->m, row, col);
   m = x->m.atombuffer+2;
 
@@ -267,19 +242,7 @@ static void mtx_divelement_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   t_atom *m;
   t_atom *m2 = x->m2.atombuffer+2;
   int n = argc-2;
-
-  if (argc<2) {
-    pd_error(x, "crippled matrix");
-    return;
-  }
-  if ((col<1)||(row<1)) {
-    pd_error(x, "invalid dimensions");
-    return;
-  }
-  if (col*row>argc-2) {
-    pd_error(x, "sparse matrix not yet supported : use \"mtx_check\"");
-    return;
-  }
+  if(iemmatrix_check(x, argc, argv, 0))return;
   if (!(x->m2.col*x->m2.row)) {
     adjustsize(&x->m, row, col);
     matrix_set(&x->m, 0);
@@ -288,7 +251,7 @@ static void mtx_divelement_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
     return;
   }
   if ((col!=x->m2.col)||(row!=x->m2.row)) {
-    pd_error(x, "matrix dimension do not match");    /* LATER SOLVE THIS */
+    pd_error(x, "[mtx_./]: matrix dimension do not match");    /* LATER SOLVE THIS */
     return;
   }
 
@@ -311,7 +274,7 @@ static void mtx_divelement_float(t_mtx_binmtx *x, t_float f)
   int row2, col2, n;
 
   if (!m2->atombuffer) {
-    pd_error(x, "right-hand matrix missing");
+    pd_error(x, "[mtx_./]: right-hand matrix missing");
     return;
   }
 
@@ -338,11 +301,7 @@ static void mtx_divscalar_matrix(t_mtx_binscalar *x, t_symbol *s, int argc,
   t_float factor = 1.0/x->f;
   int row=atom_getfloat(argv++);
   int col=atom_getfloat(argv++);
-
-  if (argc<2) {
-    pd_error(x, "crippled matrix");
-    return;
-  }
+  if(iemmatrix_check(x, argc, argv, IEMMATRIX_CHECK_CRIPPLED))return;
   adjustsize(&x->m, row, col);
   m = x->m.atombuffer+2;
 

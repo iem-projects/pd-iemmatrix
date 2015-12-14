@@ -26,19 +26,7 @@ static void mtx_powelement_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   t_atom *m;
   t_atom *m2 = x->m2.atombuffer+2;
   int n = argc-2;
-
-  if (argc<2) {
-    post("mtx_pow: crippled matrix");
-    return;
-  }
-  if ((col<1)||(row<1)) {
-    post("mtx_pow: invalid dimensions");
-    return;
-  }
-  if (col*row>argc-2) {
-    post("sparse matrix not yet supported : use \"mtx_check\"");
-    return;
-  }
+  if(iemmatrix_check(x, argc, argc, 0))return;
   if (!(x->m2.col*x->m2.row)) {
     adjustsize(&x->m, row, col);
     matrix_set(&x->m, 0);
@@ -97,11 +85,8 @@ static void mtx_powscalar_matrix(t_mtx_binscalar *x, t_symbol *s, int argc,
   t_float factor = x->f;
   int row=atom_getfloat(argv++);
   int col=atom_getfloat(argv++);
+  if(iemmatrix_check(x, argc, argc, IEMMATRIX_CHECK_CRIPPLED))return;
 
-  if (argc<2) {
-    post("mtx_pow: crippled matrix");
-    return;
-  }
   adjustsize(&x->m, row, col);
   m = x->m.atombuffer+2;
 

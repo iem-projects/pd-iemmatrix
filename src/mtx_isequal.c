@@ -30,10 +30,7 @@ static void mtx_isequalscalar_matrix(t_mtx_binscalar *x, t_symbol *s,
   t_atom *buf;
   t_atom *ap=argv+2;
 
-  if(argc<2) {
-    post("mtx_isequal: crippled matrix");
-    return;
-  }
+  if(iemmatrix_check(x, argc, argv, IEMMATRIX_CHECK_CRIPPLED))return;
 
   while(n--) {
     if(atom_getfloat(ap)!=offset) {
@@ -70,19 +67,7 @@ static void mtx_isequal_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   t_atom *m1 = argv+2;
   t_atom *m2 = x->m2.atombuffer+2;
   int n = argc-2;
-
-  if (argc<2) {
-    post("mtx_isequal: crippled matrix");
-    return;
-  }
-  if ((col<1)||(row<1)) {
-    post("mtx_isequal: invalid dimensions");
-    return;
-  }
-  if (col*row>argc-2) {
-    post("sparse matrix not yet supported : use \"mtx_check\"");
-    return;
-  }
+  if(iemmatrix_check(x, argc, argv, 0))return;
 
   if ((col!=x->m2.col)||(row!=x->m2.row)) {
     outlet_float(x->x_obj.ob_outlet, (t_float)0);

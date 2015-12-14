@@ -44,19 +44,7 @@ static void mtx_pivot_matrix(t_mtx_pivot *x, t_symbol *s, int argc,
   int pivot_row, pivot_col;
 
   int ascending=(x->ascending);
-
-  if (argc<2) {
-    post("mtx_pivot: crippled matrix");
-    return;
-  }
-  if ((col<1)||(row<1)) {
-    post("mtx_pivot: invalid dimensions");
-    return;
-  }
-  if (col*row>argc-2) {
-    post("sparse matrix not yet supported : use \"mtx_check\"");
-    return;
-  }
+  if(iemmatrix_check(x, argc, argv, 0))return;
 
   adjustsize(&x->m, row, col);
   adjustsize(&x->m_pre, row, row);

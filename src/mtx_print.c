@@ -24,16 +24,9 @@ static t_class *mtx_print_class;
 static void mtx_print(t_mtxprint *x, t_symbol *s, int argc, t_atom *argv)
 {
   int col, row;
-  if (argc<2) {
-    post("mtx_print : crippled matrix");
-    return;
-  }
+  if(iemmatrix_check(x, argc, argv, 0))return;
   row = atom_getfloat(argv++);
   col = atom_getfloat(argv++);
-  if(row*col>argc-2) {
-    post("mtx_print : sparse matrices not yet supported : use \"mtx_check\"");
-    return;
-  }
   post("%s:", x->x_s->s_name);
   while(row--) {
     postatom(col, argv);

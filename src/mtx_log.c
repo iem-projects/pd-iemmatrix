@@ -24,19 +24,7 @@ static void mtx_log_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   int col=atom_getfloat(argv++);
   t_atom *m;
   int n = argc-2;
-
-  if (argc<2) {
-    post("mtx_log: crippled matrix");
-    return;
-  }
-  if ((col<1)||(row<1)) {
-    post("mtx_log: invalid dimensions");
-    return;
-  }
-  if (col*row>argc-2) {
-    post("sparse matrix not yet supported : use \"mtx_check\"");
-    return;
-  }
+  if(iemmatrix_check(x, argc, argv, 0))return;
 
   adjustsize(&x->m, row, col);
   m =  x->m.atombuffer+2;

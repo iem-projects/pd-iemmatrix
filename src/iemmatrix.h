@@ -153,6 +153,16 @@ void adjustsize(t_matrix *x, int desiredRow, int desiredCol);
 void debugmtx(int argc, t_float *buf, int id);
 t_matrixfloat *matrix2float(t_atom *ap);
 void float2matrix(t_atom *ap, t_matrixfloat *buffer);
+/* basic matrix message checks: returns 1 if matrix message is invalid, 0 otherwise ; prints error messages
+ * tests specifies the tests to run (0==all tests)
+ */
+enum {
+  IEMMATRIX_CHECK_CRIPPLED   = 1<<0,
+  IEMMATRIX_CHECK_DIMENSIONS = 1<<1,
+  IEMMATRIX_CHECK_SPARSE     = 1<<2,
+  IEMMATRIX_CHECK_ALL        = 0
+};
+int iemmatrix_check(void*object, int argc, t_atom*argv, unsigned int tests);
 
 /* basic I/O functions */
 void matrix_bang(t_matrix *x); /* output the matrix stored in atombuffer */

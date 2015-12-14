@@ -655,3 +655,42 @@ int iemmatrix_fdclose(int fd)
   }
   return my_close(fd);
 }
+
+
+int iemmatrix_check(void*object, int argc, t_atom*argv, unsigned int tests) {
+  t_object*x=(t_object*)object;
+  t_symbol*s=atom_getsymbol(binbuf_getvec(x->te_binbuf));
+  char*objname=(s && s->s_name)?s->s_name:0;
+
+  int row=(argc>1)?atom_getfloat(argv+0):0;
+  int col=(argc>1)?atom_getfloat(argv+1):0;
+
+  if (!tests)
+    tests =
+      IEMMATRIX_CHECK_CRIPPLED
+      | IEMMATRIX_CHECK_DIMENSIONS
+      | IEMMATRIX_CHECK_SPARSE;
+
+  if ((tests & IEMMATRIX_CHECK_CRIPPLED) && argc<2) {
+    if (objname)
+      pd_error(x, "[%s]: crippled matrix", objname);
+    else
+      pd_error(x, "crippled matrix");
+    return 1;
+  }
+  if ((tests & IEMMATRIX_CHECK_DIMENSIONS) && ((col<1)||(row<1))) {
+    if (objname)
+      pd_error(x, "[%s]: invalid dimensions", objname);
+    else
+      pd_error(x, "invalid dimensions");
+    return 1;
+  }
+  if ((tests & IEMMATRIX_CHECK_SPARSE)&&(col*row>argc-2)) {
+    if (objname)
+      pd_error(x, "[%s]: sparse matrix not yet supported : use [mtx_check]", objname);
+    else
+      pd_error(x, "sparse matrix not yet supported : use [mtx_check]");
+    return 1;
+  }
+  return 0;
+}

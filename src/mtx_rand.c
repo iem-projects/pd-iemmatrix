@@ -44,14 +44,17 @@ static void mtx_rand_random(t_matrix *x)
 
 static void mtx_rand_list(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 {
-  int row = atom_getfloat(argv++);
-  int col = atom_getfloat(argv++);
+  int row, col;
 
-  if(!argv) {
+  switch(argc) {
+  case 0:
     return;
-  }
-  if(argc==1) {
-    col=row;
+  case 1:
+    row = col = atom_getfloat(argv);
+    break;
+  default:
+    row = atom_getfloat(argv+0);
+    col = atom_getfloat(argv+1);
   }
 
   adjustsize(x, row, col);

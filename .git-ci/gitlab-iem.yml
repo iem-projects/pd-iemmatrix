@@ -5,7 +5,8 @@ variables:
   LANG: C
   MACOSX_DEPLOYMENT_TARGET: "10.9"
   # however, it seems that CI_JOB_NAME is not expanded here!
-  ARTIFACTSDIR: artifacts/${CI_PROJECT_NAME}${CI_JOB_NAME%_*}
+  #ARTIFACTSDIR: artifacts/${CI_PROJECT_NAME}${CI_JOB_NAME%_*}
+  ARTIFACTSDIR: artifacts/${CI_PROJECT_NAME}${CI_JOB_NAME}
 
 .build:snapshot: &snapshot
   except:

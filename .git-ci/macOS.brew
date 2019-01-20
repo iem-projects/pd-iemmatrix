@@ -1,0 +1,9 @@
+# build-system
+brew "pkg-config"
+brew "automake"
+brew "libtool"
+
+# the real stuff
+brew "fftw"
+brew "libsndfile"
+brew "gsl"

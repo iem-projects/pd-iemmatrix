@@ -1,0 +1,3 @@
+@MINGW@libsndfile
+@MINGW@fftw
+@MINGW@gsl

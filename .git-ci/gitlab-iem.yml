@@ -37,8 +37,7 @@ variables:
     - ./autogen.sh
     - ./configure
     - make check -j2
-    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR}
-
+    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/
 .build:macos: &build_macos
   tags:
      - osx
@@ -58,7 +57,7 @@ variables:
     - ./autogen.sh
     - ./configure --with-pd="${PDDIR}"
     - make check -j2
-    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR}
+    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/
   after_script:
     - find "${ARTIFACTSDIR}" "(" -name "*.pd_darwin" -or -name "*.so" ")" -exec .git-ci/localdeps.macos.sh {} +
 
@@ -82,7 +81,7 @@ variables:
     - ./autogen.sh
     - ./configure --with-pd="$(pwd)/_pd"
     - make check -j2
-    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR}
+    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/
   after_script:
     - find "${ARTIFACTSDIR}" -name "*.dll" -exec .git-ci/localdeps.win.sh {} +
 
@@ -106,7 +105,7 @@ variables:
     - ./autogen.sh
     - ./configure --with-pd="$(pwd)/_pd"
     - make check -j2
-    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR}
+    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/
   after_script:
     - find "${ARTIFACTSDIR}" -name "*.dll" -exec .git-ci/localdeps.win.sh {} +
 

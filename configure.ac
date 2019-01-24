@@ -91,7 +91,7 @@ AC_CHECK_LIB([user32], [main])
 AC_CHECK_LIB([gdi32], [main])
 
 dnl Replace `main' with a function in -lm:
-AC_CHECK_LIB([m], [main])
+AC_CHECK_LIB([m], [cos])
 dnl for math.h Bessel/Neumann functions
 AC_CHECK_LIB([m], [jn])
 AS_IF([test "xyes" = "x${ac_cv_lib_m_jn}"],[

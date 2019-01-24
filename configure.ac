@@ -83,12 +83,6 @@ fi
 dnl Checks for libraries.
 dnl Replace `main' with a function in -lc:
 AC_CHECK_LIB([c], [main])
-AC_CHECK_LIB([crtdll], [fclose])
-
-AC_CHECK_LIB([coldname], [lseek])
-AC_CHECK_LIB([kernel32], [main])
-AC_CHECK_LIB([user32], [main])
-AC_CHECK_LIB([gdi32], [main])
 
 dnl Replace `main' with a function in -lm:
 AC_CHECK_LIB([m], [cos])

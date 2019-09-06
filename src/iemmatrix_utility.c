@@ -643,6 +643,23 @@ int iemmatrix_fdclose(int fd)
   return my_close(fd);
 }
 
+static const char*iemmatrix_objname(t_object*x) {
+  t_symbol*s=gensym("");
+  if(x && x->te_binbuf) {
+    char buf[MAXPDSTRING];
+    if(
+#ifdef _WIN32
+        _snprintf
+#else
+        snprintf
+#endif
+                (buf, MAXPDSTRING, "[%s]: ", atom_getsymbol(binbuf_getvec(x->te_binbuf))->s_name)
+        > 0)
+      s = gensym(buf);
+  }
+  return s->s_name;
+}
+
 
 int iemmatrix_check(void*object, int argc, t_atom*argv, unsigned int tests) {
   t_object*x=(t_object*)object;

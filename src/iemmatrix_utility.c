@@ -662,9 +662,8 @@ static const char*iemmatrix_objname(t_object*x) {
 
 
 int iemmatrix_check(void*object, int argc, t_atom*argv, unsigned int tests) {
-  t_object*x=(t_object*)object;
-  t_symbol*s=(x && x->te_binbuf)?atom_getsymbol(binbuf_getvec(x->te_binbuf)):0;
-  const char*objname=(s && s->s_name)?s->s_name:0;
+  t_object*x = (t_object*)object;
+  const char*objname=iemmatrix_objname(x);
 
   int row=(argc>1)?atom_getfloat(argv+0):0;
   int col=(argc>1)?atom_getfloat(argv+1):0;
@@ -674,25 +673,19 @@ int iemmatrix_check(void*object, int argc, t_atom*argv, unsigned int tests) {
       IEMMATRIX_CHECK_CRIPPLED
       | IEMMATRIX_CHECK_DIMENSIONS
       | IEMMATRIX_CHECK_SPARSE;
+
   if ((tests & IEMMATRIX_CHECK_CRIPPLED) && argc<2) {
-    if (objname)
-      pd_error(x, "[%s]: crippled matrix", objname);
-    else
-      pd_error(x, "crippled matrix");
+    pd_error(x, "%scrippled matrix", objname);
     return 1;
   }
+
   if ((tests & IEMMATRIX_CHECK_DIMENSIONS) && ((col<1)||(row<1))) {
-    if (objname)
-      pd_error(x, "[%s]: invalid dimensions %dx%d", objname, col, row);
-    else
-      pd_error(x, "invalid dimensions %dx%d", col, row);
+    pd_error(x, "%sinvalid dimensions %dx%d", objname, col, row);
     return 1;
   }
+
   if ((tests & IEMMATRIX_CHECK_SPARSE)&&(col*row>argc-2)) {
-    if (objname)
-      pd_error(x, "[%s]: sparse matrix not yet supported : use [mtx_check]", objname);
-    else
-      pd_error(x, "sparse matrix not yet supported : use [mtx_check]");
+    pd_error(x, "%ssparse matrix not yet supported : use [mtx_check]", objname);
     return 1;
   }
   return 0;

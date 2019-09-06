@@ -95,13 +95,16 @@ static void mtx_mul_float(t_mtx_binmtx *x, t_float f)
 static void mtx_mulelement_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
                                   t_atom *argv)
 {
-  int row=atom_getfloat(argv++);
-  int col=atom_getfloat(argv++);
+  int row, col;
   t_atom *m;
   t_atom *m2 = x->m2.atombuffer+2;
   int n = argc-2;
 
   if(iemmatrix_check(x, argc, argv, 0))return;
+
+  row=atom_getfloat(argv++);
+  col=atom_getfloat(argv++);
+
   if (!(x->m2.col*x->m2.row)) {
     adjustsize(&x->m, row, col);
     matrix_set(&x->m, 0);
@@ -130,13 +133,15 @@ static void mtx_mulelement_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
 static void mtx_mulscalar_matrix(t_mtx_binscalar *x, t_symbol *s, int argc,
                                  t_atom *argv)
 {
+  int row, col;
   int n=argc-2;
   t_atom *m;
   t_float factor = x->f;
-  int row=atom_getfloat(argv++);
-  int col=atom_getfloat(argv++);
 
   if(iemmatrix_check(x, argc, argv, IEMMATRIX_CHECK_CRIPPLED))return;
+  row=atom_getfloat(argv++);
+  col=atom_getfloat(argv++);
+
   adjustsize(&x->m, row, col);
   m = x->m.atombuffer+2;
 
@@ -237,12 +242,14 @@ static t_class *mtx_divelement_class, *mtx_divscalar_class;
 static void mtx_divelement_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
                                   t_atom *argv)
 {
-  int row=atom_getfloat(argv++);
-  int col=atom_getfloat(argv++);
+  int row, col;
   t_atom *m;
   t_atom *m2 = x->m2.atombuffer+2;
   int n = argc-2;
   if(iemmatrix_check(x, argc, argv, 0))return;
+  row=atom_getfloat(argv++);
+  col=atom_getfloat(argv++);
+
   if (!(x->m2.col*x->m2.row)) {
     adjustsize(&x->m, row, col);
     matrix_set(&x->m, 0);
@@ -296,12 +303,13 @@ static void mtx_divelement_float(t_mtx_binmtx *x, t_float f)
 static void mtx_divscalar_matrix(t_mtx_binscalar *x, t_symbol *s, int argc,
                                  t_atom *argv)
 {
+  int row, col;
   int n=argc-2;
   t_atom *m;
   t_float factor = 1.0/x->f;
-  int row=atom_getfloat(argv++);
-  int col=atom_getfloat(argv++);
   if(iemmatrix_check(x, argc, argv, IEMMATRIX_CHECK_CRIPPLED))return;
+  row=atom_getfloat(argv++);
+  col=atom_getfloat(argv++);
   adjustsize(&x->m, row, col);
   m = x->m.atombuffer+2;
 

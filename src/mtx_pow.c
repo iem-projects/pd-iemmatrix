@@ -82,12 +82,13 @@ static void mtx_powelement_float(t_mtx_binmtx *x, t_float f)
 static void mtx_powscalar_matrix(t_mtx_binscalar *x, t_symbol *s, int argc,
                                  t_atom *argv)
 {
+  int row, col;
   int n=argc-2;
   t_atom *m;
   t_float factor = x->f;
-  int row=atom_getfloat(argv++);
-  int col=atom_getfloat(argv++);
   if(iemmatrix_check(x, argc, argv, IEMMATRIX_CHECK_CRIPPLED))return;
+  row=atom_getfloat(argv++);
+  col=atom_getfloat(argv++);
 
   adjustsize(&x->m, row, col);
   m = x->m.atombuffer+2;

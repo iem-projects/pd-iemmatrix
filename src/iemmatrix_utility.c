@@ -643,8 +643,9 @@ int iemmatrix_fdclose(int fd)
   return my_close(fd);
 }
 
-static const char*iemmatrix_objname(t_object*x) {
-  t_symbol*s=gensym("");
+const char*iemmatrix_objname(void*obj) {
+  t_object*x = obj;
+  t_symbol*s = gensym("");
   if(x && x->te_binbuf) {
     char buf[MAXPDSTRING];
     if(

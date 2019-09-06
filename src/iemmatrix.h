@@ -164,6 +164,13 @@ enum {
 };
 int iemmatrix_check(void*object, int argc, t_atom*argv, unsigned int tests);
 
+/* get a (decorated) objname: returns either "[<foo>]: " or ""
+ * the returned string MUST NOT be freed by the caller
+ * 'object' must be of type 't_object*' (or derived)
+ */
+const char*iemmatrix_objname(void*object);
+
+
 /* basic I/O functions */
 void matrix_bang(t_matrix *x); /* output the matrix stored in atombuffer */
 void matrix_matrix2(t_matrix *x, t_symbol *s, int argc,

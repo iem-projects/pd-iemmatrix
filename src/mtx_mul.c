@@ -27,6 +27,16 @@
 /* mtx_mul */
 static t_class *mtx_mul_class, *mtx_mulelement_class, *mtx_mulscalar_class;
 
+static int matchingdimension(void*x, int col, int row, t_matrix*m) {
+  if ((col!=m->col)||(row!=m->row)) {
+    pd_error(x, "%smatrix dimension do not match (%dx%d != %dx%d)",
+        iemmatrix_objname(x),
+        col, row, m->col, m->row);
+    return 0;
+  }
+  return 1;
+}
+
 static void mtx_mul_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
                            t_atom *argv)
 {
@@ -112,10 +122,8 @@ static void mtx_mulelement_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
                     x->m.atombuffer);
     return;
   }
-  if ((col!=x->m2.col)||(row!=x->m2.row)) {
-    pd_error(x, "[mtx_.*]: matrix dimension do not match");    /* LATER SOLVE THIS */
+  if(!matchingdimension(x, col, row, &x->m2))
     return;
-  }
 
   adjustsize(&x->m, row, col);
   m =  x->m.atombuffer+2;
@@ -257,10 +265,8 @@ static void mtx_divelement_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
                     x->m.atombuffer);
     return;
   }
-  if ((col!=x->m2.col)||(row!=x->m2.row)) {
-    pd_error(x, "[mtx_./]: matrix dimension do not match");    /* LATER SOLVE THIS */
+  if(!matchingdimension(x, col, row, &x->m2))
     return;
-  }
 
   adjustsize(&x->m, row, col);
   m =  x->m.atombuffer+2;

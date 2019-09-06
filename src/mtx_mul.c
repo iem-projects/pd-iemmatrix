@@ -306,7 +306,7 @@ static void mtx_divscalar_matrix(t_mtx_binscalar *x, t_symbol *s, int argc,
   int row, col;
   int n=argc-2;
   t_atom *m;
-  t_float factor = 1.0/x->f;
+  t_float factor = (x->f)?1.0/x->f:0.;
   if(iemmatrix_check(x, argc, argv, IEMMATRIX_CHECK_CRIPPLED))return;
   row=atom_getfloat(argv++);
   col=atom_getfloat(argv++);

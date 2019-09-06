@@ -1,0 +1,21 @@
+#N canvas 885 212 445 546 10;
+#X obj 52 270 mtx_.*;
+#X obj 52 204 t b b;
+#X msg 82 146 bang;
+#X obj 52 114 inlet bang;
+#X obj 52 383 b;
+#X msg 52 406 1;
+#X obj 52 435 outlet 1==OK;
+#X text 38 47 with iemmatrix-0.3.1 [mtx_.*] is broken. as it refuses
+to multiply;
+#X msg 52 229 matrix 3 3 1 0 0 0 1 0 0 0 1;
+#X msg 85 249 matrix 3 3 1 1 1 1 1 1 1 1 1;
+#X connect 0 0 4 0;
+#X connect 1 0 8 0;
+#X connect 1 1 9 0;
+#X connect 2 0 1 0;
+#X connect 3 0 1 0;
+#X connect 4 0 5 0;
+#X connect 5 0 6 0;
+#X connect 8 0 0 0;
+#X connect 9 0 0 1;

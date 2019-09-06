@@ -219,6 +219,7 @@ mtx_minmax/06_function;
 mtx_mul/00_exist1;
 mtx_mul/00_exist2;
 mtx_mul/00_exist;
+mtx_mul/01_dotmul;
 mtx_neq/00_exist;
 mtx_neq/01_function;
 mtx_neq/02_function;

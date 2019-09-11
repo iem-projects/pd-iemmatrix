@@ -17,7 +17,9 @@ XITCODE=0
 
 ls -1 */*.pd | sed 's/\.pd/;/' > $RUNTESTS_TXT
 
-IEMMATRIX="-lib ../iemmatrix -path ../abs/"
+if [ "x${IEMMATRIX}" = "x" ]; then
+ IEMMATRIX="-lib ../iemmatrix -path ../abs/"
+fi
 
 run_nogui() {
  ${PD} ${PDARGS} $IEMMATRIX -nogui runtests_nogui.pd > ${RUNTESTS_LOG} 2>&1

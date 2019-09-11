@@ -1,4 +1,5 @@
 #N canvas 697 324 312 252 10;
+#X declare -path .;
 #N canvas 6 50 564 876 run-test 1;
 #X obj 87 512 r \$0-receive;
 #X obj 71 532 f;
@@ -79,5 +80,6 @@
 #X obj 94 111 inlet;
 #N canvas 672 477 450 300 \$0-regressiontest 0;
 #X restore 92 186 pd \$0-regressiontest;
+#X obj 91 49 declare -path .;
 #X connect 0 0 1 0;
 #X connect 2 0 0 0;

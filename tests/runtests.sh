@@ -13,6 +13,7 @@ fi
 
 RUNTESTS_TXT=runtests.txt
 RUNTESTS_LOG=runtests.log
+XITCODE=0
 
 ls -1 */*.pd | sed 's/\.pd/;/' > $RUNTESTS_TXT
 
@@ -30,6 +31,9 @@ run_nogui() {
    echo -n "${ft} "
  done
  echo
+ if [ "x${FAILEDTESTS}" != "x" ]; then
+   XITCODE=1
+ fi
 }
 
 run_withgui() {
@@ -43,4 +47,4 @@ else
  run_nogui
 fi
 
-
+exit ${XITCODE}

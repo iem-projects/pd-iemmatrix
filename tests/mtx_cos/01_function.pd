@@ -7,7 +7,7 @@
 #X obj 122 151 t f f;
 #X msg 122 190 matrix 1 1 \$1;
 #X obj 165 232 cos;
-#X obj 122 265 ==;
+#X obj 122 265 epseq 1e-7;
 #X msg 122 127 -2;
 #X connect 0 0 4 0;
 #X connect 2 0 3 0;

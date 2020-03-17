@@ -160,18 +160,18 @@ static void mTXSphMatrix (MTXSph *x, t_symbol *s,
     }
 
   if (x->h_re!=0) {
-    SETFLOAT(x->list_h_re+1,(float)(x->nmax+1));
-    SETFLOAT(x->list_h_re,(float)x->l);
+    SETFLOAT(x->list_h_re+1,(t_float)(x->nmax+1));
+    SETFLOAT(x->list_h_re,(t_float)x->l);
     for (n=0; n<x->l*(x->nmax+1); n++) {
-      SETFLOAT(x->list_h_re+n+2,(float)x->h_re[n]);
+      SETFLOAT(x->list_h_re+n+2,(t_float)x->h_re[n]);
     }
   }
 
   if (x->h_im!=0) {
-    SETFLOAT(x->list_h_im+1,(float)(x->nmax+1));
-    SETFLOAT(x->list_h_im,(float)x->l);
+    SETFLOAT(x->list_h_im+1,(t_float)(x->nmax+1));
+    SETFLOAT(x->list_h_im,(t_float)x->l);
     for (n=0; n<x->l*(x->nmax+1); n++) {
-      SETFLOAT(x->list_h_im+n+2,(float)x->h_im[n]);
+      SETFLOAT(x->list_h_im+n+2,(t_float)x->h_im[n]);
     }
   }
 

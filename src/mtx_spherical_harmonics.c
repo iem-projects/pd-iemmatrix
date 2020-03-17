@@ -132,10 +132,10 @@ static void mTXShMatrix (MTXSh *x, t_symbol *s,
     int n;
     sharmonics(x->phi, x->theta, x->ws);
     size=x->l*(x->nmax+1)*(x->nmax+1);
-    SETFLOAT(x->list_sh,(float)x->l);
-    SETFLOAT(x->list_sh+1,(float)(x->nmax+1)*(x->nmax+1));
+    SETFLOAT(x->list_sh,(t_float)x->l);
+    SETFLOAT(x->list_sh+1,(t_float)(x->nmax+1)*(x->nmax+1));
     for (n=0; n<size; n++) {
-      SETFLOAT(x->list_sh+n+2,(float)x->ws->y[n]);
+      SETFLOAT(x->list_sh+n+2,(t_float)x->ws->y[n]);
     }
     mTXShBang(x);
   } else {
@@ -218,10 +218,10 @@ static void mTXChMatrix (MTXCh *x, t_symbol *s,
       int n;
       chebyshev12(x->phi, x->wc);
       size=x->l*(2*x->nmax+1);
-      SETFLOAT(x->list_ch,(float)x->l);
-      SETFLOAT(x->list_ch+1,(float)(2*x->nmax+1));
+      SETFLOAT(x->list_ch,(t_float)x->l);
+      SETFLOAT(x->list_ch+1,(t_float)(2*x->nmax+1));
       for (n=0; n<size; n++) {
-        SETFLOAT(x->list_ch+n+2,(float)x->wc->t[n]);
+        SETFLOAT(x->list_ch+n+2,(t_float)x->wc->t[n]);
       }
       mTXChBang(x);
     } else {

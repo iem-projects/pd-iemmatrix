@@ -7,6 +7,7 @@ variables:
   # however, it seems that CI_JOB_NAME is not expanded here!
   #ARTIFACTSDIR: artifacts/${CI_PROJECT_NAME}${CI_JOB_NAME%_*}
   ARTIFACTSDIR: artifacts/${CI_PROJECT_NAME}${CI_JOB_NAME}
+  IEM_CI_TMPDIR: .git-ci/_build/
 
 .build:snapshot: &snapshot
   except:
@@ -44,15 +45,34 @@ variables:
      - bigsur
   stage: build
   before_script:
-    - wget -q -O Pd.tgz http://msp.ucsd.edu/Software/pd-${PDVERSION}.mac.tar.gz
+    - date
+    - brew bundle --no-upgrade --file=.git-ci/macOS.brew
     - rm -rf /Applications/Pd*.app/
-    - tar xf Pd.tgz -C /Applications/
-    - rm -f Pd.tgz
+    - rm -rf "${IEM_CI_TMPDIR}"
+    # get Pd tarball
+    - curl -sL http://msp.ucsd.edu/Software/pd-${PDVERSION}.mac.tar.gz | tar --extract --gzip --directory /Applications/ || mkdir -p "${IEM_CI_TMPDIR}"
+    # if there was no tarball, try to get a zip-file
+    - test ! -d "${IEM_CI_TMPDIR}" || wget -q -O "${IEM_CI_TMPDIR}"/Pd.zip http://msp.ucsd.edu/Software/pd-${PDVERSION}.macos.zip
+    - test ! -f "${IEM_CI_TMPDIR}"/Pd.zip || unzip "${IEM_CI_TMPDIR}"/Pd.zip -d "${IEM_CI_TMPDIR}"
+    # the ZIP-file contains a .dmg containing Pd
+    - |
+      for dmg in "${IEM_CI_TMPDIR}"/Pd*.dmg; do break; done
+    - pddisk=""
+    - test ! -f "${dmg}" || pddisk=$(hdiutil attach "${dmg}" 2>/dev/null | egrep "^/.*/Volumes/" | tail -1 | awk '{print $NF}')
+    - rm -rf "${dmg}"
+    - |
+      for app in "${pddisk}"/Pd*.app "${IEM_CI_TMPDIR}"/Pd*.app; do if test -d "${app}"; then cp -r "${app}" /Applications/; break; fi; done
+    - test ! -d "${pddisk}" || umount "${pddisk}"
+    - |
+      rm -rf "${IEM_CI_TMPDIR}"
+      dmg=""
+      pddisk=""
+      app=""
+    - export PD=$(find /Applications/Pd*.app/Contents/Resources/bin/ type f -name pd -print -quit)
     - export PD=$(find /Applications/Pd*.app/Contents/Resources/bin/ type f -name pd -print -quit)
     - export PDDIR=$(find /Applications/Pd*.app/Contents/Resources -maxdepth 1 -type d -print -quit)
     - echo "PD=${PD}"
     - echo "PDDIR=${PDDIR}"
-    - brew bundle --no-upgrade --file=.git-ci/macOS.brew
     - date
   script:
     - ./autogen.sh

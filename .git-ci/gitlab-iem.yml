@@ -41,7 +41,7 @@ variables:
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/
 .build:macos: &build_macos
   tags:
-     - osx
+     - bigsur
   stage: build
   before_script:
     - wget -q -O Pd.tgz http://msp.ucsd.edu/Software/pd-${PDVERSION}.mac.tar.gz

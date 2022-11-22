@@ -1,13 +1,9 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_PREREQ([2.60])
+AC_PREREQ([2.71])
 
-AC_INIT([iemmatrix], [0.3.2], [zmoelnig@iem.at], [iemmatrix], [https://git.iem.at/pd/iemmatrix])
+AC_INIT([iemmatrix],[0.3.2],[zmoelnig@iem.at],[iemmatrix],[https://git.iem.at/pd/iemmatrix])
 AM_INIT_AUTOMAKE([1.10 foreign])
-m4_ifdef([LT_INIT], 
-	[LT_INIT([disable-static win32-dll])],
-	[AC_ENABLE_SHARED
-	 AC_DISABLE_STATIC
-	 AC_LIBTOOL_WIN32_DLL])
+LT_INIT([disable-static win32-dll])
 
 AC_CONFIG_MACRO_DIR([m4])
 
@@ -28,21 +24,15 @@ dnl m4_ifdef([AC_LIB_RPATH], [AC_LIB_RPATH])
 dnl Checks for programs.
 AC_PROG_CC
 AC_PROG_LN_S
-AC_LIBTOOL_WIN32_DLL
-AC_PROG_LIBTOOL
 
 AC_ARG_WITH([pd],
-            AC_HELP_STRING([--with-pd=</path/to/pd>],
-                           [where to look for Pd-headers and and -libs]))
+            AS_HELP_STRING([--with-pd=</path/to/pd>],[where to look for Pd-headers and and -libs]))
 AC_ARG_WITH([extension],
-            AC_HELP_STRING([--with-extension=<ext>],
-                           [enforce a certain extension for the dynamic library (e.g. dll)]))
+            AS_HELP_STRING([--with-extension=<ext>],[enforce a certain extension for the dynamic library (e.g. dll)]))
 AC_ARG_ENABLE([library],
-            AC_HELP_STRING([--enable-library],
-                           [build iemmatrix as multi-object library (default, "yes"), as single-object externals ("no") or as both ("both")]))
+            AS_HELP_STRING([--enable-library],[build iemmatrix as multi-object library (default, "yes"), as single-object externals ("no") or as both ("both")]))
 AC_ARG_WITH([build-date],
-            AC_HELP_STRING([--with-build-date=<str>],
-                           [alternative date string]))
+            AS_HELP_STRING([--with-build-date=<str>],[alternative date string]))
 
 AM_CONDITIONAL([LIBRARY], [test "x${enable_library}" != "xno"])
 AM_CONDITIONAL([SINGLEOBJECTS], [test "x${enable_library}" = "xno" || test "x${enable_library}" = "xboth"])
@@ -109,16 +99,6 @@ AS_IF([test "x$have_pddll" = "xyes"],[
   AC_CHECK_LIB([pd], [nullfn])
 ])
 
-dnl Checks for header files.
-AC_HEADER_STDC
-AC_CHECK_HEADERS([io.h math.h memory.h stdio.h stdlib.h string.h unistd.h])
-
-dnl Checks for typedefs, structures, and compiler characteristics.
-AC_HEADER_TIME
-
-dnl Checks for library functions.
-AC_FUNC_MMAP
-
 IEM_CHECK_FAT(ARCH_FLAG)
 
 IEM_CHECK_CFLAGS([-mms-bitfields])
@@ -161,12 +141,12 @@ AC_MSG_RESULT([$EXTENSION])
 have_pd="no"
 AC_CHECK_HEADERS([pd/m_pd.h m_pd.h], [have_pd="yes"])
 AS_IF([test "x${have_pd}" = "xno"],[
-AC_ERROR([m_pd.h is desperately needed!
+AC_MSG_ERROR(m_pd.h is desperately needed!
         install pd and/or use
-        "--with-pd=</path/to/pd/>"])
+        "--with-pd=</path/to/pd/>")
 ])
 
-AC_ARG_WITH([fftw], AC_HELP_STRING([--without-fftw], [compile without FFTW]))
+AC_ARG_WITH([fftw], AS_HELP_STRING([--without-fftw],[compile without FFTW]))
 AS_IF([test "xno" != "x${with_fftw}" ],[
 have_fftw="no"
 have_fftw3="no"
@@ -191,7 +171,7 @@ dnl   AC_DEFINE(HAVE_LIBFFTW,1,[Define to 1 if you have the 'fftw' library (e.g.
 AM_CONDITIONAL(HAVE_FFTW, [test "x${have_fftw}" = "xyes"])
 
 dnl for soundfile reading (and writing, if we do that...)
-AC_ARG_WITH([sndfile], AC_HELP_STRING([--without-sndfile], [compile without libsndfile support]))
+AC_ARG_WITH([sndfile], AS_HELP_STRING([--without-sndfile],[compile without libsndfile support]))
 have_sndfile="no"
 AS_IF([test "xno" != "x${with_sndfile}"],[
    AC_CHECK_LIB([sndfile], [sf_close])
@@ -211,7 +191,7 @@ AM_CONDITIONAL(HAVE_SNDFILE, [test "xyes" = "x${have_sndfile}"])
 
 
 dnl for gnu scientific library -lgsl:
-AC_ARG_WITH([gsl], AC_HELP_STRING([--without-gsl], [compile without GNU Scientific Library]))
+AC_ARG_WITH([gsl], AS_HELP_STRING([--without-gsl],[compile without GNU Scientific Library]))
 AS_IF([test "xno" != "x${with_gsl}"],[
    AC_CHECK_LIB([gslcblas], [cblas_dgemm])
    AC_CHECK_LIB([gsl], [gsl_blas_dgemm])
@@ -253,7 +233,7 @@ AC_SUBST([DEFS])
 AC_SUBST([ARCH_FLAG])
 AC_SUBST([LIBTOOL_DEPS])
 AC_SUBST([EXTRA_LTFLAGS])
-AC_SUBST(EXTENSION)
+AC_SUBST([EXTENSION])
 
-AC_OUTPUT()
+AC_OUTPUT
 

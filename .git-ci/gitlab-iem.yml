@@ -143,13 +143,13 @@ W64:
 
 deken:
   stage: deploy
-  image: debian:buster
+  image: registry.git.iem.at/pd/deken:latest
   only:
     - tags
   variables:
     DEKEN_ROOT: "yes"
   before_script:
-    - apt-get update && apt-get --no-install-recommends -y install deken git
+    - apt-get update && apt-get --no-install-recommends -y install git
   script:
     - chmod -R go-w artifacts/
 # remove ltlib leftovers

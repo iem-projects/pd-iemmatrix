@@ -56,7 +56,7 @@ static void mTXSetReverseMode (MTXreverse *mtx_reverse_obj,
     mtx_reverse_obj->reverse_mode = -1;
     break;
   default:
-    error("mtx_reverse: invalid mode '%s'", c_mode->s_name);
+    pd_error(mtx_reverse_obj, "mtx_reverse: invalid mode '%s'", c_mode->s_name);
     break;
   }
 }
@@ -125,10 +125,10 @@ static void mTXreverseMatrix (MTXreverse *mtx_reverse_obj, t_symbol *s,
 
   /* size check */
   if (!size) {
-    error("mtx_reverse: invalid dimensions");
+    pd_error(mtx_reverse_obj, "mtx_reverse: invalid dimensions");
     return;
   } else if (list_size<size) {
-    error("mtx_reverse: sparse matrix not yet supported: use \"mtx_check\"");
+    pd_error(mtx_reverse_obj, "mtx_reverse: sparse matrix not yet supported: use \"mtx_check\"");
     return;
   }
 

@@ -106,7 +106,7 @@ static void *newMTXFind (t_symbol *s, int argc, t_atom *argv)
   mtx_find_obj->list_outlet = outlet_new (&mtx_find_obj->x_obj,
                                           gensym("matrix"));
 
-  error("[mtx_find]: this object is likely to change! not really for use yet");
+  pd_error(mtx_find_obj, "[mtx_find]: this object is likely to change! not really for use yet");
   return ((void *) mtx_find_obj);
 }
 

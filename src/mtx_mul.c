@@ -180,7 +180,7 @@ static void mtx_mulscalar_list(t_mtx_binscalar *x, t_symbol *s, int argc,
 static void *mtx_mul_new(t_symbol *s, int argc, t_atom *argv)
 {
   if (argc>1) {
-    error("[%s]: extra arguments ignored", s->s_name);
+    pd_error(0, "[%s]: extra arguments ignored", s->s_name);
   }
   if (argc) {
     t_mtx_binscalar *x = (t_mtx_binscalar *)pd_new(mtx_mulscalar_class);
@@ -348,7 +348,7 @@ static void mtx_divscalar_list(t_mtx_binscalar *x, t_symbol *s, int argc,
 static void *mtx_div_new(t_symbol *s, int argc, t_atom *argv)
 {
   if (argc>1) {
-    error("[%s] extra arguments ignored", s->s_name);
+    pd_error(0, "[%s] extra arguments ignored", s->s_name);
   }
   if (argc) {
     /* scalar division */

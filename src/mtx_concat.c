@@ -49,7 +49,7 @@ static void mTXSetConcatMode (MTXconcat *mtx_concat_obj, t_symbol *c_mode)
     mtx_concat_obj->concat_mode = 0;
     break;
   default:
-    error("mtx_concat: invalid mode '%s'", c_mode->s_name);
+    pd_error(mtx_concat_obj, "mtx_concat: invalid mode '%s'", c_mode->s_name);
     break;
   }
 }

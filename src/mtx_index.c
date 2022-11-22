@@ -70,7 +70,7 @@ static void *newMTXIndex (t_symbol *s, int argc, t_atom *argv)
   inlet_new(&mtx_index_obj->x_obj, &mtx_index_obj->x_obj.ob_pd,
             gensym("matrix"),gensym(""));
 
-  error("[mtx_index]: this object is likely to change! not really for use yet");
+  pd_error(mtx_index_obj, "[mtx_index]: this object is likely to change! not really for use yet");
 
   return ((void *) mtx_index_obj);
 }

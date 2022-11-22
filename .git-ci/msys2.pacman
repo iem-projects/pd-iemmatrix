@@ -1,3 +1,13 @@
+# basic building infrastructure
+@MINGW@gcc
+@MINGW@libtool
+autoconf
+automake
+make
+@MINGW@pkg-config
+@MINGW@ntldd
+
+# libraries
 @MINGW@libsndfile
 @MINGW@fftw
 @MINGW@gsl

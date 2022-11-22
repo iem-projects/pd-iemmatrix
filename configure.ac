@@ -109,16 +109,6 @@ AS_IF([test "x$have_pddll" = "xyes"],[
   AC_CHECK_LIB([pd], [nullfn])
 ])
 
-dnl Checks for header files.
-AC_HEADER_STDC
-AC_CHECK_HEADERS([io.h math.h memory.h stdio.h stdlib.h string.h unistd.h])
-
-dnl Checks for typedefs, structures, and compiler characteristics.
-AC_HEADER_TIME
-
-dnl Checks for library functions.
-AC_FUNC_MMAP
-
 IEM_CHECK_FAT(ARCH_FLAG)
 
 IEM_CHECK_CFLAGS([-mms-bitfields])
@@ -253,7 +243,7 @@ AC_SUBST([DEFS])
 AC_SUBST([ARCH_FLAG])
 AC_SUBST([LIBTOOL_DEPS])
 AC_SUBST([EXTRA_LTFLAGS])
-AC_SUBST(EXTENSION)
+AC_SUBST([EXTENSION])
 
 AC_OUTPUT()
 

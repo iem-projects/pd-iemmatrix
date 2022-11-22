@@ -31,54 +31,6 @@ AC_PROG_LN_S
 AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 
-AC_ARG_WITH([pd],
-            AC_HELP_STRING([--with-pd=</path/to/pd>],
-                           [where to look for Pd-headers and and -libs]))
-AC_ARG_WITH([extension],
-            AC_HELP_STRING([--with-extension=<ext>],
-                           [enforce a certain extension for the dynamic library (e.g. dll)]))
-AC_ARG_ENABLE([library],
-            AC_HELP_STRING([--enable-library],
-                           [build iemmatrix as multi-object library (default, "yes"), as single-object externals ("no") or as both ("both")]))
-AC_ARG_WITH([build-date],
-            AC_HELP_STRING([--with-build-date=<str>],
-                           [alternative date string]))
-
-AM_CONDITIONAL([LIBRARY], [test "x${enable_library}" != "xno"])
-AM_CONDITIONAL([SINGLEOBJECTS], [test "x${enable_library}" = "xno" || test "x${enable_library}" = "xboth"])
-
-
-if test "x${libdir}" = "x\${exec_prefix}/lib"; then
- libdir='${exec_prefix}/lib/pd/extra'
-fi
-
-
-if test "x$with_pd" != "x"; then
- if test -d "${with_pd}"; then
-   PDPATH=${with_pd}
- fi
- if test -d "${PDPATH}/src"; then
-  AC_MSG_RESULT([adding ${PDPATH}/src to CPPFLAGS])
-  CPPFLAGS="-I${PDPATH}/src ${CPPFLAGS}"
-
-  AC_MSG_RESULT([adding ${PDPATH}/src to LDFLAGS])
-  LDFLAGS="-L${PDPATH}/src ${LDFLAGS}"
- else
-  if test -d "${PDPATH}"; then
-   AC_MSG_RESULT([adding ${PDPATH} to CPPFLAGS])
-   CPPFLAGS="-I${PDPATH} ${CPPFLAGS}"
-  fi
- fi
- if test -d "${PDPATH}/bin"; then
-  AC_MSG_RESULT([adding ${PDPATH}/bin to LDFLAGS])
-  LDFLAGS="-L${PDPATH}/bin ${LDFLAGS}"
- else
-  if test -d "${PDPATH}"; then
-   AC_MSG_RESULT([adding ${PDPATH} to LDFLAGS])
-   LDFLAGS="-L${PDPATH} ${LDFLAGS}"
-  fi
- fi
-fi
 
 dnl Checks for libraries.
 dnl Replace `main' with a function in -lc:
@@ -92,69 +44,6 @@ AS_IF([test "xyes" = "x${ac_cv_lib_m_jn}"],[
    AC_DEFINE(HAVE_MATH_BESSEL,1,[can math compute Bessel functions?])
 ])
 AM_CONDITIONAL(HAVE_MATH_BESSEL, [test "x${ac_cv_lib_m_jn}" = "xyes"])
-
-
-dnl Replace `main' with a function in -lpthread:
-dnl AC_CHECK_LIB([pthread], [main])
-dnl Replace `main' with a function in -lstk:
-dnl AC_CHECK_LIB([stk], [main], [STK=yes])
-
-tmp_pddll_LIBS=$LIBS
-AC_CHECK_LIB([:pd.dll], [nullfn], [have_pddll="yes"], [have_pddll="no"])
-LIBS=$tmp_pddll_LIBS
-
-AS_IF([test "x$have_pddll" = "xyes"],[
-  EXTRA_LTFLAGS="$EXTRA_LTFLAGS -Xlinker -l:pd.dll"
-  ],[
-  AC_CHECK_LIB([pd], [nullfn])
-])
-
-IEM_CHECK_FAT(ARCH_FLAG)
-
-IEM_CHECK_CFLAGS([-mms-bitfields])
-IEM_CHECK_SIMD
-
-AC_MSG_CHECKING([extension])
-if test "x$with_extension" != "x"
-then
- EXTENSION=$with_extension
-else
- case "$KERN" in
- Darwin)
-   EXTENSION=pd_darwin
-   ;;
- Linux)
-   EXTENSION=pd_linux
-   ;;
- IRIX64)
-   EXTENSION=pd_irix6
-   ;;
- IRIX32)
-   EXTENSION=pd_irix5
-   ;;
- IRIX64)
-   EXTENSION=pd_irix6
-   ;;
- *CYGWIN*)
-   EXTENSION=dll
-   ;;
- *MINGW*)
-   EXTENSION=dll
-   ;;
- *)
-   EXTENSION=pd_linux
-   ;;
- esac
-fi
-AC_MSG_RESULT([$EXTENSION])
-
-have_pd="no"
-AC_CHECK_HEADERS([pd/m_pd.h m_pd.h], [have_pd="yes"])
-AS_IF([test "x${have_pd}" = "xno"],[
-AC_ERROR([m_pd.h is desperately needed!
-        install pd and/or use
-        "--with-pd=</path/to/pd/>"])
-])
 
 AC_ARG_WITH([fftw], AC_HELP_STRING([--without-fftw], [compile without FFTW]))
 AS_IF([test "xno" != "x${with_fftw}" ],[
@@ -228,6 +117,110 @@ AS_IF([test "x${ac_cv_lib_gsl_gsl_sf_bessel_Jn}" = "xyes"],[
 ])
 AM_CONDITIONAL(HAVE_GSL_BESSEL, [test "x${ac_cv_lib_gsl_sf_bessel_Jn}" = "xyes"])
 
+
+###############################################
+
+AS_IF([test "x${libdir}" = "x\${exec_prefix}/lib"],
+ [libdir='${exec_prefix}/lib/pd/extra']
+)
+
+
+# handle Pd path
+AC_ARG_WITH([pd],
+  AC_HELP_STRING([--with-pd=</path/to/pd>],
+                 [where to look for Pd-headers and and -libs]))
+AS_IF([test -d "${with_pd}"], [PDPATH=${with_pd}])
+AS_IF([test -d "${PDPATH}"], [
+ AS_IF([test -d "${PDPATH}/src"], [
+   AC_MSG_RESULT([adding ${PDPATH}/src to CPPFLAGS])
+   CPPFLAGS="-I${PDPATH}/src ${CPPFLAGS}"
+
+   AC_MSG_RESULT([adding ${PDPATH}/src to LDFLAGS])
+   LDFLAGS="-L${PDPATH}/src ${LDFLAGS}"
+ ],[
+   AC_MSG_RESULT([adding ${PDPATH} to CPPFLAGS])
+   CPPFLAGS="-I${PDPATH} ${CPPFLAGS}"
+ ])
+ AS_IF([test -d "${PDPATH}/bin"], [
+   AC_MSG_RESULT([adding ${PDPATH}/bin to LDFLAGS])
+   LDFLAGS="-L${PDPATH}/bin ${LDFLAGS}"
+ ],[
+   AC_MSG_RESULT([adding ${PDPATH} to LDFLAGS])
+   LDFLAGS="-L${PDPATH} ${LDFLAGS}"
+ ])
+])
+
+AC_ARG_ENABLE([library],
+  AC_HELP_STRING([--enable-library],
+                 [build iemmatrix as multi-object library (default, "yes"), as single-object externals ("no") or as both ("both")]))
+AM_CONDITIONAL([LIBRARY], [test "x${enable_library}" != "xno"])
+AM_CONDITIONAL([SINGLEOBJECTS], [test "x${enable_library}" = "xno" || test "x${enable_library}" = "xboth"])
+
+AC_ARG_WITH([extension],
+  AC_HELP_STRING([--with-extension=<ext>],
+                 [enforce a certain extension for the dynamic library (e.g. dll)]))
+AC_MSG_CHECKING([extension])
+if test "x$with_extension" != "x"
+then
+ EXTENSION=$with_extension
+else
+ case "$KERN" in
+ Darwin)
+   EXTENSION=pd_darwin
+   ;;
+ Linux)
+   EXTENSION=pd_linux
+   ;;
+ IRIX64)
+   EXTENSION=pd_irix6
+   ;;
+ IRIX32)
+   EXTENSION=pd_irix5
+   ;;
+ IRIX64)
+   EXTENSION=pd_irix6
+   ;;
+ *CYGWIN*)
+   EXTENSION=dll
+   ;;
+ *MINGW*)
+   EXTENSION=dll
+   ;;
+ *)
+   EXTENSION=pd_linux
+   ;;
+ esac
+fi
+AC_MSG_RESULT([$EXTENSION])
+
+
+tmp_pddll_LIBS=$LIBS
+AC_CHECK_LIB([:pd.dll], [nullfn], [have_pddll="yes"], [have_pddll="no"])
+LIBS=$tmp_pddll_LIBS
+
+AS_IF([test "x$have_pddll" = "xyes"],[
+  EXTRA_LTFLAGS="$EXTRA_LTFLAGS -Xlinker -l:pd.dll"
+  ],[
+  AC_CHECK_LIB([pd], [nullfn])
+])
+
+IEM_CHECK_FAT(ARCH_FLAG)
+
+IEM_CHECK_CFLAGS([-mms-bitfields])
+IEM_CHECK_SIMD
+
+have_pd="no"
+AC_CHECK_HEADERS([pd/m_pd.h m_pd.h], [have_pd="yes"])
+AS_IF([test "x${have_pd}" = "xno"],[
+AC_ERROR([m_pd.h is desperately needed!
+        install pd and/or use
+        "--with-pd=</path/to/pd/>"])
+])
+
+dnl Reproducible builds
+AC_ARG_WITH([build-date],
+  AC_HELP_STRING([--with-build-date=<str>],
+                 [alternative date string]))
 AC_MSG_CHECKING([build-date])
 AS_IF([test "x$with_build_date" = "xyes" ],[with_build_date=""])
 AS_IF([test "x$with_build_date" = "xno"  ],[with_build_date=""])

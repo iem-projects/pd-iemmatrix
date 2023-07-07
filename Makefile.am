@@ -43,6 +43,7 @@ libiemmatrixCore_la_SOURCES+=\
 	src/mtx_qhull/zhull.c
 
 iemmatrix_la_CPPFLAGS=-DIEMMATRIX_LIBRARY $(AM_CPPFLAGS)
+iemmatrix_la_CFLAGS=$(AM_CFLAGS) $(SNDFILE_CFLAGS)
 
 ### BEGIN GENERATED CONTENT ###################################################
 ###############################################################################
@@ -101,7 +102,7 @@ pkglib_LTLIBRARIES += \
 endif SINGLEOBJECTS
 
 
-iemmatrix_la_LIBADD = libiemmatrixCore.la
+iemmatrix_la_LIBADD = libiemmatrixCore.la $(SNDFILE_LIBS)
 iemmatrix_la_SOURCES = \
 	src/iemmatrix.c src/iemmatrix_sources.c 
 iemmatrix_la_SOURCES += \
@@ -300,6 +301,8 @@ mtx_size_la_LIBADD	= libiemmatrixCore.la
 mtx_slice_la_SOURCES	= src/mtx_slice.c
 mtx_slice_la_LIBADD	= libiemmatrixCore.la
 mtx_sndfileread_la_SOURCES	= src/mtx_sndfileread.c
+mtx_sndfileread_la_CFLAGS	= $(AM_CFLAGS) $(SNDFILE_CFLAGS)
+mtx_sndfileread_la_LIBADD	= libiemmatrixCore.la $(SNDFILE_LIBS)
 mtx_sort_la_SOURCES	= src/mtx_sort.c
 mtx_sort_la_LIBADD	= libiemmatrixCore.la
 mtx_spherical_harmonics_la_SOURCES	= src/mtx_spherical_harmonics.c

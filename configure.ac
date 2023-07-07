@@ -72,14 +72,7 @@ dnl for soundfile reading (and writing, if we do that...)
 AC_ARG_WITH([sndfile], AC_HELP_STRING([--without-sndfile], [compile without libsndfile support]))
 have_sndfile="no"
 AS_IF([test "xno" != "x${with_sndfile}"],[
-   AC_CHECK_LIB([sndfile], [sf_close])
-   AS_IF([test "x$ac_cv_lib_sndfile_sf_close" != "xyes"],[
-      AC_CHECK_LIB([sndfile-1],[sf_close])
-      ac_cv_lib_sndfile_sf_close=$ac_cv_lib_sndfile_1_sf_close
-   ])
-   AS_IF([test "x$ac_cv_lib_sndfile_sf_close" = "xyes"],[
-       AC_CHECK_HEADERS([sndfile.h], [have_sndfile="yes"])
-   ])
+   PKG_CHECK_MODULES([SNDFILE], [sndfile], [have_sndfile=yes], [have_sndfile=no])
 ])
 AS_IF([test "xyes" = "x${have_sndfile}"],[
    AC_DEFINE([HAVE_LIBSNDFILE],1,[Define to 1 if you have the 'sndfile' library (-lsndfile).])

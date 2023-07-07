@@ -42,7 +42,6 @@ AC_CHECK_LIB([m], [jn])
 AS_IF([test "xyes" = "x${ac_cv_lib_m_jn}"],[
    AC_DEFINE(HAVE_MATH_BESSEL,1,[can math compute Bessel functions?])
 ])
-AM_CONDITIONAL(HAVE_MATH_BESSEL, [test "x${ac_cv_lib_m_jn}" = "xyes"])
 
 dnl FFT
 AC_ARG_WITH([fftw], AC_HELP_STRING([--without-fftw], [compile without FFTW]))
@@ -52,7 +51,6 @@ AS_IF([test "xno" != "x${with_fftw}" ],[
 AS_IF([test "xyes" = "x${have_fftw3}" ],[
    AC_DEFINE(USE_FFTW, 1, [can we use fftw?])
 ])
-AM_CONDITIONAL(HAVE_FFTW, [test "x${have_fftw3}" = "xyes"])
 
 dnl for soundfile reading (and writing, if we do that...)
 AC_ARG_WITH([sndfile], AC_HELP_STRING([--without-sndfile], [compile without libsndfile support]))
@@ -64,7 +62,6 @@ AS_IF([test "xyes" = "x${have_sndfile}"],[
    AC_DEFINE([HAVE_LIBSNDFILE],1,[Define to 1 if you have the 'sndfile' library (-lsndfile).])
    AC_DEFINE([HAVE_SNDFILE_H],1,[Define to 1 if you have the <sndfile.h> header file.])
 ])
-AM_CONDITIONAL(HAVE_SNDFILE, [test "xyes" = "x${have_sndfile}"])
 
 
 dnl for gnu scientific library -lgsl:
@@ -77,8 +74,6 @@ AS_IF([test "xno" != "x${with_gsl}"],[
         AC_CHECK_LIB([gsl], [gsl_sf_bessel_Jn], [:])
    ])
 ])
-AM_CONDITIONAL(HAVE_GSL, [test "x${ac_cv_lib_gsl_gsl_blas_dgemm}" = "xyes"])
-AM_CONDITIONAL(HAVE_GSL_CBLAS, [test "x${ac_cv_lib_gslcblas_cblas_dgemm}" = "xyes"])
 AS_IF([test "x${ac_cv_lib_gsl_gsl_blas_dgemm}" = "xyes"],[
    AC_DEFINE(HAVE_LIBGSL,1,[Define to 1 if you have the 'gsl' library (-lgsl).])
 ])
@@ -88,12 +83,10 @@ AS_IF([test "x${ac_cv_lib_gslcblas_cblas_dgemm}" = "xyes"],[
 AS_IF([test "x${ac_cv_lib_gsl_gsl_eigen_nonsymm}" = "xyes"],[
    AC_DEFINE(HAVE_GSL_EIGEN_NONSYMM,1,[can gsl compute complex eigenvalues?])
 ])
-AM_CONDITIONAL(HAVE_GSL_EIGEN, [test "x${ac_cv_lib_gsl_gsl_eigen_nonsymm}" = "xyes"])
 
 AS_IF([test "x${ac_cv_lib_gsl_gsl_sf_bessel_Jn}" = "xyes"],[
    AC_DEFINE(HAVE_GSL_BESSEL,1,[can gsl compute Bessel functions?])
 ])
-AM_CONDITIONAL(HAVE_GSL_BESSEL, [test "x${ac_cv_lib_gsl_sf_bessel_Jn}" = "xyes"])
 
 
 ###############################################

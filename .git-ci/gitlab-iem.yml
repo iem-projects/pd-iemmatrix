@@ -16,9 +16,18 @@ variables:
       - ${ARTIFACTSDIR}
     expire_in: 1 week
 
-.build:linux:
-  image: gcc
+.build:
   stage: build
+  script:
+    - ./autogen.sh
+    - ./configure --enable-fat-binary=x86_64,arm64 ${PDDIR:+--with-pd="${PDDIR}"}
+    - make check -j2
+    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/
+
+.build:linux:
+  extends:
+    - .build
+  image: registry.git.iem.at/devtools/docker/debiancross:amd64
   before_script:
     - mkdir -p /etc/apt/sources.list.d/
     - touch /etc/apt/sources.list
@@ -26,15 +35,11 @@ variables:
     - apt-get update && apt-get install -y --no-install-recommends make puredata-dev puredata-core
     - apt-get install -y --no-install-recommends libsndfile1-dev libgsl-dev libfftw3-dev
     - date
-  script:
-    - ./autogen.sh
-    - ./configure
-    - make check -j2
-    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/
 .build:macos: &build_macos
+  extends:
+    - .build
   tags:
      - bigsur
-  stage: build
   before_script:
     - date
     - brew bundle --no-upgrade --file=.git-ci/macOS.brew
@@ -65,16 +70,12 @@ variables:
     - echo "PD=${PD}"
     - echo "PDDIR=${PDDIR}"
     - date
-  script:
-    - ./autogen.sh
-    - ./configure --with-pd="${PDDIR}"
-    - make check -j2
-    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/
   after_script:
     - find "${ARTIFACTSDIR}" "(" -name "*.pd_darwin" -or -name "*.so" ")" -exec .git-ci/localdeps.macos.sh {} +
 
 .build:w32:
-  stage: build
+  extends:
+    - .build
   tags:
     - windows
   variables:
@@ -89,16 +90,13 @@ variables:
     - export PD="_pd/bin/pd.com"
     - pacman --noconfirm -S $(cat .git-ci/msys2.pacman  | sed -e 's|#.*||' -e "s|@MINGW@|${MINGW_PACKAGE_PREFIX}-|") || true
     - date
-  script:
-    - ./autogen.sh
-    - ./configure --with-pd="$(pwd)/_pd"
-    - make check -j2
-    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/
+    - PDDIR="$(pwd)/_pd"
   after_script:
     - find "${ARTIFACTSDIR}" -name "*.dll" -exec .git-ci/localdeps.win.sh {} +
 
 .build:w64:
-  stage: build
+  extends:
+    - .build
   tags:
     - windows
   variables:
@@ -113,11 +111,6 @@ variables:
     - export PD="_pd/bin/pd.com"
     - pacman --noconfirm -S $(cat .git-ci/msys2.pacman  | sed -e 's|#.*||' -e "s|@MINGW@|${MINGW_PACKAGE_PREFIX}-|") || true
     - date
-  script:
-    - ./autogen.sh
-    - ./configure --with-pd="$(pwd)/_pd"
-    - make check -j2
-    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/
   after_script:
     - find "${ARTIFACTSDIR}" -name "*.dll" -exec .git-ci/localdeps.win.sh {} +
 

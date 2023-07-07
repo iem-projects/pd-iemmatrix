@@ -21,11 +21,12 @@ AC_CONFIG_SRCDIR([src/iemmatrix.c])
 
 IEM_OPERATING_SYSTEM
 
+need_pdlib=no
 AS_CASE([$host],
  [*darwin],                [EXTENSION=pd_darwin],
  [*linux*|*kfreebsd*gnu*], [EXTENSION=pd_linux],
  [*-*-gnu*],               [EXTENSION=pd_linux],
- [*mingw*|*cygwin*],       [EXTENSION=dll],
+ [*mingw*|*cygwin*],       [EXTENSION=dll; need_pdlib=yes],
  [EXTENSION=pd_linux])
 
 dnl m4_ifdef([AC_LIB_RPATH], [AC_LIB_RPATH])
@@ -136,14 +137,16 @@ AS_IF([test "x$with_extension" != "x"],[EXTENSION="${with_extension#.}"])
 AC_MSG_RESULT([${EXTENSION}])
 
 
-tmp_pddll_LIBS=$LIBS
-AC_CHECK_LIB([:pd.dll], [nullfn], [have_pddll="yes"], [have_pddll="no"])
-LIBS=$tmp_pddll_LIBS
+AS_IF([test "x${need_pdlib}" = "xyes"], [
+   tmp_pddll_LIBS=$LIBS
+   AC_CHECK_LIB([:pd.dll], [nullfn], [have_pddll="yes"], [have_pddll="no"])
+   LIBS=$tmp_pddll_LIBS
 
-AS_IF([test "x$have_pddll" = "xyes"],[
-  EXTRA_LTFLAGS="$EXTRA_LTFLAGS -Xlinker -l:pd.dll"
-  ],[
-  AC_CHECK_LIB([pd], [nullfn])
+   AS_IF([test "x$have_pddll" = "xyes"],[
+     EXTRA_LTFLAGS="$EXTRA_LTFLAGS -Xlinker -l:pd.dll"
+       ],[
+   AC_CHECK_LIB([pd], [nullfn])
+   ])
 ])
 
 IEM_CHECK_FAT(ARCH_FLAG)

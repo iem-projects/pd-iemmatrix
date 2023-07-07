@@ -10,7 +10,7 @@ dist_iemmatrix_DATA = \
 
 pkglib_LTLIBRARIES=
 
-AM_CPPFLAGS=-I$(top_srcdir)/src
+AM_CPPFLAGS=-I$(top_srcdir)/src @IEMMATRIX_CPPFLAGS@
 AM_CFLAGS =
 AM_LDFLAGS= -module -avoid-version -shared -shrext .@EXTENSION@
 

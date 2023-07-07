@@ -20,6 +20,7 @@ AC_CONFIG_FILES([VERSION.txt])
 AC_CONFIG_SRCDIR([src/iemmatrix.c])
 
 IEM_OPERATING_SYSTEM
+IEMMATRIX_CPPFLAGS=""
 
 need_pdlib=no
 AS_CASE([$host],
@@ -136,6 +137,18 @@ AC_MSG_CHECKING([extension])
 AS_IF([test "x$with_extension" != "x"],[EXTENSION="${with_extension#.}"])
 AC_MSG_RESULT([${EXTENSION}])
 
+AC_ARG_WITH([floatsize],
+  AC_HELP_STRING([--with-floatsize=<floatsize>],
+                 [use a given floatsize (32, 64)]))
+AC_MSG_CHECKING([floatsize])
+AS_CASE([$with_floatsize],
+ [32], [floatsize=32],
+ [64], [floatsize=64],
+ [""], [floatsize=""],
+ [AC_MSG_ERROR([invalid floatsize: only 32 and 64 are currently allowed])])
+AS_IF([test "x$floatsize" != "x"],[IEMMATRIX_CPPFLAGS+=" -DPD_FLOATSIZE=${floatsize}"])
+AC_MSG_RESULT([${floatsize:-default}])
+
 
 AS_IF([test "x${need_pdlib}" = "xyes"], [
    tmp_pddll_LIBS=$LIBS
@@ -174,6 +187,7 @@ AS_IF([test "x$with_build_date" != "x"  ],[ AC_DEFINE_UNQUOTED([BUILD_DATE], ["$
 AS_IF([test "x$with_build_date" != "x"  ],[ with_build_date="@<:@default@:>@" ])
 AC_MSG_RESULT([$with_build_date])
 
+AC_SUBST([IEMMATRIX_CPPFLAGS])
 AC_SUBST([CPPFLAGS])
 AC_SUBST([CFLAGS])
 AC_SUBST([LIBS])

@@ -43,7 +43,7 @@ libiemmatrixCore_la_SOURCES+=\
 	src/mtx_qhull/zhull.c
 
 iemmatrix_la_CPPFLAGS=-DIEMMATRIX_LIBRARY $(AM_CPPFLAGS)
-iemmatrix_la_CFLAGS=$(AM_CFLAGS) $(SNDFILE_CFLAGS)
+iemmatrix_la_CFLAGS=$(AM_CFLAGS) $(SNDFILE_CFLAGS) $(FFTW3_CFLAGS)
 
 ### BEGIN GENERATED CONTENT ###################################################
 ###############################################################################
@@ -102,7 +102,7 @@ pkglib_LTLIBRARIES += \
 endif SINGLEOBJECTS
 
 
-iemmatrix_la_LIBADD = libiemmatrixCore.la $(SNDFILE_LIBS)
+iemmatrix_la_LIBADD = libiemmatrixCore.la $(SNDFILE_LIBS) $(FFTW3_LIBS)
 iemmatrix_la_SOURCES = \
 	src/iemmatrix.c src/iemmatrix_sources.c 
 iemmatrix_la_SOURCES += \
@@ -283,9 +283,11 @@ mtx_resize_la_LIBADD	= libiemmatrixCore.la
 mtx_reverse_la_SOURCES	= src/mtx_reverse.c
 mtx_reverse_la_LIBADD	= libiemmatrixCore.la
 mtx_rfft_la_SOURCES	= src/mtx_rfft.c
-mtx_rfft_la_LIBADD	= libiemmatrixCore.la
+mtx_rfft_la_CFLAGS      = $(AM_CFLAGS) $(FFTW3_CFLAGS)
+mtx_rfft_la_LIBADD	= libiemmatrixCore.la $(FFTW3_LIBS)
 mtx_rifft_la_SOURCES	= src/mtx_rifft.c
-mtx_rifft_la_LIBADD	= libiemmatrixCore.la
+mtx_rifft_la_CFLAGS      = $(AM_CFLAGS) $(FFTW3_CFLAGS)
+mtx_rifft_la_LIBADD	= libiemmatrixCore.la $(FFTW3_LIBS)
 mtx_rmstodb_la_SOURCES	= src/mtx_rmstodb.c
 mtx_rmstodb_la_LIBADD	= libiemmatrixCore.la
 mtx_roll_la_SOURCES	= src/mtx_roll.c

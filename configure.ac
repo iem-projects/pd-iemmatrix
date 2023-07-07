@@ -44,29 +44,15 @@ AS_IF([test "xyes" = "x${ac_cv_lib_m_jn}"],[
 ])
 AM_CONDITIONAL(HAVE_MATH_BESSEL, [test "x${ac_cv_lib_m_jn}" = "xyes"])
 
+dnl FFT
 AC_ARG_WITH([fftw], AC_HELP_STRING([--without-fftw], [compile without FFTW]))
 AS_IF([test "xno" != "x${with_fftw}" ],[
-have_fftw="no"
-have_fftw3="no"
-AC_CHECK_LIB([fftw3],[fftw_execute])
-  AS_IF([test "x$ac_cv_lib_fftw3_fftw_execute" != "xyes"],[
-      AC_CHECK_LIB([fftw3-3],[fftw_execute])
-      ac_cv_lib_fftw3_fftw_execute=$ac_cv_lib_fftw3_3_fftw_execute
-  ])
-  AS_IF([test "x$ac_cv_lib_fftw3_fftw_execute" = "xyes"],[
-      AC_CHECK_HEADERS([fftw3.h], [have_fftw3="yes"])
-  ])
+   PKG_CHECK_MODULES([FFTW3], [fftw3], [have_fftw3=yes], [have_fftw3=no])
 ])
-AS_IF([test "xyes" = "x${have_fftw3}"],[
-   have_fftw="yes"
-   AC_DEFINE(HAVE_LIBFFTW3, 1, [Define to 1 if you have the 'fftw3' library (-lfftw3).])
-])
-AS_IF([test "xyes" = "x${have_fftw}" ],[
-dnl   AC_DEFINE(HAVE_LIBFFTW,1,[Define to 1 if you have the 'fftw' library (e.g. -lfftw3).])
+AS_IF([test "xyes" = "x${have_fftw3}" ],[
    AC_DEFINE(USE_FFTW, 1, [can we use fftw?])
 ])
-
-AM_CONDITIONAL(HAVE_FFTW, [test "x${have_fftw}" = "xyes"])
+AM_CONDITIONAL(HAVE_FFTW, [test "x${have_fftw3}" = "xyes"])
 
 dnl for soundfile reading (and writing, if we do that...)
 AC_ARG_WITH([sndfile], AC_HELP_STRING([--without-sndfile], [compile without libsndfile support]))

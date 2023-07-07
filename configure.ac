@@ -20,7 +20,6 @@ AC_CONFIG_FILES([VERSION.txt])
 AC_CONFIG_SRCDIR([src/iemmatrix.c])
 
 IEM_OPERATING_SYSTEM
-ARCH=$(uname -m)
 KERN=$(uname -s)
 
 dnl m4_ifdef([AC_LIB_RPATH], [AC_LIB_RPATH])

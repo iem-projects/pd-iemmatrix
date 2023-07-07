@@ -136,7 +136,7 @@ W64:
 
 .double:
   variables:
-    - floatsize: 64
+    floatsize: 64
   allow_failure: true
 
 Linux:Pd64:
@@ -144,25 +144,25 @@ Linux:Pd64:
     - Linux
     - .double
   variables:
-    - extension: linux-amd64-64.so
+    extension: linux-amd64-64.so
 Darwin:Pd64:
   extends:
     - Darwin
     - .double
   variables:
-    - extension: darwin-fat-64.so
+    extension: darwin-fat-64.so
 W32:Pd64:
   extends:
     - W32
     - .double
   variables:
-    - extension: windows-i386-64.so
+    extension: windows-i386-64.so
 W64:Pd64:
   extends:
     - W64
     - .double
   variables:
-    - extension: windows-amd64-64.so
+    extension: windows-amd64-64.so
 
 
 deken:

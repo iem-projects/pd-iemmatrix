@@ -43,7 +43,10 @@ libiemmatrixCore_la_SOURCES+=\
 	src/mtx_qhull/zhull.c
 
 iemmatrix_la_CPPFLAGS=-DIEMMATRIX_LIBRARY $(AM_CPPFLAGS)
-iemmatrix_la_CFLAGS=$(AM_CFLAGS) $(SNDFILE_CFLAGS) $(FFTW3_CFLAGS)
+iemmatrix_la_CFLAGS =$(AM_CFLAGS)
+iemmatrix_la_CFLAGS+=$(SNDFILE_CFLAGS) $(FFTW3_CFLAGS) $(GSL_CFLAGS)
+iemmatrix_la_LIBADD = libiemmatrixCore.la
+iemmatrix_la_LIBADD+= $(SNDFILE_LIBS) $(FFTW3_LIBS) $(GSL_LIBS)
 
 ### BEGIN GENERATED CONTENT ###################################################
 ###############################################################################
@@ -102,7 +105,6 @@ pkglib_LTLIBRARIES += \
 endif SINGLEOBJECTS
 
 
-iemmatrix_la_LIBADD = libiemmatrixCore.la $(SNDFILE_LIBS) $(FFTW3_LIBS)
 iemmatrix_la_SOURCES = \
 	src/iemmatrix.c src/iemmatrix_sources.c 
 iemmatrix_la_SOURCES += \
@@ -151,7 +153,8 @@ mtx_atan_la_LIBADD	= libiemmatrixCore.la
 mtx_atan2_la_SOURCES	= src/mtx_atan2.c
 mtx_atan2_la_LIBADD	= libiemmatrixCore.la
 mtx_bessel_la_SOURCES	= src/mtx_bessel.c
-mtx_bessel_la_LIBADD	= libiemmatrixCore.la
+mtx_bessel_la_CFLAGS	= $(AM_CFLAGS) $(GSL_CFLAGS)
+mtx_bessel_la_LIBADD	= libiemmatrixCore.la $(GSL_LIBS)
 mtx_bitand_la_SOURCES	= src/mtx_bitand.c
 mtx_bitand_la_LIBADD	= libiemmatrixCore.la
 mtx_bitleft_la_SOURCES	= src/mtx_bitleft.c
@@ -199,7 +202,8 @@ mtx_distance2_la_LIBADD	= libiemmatrixCore.la
 mtx_egg_la_SOURCES	= src/mtx_egg.c
 mtx_egg_la_LIBADD	= libiemmatrixCore.la
 mtx_eig_la_SOURCES	= src/mtx_eig.c
-mtx_eig_la_LIBADD	= libiemmatrixCore.la
+mtx_eig_la_CFLAGS	= $(AM_CFLAGS) $(GSL_CFLAGS)
+mtx_eig_la_LIBADD	= libiemmatrixCore.la $(GSL_LIBS)
 mtx_ei__la_SOURCES	= src/mtx_ei~.c
 mtx_ei__la_LIBADD	= libiemmatrixCore.la
 mtx_element_la_SOURCES	= src/mtx_element.c
@@ -273,7 +277,8 @@ mtx_prod_la_LIBADD	= libiemmatrixCore.la
 mtx_qhull_la_SOURCES	= src/mtx_qhull.c
 mtx_qhull_la_LIBADD	= libiemmatrixCore.la
 mtx_qr_la_SOURCES	= src/mtx_qr.c
-mtx_qr_la_LIBADD	= libiemmatrixCore.la
+mtx_qr_la_CFLAGS	= $(AM_CFLAGS) $(GSL_CFLAGS)
+mtx_qr_la_LIBADD	= libiemmatrixCore.la $(GSL_LIBS)
 mtx_rand_la_SOURCES	= src/mtx_rand.c
 mtx_rand_la_LIBADD	= libiemmatrixCore.la
 mtx_repmat_la_SOURCES	= src/mtx_repmat.c
@@ -322,7 +327,8 @@ mtx_sub_la_LIBADD	= libiemmatrixCore.la
 mtx_sum_la_SOURCES	= src/mtx_sum.c
 mtx_sum_la_LIBADD	= libiemmatrixCore.la
 mtx_svd_la_SOURCES	= src/mtx_svd.c
-mtx_svd_la_LIBADD	= libiemmatrixCore.la
+mtx_svd_la_CFLAGS	= $(AM_CFLAGS) $(GSL_CFLAGS)
+mtx_svd_la_LIBADD	= libiemmatrixCore.la $(GSL_LIBS)
 mtx_trace_la_SOURCES	= src/mtx_trace.c
 mtx_trace_la_LIBADD	= libiemmatrixCore.la
 mtx_transpose_la_SOURCES= src/mtx_transpose.c

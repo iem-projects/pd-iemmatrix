@@ -65,26 +65,21 @@ AS_IF([test "xyes" = "x${have_sndfile}"],[
 
 
 dnl for gnu scientific library -lgsl:
-AC_ARG_WITH([gsl], AC_HELP_STRING([--without-gsl], [compile without GNU Scientific Library]))
-AS_IF([test "xno" != "x${with_gsl}"],[
-   AC_CHECK_LIB([gslcblas], [cblas_dgemm])
-   AC_CHECK_LIB([gsl], [gsl_blas_dgemm])
-   AS_IF([test "x${ac_cv_lib_gsl_gsl_blas_dgemm}" = "xyes"],[
-        AC_CHECK_LIB([gsl], [gsl_eigen_nonsymm], [:])
-        AC_CHECK_LIB([gsl], [gsl_sf_bessel_Jn], [:])
-   ])
+have_gsl_eigen_nonsymm=no
+have_gsl_bessel=no
+PKG_CHECK_MODULES([GSL], [gsl], [have_gsl=yes], [have_gsl=no])
+AS_IF([test "xyes" = "x${have_gsl}"],[
+  AC_SEARCH_LIBS([gsl_eigen_nonsymm],[m],[have_gsl_eigen_nonsymm=yes],[],[${GSL_LIBS}])
+  AC_SEARCH_LIBS([gsl_sf_bessel_Jn],[m],[have_gsl_bessel=yes],[],[${GSL_LIBS}])
+  AC_DEFINE(HAVE_LIBGSL,1,[Define to 1 if you have the 'gsl' library (-lgsl).])
 ])
-AS_IF([test "x${ac_cv_lib_gsl_gsl_blas_dgemm}" = "xyes"],[
-   AC_DEFINE(HAVE_LIBGSL,1,[Define to 1 if you have the 'gsl' library (-lgsl).])
-])
-AS_IF([test "x${ac_cv_lib_gslcblas_cblas_dgemm}" = "xyes"],[
-   AC_DEFINE(HAVE_LIBGSLCBLAS,1,[Define to 1 if you have the 'gslcblas' library (-lgslcblas).])
-])
-AS_IF([test "x${ac_cv_lib_gsl_gsl_eigen_nonsymm}" = "xyes"],[
+
+
+AS_IF([test "x${have_gsl_eigen_nonsymm}" = "xyes"],[
    AC_DEFINE(HAVE_GSL_EIGEN_NONSYMM,1,[can gsl compute complex eigenvalues?])
 ])
 
-AS_IF([test "x${ac_cv_lib_gsl_gsl_sf_bessel_Jn}" = "xyes"],[
+AS_IF([test "x${have_gsl_bessel}" = "xyes"],[
    AC_DEFINE(HAVE_GSL_BESSEL,1,[can gsl compute Bessel functions?])
 ])
 

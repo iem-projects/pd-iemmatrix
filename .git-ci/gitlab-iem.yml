@@ -20,7 +20,7 @@ variables:
   stage: build
   script:
     - ./autogen.sh
-    - ./configure --enable-fat-binary=x86_64,arm64 ${PDDIR:+--with-pd="${PDDIR}"}
+    - ./configure --enable-fat-binary=x86_64,arm64 ${PDDIR:+--with-pd="${PDDIR}"} ${extension:+--with-extension="${extension}"} ${floatsize:+--with-floatsize="${floatsize}"}
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/
 
@@ -133,6 +133,36 @@ W64:
   extends:
     - .build:w64
     - .snapshot
+
+.double:
+  variables:
+    - floatsize: 64
+  allow_failure: true
+
+Linux:Pd64:
+  extends:
+    - Linux
+    - .double
+  variables:
+    - extension: linux-amd64-64.so
+Darwin:Pd64:
+  extends:
+    - Darwin
+    - .double
+  variables:
+    - extension: darwin-fat-64.so
+W32:Pd64:
+  extends:
+    - W32
+    - .double
+  variables:
+    - extension: windows-i386-64.so
+W64:Pd64:
+  extends:
+    - W64
+    - .double
+  variables:
+    - extension: windows-amd64-64.so
 
 
 deken:

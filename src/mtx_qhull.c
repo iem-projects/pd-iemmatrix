@@ -147,7 +147,7 @@ static void mTXQhullMatrix(MTXQhull *xo, t_symbol *s,
   }
 }
 
-static void mtx_qhull_setup (void)
+void mtx_qhull_setup (void)
 {
   mtx_qhull_class = class_new (
                       gensym("mtx_qhull"),

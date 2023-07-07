@@ -149,16 +149,18 @@ AS_CASE([$with_floatsize],
 AS_IF([test "x$floatsize" != "x"],[IEMMATRIX_CPPFLAGS+=" -DPD_FLOATSIZE=${floatsize}"])
 AC_MSG_RESULT([${floatsize:-default}])
 
-
+AS_CASE([$floatsize],
+ [64], [pdlib="pd64"],
+ [pdlib="pd"])
 AS_IF([test "x${need_pdlib}" = "xyes"], [
    tmp_pddll_LIBS=$LIBS
-   AC_CHECK_LIB([:pd.dll], [nullfn], [have_pddll="yes"], [have_pddll="no"])
+   AC_CHECK_LIB([:${pdlib}.dll], [nullfn], [have_pddll="yes"], [have_pddll="no"])
    LIBS=$tmp_pddll_LIBS
 
    AS_IF([test "x$have_pddll" = "xyes"],[
-     EXTRA_LTFLAGS="$EXTRA_LTFLAGS -Xlinker -l:pd.dll"
+     EXTRA_LTFLAGS="$EXTRA_LTFLAGS -Xlinker -l:${pdlib}.dll"
        ],[
-   AC_CHECK_LIB([pd], [nullfn])
+   AC_CHECK_LIB([${pdlib}], [nullfn])
    ])
 ])
 

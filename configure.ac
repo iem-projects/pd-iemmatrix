@@ -20,7 +20,13 @@ AC_CONFIG_FILES([VERSION.txt])
 AC_CONFIG_SRCDIR([src/iemmatrix.c])
 
 IEM_OPERATING_SYSTEM
-KERN=$(uname -s)
+
+AS_CASE([$host],
+ [*darwin],                [EXTENSION=pd_darwin],
+ [*linux*|*kfreebsd*gnu*], [EXTENSION=pd_linux],
+ [*-*-gnu*],               [EXTENSION=pd_linux],
+ [*mingw*|*cygwin*],       [EXTENSION=dll],
+ [EXTENSION=pd_linux])
 
 dnl m4_ifdef([AC_LIB_RPATH], [AC_LIB_RPATH])
 
@@ -126,38 +132,8 @@ AC_ARG_WITH([extension],
   AC_HELP_STRING([--with-extension=<ext>],
                  [enforce a certain extension for the dynamic library (e.g. dll)]))
 AC_MSG_CHECKING([extension])
-if test "x$with_extension" != "x"
-then
- EXTENSION=$with_extension
-else
- case "$KERN" in
- Darwin)
-   EXTENSION=pd_darwin
-   ;;
- Linux)
-   EXTENSION=pd_linux
-   ;;
- IRIX64)
-   EXTENSION=pd_irix6
-   ;;
- IRIX32)
-   EXTENSION=pd_irix5
-   ;;
- IRIX64)
-   EXTENSION=pd_irix6
-   ;;
- *CYGWIN*)
-   EXTENSION=dll
-   ;;
- *MINGW*)
-   EXTENSION=dll
-   ;;
- *)
-   EXTENSION=pd_linux
-   ;;
- esac
-fi
-AC_MSG_RESULT([$EXTENSION])
+AS_IF([test "x$with_extension" != "x"],[EXTENSION="${with_extension#.}"])
+AC_MSG_RESULT([${EXTENSION}])
 
 
 tmp_pddll_LIBS=$LIBS

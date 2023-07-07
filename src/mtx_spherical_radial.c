@@ -15,7 +15,7 @@
 
 #include "iemmatrix.h"
 #include <stdlib.h>
-#include "mtx_spherical_harmonics/sph_radial.c"
+#include "mtx_spherical_harmonics/sph_radial.h"
 
 static t_class *mtx_spherical_radial_class;
 

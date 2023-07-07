@@ -138,7 +138,14 @@ iemmatrix_la_SOURCES += \
 	src/mtx_sndfileread.c src/mtx_sort.c src/mtx_spherical_harmonics.c \
 	src/mtx_spherical_radial.c src/mtx_sub.c src/mtx_sum.c \
 	src/mtx_svd.c src/mtx_trace.c src/mtx_transpose.c \
-	src/mtx_unpack~.c src/mtx_zeros.c 
+	src/mtx_unpack~.c src/mtx_zeros.c
+
+iemmatrix_la_SOURCES += \
+	src/mtx_spherical_harmonics/chebyshev12.c src/mtx_spherical_harmonics/chebyshev12.h \
+	src/mtx_spherical_harmonics/legendre_a.c src/mtx_spherical_harmonics/legendre_a.h \
+	src/mtx_spherical_harmonics/sharmonics.c src/mtx_spherical_harmonics/sharmonics.h \
+	src/mtx_spherical_harmonics/sharmonics_normalization.c src/mtx_spherical_harmonics/sharmonics_normalization.h \
+	src/mtx_spherical_harmonics/sph_radial.c src/mtx_spherical_harmonics/sph_radial.h
 
 matrix_la_SOURCES	= src/matrix.c
 matrix_la_LIBADD	= libiemmatrixCore.la
@@ -317,10 +324,10 @@ mtx_spherical_harmonics_la_SOURCES	+=  \
 	src/mtx_spherical_harmonics/chebyshev12.c src/mtx_spherical_harmonics/chebyshev12.h \
 	src/mtx_spherical_harmonics/legendre_a.c src/mtx_spherical_harmonics/legendre_a.h \
 	src/mtx_spherical_harmonics/sharmonics.c src/mtx_spherical_harmonics/sharmonics.h \
-	src/mtx_spherical_harmonics/sharmonics_normalization.c src/mtx_spherical_harmonics/sharmonics_normalization.h \
-	src/mtx_spherical_harmonics/sph_radial.c src/mtx_spherical_harmonics/sph_radial.h
+	src/mtx_spherical_harmonics/sharmonics_normalization.c src/mtx_spherical_harmonics/sharmonics_normalization.h
 mtx_spherical_harmonics_la_LIBADD	= libiemmatrixCore.la
-mtx_spherical_radial_la_SOURCES	= src/mtx_spherical_radial.c
+mtx_spherical_radial_la_SOURCES	= src/mtx_spherical_radial.c src/mtx_spherical_harmonics/sph_radial.c src/mtx_spherical_harmonics/sph_radial.h
+
 mtx_spherical_radial_la_LIBADD	= libiemmatrixCore.la
 mtx_sub_la_SOURCES	= src/mtx_sub.c
 mtx_sub_la_LIBADD	= libiemmatrixCore.la

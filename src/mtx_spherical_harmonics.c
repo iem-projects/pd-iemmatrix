@@ -15,10 +15,10 @@
 
 #include "iemmatrix.h"
 #include <stdlib.h>
-#include "mtx_spherical_harmonics/sharmonics.c"
-#include "mtx_spherical_harmonics/legendre_a.c"
-#include "mtx_spherical_harmonics/chebyshev12.c"
-#include "mtx_spherical_harmonics/sharmonics_normalization.c"
+#include "mtx_spherical_harmonics/sharmonics.h"
+#include "mtx_spherical_harmonics/legendre_a.h"
+#include "mtx_spherical_harmonics/chebyshev12.h"
+#include "mtx_spherical_harmonics/sharmonics_normalization.h"
 
 static t_class *mtx_spherical_harmonics_class;
 

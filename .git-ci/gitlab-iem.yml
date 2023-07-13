@@ -81,16 +81,17 @@ variables:
   variables:
     IEMCI_CONFIGURATIONS: mingw32
   before_script:
-    - wget -q -O Pd.zip http://msp.ucsd.edu/Software/pd-${PDVERSION}-i386.msw.zip
+    - test "${floatsize}" = 64 || wget -q -O Pd.zip http://msp.ucsd.edu/Software/pd-${PDVERSION}-i386.msw.zip
+    - test "${floatsize}" != 64 || wget -q -O Pd.zip https://get.puredata.info/pure-data/releases/0.54-0-pd64/Pd64-0.54-0-i386.msw.zip
     - mkdir -p _pd
     - unzip -q Pd.zip -d "_pd"
     - mv -v "_pd"/*/* "_pd"
     - rm -f Pd.zip
     - rm -f _pd/bin/msvcr*.dll
-    - export PD="_pd/bin/pd.com"
+    - export PDDIR="$(pwd)/_pd"
+    - export PD=$(find "${PDDIR}" "(" -name "pd.com" -o -name "pd64.com" ")" -print -quit)
     - pacman --noconfirm -S $(cat .git-ci/msys2.pacman  | sed -e 's|#.*||' -e "s|@MINGW@|${MINGW_PACKAGE_PREFIX}-|") || true
     - date
-    - PDDIR="$(pwd)/_pd"
   after_script:
     - find "${ARTIFACTSDIR}" -name "*.dll" -exec .git-ci/localdeps.win.sh {} +
 
@@ -102,13 +103,15 @@ variables:
   variables:
     IEMCI_CONFIGURATIONS: mingw64
   before_script:
-    - wget -q -O Pd.zip http://msp.ucsd.edu/Software/pd-${PDVERSION}.msw.zip
+    - test "${floatsize}" = 64 || wget -q -O Pd.zip http://msp.ucsd.edu/Software/pd-${PDVERSION}.msw.zip
+    - test "${floatsize}" != 64 || wget -q -O Pd.zip https://get.puredata.info/pure-data/releases/0.54-0-pd64/Pd64-0.54-0.msw.zip
     - mkdir -p _pd
     - unzip -q Pd.zip -d "_pd"
     - mv -v "_pd"/*/* "_pd"
     - rm -f Pd.zip
     - rm -f _pd/bin/msvcr*.dll
-    - export PD="_pd/bin/pd.com"
+    - export PDDIR="$(pwd)/_pd"
+    - export PD=$(find "${PDDIR}" "(" -name "pd.com" -o -name "pd64.com" ")" -print -quit)
     - pacman --noconfirm -S $(cat .git-ci/msys2.pacman  | sed -e 's|#.*||' -e "s|@MINGW@|${MINGW_PACKAGE_PREFIX}-|") || true
     - date
   after_script:

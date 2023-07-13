@@ -158,7 +158,7 @@ Darwin:Pd64:
     - .double
   variables:
     extension: darwin-fat-64.so
-.W32:Pd64:
+W32:Pd64:
   extends:
     - W32
     - .double

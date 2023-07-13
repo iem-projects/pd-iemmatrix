@@ -19,6 +19,10 @@ variables:
 .build:
   stage: build
   script:
+    - echo "PDDIR ${PDDIR}"
+    - echo "PD ${PD}"
+    - echo "extension ${extension}"
+    - echo "floatsize ${floatsize}"
     - ./autogen.sh
     - ./configure --enable-fat-binary=x86_64,arm64 ${PDDIR:+--with-pd="${PDDIR}"} ${extension:+--with-extension="${extension}"} ${floatsize:+--with-floatsize="${floatsize}"}
     - make check -j2

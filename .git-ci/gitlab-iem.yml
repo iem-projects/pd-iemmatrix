@@ -164,13 +164,13 @@ W32:Pd64:
     - W32
     - .double
   variables:
-    extension: windows-i386-64.so
+    extension: windows-i386-64.dll
 W64:Pd64:
   extends:
     - W64
     - .double
   variables:
-    extension: windows-amd64-64.so
+    extension: windows-amd64-64.dll
 
 
 deken:

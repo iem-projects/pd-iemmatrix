@@ -3,7 +3,7 @@
 #X obj 122 385 outlet 1==OK;
 #X obj 122 347 b;
 #X msg 122 366 1;
-#X text 67 37 test for existance of [mtx_rand];
+#X text 67 37 test for existence of [mtx_rand];
 #X obj 122 161 mtx_rand;
 #X obj 122 90 t b;
 #X connect 0 0 6 0;

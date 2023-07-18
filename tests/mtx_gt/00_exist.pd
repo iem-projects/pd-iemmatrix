@@ -4,7 +4,7 @@
 #X obj 122 347 b;
 #X msg 122 366 1;
 #X obj 122 161 mtx_gt;
-#X text 67 37 test for existance of [mtx_gt];
+#X text 67 37 test for existence of [mtx_gt];
 #X msg 122 122 matrix 1 1 1;
 #X connect 0 0 6 0;
 #X connect 2 0 3 0;

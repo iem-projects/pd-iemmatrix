@@ -2,7 +2,7 @@
 #X obj 122 68 inlet bang;
 #X obj 122 385 outlet 1==OK;
 #X obj 222 191 mtx_log;
-#X text 67 37 test for existance of [mtx_log];
+#X text 67 37 test for existence of [mtx_log];
 #X msg 222 170 matrix 2 2 \$1 \$2 \$3 \$4;
 #X msg 222 110 3 -1 -10.5 0;
 #X obj 222 135 t l l;

@@ -1,7 +1,7 @@
 #N canvas 175 99 591 461 10;
 #X obj 122 68 inlet bang;
 #X obj 122 385 outlet 1==OK;
-#X text 67 37 test for existance of [mtx_max];
+#X text 67 37 test for existence of [mtx_max];
 #X msg 122 170 matrix 2 2 \$1 \$2 \$3 \$4;
 #X obj 122 89 t b;
 #X msg 122 110 3 -1 -10.5 0;

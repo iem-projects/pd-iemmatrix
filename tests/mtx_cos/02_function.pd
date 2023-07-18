@@ -2,7 +2,7 @@
 #X obj 122 68 inlet bang;
 #X obj 122 415 outlet 1==OK;
 #X obj 122 191 mtx_cos;
-#X text 67 37 test for existance of [mtx_cos];
+#X text 67 37 test for existence of [mtx_cos];
 #X msg 122 170 matrix 2 2 \$1 \$2 \$3 \$4;
 #X obj 122 89 t b;
 #X msg 122 110 3 -1 -10.5 0;

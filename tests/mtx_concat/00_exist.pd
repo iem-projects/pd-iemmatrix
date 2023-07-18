@@ -4,7 +4,7 @@
 #X obj 122 347 b;
 #X msg 122 366 1;
 #X obj 122 161 mtx_concat;
-#X text 67 37 test for existance of [mtx_concat];
+#X text 67 37 test for existence of [mtx_concat];
 #X connect 0 0 4 0;
 #X connect 2 0 3 0;
 #X connect 3 0 1 0;

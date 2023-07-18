@@ -40,7 +40,7 @@ variables:
     - echo "OBJCOPY ${OBJCOPY}"
     - base_dir_ci=$(pwd)
     - cd "${DESTDIR}"
-    - du -sh
+    - ls -lah; du -sh
     - |
       "${base_dir_ci}/.git-ci/split-debug" ${extension:+*.${extension}} *.pd_* *.?_* *.dll *.so || echo "ignoring problems when splitting debug info"
     - du -sh

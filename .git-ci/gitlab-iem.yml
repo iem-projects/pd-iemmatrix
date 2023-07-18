@@ -23,8 +23,10 @@ variables:
     - echo "PD ${PD}"
     - echo "extension ${extension}"
     - echo "floatsize ${floatsize}"
+    - echo "gnuhost ${gnuhost}"
+    - echo "fatarchs ${fatarchs}"
     - ./autogen.sh
-    - ./configure --enable-fat-binary=x86_64,arm64 ${PDDIR:+--with-pd="${PDDIR}"} ${extension:+--with-extension="${extension}"} ${floatsize:+--with-floatsize="${floatsize}"}
+    - ./configure ${fatarchs:+--enable-fat-binary=${fatarchs}} ${gnuhost:+--host="${gnuhost}"} ${PDDIR:+--with-pd="${PDDIR}"} ${extension:+--with-extension="${extension}"} ${floatsize:+--with-floatsize="${floatsize}"}
     - make check -j2
     - |
       make install DESTDIR="$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%%:*}" libdir=/
@@ -35,12 +37,13 @@ variables:
   image: registry.git.iem.at/devtools/docker/debiancross:amd64
   before_script:
     - mkdir -p "${IEM_CI_TMPDIR}"
-    - apt-get update && apt-get install -y --no-install-recommends automake libtool make equivs
+    - apt-get update && apt-get install -y --no-install-recommends automake libtool make equivs ${TARGETDEBARCH:+cross}build-essential${TARGETDEBARCH:+-}${TARGETDEBARCH}
     - equivs-control "${IEM_CI_TMPDIR}"/builddeps
     - sed -e "s|^\(Package:\) .*|\1 builddeps-${CI_PROJECT_NAME}|" -e '/^Depends/d' -i "${IEM_CI_TMPDIR}"/builddeps
-    - echo "Depends:"" puredata-dev, puredata-core, libsndfile1-dev, libgsl-dev, libfftw3-dev, ${TARGETDEBARCH:+cross}build-essential${TARGETDEBARCH:+-}${TARGETDEBARCH}" >> "${IEM_CI_TMPDIR}"/builddeps
+    - echo "Depends:"" puredata-dev, puredata-core, libsndfile1-dev, libgsl-dev, libfftw3-dev" >> "${IEM_CI_TMPDIR}"/builddeps
     - (cd "${IEM_CI_TMPDIR}/"; equivs-build ${TARGETDEBARCH:+-a ${TARGETDEBARCH}} builddeps)
     - find  "${IEM_CI_TMPDIR}/" -name "*.deb" -exec dpkg -i {} + || apt-get -f install -y --no-install-recommends
+    - gnuhost=$(dpkg-architecture ${TARGETDEBARCH:+-a ${TARGETDEBARCH}} -qDEB_HOST_MULTIARCH)
     - date
 .build:macos: &build_macos
   extends:
@@ -137,6 +140,7 @@ Darwin:
     - .snapshot
   variables:
     extension: d_fat
+    fatarchs: "x86_64,arm64"
 W32:
   extends:
     - .build:w32

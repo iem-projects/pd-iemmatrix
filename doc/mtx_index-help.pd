@@ -14,13 +14,9 @@
 #X obj 81 214 mtx_index nan;
 #X text 185 215 <- invalid indices;
 #X msg 275 148 matrix 2 2 0 5 2 4;
-#X text 8 60 you can simultaneously address matrix elements you know
-the indices of \; the outlet matrix carries the shape of the indexing
-matrix \; 0 is not allowed as index \, so you can give an alternative
-value as creation argument (here nan).;
+#X text 8 60 you can simultaneously address matrix elements you know the indices of \; the outlet matrix carries the shape of the indexing matrix \; 0 is not allowed as index \, so you can give an alternative value as creation argument (here nan).;
 #X obj 441 337 mtx_find;
-#X text 44 282 the indexing matrix can e.g. be the outlet of mtx_find
-based on logical conditions:;
+#X text 44 282 the indexing matrix can e.g. be the outlet of mtx_find based on logical conditions:;
 #X obj 89 325 mtx_rand;
 #X obj 89 347 t a a;
 #X obj 119 369 mtx_> 0.5;

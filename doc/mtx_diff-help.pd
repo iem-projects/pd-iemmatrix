@@ -26,9 +26,7 @@
 #X obj 410 466 mtx_cumsum;
 #X obj 12 257 mtx_diff row;
 #X text 47 34 first forward/backward difference;
-#X text 18 63 you can calculate the differences between matrix elements
-forwards/backwards \; this is useful for the numerical derivative of
-vectors/matrices.;
+#X text 18 63 you can calculate the differences between matrix elements forwards/backwards \; this is useful for the numerical derivative of vectors/matrices.;
 #X obj 12 235 t a a a;
 #X obj 307 284 mtx_print cumsum-row-reverse;
 #X obj 265 256 mtx_diff col -1;

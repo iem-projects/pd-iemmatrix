@@ -5,7 +5,7 @@
 #X obj 84 106 mtx_ones 7;
 #X msg 84 83 bang;
 #X obj 84 147 mtx_trace;
-#X floatatom 84 189 4 0 0 0 - - -;
+#X floatatom 84 189 4 0 0 0 - - - 0;
 #X text 86 68 get trace of a matrix;
 #X text 81 204 trace = sum(diagonal elements);
 #X obj 497 90 matrix;

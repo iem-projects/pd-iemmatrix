@@ -1,7 +1,6 @@
 #N canvas 88 457 841 379 10;
 #X text 482 28 part of iemmatrix;
-#X obj 33 124 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
--1;
+#X obj 33 124 bng 15 250 50 0 empty empty empty 0 -6 0 8 #fcfcfc #000000 #000000;
 #X obj 33 148 t b b b b;
 #X obj 33 216 t a a;
 #X text 441 116 inletA: real part of matrix;

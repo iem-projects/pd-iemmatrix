@@ -8,10 +8,8 @@
 #X text 246 158 regular;
 #X text 247 168 but badly conditioned;
 #X text 45 16 mtx_inverse:: get the inverse of a matrix;
-#X text 44 49 mtx_inverse calculates the inverse of a square-matrix
-;
-#X text 43 67 if the input is a non-square matrix (rows!=cols) \, the
-pseudo-inverse will be calculated.;
+#X text 44 49 mtx_inverse calculates the inverse of a square-matrix;
+#X text 43 67 if the input is a non-square matrix (rows!=cols) \, the pseudo-inverse will be calculated.;
 #X text 154 453 A*inv(A)=inv(A)*A=I;
 #X text 248 221 pseudoinverse: P1=inv(A'*A)*A';
 #X text 247 269 pseudoinverse: P2=A'*inv(A*A');
@@ -29,8 +27,7 @@ pseudo-inverse will be calculated.;
 #X msg 153 198 bang;
 #X msg 153 248 bang;
 #X obj 153 269 mtx_rand 3 4;
-#X obj 181 358 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
--1;
+#X obj 181 358 bng 15 250 50 0 empty empty empty 0 -6 0 8 #fcfcfc #000000 #000000;
 #X text 199 359 instability detected!;
 #X connect 16 0 21 0;
 #X connect 16 1 28 0;

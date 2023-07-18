@@ -15,8 +15,7 @@
 #X text 31 31 [mtx_fill_rowcol_grid];
 #X obj 33 201 mtx_fill_rowcol_grid;
 #X text 425 247 inletD: matrix/vector indices for filling;
-#X text 166 69 fills values into to the row and col grid indices of
-given matrix.;
+#X text 166 69 fills values into to the row and col grid indices of given matrix.;
 #X msg 450 108 matrix 1 2 2 4;
 #X obj 33 85 t b b b b;
 #X obj 450 159 mtx_print D_col;

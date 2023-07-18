@@ -6,12 +6,12 @@
 #X obj 264 251 mtx_print permutator;
 #X obj 141 298 mtx_-;
 #X obj 141 320 mtx_.^ 2;
-#X floatatom 141 383 0 0 0 0 error_unmatched - -;
+#X floatatom 141 383 0 0 0 0 error_unmatched - - 0;
 #X obj 174 180 t a a;
 #X obj 264 181 t a a a;
 #X obj 270 302 mtx_-;
 #X obj 270 324 mtx_.^ 2;
-#X floatatom 270 387 0 0 0 1 error_matched - -;
+#X floatatom 270 387 0 0 0 1 error_matched - - 0;
 #X obj 192 253 t a a;
 #X obj 141 343 mtx_sum;
 #X obj 141 363 mtx_sum;
@@ -22,8 +22,7 @@
 #X obj 174 157 mtx_eye 5;
 #X obj 264 157 mtx_egg 5;
 #X text 68 9 mtx_matcher:: match 2 sets of vectors;
-#X text 22 45 mtx_matcher tries to match 2 sets of vectors. The vector-sets
-are expressed as matrices;
+#X text 22 45 mtx_matcher tries to match 2 sets of vectors. The vector-sets are expressed as matrices;
 #X connect 0 0 13 0;
 #X connect 0 1 4 0;
 #X connect 1 0 21 0;

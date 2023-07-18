@@ -8,8 +8,7 @@
 #X msg 33 94 10 3;
 #X obj 94 116 mtx_print original;
 #X text 43 34 [mtx_sfread][mtx_sfwrite];
-#X text 165 69 reads the rows of a matrix from a multichannel sound
-file;
+#X text 165 69 reads the rows of a matrix from a multichannel sound file;
 #X connect 1 0 5 0;
 #X connect 1 0 7 0;
 #X connect 2 0 4 0;

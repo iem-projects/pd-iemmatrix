@@ -15,8 +15,7 @@
 #X obj 192 220 print~ C;
 #X obj 133 244 print~ B;
 #X obj 77 267 print~ A;
-#X obj 19 96 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
--1;
+#X obj 19 96 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000;
 #X obj 126 115 mtx_ones;
 #X msg 126 93 3 8;
 #X connect 7 0 15 0;

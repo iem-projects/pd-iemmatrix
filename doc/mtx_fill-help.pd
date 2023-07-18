@@ -5,16 +5,14 @@
 #X text 465 42 see also help for;
 #X obj 62 208 mtx_fill;
 #X text 87 15 [mtx_fill];
-#X text 47 34 filling elements of a data matrix into specific positions
-of an other matrix;
+#X text 47 34 filling elements of a data matrix into specific positions of an other matrix;
 #X obj 136 117 mtx_zeros;
 #X obj 62 231 mtx_print;
-#X floatatom 232 110 5 0 0 0 - - -;
+#X floatatom 232 110 5 0 0 0 - - - 0;
 #X obj 136 75 loadbang;
 #X msg 136 95 10 10;
-#X text 238 198 <-- if empty matrix: filling sub-matrix at start position
-;
-#X floatatom 281 110 5 0 0 0 - - -;
+#X text 238 198 <-- if empty matrix: filling sub-matrix at start position;
+#X floatatom 281 110 5 0 0 0 - - - 0;
 #X text 234 92 row;
 #X text 289 93 col;
 #X msg 145 197 matrix \$1 \$2;

@@ -9,8 +9,7 @@
 #X text 479 201 outleA: matrix containing the indexed values;
 #X obj 33 232 mtx_print output;
 #X text 43 34 [mtx_index_rowcol];
-#X text 166 69 finds the values to the given row/col indices in a given
-matrix.;
+#X text 166 69 finds the values to the given row/col indices in a given matrix.;
 #X obj 33 194 mtx_index_rowcol;
 #X msg 33 112 matrix 2 3 1 2 3 4 5 6;
 #X obj 33 83 t b b b;

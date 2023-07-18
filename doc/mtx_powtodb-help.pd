@@ -21,8 +21,7 @@
 #X obj 595 43 matrix;
 #X text 465 42 see also help for;
 #X text 188 7 convert power to dB(pd);
-#X text 44 34 convert a power value to dB(pd) to for each element of
-a matrix;
+#X text 44 34 convert a power value to dB(pd) to for each element of a matrix;
 #X obj 48 134 mtx_powtodb;
 #X obj 48 162 mtx_print powtodb;
 #X obj 64 330 mtx_dbtopow;

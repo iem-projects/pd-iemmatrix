@@ -1,7 +1,6 @@
 #N canvas 439 256 841 379 10;
 #X text 482 28 part of iemmatrix;
-#X text 166 69 writes the rows of a matrix into a multichannel sound
-file;
+#X text 166 69 writes the rows of a matrix into a multichannel sound file;
 #X obj 33 116 mtx_rand;
 #X msg 32 207 bang;
 #X obj 32 249 mtx_print file;

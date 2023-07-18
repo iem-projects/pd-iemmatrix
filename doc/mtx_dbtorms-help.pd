@@ -19,8 +19,7 @@
 #X obj 105 357 mtx_print db;
 #X obj 64 407 mtx_print db;
 #X obj 48 100 mtx 2 2;
-#X text 44 34 convert dB(pd) to a linear value for each element of
-a matrix;
+#X text 44 34 convert dB(pd) to a linear value for each element of a matrix;
 #X text 290 305 note: dB(pd):=dB(techn)+100;
 #X text 307 337 this means: 100dB(pd)==unity gain (==1);
 #X text 404 375 0dB(pd)==zero gain (==0);

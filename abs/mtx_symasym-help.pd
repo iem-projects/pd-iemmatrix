@@ -10,15 +10,11 @@
 #X obj 174 297 mtx_print symmetric;
 #X obj 204 205 mtx_print original;
 #X msg 264 114 bang;
-#X text 26 12 mtx_symasym:: decompose a matrix into symmetric & asymmetric
-parts;
-#X text 22 45 each square matrix can be decomposed into a symmetric
-and an assymmetric part \, with;
+#X text 26 12 mtx_symasym:: decompose a matrix into symmetric & asymmetric parts;
+#X text 22 45 each square matrix can be decomposed into a symmetric and an assymmetric part \, with;
 #X text 205 79 M=S+A;
-#X text 70 336 (c) 2005 by IOhannes m zmoelnig \, IEM KUG \, graz austria
-;
-#X text 70 353 for license-details see LICENSE.txt that must come with
-iemmatrix.;
+#X text 70 336 (c) 2005 by IOhannes m zmoelnig \, IEM KUG \, graz austria;
+#X text 70 353 for license-details see LICENSE.txt that must come with iemmatrix.;
 #X connect 0 0 4 0;
 #X connect 1 0 6 0;
 #X connect 1 1 9 0;

@@ -13,8 +13,7 @@
 #X obj 33 232 mtx_print output;
 #X obj 224 159 mtx_print B_orig;
 #X text 43 34 [mtx_fill_row_grid];
-#X text 166 69 fills values into to the row indices of given matrix.
-;
+#X text 166 69 fills values into to the row indices of given matrix.;
 #X obj 341 159 mtx_print C_row;
 #X obj 33 201 mtx_fill_row_grid;
 #X msg 341 108 matrix 1 2 3 1;

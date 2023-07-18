@@ -1,8 +1,7 @@
 #N canvas 439 163 841 379 10;
 #X text 482 28 part of iemmatrix;
 #X text 43 34 [mtx_linspace];
-#X text 166 69 creates a linearly spaced vector from a startvalue to
-a stopvalue with n entries;
+#X text 166 69 creates a linearly spaced vector from a startvalue to a stopvalue with n entries;
 #X text 268 138 inlet: [startval stopval n(;
 #X text 268 157 outlet: matrix/vector;
 #X text 465 324 see also:;

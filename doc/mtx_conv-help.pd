@@ -5,9 +5,7 @@
 #X text 465 42 see also help for;
 #X text 90 15 [mtx_conv];
 #X text 47 34 2-dimensional convolution;
-#X text 18 63 you can calculate the convolution of a matrix with a
-filter matrix kernel (2 dimensional FIR filtering). Of course \, it
-can also be used for 1-dimensional FIR convolutions.;
+#X text 18 63 you can calculate the convolution of a matrix with a filter matrix kernel (2 dimensional FIR filtering). Of course \, it can also be used for 1-dimensional FIR convolutions.;
 #X msg 42 127 bang;
 #X obj 42 151 t b b b;
 #X obj 64 215 t a a;

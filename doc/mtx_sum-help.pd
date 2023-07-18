@@ -9,11 +9,10 @@
 #X obj 48 164 mtx_sum;
 #X obj 91 132 mtx_print;
 #X text 136 10 sum columns of matrix;
-#X text 45 42 compute the column-wise sum of a matrix (result is a
-list of sums);
+#X text 45 42 compute the column-wise sum of a matrix (result is a list of sums);
 #X obj 262 151 mtx_sum;
 #X msg 262 129 1 1 2;
-#X floatatom 262 178 5 0 0 0 - - -;
+#X floatatom 262 178 5 0 0 0 - - - 0;
 #X obj 48 186 print sum;
 #X text 262 107 can also be used for summing up lists;
 #X connect 4 0 5 0;

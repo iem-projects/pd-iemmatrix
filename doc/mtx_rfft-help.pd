@@ -5,15 +5,13 @@
 #X text 464 42 see also help for;
 #X msg 11 124 bang;
 #X text 46 34 real fft in each matrix row;
-#X text 7 60 you can calculate real ffts in column direction \; matrix
-has to have 2^k columns \; a N/2+1 columns matrix is the result \;
-;
+#X text 7 60 you can calculate real ffts in column direction \; matrix has to have 2^k columns \; a N/2+1 columns matrix is the result \;;
 #X obj 11 191 mtx_cumsum;
 #X msg 11 147 1 16;
 #X obj 11 169 mtx_ones;
 #X obj 11 213 mtx_- 1;
 #X obj 49 255 mtx_* 0;
-#X floatatom 140 210 5 0 0 0 - - -;
+#X floatatom 140 210 5 0 0 0 - - - 0;
 #X text 184 208 <-- scroll here to select frequency;
 #X obj 172 255 / 8;
 #X obj 49 306 t a a;

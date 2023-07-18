@@ -16,8 +16,7 @@
 #X text 307 337 this means: 100dB(pd)==unity gain (==1);
 #X text 404 375 0dB(pd)==zero gain (==0);
 #X text 391 354 106dB(pd)~=double gain (==2);
-#X text 44 34 convert a linear value to dB(pd) to for each element
-of a matrix;
+#X text 44 34 convert a linear value to dB(pd) to for each element of a matrix;
 #X obj 48 134 mtx_rmstodb;
 #X obj 64 330 mtx_dbtorms;
 #X obj 64 380 mtx_rmstodb;

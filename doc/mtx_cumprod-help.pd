@@ -22,8 +22,7 @@
 #X obj 409 466 mtx_cumsum;
 #X text 90 15 [mtx_cumprod];
 #X text 47 34 cumulative product in row/col direction;
-#X text 18 63 you can calculate factorials or geometric series \; you
-can also do this into the reverse direction;
+#X text 18 63 you can calculate factorials or geometric series \; you can also do this into the reverse direction;
 #X obj 12 168 mtx_* 2;
 #X obj 17 357 mtx_* 2;
 #X obj 12 257 mtx_cumprod row;

@@ -1,7 +1,6 @@
 #N canvas 541 188 450 300 10;
-#X obj 72 78 hsl 128 15 0 360 0 0 empty empty empty -2 -8 0 10 -262144
--1 -1 0 1;
-#X floatatom 69 98 5 0 0 0 - - -;
+#X obj 72 78 hsl 128 15 0 360 0 0 empty empty empty -2 -8 0 10 #fcfcfc #000000 #000000 0 1;
+#X floatatom 69 98 5 0 0 0 - - - 0;
 #X obj 69 115 *;
 #X obj 225 105 atan;
 #X msg 225 85 1;

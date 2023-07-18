@@ -11,10 +11,9 @@
 #X obj 194 192 mtx_scroll 1;
 #X msg 194 116 1 2 3 4 5;
 #X text 190 99 shift rows of a matrix;
-#X floatatom 301 191 4 0 6 1 shift - -;
+#X floatatom 301 191 4 0 6 1 shift - - 0;
 #X obj 194 138 mtx_diag;
-#X text 380 179 (0=no-shift \; 1=1-row-down \; -2=2-rows-up \; ...)
-;
+#X text 380 179 (0=no-shift \; 1=1-row-down \; -2=2-rows-up \; ...);
 #X connect 6 0 9 0;
 #X connect 6 1 7 0;
 #X connect 9 0 8 0;

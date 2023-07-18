@@ -12,8 +12,7 @@
 #X obj 64 307 t a a;
 #X obj 105 307 mtx_print org;
 #X obj 64 357 t a a;
-#X text 45 42 compute the natural lograithm of each element of a matrix
-;
+#X text 45 42 compute the natural lograithm of each element of a matrix;
 #X obj 48 134 mtx_log;
 #X obj 48 162 mtx_print logarithm;
 #X obj 64 330 mtx_log;

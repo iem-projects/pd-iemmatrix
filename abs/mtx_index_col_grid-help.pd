@@ -9,8 +9,7 @@
 #X obj 242 135 mtx_print B_row;
 #X msg 241 110 matrix 1 2 3 1;
 #X text 43 34 [mtx_index_col_grid];
-#X text 166 69 finds the values to the col grid indices in a given
-matrix.;
+#X text 166 69 finds the values to the col grid indices in a given matrix.;
 #X text 384 165 inletB: col matrix/vector;
 #X text 382 199 outleA: matrix containing the indexed cols;
 #X obj 33 194 mtx_index_col_grid;

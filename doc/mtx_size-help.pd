@@ -3,13 +3,13 @@
 #X obj 196 233 iemmatrix 0.2;
 #X obj 245 259 matrix;
 #X text 115 258 see also help for;
-#X floatatom 151 178 4 0 0 0 - - -;
+#X floatatom 151 178 4 0 0 0 - - - 0;
 #X text 148 68 get the size of a matrix;
 #X obj 151 140 mtx_size;
 #X msg 185 91 3 2;
 #X msg 151 91 7;
 #X obj 151 115 mtx_ones;
-#X floatatom 194 178 4 0 0 0 - - -;
+#X floatatom 194 178 4 0 0 0 - - - 0;
 #X text 192 194 columns;
 #X text 152 195 rows;
 #X obj 150 22 mtx_size;

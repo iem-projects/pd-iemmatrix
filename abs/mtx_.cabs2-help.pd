@@ -2,8 +2,7 @@
 #X text 482 28 part of iemmatrix;
 #X msg 33 172 matrix 1 2 1 2;
 #X msg 49 193 matrix 1 2 0 1;
-#X obj 33 124 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
--1;
+#X obj 33 124 bng 15 250 50 0 empty empty empty 0 -6 0 8 #fcfcfc #000000 #000000;
 #X obj 33 148 t b b b b;
 #X obj 33 216 t a a;
 #X text 441 116 inletA: real part of matrix;

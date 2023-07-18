@@ -11,8 +11,7 @@
 #X obj 92 164 mtx_print;
 #X obj 48 228 print oops;
 #X obj 70 194 mtx_print label;
-#X text 211 116 [mtx_print] will print the matrix in a formatted way
-;
+#X text 211 116 [mtx_print] will print the matrix in a formatted way;
 #X text 216 143 you can give labels \, just like with [print];
 #X connect 6 0 7 0;
 #X connect 7 0 8 0;

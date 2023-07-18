@@ -22,19 +22,13 @@
 #X msg 153 198 bang;
 #X msg 153 248 bang;
 #X obj 153 269 mtx_rand 3 4;
-#X obj 182 348 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
--1;
+#X obj 182 348 bng 15 250 50 0 empty empty empty 0 -6 0 8 #fcfcfc #000000 #000000;
 #X text 199 359 instability detected!;
 #X obj 92 348 mtx_pinverse;
-#X text 45 16 mtx_pinverse:: get the inverse of a matrix (with pivoting)
-;
-#X text 44 49 mtx_pinverse calculates the inverse of a square-matrix.
-For inverting rectangle matrices \, use [mtx_inverse] or [mtx_pseudoinverse]
-;
+#X text 45 16 mtx_pinverse:: get the inverse of a matrix (with pivoting);
+#X text 44 49 mtx_pinverse calculates the inverse of a square-matrix. For inverting rectangle matrices \, use [mtx_inverse] or [mtx_pseudoinverse];
 #X msg 103 140 1 2 3 2 3 4 0 0 0;
-#X text 194 385 due to pivoting \, [mtx_pinverse] will handle badly
-conditioned matrices better than [mtx_inverse] \, however it will also
-detect less (real) instabilities than [mtx_inverse];
+#X text 194 385 due to pivoting \, [mtx_pinverse] will handle badly conditioned matrices better than [mtx_inverse] \, however it will also detect less (real) instabilities than [mtx_inverse];
 #X obj 485 524 mtx_inverse;
 #X obj 485 548 mtx_pseudoinverse;
 #X connect 13 0 17 0;

@@ -9,8 +9,7 @@
 #X obj 33 83 t b b b;
 #X obj 242 135 mtx_print B_row;
 #X text 43 34 [mtx_index_row_grid];
-#X text 166 69 finds the values to the row grid indices in a given
-matrix.;
+#X text 166 69 finds the values to the row grid indices in a given matrix.;
 #X obj 33 194 mtx_index_row_grid;
 #X text 382 199 outleA: matrix containing the indexed rows;
 #X msg 33 112 matrix 3 3 1 1 1 2 2 2 3 3 3;

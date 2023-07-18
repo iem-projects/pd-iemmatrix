@@ -6,8 +6,7 @@
 #X msg 323 112 matrix 1 4 1 2 2 2;
 #X msg 464 112 matrix 1 4 2 3 1 2 3;
 #X text 43 34 [mtx_fill_rowcol];
-#X text 166 69 fillss values into to the given row/col indices of a
-given matrix.;
+#X text 166 69 fillss values into to the given row/col indices of a given matrix.;
 #X text 481 186 inletA: matrix/vector with fill values;
 #X text 479 247 outleA: matrix containing the fill values;
 #X text 481 199 inletB: matrix/vector to be filled;

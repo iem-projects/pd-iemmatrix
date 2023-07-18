@@ -5,8 +5,7 @@
 #X obj 595 43 matrix;
 #X text 465 42 see also help for;
 #X obj 48 100 mtx 3 3;
-#X text 45 42 compute the absolute value of each element of a matrix
-;
+#X text 45 42 compute the absolute value of each element of a matrix;
 #X obj 595 63 abs;
 #X obj 48 164 mtx_abs;
 #X obj 48 192 mtx_print abs;

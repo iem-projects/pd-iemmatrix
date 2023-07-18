@@ -3,8 +3,7 @@
 #X obj 546 17 iemmatrix 0.2;
 #X text 465 42 see also help for;
 #X text 26 12 mtx_gauss:: gauss elimination algorithm;
-#X text 71 62 apply row- & column-transformation to a matrix to shape
-it into an upper-triangle matrix;
+#X text 71 62 apply row- & column-transformation to a matrix to shape it into an upper-triangle matrix;
 #X obj 595 43 matrix;
 #X obj 595 63 abs;
 #X msg 174 146 bang;

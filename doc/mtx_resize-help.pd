@@ -18,8 +18,7 @@
 #X text 284 174 don't resize;
 #X text 209 222 creation: mtx_resize [<rows> [<cols>]];
 #X msg 243 146 0 4;
-#X text 285 145 resize to 4 columns \, leave column-length unchanged
-;
+#X text 285 145 resize to 4 columns \, leave column-length unchanged;
 #X msg 242 199 8;
 #X text 274 199 resize to [8 \, 8];
 #X connect 7 0 9 0;

@@ -4,8 +4,7 @@
 #X obj 33 132 t a a;
 #X obj 33 85 t b b b;
 #X text 43 34 [mtx_fill_col_grid];
-#X text 166 69 fills values into to the col indices of given matrix.
-;
+#X text 166 69 fills values into to the col indices of given matrix.;
 #X text 424 184 inletA: matrix/vector values for fill;
 #X text 424 197 inletB: matrix/vector to fill values into;
 #X text 424 211 inletC: matrix/vector indices for filling;

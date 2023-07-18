@@ -12,7 +12,7 @@
 #X obj 263 167 mtx_eye 4;
 #X msg 263 140 bang;
 #X obj 263 219 mtx_print;
-#X floatatom 332 124 4 0 0 0 - - -;
+#X floatatom 332 124 4 0 0 0 - - - 0;
 #X obj 332 142 t b f;
 #X text 339 193 ==;
 #X obj 17 23 mtx_eq;

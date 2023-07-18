@@ -9,11 +9,9 @@
 #X obj 112 287 mtx_print Y;
 #X obj 28 260 mtx_meshgrid;
 #X text 43 34 [mtx_meshgrid];
-#X text 166 69 creates an [X \, Y] grid on the ticks given by the x
-and y vector;
+#X text 166 69 creates an [X \, Y] grid on the ticks given by the x and y vector;
 #X text 268 138 inlet1 \, 2: row vectors x \, y;
-#X text 268 157 outlet: matrices X \, Y containing all (x \, y) value-pairs
-;
+#X text 268 157 outlet: matrices X \, Y containing all (x \, y) value-pairs;
 #X connect 3 0 8 0;
 #X connect 3 1 1 0;
 #X connect 4 0 3 0;

@@ -5,12 +5,12 @@
 #X obj 166 403 *~ 1.5;
 #X obj 212 356 osc~ 432;
 #X obj 68 471 env~;
-#X floatatom 68 495 4 0 0 0 - - -;
+#X floatatom 68 495 4 0 0 0 - - - 0;
 #X obj 127 470 env~;
-#X floatatom 127 494 4 0 0 0 - - -;
+#X floatatom 127 494 4 0 0 0 - - - 0;
 #X obj 187 470 env~;
-#X floatatom 187 494 4 0 0 0 - - -;
-#X floatatom 286 402 4 0 0 0 - - -;
+#X floatatom 187 494 4 0 0 0 - - - 0;
+#X floatatom 286 402 4 0 0 0 - - - 0;
 #X text 332 413 fade time in [ms];
 #X msg 48 140 bang;
 #X msg 170 140 bang;
@@ -20,19 +20,16 @@
 #X text 173 41 matrices are interpolated a la line~;
 #X text 304 170 matrix-messages to control the gains;
 #X text 303 183 of the matrix~;
-#X text 334 380 the last inlet gets the fade-time between two matrix-messages.
-;
+#X text 334 380 the last inlet gets the fade-time between two matrix-messages.;
 #X obj 98 32 mtx_*~;
 #X obj 69 431 mtx_*~ 4 3 100 .......;
 #X obj 253 471 env~;
-#X floatatom 253 495 4 0 0 0 - - -;
+#X floatatom 253 495 4 0 0 0 - - - 0;
 #X obj 69 301 t a;
 #X obj 70 539 mtx_*~;
-#X text 147 536 creation: "mtx_*~ [<#out> [<#in> [<fade_time>] [<...>]]
-;
+#X text 147 536 creation: "mtx_*~ [<#out> [<#in> [<fade_time>] [<...>]];
 #X text 302 154 the first inlet eats;
-#X text 316 314 the 2nd...one-before-last inlets get the signals to
-be multiplied.;
+#X text 316 314 the 2nd...one-before-last inlets get the signals to be multiplied.;
 #X text 328 487 Output signals;
 #X text 207 68 OUT~^ = A * IN~^;
 #X obj 48 167 mtx_eye 4 3;
@@ -40,13 +37,11 @@ be multiplied.;
 #X obj 190 245 mtx_zeros 4 3;
 #X obj 69 246 mtx_ones 4 3;
 #X msg 699 33 \; pd dsp 1;
-#X text 127 96 or \, with dimensions: OUT~^[1*n] = A[n*m] * IN~^[m*1]
-;
+#X text 127 96 or \, with dimensions: OUT~^[1*n] = A[n*m] * IN~^[m*1];
 #N canvas 34 69 925 425 LEGACY 0;
 #X obj 51 160 sig~;
-#X floatatom 180 166 5 0 0 0 - - -;
-#X text 286 127 this object \, accepted the signals at the first inputs
-\, then the matrix (and finally the fade-time);
+#X floatatom 180 166 5 0 0 0 - - - 0;
+#X text 286 127 this object \, accepted the signals at the first inputs \, then the matrix (and finally the fade-time);
 #X text 295 163 OUT~^[n] = IN~^[m] * B[m*x];
 #X obj 192 307 sig~;
 #X msg 97 303 time 100;
@@ -55,18 +50,12 @@ be multiplied.;
 #X obj 136 138 mtx 2 3;
 #X obj 25 346 matrix_mul_line~ 2 3 100;
 #X obj 235 307 sig~;
-#X text 288 262 this object \, accepted the signals at the inlets \;
-all! messages went to the 1st inlet;
+#X text 288 262 this object \, accepted the signals at the inlets \; all! messages went to the 1st inlet;
 #X obj 25 304 mtx 3 2;
 #X text 297 298 OUT~^[n] = B[n*m] * IN~^[m];
-#X text 288 183 this is a _very_ unusual way to notate signal matrix
-multiplications;
-#X text 290 318 this conforms to the way how signal matrix multiplications
-is usually notated \, however \, we didn't like that the incoming matrix
-had different dimensions than the object ([mtx N M] vs [matrix_mul_line~
-M N]) \; and the 1st inlet was a bit overloaded.;
-#X text 84 18 [mtx_*~] is the successor of 2 similar objects \, which
-we believe to have had some design flaws:;
+#X text 288 183 this is a _very_ unusual way to notate signal matrix multiplications;
+#X text 290 318 this conforms to the way how signal matrix multiplications is usually notated \, however \, we didn't like that the incoming matrix had different dimensions than the object ([mtx N M] vs [matrix_mul_line~ M N]) \; and the 1st inlet was a bit overloaded.;
+#X text 84 18 [mtx_*~] is the successor of 2 similar objects \, which we believe to have had some design flaws:;
 #X connect 0 0 7 0;
 #X connect 1 0 7 3;
 #X connect 4 0 9 0;

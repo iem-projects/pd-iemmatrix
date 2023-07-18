@@ -11,16 +11,11 @@
 #X obj 119 154 mtx_rand 2 3;
 #X text 44 34 [mtx_distance2];
 #X text 482 28 part of iemmatrix;
-#X text 268 138 inletA: a matrix defining <i> vectors of dimension
-<n>;
-#X text 268 158 inletB: a matrix defining <j> vectors of dimension
-<n>;
-#X text 267 179 outlet: distance matrix (i \, j) \, where each element
-Y(i \, j)=(A(i)-B(i)).(A(i)-B(i))=|A(i)-B(i)|^2;
-#X text 166 69 calculate the (square of the) euclidian distance between
-two sets of vectors.;
-#X text 233 274 note: if you want the real-distance (non-squared) \,
-calculate the square-root with [mtx_.^ 0.5];
+#X text 268 138 inletA: a matrix defining <i> vectors of dimension <n>;
+#X text 268 158 inletB: a matrix defining <j> vectors of dimension <n>;
+#X text 267 179 outlet: distance matrix (i \, j) \, where each element Y(i \, j)=(A(i)-B(i)).(A(i)-B(i))=|A(i)-B(i)|^2;
+#X text 166 69 calculate the (square of the) euclidian distance between two sets of vectors.;
+#X text 233 274 note: if you want the real-distance (non-squared) \, calculate the square-root with [mtx_.^ 0.5];
 #X connect 0 0 1 0;
 #X connect 2 0 0 1;
 #X connect 2 1 3 0;

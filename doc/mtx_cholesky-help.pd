@@ -4,8 +4,7 @@
 #X obj 203 351 matrix;
 #X text 73 350 see also help for;
 #X obj 203 371 mtx_gauss;
-#X text 26 12 mtx_cholesky:: decompose a matrix using cholesky's algorithm
-;
+#X text 26 12 mtx_cholesky:: decompose a matrix using cholesky's algorithm;
 #X msg 176 54 bang;
 #X obj 176 98 t a a;
 #X obj 176 75 mtx_eye 5;

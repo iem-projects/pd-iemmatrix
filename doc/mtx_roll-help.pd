@@ -11,9 +11,8 @@
 #X msg 194 120 1 2 3 4 5;
 #X obj 194 142 mtx_diag;
 #X text 190 103 shift columns of a matrix;
-#X floatatom 289 196 4 0 5 1 shift - -;
-#X text 374 182 (0=no-shift \; 1=1-column-right \; -2=2-columns-left
-\; ...);
+#X floatatom 289 196 4 0 5 1 shift - - 0;
+#X text 374 182 (0=no-shift \; 1=1-column-right \; -2=2-columns-left \; ...);
 #X obj 194 192 mtx_roll 1;
 #X connect 6 0 14 0;
 #X connect 6 1 7 0;

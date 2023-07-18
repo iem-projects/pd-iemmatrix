@@ -3,13 +3,9 @@
 #X msg 33 88 bang;
 #X text 482 28 part of iemmatrix;
 #X text 43 34 [mtx_index2rowcol];
-#X text 166 69 calculate the row and column indices w.r.t. the linear
-matrix indices used by the standard objects (e.g. mtx_find \, mtx_index
-\, mtx_fill \, ...);
-#X text 268 138 inletA: matrix/vector containing linear indices of
-a matrix;
-#X text 268 158 inletB: integer describing the number of columns of
-the indexed matrix;
+#X text 166 69 calculate the row and column indices w.r.t. the linear matrix indices used by the standard objects (e.g. mtx_find \, mtx_index \, mtx_fill \, ...);
+#X text 268 138 inletA: matrix/vector containing linear indices of a matrix;
+#X text 268 158 inletB: integer describing the number of columns of the indexed matrix;
 #X text 267 190 outleA: matrix containing row indices;
 #X text 269 209 outletB: matrix containing col indices;
 #X obj 33 242 mtx_index2rowcol;

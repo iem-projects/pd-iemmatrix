@@ -16,12 +16,12 @@
 #X obj 332 142 t b f;
 #X text 349 193 ==;
 #X obj 17 23 mtx_bitand;
-#X obj 101 23 mtx_&&;
-#X obj 392 77 &&;
+#X obj 101 23 mtx_&;
+#X obj 392 77 &;
 #X obj 46 196 mtx_bitand;
-#X obj 145 197 mtx_&&;
+#X obj 145 197 mtx_&;
 #X obj 263 192 mtx_bitand 0;
-#X obj 370 192 mtx_&& 0;
+#X obj 370 192 mtx_& 0;
 #X text 38 247 AND 2 matrices;
 #X text 246 251 AND a matrix with a scalar;
 #X text 9 42 matrix logic: bitwise AND;

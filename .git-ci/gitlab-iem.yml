@@ -34,11 +34,13 @@ variables:
     - .build
   image: registry.git.iem.at/devtools/docker/debiancross:amd64
   before_script:
-    - mkdir -p /etc/apt/sources.list.d/
-    - touch /etc/apt/sources.list
-    - find /etc/apt/sources.list /etc/apt/sources.list.d/ -name "*.list" -type f -exec egrep "^deb " {} ";" | sed -e 's|^deb |deb-src |' > /etc/apt/sources.list.d/${CI_COMMIT_REF_SLUG}.list
-    - apt-get update && apt-get install -y --no-install-recommends automake libtool make puredata-dev puredata-core
-    - apt-get install -y --no-install-recommends libsndfile1-dev libgsl-dev libfftw3-dev
+    - mkdir -p "${IEM_CI_TMPDIR}"
+    - apt-get update && apt-get install -y --no-install-recommends automake libtool make equivs-control
+    - equivs-control "${IEM_CI_TMPDIR}"/builddeps
+    - sed -e "s|^\(Package:\) .*|\1 builddeps-${CI_PROJECT_NAME}|" -e '/^Depends/d' -i "${IEM_CI_TMPDIR}"/builddeps
+    - echo "Depends:"" puredata-dev, puredata-core, libsndfile1-dev, libgsl-dev, libfftw3-dev, ${TARGETDEBARCH:+cross}build-essential${TARGETDEBARCH:+-}${TARGETDEBARCH}" >> "${IEM_CI_TMPDIR}"/builddeps
+    - (cd "${IEM_CI_TMPDIR}/"; equivs-build ${TARGETDEBARCH:+-a ${TARGETDEBARCH}} builddeps)
+    - find  "${IEM_CI_TMPDIR}/" -name "*.deb" -exec dpkg -i {} + || apt-get -f install -y --no-install-recommends)
     - date
 .build:macos: &build_macos
   extends:

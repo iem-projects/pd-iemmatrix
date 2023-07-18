@@ -122,7 +122,7 @@
 #X text 12 25 LICENSE GPL-2+;
 #X text 12 65 INLET_0 matrix;
 #X text 12 5 KEYWORDS control matrix math;
-#X text 12 44 DESCRIPTION calculate sperhical radicals of a matrix of coordinates;
+#X text 12 44 DESCRIPTION calculate spherical radials of a matrix of coordinates;
 #X restore 421 16 pd META;
 #X connect 6 0 7 0;
 #X connect 6 1 8 0;

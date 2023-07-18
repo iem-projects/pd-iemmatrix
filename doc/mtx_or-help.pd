@@ -32,7 +32,7 @@
 #X text 12 25 LICENSE GPL-2+;
 #X text 12 65 INLET_0 matrix;
 #X text 12 5 KEYWORDS control matrix logic;
-#X text 12 44 DESCRIPTION matix logic logical OR;
+#X text 12 44 DESCRIPTION matrix logic logical OR;
 #X restore 381 6 pd META;
 #X connect 4 0 19 1;
 #X connect 5 0 19 0;

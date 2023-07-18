@@ -18,7 +18,7 @@
 #X text 12 25 LICENSE GPL-2+;
 #X text 12 65 INLET_0 matrix;
 #X text 12 5 KEYWORDS control matrix;
-#X text 12 45 DESCRIPTION create an identitiy matrix;
+#X text 12 45 DESCRIPTION create an identity matrix;
 #X restore 431 16 pd META;
 #X connect 5 0 6 0;
 #X connect 7 0 5 0;

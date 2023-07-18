@@ -7,7 +7,7 @@ iemmatrix.;
 #X obj 115 78 inlet matrix1;
 #X obj 264 78 inlet matrix2;
 #X obj 115 209 mtx_.^ 0.5;
-#X text 73 41 calculate the euclidian distance between to sets of vectors
+#X text 73 41 calculate the euclidean distance between to sets of vectors
 ;
 #X text 229 162 for performance reasons this does not calculate the
 square-root;

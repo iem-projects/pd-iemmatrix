@@ -369,7 +369,7 @@
 #X text 12 25 LICENSE GPL-2+;
 #X text 12 65 INLET_0 matrix;
 #X text 12 5 KEYWORDS control matrix;
-#X text 11 43 DESCRIPTION create a row vector with window functions of different specificiations, f 82;
+#X text 11 43 DESCRIPTION create a row vector with window functions of different specifications, f 82;
 #X restore 574 358 pd META;
 #X obj 369 358 declare -lib iemmatrix -lib zexy;
 #X connect 1 0 6 0;

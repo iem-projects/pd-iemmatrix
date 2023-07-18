@@ -14,7 +14,7 @@
 #include "iemmatrix.h"
 
 /*
-  mtx_distance2: gets the euclidian distances (squared) between 2 sets of n-dimensional vectors
+  mtx_distance2: gets the euclidean distances (squared) between 2 sets of n-dimensional vectors
 */
 
 /* -­------------------------------------------------------------- */

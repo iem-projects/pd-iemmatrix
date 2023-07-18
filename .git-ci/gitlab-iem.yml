@@ -38,15 +38,9 @@ variables:
     - if command -v ${HOST_ARCH_GNU}${HOST_ARCH_GNU:+-}objcopy; then export OBJCOPY=${HOST_ARCH_GNU}${HOST_ARCH_GNU:+-}objcopy; fi
     - echo "STRIP ${STRIP}"
     - echo "OBJCOPY ${OBJCOPY}"
-    - base_dir_ci=$(pwd)
-    - cd "${DESTDIR}"
-    - ls -lah; du -sh
-    - |
-      "${base_dir_ci}/.git-ci/split-debug" ${extension:+*.${extension}} *.pd_* *.?_* *.dll *.so || echo "ignoring problems when splitting debug info"
-    - du -sh
-    - find . -type f -not -name "*.pd" -exec  "${base_dir_ci}/.git-ci/split-debug" {} + || echo "ignoring problems when splitting debug info"
-    - du -sh
-    - cd "${base_dir_ci}"
+    - du -sh "${DESTDIR}"
+    - find "${DESTDIR}" -type f -type f -not -name "*.pd" -not -name "*.txt" -not -name "*.la" -exec .git-ci/split-debug" {} + || echo "ignoring problems when splitting debug info"
+    - du -sh "${DESTDIR}"
 
 .build:linux:
   extends:

@@ -76,7 +76,7 @@ variables:
     - echo "PDDIR=${PDDIR}"
     - date
   after_script:
-    - find "${ARTIFACTSDIR}" "(" -name "*.pd_darwin" -or -name "*.so" ")" -exec .git-ci/localdeps.macos.sh {} +
+    - find "${ARTIFACTSDIR}" "(" -name "*.pd_darwin" -or -name "*.d_fat" -or -name "*.so" ")" -exec .git-ci/localdeps.macos.sh {} +
 
 .build:w32:
   extends:
@@ -123,7 +123,7 @@ variables:
     - find "${ARTIFACTSDIR}" -name "*.dll" -exec .git-ci/localdeps.win.sh {} +
 
 ###################################################
-### the actual jobs: (linux,macos,windows)*(release,snapshot)
+### the actual jobs: (linux,macos,windows)*(single,double)
 
 Linux:
   extends:
@@ -133,6 +133,8 @@ Darwin:
   extends:
     - .build:macos
     - .snapshot
+  variables:
+    extension: d_fat
 W32:
   extends:
     - .build:w32

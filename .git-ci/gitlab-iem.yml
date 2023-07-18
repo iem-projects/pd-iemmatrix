@@ -27,7 +27,7 @@ variables:
     - ./configure --enable-fat-binary=x86_64,arm64 ${PDDIR:+--with-pd="${PDDIR}"} ${extension:+--with-extension="${extension}"} ${floatsize:+--with-floatsize="${floatsize}"}
     - make check -j2
     - |
-      make install DESTDIR="$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%:*}" libdir=/
+      make install DESTDIR="$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%%:*}" libdir=/
 
 .build:linux:
   extends:

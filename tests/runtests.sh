@@ -15,7 +15,9 @@ RUNTESTS_TXT=runtests.txt
 RUNTESTS_LOG=runtests.log
 XITCODE=0
 
-ls -1 */*.pd | sed 's/\.pd/;/' > $RUNTESTS_TXT
+for f in */*.pd; do
+  test -e "${f}" && echo "${f%.pd};"
+done | LC_ALL=C sort > $RUNTESTS_TXT
 
 if [ "x${IEMMATRIX}" = "x" ]; then
  IEMMATRIX="-lib ../iemmatrix -path ../abs/"

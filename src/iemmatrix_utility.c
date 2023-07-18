@@ -2,7 +2,7 @@
  *  iemmatrix_utility
  *
  *  objects for manipulating simple matrices
- *  mostly refering to matlab/octave matrix functions
+ *  mostly referring to matlab/octave matrix functions
  *
  * Copyright (c) IOhannes m zmölnig, forum::für::umläute
  * IEM, Graz, Austria
@@ -268,7 +268,7 @@ void matrix_diag(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
   int col=argc;
   argv+=argc-1;
   if (argc<1) {
-    pd_error(x, "matrix: no diagonale present");
+    pd_error(x, "matrix: no diagonal present");
     return;
   }
   adjustsize(x, argc, argc);
@@ -286,7 +286,7 @@ void matrix_diegg(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
   int col=argc;
   argv+=argc-1;
   if (argc<1) {
-    pd_error(x, "matrix: no dieggonale present");
+    pd_error(x, "matrix: no dieggonal present");
     return;
   }
   adjustsize(x, argc, argc);

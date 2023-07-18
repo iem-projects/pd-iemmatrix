@@ -6,7 +6,7 @@
 #X obj 546 17 iemmatrix 0.2;
 #X obj 595 43 matrix;
 #X text 465 42 see also help for;
-#X text 194 36 tranpose matrices;
+#X text 194 36 transpose matrices;
 #X text 198 15 [mtx_transpose];
 #X obj 194 139 mtx_eye;
 #X obj 194 162 t a a;

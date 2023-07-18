@@ -1,7 +1,7 @@
 #N canvas 0 0 493 363 10;
 #X obj 61 66 inlet matrix;
 #X obj 61 255 outlet symmetric;
-#X obj 105 229 outlet assymetric;
+#X obj 105 229 outlet asymmetric;
 #X obj 105 136 mtx_transpose;
 #X obj 61 93 mtx_* 0.5;
 #X obj 61 229 mtx_+;

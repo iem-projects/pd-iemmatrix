@@ -33,11 +33,11 @@
 
 
 #ifdef __WIN32__
-/* MinGW automaticaly defines __WIN32__
+/* MinGW automatically defines __WIN32__
  * other windos compilers might have to define it by hand
  */
 
-/* m_pd.h expexts MSW rather than __WIN32__ */
+/* m_pd.h expects MSW rather than __WIN32__ */
 # ifndef MSW
 #  define MSW
 # endif

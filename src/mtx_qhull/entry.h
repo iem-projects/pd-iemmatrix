@@ -101,7 +101,7 @@ void print_entry(const entry_t e)
     printf("0x%p", e.val.p);
     return;
   default:
-    printf("<unkonwn>");
+    printf("<unknown>");
     return;
   }
 }

@@ -27,8 +27,8 @@
    All-pass z-Transform A(z)=(1+lambda*z)/(z-lambda), lambda ... input parameter
 
 inlet:  is a signal matrix with C rows (number of channels) and N columns (samples)
-outlet: C rows and L colums matrix with current state of the dispersive delay
-   line after computing the N imput samples. It is possible to capture
+outlet: C rows and L columns matrix with current state of the dispersive delay
+   line after computing the N input samples. It is possible to capture
    the list outlet every sample when using a column (sample) vector as input matrix.
 
    creation input parameters are:

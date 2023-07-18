@@ -579,7 +579,7 @@ static void initNewFacets(zhull_t *zh, index_t point_index,
                entry_getIndex(&e),
                getEntry(new_facets,i));
     } else {
-      // registring at new neighbor where there
+      // registering at new neighbor where there
       // is no old one: degenerate 2D case
       for (j=0; j<getLength(horizon_fcts_edges); j++) {
         entry_t e1=getEntry(horizon_fcts_edges,i);

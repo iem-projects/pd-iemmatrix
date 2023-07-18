@@ -22,12 +22,12 @@
 #X obj 87 205 mtx_print pre;
 #X obj 63 245 mtx_print pivot;
 #X text 290 184 the first outlet is the pivot-transformed matrix.;
-#X text 289 210 the other outlets are the 1/0-matrices that have to be pre-multiplied (row-tranform) and post-multiplied (column-tranform) to the original matrix to get the pivot-tranformation. this is useful for de-pivoting.;
+#X text 289 210 the other outlets are the 1/0-matrices that have to be pre-multiplied (row-transform) and post-multiplied (column-tranform) to the original matrix to get the pivot-tranformation. this is useful for de-pivoting.;
 #X obj 63 141 t a a;
 #X obj 103 141 mtx_print original;
 #X msg 175 99 matrix 4 3 1 2 3 4 5 6 7 8 9 10 11 12;
 #X text 194 36 pivot-transform matrices;
-#X text 290 131 this will tranform the columns and rows \, so that the result will have "all" maximum values in the diagonale. the maximum of the matrix will be located at the upper-left corner.;
+#X text 290 131 this will transform the columns and rows \, so that the result will have "all" maximum values in the diagonal. the maximum of the matrix will be located at the upper-left corner.;
 #N canvas 460 154 494 171 META 0;
 #X text 12 135 AUTHOR IOhannes m zmoelnig;
 #X text 12 85 OUTLET_0 matrix;

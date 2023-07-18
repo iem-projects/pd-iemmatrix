@@ -7,7 +7,7 @@
 #X obj 149 151 pack f f f;
 #X obj 148 172 mtx_linspace;
 #X obj 147 194 mtx_exp;
-#X text 125 1 logspace creates a logarithmical scale between start
+#X text 125 1 logspace creates a logarithmic scale between start
 and end point with N points;
 #X obj 147 80 pack \$1 \$2 \$3;
 #X text 385 104 arg1: startval;

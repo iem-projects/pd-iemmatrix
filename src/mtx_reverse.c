@@ -2,7 +2,7 @@
  *  iemmatrix
  *
  *  objects for manipulating simple matrices
- *  mostly refering to matlab/octave matrix functions
+ *  mostly referring to matlab/octave matrix functions
  *
  * Copyright (c) 2005, Franz Zotter
  * Copyright (c) 2006, IOhannes m zmölnig

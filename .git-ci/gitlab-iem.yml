@@ -176,6 +176,45 @@ W64:Pd64:
   variables:
     extension: windows-amd64-64.dll
 
+Linux:i386:
+  image: registry.git.iem.at/devtools/docker/debiancross:i386
+  extends:
+    - Linux
+  variables:
+    extension: l_i386
+Linux:i386:Pd64:
+  extends:
+    - Linux:i386
+    - .double
+  variables:
+    extension: linux-i386-64.so
+
+Linux:armhf:
+  image: registry.git.iem.at/devtools/docker/debiancross:armhf
+  extends:
+    - Linux
+  variables:
+    extension: l_arm
+Linux:armhf:Pd64:
+  extends:
+    - Linux:armhf
+    - .double
+  variables:
+    extension: linux-armv7-64.so
+
+Linux:arm64:
+  image: registry.git.iem.at/devtools/docker/debiancross:arm64
+  extends:
+    - Linux
+  variables:
+    extension: l_arm64
+Linux:arm64:Pd64:
+  extends:
+    - Linux:arm64
+    - .double
+  variables:
+    extension: linux-arm64-64.so
+
 
 deken:
   stage: deploy

@@ -44,6 +44,8 @@ variables:
     - |
       "${base_dir_ci}/.git-ci/split-debug" ${extension:+*.${extension}} *.pd_* *.?_* *.dll *.so || echo "ignoring problems when splitting debug info"
     - du -sh
+    - find . -type f -not -name "*.pd" -exec  "${base_dir_ci}/.git-ci/split-debug" {} + || echo "ignoring problems when splitting debug info"
+    - du -sh
     - cd "${base_dir_ci}"
 
 .build:linux:

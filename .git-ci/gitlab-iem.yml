@@ -39,7 +39,7 @@ variables:
     - echo "STRIP ${STRIP}"
     - echo "OBJCOPY ${OBJCOPY}"
     - du -sh "${DESTDIR}"
-    - find "${DESTDIR}" -type f -type f -not -name "*.pd" -not -name "*.txt" -not -name "*.la" -exec .git-ci/split-debug" {} + || echo "ignoring problems when splitting debug info"
+    - find "${DESTDIR}" -type f -type f -not -name "*.pd" -not -name "*.txt" -not -name "*.la" -exec .git-ci/split-debug {} + || echo "ignoring problems when splitting debug info"
     - du -sh "${DESTDIR}"
 
 .build:linux:

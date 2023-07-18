@@ -1,6 +1,6 @@
 #N canvas 136 41 544 373 10;
 #X text 276 28 updated for;
-#X obj 364 28 iemmatrix 0.2;
+#X obj 354 28 iemmatrix 0.2;
 #X obj 413 54 matrix;
 #X text 283 53 see also help for;
 #X obj 413 96 mtx_col;
@@ -18,6 +18,15 @@
 #X text 133 242 creation: mtx_row [<row> <col> [<posR>]];
 #X text 55 129 set matrix rows;
 #X obj 413 76 mtx_element;
+#N canvas 460 154 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 44 DESCRIPTION set rows of a matrix;
+#X text 11 5 KEYWORDS control matrix;
+#X restore 451 28 pd META;
 #X connect 8 0 10 0;
 #X connect 9 0 8 0;
 #X connect 10 0 7 0;

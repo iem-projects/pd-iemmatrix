@@ -15,6 +15,15 @@
 #X obj 262 151 mtx_prod;
 #X text 262 107 can also be used for multiplying up lists;
 #X msg 48 80 0 1 -2 -3 -4 5 -6 7 -8;
+#N canvas 460 154 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 5 KEYWORDS control matrix math;
+#X text 12 44 DESCRIPTION compute the column-wise product of a matrix;
+#X restore 611 16 pd META;
 #X connect 4 0 5 0;
 #X connect 5 0 12 0;
 #X connect 5 1 6 0;

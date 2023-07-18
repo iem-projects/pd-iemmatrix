@@ -13,6 +13,16 @@
 #X obj 176 130 mtx_print;
 #X text 133 67 get min/max of a matrix;
 #X obj 136 152 mtx_minmax;
+#N canvas 460 154 494 171 META 0;
+#X text 12 125 AUTHOR IOhannes m zmoelnig;
+#X text 12 145 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 44 DESCRIPTION get minimum and maximum value of a matrix;
+#X text 12 5 KEYWORDS control matrix statistics;
+#X text 12 85 OUTLET_0 float;
+#X text 12 105 OUTLET_1 float;
+#X restore 421 26 pd META;
 #X connect 4 0 9 0;
 #X connect 9 0 10 0;
 #X connect 10 0 13 0;

@@ -24,6 +24,15 @@
 #X text 308 201 illegal too: too many elements are given;
 #X obj 86 267 t a a;
 #X obj 126 267 print fixed;
+#N canvas 403 254 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 5 KEYWORDS control matrix;
+#X text 12 45 DESCRIPTION check (and fix) a matrix for validity;
+#X restore 771 16 pd META;
 #X connect 7 0 23 0;
 #X connect 9 0 7 0;
 #X connect 10 0 16 0;

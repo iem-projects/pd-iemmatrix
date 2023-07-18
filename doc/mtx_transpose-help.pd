@@ -12,6 +12,15 @@
 #X obj 194 162 t a a;
 #X obj 236 163 mtx_print org;
 #X obj 194 220 mtx_print transposed;
+#N canvas 460 154 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 5 KEYWORDS control matrix;
+#X text 12 44 DESCRIPTION transpose a matrix;
+#X restore 591 76 pd META;
 #X connect 0 0 12 0;
 #X connect 1 0 9 0;
 #X connect 9 0 10 0;

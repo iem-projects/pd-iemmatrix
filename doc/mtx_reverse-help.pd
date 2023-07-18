@@ -24,6 +24,15 @@
 #X text 82 310 You can also set the mode via the argument to the object:;
 #X obj 491 310 mtx_reverse row;
 #X text 90 15 [mtx_reverse];
+#N canvas 460 154 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 5 KEYWORDS control matrix;
+#X text 12 44 DESCRIPTION reverse order of rows/columns/elements of a matrix, f 68;
+#X restore 632 17 pd META;
 #X connect 4 0 6 0;
 #X connect 4 1 5 0;
 #X connect 6 0 10 0;

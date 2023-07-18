@@ -27,6 +27,15 @@
 #X text 391 354 106dB(pd)~=double gain (==2);
 #X obj 595 43 matrix;
 #X text 465 42 see also help for;
+#N canvas 460 154 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 5 KEYWORDS control matrix;
+#X text 12 45 DESCRIPTION calculate linear value from dB for each matrix element, f 79;
+#X restore 601 126 pd META;
 #X connect 3 0 14 0;
 #X connect 4 0 6 0;
 #X connect 5 0 4 0;

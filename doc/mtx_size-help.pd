@@ -14,6 +14,15 @@
 #X text 152 195 rows;
 #X obj 150 22 mtx_size;
 #X text 223 24 get the size of a matrix;
+#N canvas 460 154 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 44 DESCRIPTION get size of a matrix;
+#X text 12 5 KEYWORDS control matrix;
+#X restore 401 16 pd META;
 #X connect 6 0 4 0;
 #X connect 6 1 10 0;
 #X connect 7 0 9 0;

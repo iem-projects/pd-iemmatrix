@@ -29,6 +29,15 @@
 #X obj 342 498 mtx_print repeated-orig;
 #X obj 257 477 t a a;
 #X text 251 324 this is e.g. useful when repeating values via sample+hold;
+#N canvas 1058 313 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 5 KEYWORDS control matrix;
+#X text 12 45 DESCRIPTION matrix colon operator;
+#X restore 591 76 pd META;
 #X connect 4 0 16 0;
 #X connect 10 0 12 0;
 #X connect 10 1 11 0;

@@ -17,6 +17,15 @@
 #X msg 173 174 matrix 2 3 1 1 1 1 1 1 1;
 #X msg 64 176 element 4 4 1;
 #X obj 63 196 matrix 5 5;
+#N canvas 460 154 337 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 5 KEYWORDS control matrix math;
+#X text 12 45 DESCRIPTION 2d matrix convolution;
+#X restore 591 76 pd META;
 #X connect 7 0 8 0;
 #X connect 8 0 17 0;
 #X connect 8 1 16 0;

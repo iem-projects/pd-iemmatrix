@@ -1,7 +1,7 @@
 #N canvas 25 323 504 298 10;
 #X text 51 7 fill a matrix with random values;
-#X text 295 20 updated for;
-#X obj 383 20 iemmatrix 0.2;
+#X text 285 20 updated for;
+#X obj 363 20 iemmatrix 0.2;
 #X obj 432 46 matrix;
 #X text 302 45 see also help for;
 #X obj 434 72 random;
@@ -15,6 +15,15 @@
 #X text 51 219 get a matrix containing;
 #X text 51 232 random elements (0..1];
 #X text 177 130 set seed;
+#N canvas 460 154 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 5 KEYWORDS control matrix;
+#X text 12 44 DESCRIPTION fill a matrix with random values;
+#X restore 451 19 pd META;
 #X connect 6 0 7 0;
 #X connect 8 0 6 0;
 #X connect 9 0 8 0;

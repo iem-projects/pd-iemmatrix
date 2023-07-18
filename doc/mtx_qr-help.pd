@@ -9,6 +9,15 @@
 #X obj 93 298 mtx_print Q;
 #X text 353 153 A = Q * R;
 #X text 64 24 [mtx_qr] qr decomposition using gsl;
+#N canvas 460 154 494 171 META 0;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 5 KEYWORDS control matrix math;
+#X text 12 44 DESCRIPTION calculate QR decomposition of a matrix;
+#X text 12 105 AUTHOR Franz Zotter;
+#X restore 571 16 pd META;
 #X connect 0 0 7 0;
 #X connect 0 1 6 0;
 #X connect 1 0 2 0;

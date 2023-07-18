@@ -1,4 +1,4 @@
-#N canvas 224 247 450 300 10;
+#N canvas 224 247 468 316 10;
 #X text 255 30 updated for;
 #X obj 343 30 iemmatrix 0.2;
 #X obj 392 56 matrix;
@@ -25,6 +25,15 @@
 #X text 38 247 AND 2 matrices;
 #X text 246 251 AND a matrix with a scalar;
 #X text 9 42 matrix logic: bitwise AND;
+#N canvas 460 154 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 message;
+#X text 12 5 KEYWORDS control matrix logic;
+#X text 12 45 DESCRIPTION matrix logic bitwise AND;
+#X restore 416 295 pd META;
 #X connect 4 0 19 1;
 #X connect 5 0 19 0;
 #X connect 6 0 5 0;

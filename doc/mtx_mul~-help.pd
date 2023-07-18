@@ -1,4 +1,4 @@
-#N canvas 48 0 889 615 12;
+#N canvas 893 308 889 615 12;
 #X obj 116 339 osc~ 100;
 #X obj 116 360 *~ 0.2;
 #X obj 166 381 osc~ 1000;
@@ -65,6 +65,16 @@
 #X connect 10 0 9 1;
 #X connect 12 0 9 0;
 #X restore 231 585 pd LEGACY;
+#N canvas 468 154 486 171 META 0;
+#X text 12 135 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 116 AUTHOR Franz Zotter;
+#X text 11 4 KEYWORDS signal matrix;
+#X text 11 43 DESCRIPTION multiply signals with a matrix;
+#X text 12 65 INLET_0 matrix;
+#X text 12 82 INLET_n signal;
+#X text 12 97 OUTLET_m signal;
+#X restore 521 586 pd META;
 #X connect 0 0 1 0;
 #X connect 1 0 23 1;
 #X connect 2 0 3 0;

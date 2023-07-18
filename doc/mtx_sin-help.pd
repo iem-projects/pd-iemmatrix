@@ -1,6 +1,6 @@
 #N canvas 128 118 680 254 10;
 #X text 458 17 updated for;
-#X obj 546 17 iemmatrix 0.2;
+#X obj 536 17 iemmatrix 0.2;
 #X obj 595 43 matrix;
 #X text 465 42 see also help for;
 #X obj 48 131 t a a;
@@ -12,6 +12,15 @@
 #X obj 48 192 mtx_print sin;
 #X obj 48 164 mtx_sin;
 #X obj 595 63 sin;
+#N canvas 460 154 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 5 KEYWORDS control matrix math;
+#X text 11 44 DESCRIPTION calculate sine of each element of a matrix;
+#X restore 631 16 pd META;
 #X connect 4 0 11 0;
 #X connect 4 1 5 0;
 #X connect 6 0 4 0;

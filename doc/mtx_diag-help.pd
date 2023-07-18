@@ -1,4 +1,4 @@
-#N canvas 61 0 491 290 10;
+#N canvas 61 0 621 290 10;
 #X text 285 23 updated for;
 #X obj 373 23 iemmatrix 0.2;
 #X obj 422 49 matrix;
@@ -18,6 +18,15 @@
 #X obj 347 159 mtx_print org;
 #X text 294 258 diagonal of the matrix;
 #X text 276 88 get the diagonal of a matrix;
+#N canvas 460 154 494 171 META 1;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 5 KEYWORDS control matrix;
+#X text 12 45 DESCRIPTION create a diagonal matrix;
+#X restore 461 22 pd META;
 #X connect 5 0 9 0;
 #X connect 7 0 9 0;
 #X connect 9 0 4 0;

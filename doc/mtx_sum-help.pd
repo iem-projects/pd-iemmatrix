@@ -15,6 +15,15 @@
 #X floatatom 262 178 5 0 0 0 - - - 0;
 #X obj 48 186 print sum;
 #X text 262 107 can also be used for summing up lists;
+#N canvas 460 154 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 11 44 DESCRIPTION column-wise sum of a matrix;
+#X text 12 85 OUTLET_0 list;
+#X text 11 4 KEYWORDS control matrix math;
+#X restore 601 16 pd META;
 #X connect 4 0 5 0;
 #X connect 5 0 7 0;
 #X connect 5 1 8 0;

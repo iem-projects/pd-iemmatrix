@@ -31,6 +31,15 @@
 #X obj 248 258 mtx_cumsum row -1;
 #X obj 310 285 mtx_print cumsum-col-reverse;
 #X text 18 63 you can calculate numerical integrals or ascending sequences of numbers with cumsum \; you can also do this into the reverse direction;
+#N canvas 460 154 494 171 META 0;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 5 KEYWORDS control matrix math;
+#X text 12 45 DESCRIPTION cumulative sum of a matrix;
+#X text 12 105 AUTHOR Franz Zotter;
+#X restore 591 76 pd META;
 #X connect 4 0 28 0;
 #X connect 4 1 17 0;
 #X connect 5 0 11 0;

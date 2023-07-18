@@ -16,6 +16,15 @@
 #X msg 264 144 bang;
 #X obj 174 270 mtx_gauss;
 #X obj 174 327 mtx_print gauss;
+#N canvas 460 154 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 45 DESCRIPTION matrix gauss eleminitation algorithm;
+#X text 12 4 KEYWORDS control matrix math;
+#X restore 651 16 pd META;
 #X connect 7 0 11 0;
 #X connect 8 0 15 0;
 #X connect 8 1 13 0;

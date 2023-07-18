@@ -22,6 +22,15 @@
 #X text 425 42 see also help for;
 #X text 45 42 compute the exponentials of matrix elements;
 #X text 188 7 exponentials of matrix elements;
+#N canvas 460 154 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 5 KEYWORDS control matrix math;
+#X text 12 45 DESCRIPTION compute the exponentials of matrix elements;
+#X restore 609 17 pd META;
 #X connect 0 0 3 0;
 #X connect 2 0 7 0;
 #X connect 3 0 2 0;

@@ -15,6 +15,15 @@
 #X obj 176 178 mtx_cholesky;
 #X msg 53 53 bang;
 #X obj 53 74 mtx_diag 1 2 3 5;
+#N canvas 460 154 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 5 KEYWORDS control matrix math;
+#X text 11 45 DESCRIPTION decompose a matrix using cholesky's algorithm;
+#X restore 431 16 pd META;
 #X connect 6 0 8 0;
 #X connect 7 0 13 0;
 #X connect 7 1 11 0;

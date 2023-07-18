@@ -23,6 +23,15 @@
 #X text 356 389 [iemmatrix];
 #X text 79 24 reading multichannel data from soundfile;
 #X obj 200 239 mtx_sndfileread;
+#N canvas 460 154 494 171 META 0;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 105 AUTHOR Franz Zotter;
+#X text 12 44 DESCRIPTION read multichannel data from a soundfile into a matrix, f 70;
+#X text 12 5 KEYWORDS control matrix;
+#X restore 531 16 pd META;
 #X connect 0 0 23 0;
 #X connect 1 0 0 0;
 #X connect 2 0 1 0;

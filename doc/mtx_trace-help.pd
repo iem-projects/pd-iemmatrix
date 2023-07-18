@@ -11,6 +11,15 @@
 #X obj 497 90 matrix;
 #X text 367 89 see also help for;
 #X obj 498 114 mtx_diag;
+#N canvas 460 154 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 5 KEYWORDS control matrix math;
+#X text 12 44 DESCRIPTION get the trace of a matrix (sum of diagonal elements);
+#X restore 551 16 pd META;
 #X connect 3 0 5 0;
 #X connect 4 0 3 0;
 #X connect 5 0 6 0;

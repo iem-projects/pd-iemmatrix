@@ -11,6 +11,15 @@
 #X msg 119 150 10;
 #X text 79 246 identity matrix;
 #X text 129 20 [mtx_eye];
+#N canvas 460 154 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 5 KEYWORDS control matrix;
+#X text 12 45 DESCRIPTION create an identitiy matrix;
+#X restore 431 16 pd META;
 #X connect 5 0 6 0;
 #X connect 7 0 5 0;
 #X connect 8 0 5 0;

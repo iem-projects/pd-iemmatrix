@@ -1,4 +1,4 @@
-#N canvas 482 188 717 423 12;
+#N canvas 348 184 717 423 12;
 #X obj 93 216 mtx_svd;
 #X obj 93 108 mtx_rand;
 #X obj 309 275 mtx_transpose;
@@ -12,6 +12,17 @@
 #X obj 309 298 mtx_print V^T;
 #X obj 169 155 mtx_print A;
 #X msg 93 85 4 3;
+#N canvas 460 154 494 171 META 0;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 145 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 44 DESCRIPTION singular value decomposition of a matrix;
+#X text 11 5 KEYWORDS control matrix math;
+#X text 12 125 AUTHOR Franz Zotter;
+#X text 12 95 OUTLET_1 list;
+#X text 12 105 OUTLET_2 matrix;
+#X restore 501 16 pd META;
 #X connect 0 0 8 0;
 #X connect 0 1 3 0;
 #X connect 0 2 2 0;

@@ -29,6 +29,15 @@
 #X obj 153 269 mtx_rand 3 4;
 #X obj 181 358 bng 15 250 50 0 empty empty empty 0 -6 0 8 #fcfcfc #000000 #000000;
 #X text 199 359 instability detected!;
+#N canvas 543 408 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 11 4 KEYWORDS control matrix math;
+#X text 12 44 DESCRIPTION calculate the inverse (or pseudo-inverse) of a matrix, f 72;
+#X restore 541 16 pd META;
 #X connect 16 0 21 0;
 #X connect 16 1 28 0;
 #X connect 17 0 22 0;

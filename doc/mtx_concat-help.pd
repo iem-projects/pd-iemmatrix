@@ -43,6 +43,15 @@
 #X obj 17 360 mtx_ones 2 2;
 #X obj 128 360 mtx_zeros 2 2;
 #X text 8 60 you can concatenate 2 matrices either row-wise or column-wise \; if you concatenate them in "column"-mode (default) \, the 2 matrices must have the same number of columns and vice versa in "row"-mode.;
+#N canvas 460 154 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 5 KEYWORDS control matrix;
+#X text 12 45 DESCRIPTION concatenate two matrices into a new matrix;
+#X restore 591 76 pd META;
 #X connect 4 0 18 0;
 #X connect 4 1 15 0;
 #X connect 5 0 14 0;

@@ -12,6 +12,15 @@
 #X obj 595 63 atan;
 #X text 136 10 arc tangent value of matrix elements;
 #X text 45 42 compute the arc tangent of each element of a matrix;
+#N canvas 460 154 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 5 KEYWORDS control matrix;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 message;
+#X text 12 45 DESCRIPTION calculate arctangent (atan) of matrix elements;
+#X restore 591 206 pd META;
 #X connect 4 0 6 0;
 #X connect 6 0 9 0;
 #X connect 6 1 7 0;

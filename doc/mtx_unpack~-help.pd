@@ -1,4 +1,4 @@
-#N canvas 682 0 450 300 12;
+#N canvas 423 17 450 300 12;
 #X msg 310 164 \; pd dsp 1;
 #X msg 309 202 \; pd dsp 0;
 #X obj 292 114 mtx_print;
@@ -18,6 +18,15 @@
 #X obj 19 96 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000;
 #X obj 126 115 mtx_ones;
 #X msg 126 93 3 8;
+#N canvas 460 154 494 171 META 0;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 106 AUTHOR Franz Zotter;
+#X text 11 43 DESCRIPTION unpack a matrix into signal vectors;
+#X text 12 85 OUTLET_n signal;
+#X text 12 65 INLET_0 matrix;
+#X text 12 5 KEYWORDS signal matrix;
+#X restore 381 6 pd META;
 #X connect 7 0 15 0;
 #X connect 7 1 14 0;
 #X connect 7 2 13 0;

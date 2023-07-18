@@ -1,6 +1,6 @@
-#N canvas 580 295 687 471 10;
+#N canvas 228 145 687 471 10;
 #X text 458 17 updated for;
-#X obj 546 17 iemmatrix 0.2;
+#X obj 536 17 iemmatrix 0.2;
 #X obj 181 90 mtx_eye;
 #X obj 64 258 mtx_rand 4 2;
 #X msg 64 233 bang;
@@ -28,6 +28,15 @@
 #X obj 64 380 mtx_powtodb;
 #X obj 599 71 mtx_dbtopow;
 #X obj 599 91 powtodb;
+#N canvas 460 154 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 44 DESCRIPTION convert a power value to dB for each element of a matrix, f 73;
+#X text 12 5 KEYWORDS control matrix;
+#X restore 631 16 pd META;
 #X connect 2 0 9 0;
 #X connect 3 0 18 0;
 #X connect 4 0 3 0;

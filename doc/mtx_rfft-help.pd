@@ -1,4 +1,4 @@
-#N canvas 547 150 672 515 10;
+#N canvas 316 110 672 515 10;
 #X text 457 17 updated for;
 #X obj 545 17 iemmatrix 0.2;
 #X obj 594 43 matrix;
@@ -30,6 +30,15 @@
 #X obj 121 353 mtx_+ 0.5;
 #X obj 49 373 mtx_+ 0.5;
 #X obj 140 231 t b f;
+#N canvas 450 271 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 5 KEYWORDS control matrix math;
+#X text 12 44 DESCRIPTION real-valued FFT for each matrix row;
+#X restore 591 76 pd META;
 #X connect 4 0 8 0;
 #X connect 7 0 10 0;
 #X connect 8 0 9 0;

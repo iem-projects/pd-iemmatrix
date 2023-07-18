@@ -1,4 +1,5 @@
-#N canvas 553 163 841 379 10;
+#N canvas 553 163 646 379 10;
+#X declare -lib iemmatrix;
 #X text 482 28 part of iemmatrix;
 #X text 43 34 [mtx_ispeak];
 #X text 166 69 searches for peaks in the rows of a matrix. peak locations are set to 1 \, others to 0;
@@ -60,6 +61,16 @@
 #X obj 535 325 mtx_ispeakb;
 #X text 304 306 (note: bad performance at borders and larger peaks);
 #X text 308 326 for improved version see also:;
+#N canvas 356 452 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 5 KEYWORDS control matrix;
+#X text 11 44 DESCRIPTION search for peaks in the rows of a matrix, f 67;
+#X restore 584 358 pd META;
+#X obj 439 358 declare -lib iemmatrix;
 #X connect 3 0 4 0;
 #X connect 7 0 9 0;
 #X connect 8 0 13 0;

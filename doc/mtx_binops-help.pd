@@ -97,6 +97,16 @@
 #X obj 763 575 mtx_.^;
 #X text 546 638 matrix-elements^f;
 #X text 720 636 elementA(i \, j)^elementB(i \, j);
+#N canvas 899 135 537 191 META 1;
+#X text 12 140 AUTHOR IOhannes m zmoelnig;
+#X text 12 5 KEYWORDS control matrix;
+#X text 12 120 OUTLET_0 matrix;
+#X text 12 160 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 11 86 INLET_0 matrix;
+#X text 11 102 INLET_1 matrix;
+#X text 12 42 DESCRIPTION binary matrix arithmetic: addition \, subtraction \, multiplication \, division \, element-wise multipliciation \, element-wise division \, elementwise power;
+#X restore 901 26 pd META;
 #X connect 0 0 18 0;
 #X connect 2 0 7 0;
 #X connect 4 0 2 1;

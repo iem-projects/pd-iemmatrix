@@ -21,6 +21,15 @@
 #X text 285 145 resize to 4 columns \, leave column-length unchanged;
 #X msg 242 199 8;
 #X text 274 199 resize to [8 \, 8];
+#N canvas 460 154 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 5 KEYWORDS control matrix;
+#X text 12 44 DESCRIPTION resize a matrix;
+#X restore 781 16 pd META;
 #X connect 7 0 9 0;
 #X connect 8 0 7 0;
 #X connect 9 0 6 0;

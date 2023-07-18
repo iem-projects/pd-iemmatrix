@@ -1,6 +1,6 @@
 #N canvas 65 0 766 595 10;
-#X text 525 20 updated for;
-#X obj 613 20 iemmatrix 0.2;
+#X text 505 20 updated for;
+#X obj 593 20 iemmatrix 0.2;
 #X obj 662 46 matrix;
 #X text 532 45 see also help for;
 #X obj 17 23 mtx_mul;
@@ -58,6 +58,15 @@
 #X floatatom 403 403 4 0 0 0 - - - 0;
 #X text 8 382 matrix arithmetic: division;
 #X obj 14 364 mtx_./;
+#N canvas 460 154 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 5 KEYWORDS control matrix math;
+#X text 12 44 DESCRIPTION matrix multiplication;
+#X restore 701 18 pd META;
 #X connect 9 0 37 0;
 #X connect 11 0 13 0;
 #X connect 12 0 38 0;

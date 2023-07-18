@@ -28,6 +28,17 @@
 #X msg 175 99 matrix 4 3 1 2 3 4 5 6 7 8 9 10 11 12;
 #X text 194 36 pivot-transform matrices;
 #X text 290 131 this will tranform the columns and rows \, so that the result will have "all" maximum values in the diagonale. the maximum of the matrix will be located at the upper-left corner.;
+#N canvas 460 154 494 171 META 0;
+#X text 12 135 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 155 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 5 KEYWORDS control matrix math;
+#X text 12 44 DESCRIPTION pivot transform a matrix;
+#X text 12 95 OUTLET_1 matrix;
+#X text 12 105 OUTLET_2 matrix;
+#X restore 701 16 pd META;
 #X connect 6 0 11 0;
 #X connect 6 1 10 0;
 #X connect 6 2 9 0;

@@ -19,6 +19,15 @@
 #X text 313 263 the keyword 'end' is allowed;
 #X text 347 355 see also:;
 #X obj 347 374 mtx_fill;
+#N canvas 447 371 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 85 OUTLET_0 matrix;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 5 KEYWORDS control matrix;
+#X text 12 44 DESCRIPTION slice parts out of a matrix;
+#X restore 591 66 pd META;
 #X connect 7 0 13 0;
 #X connect 8 0 9 0;
 #X connect 9 0 10 0;

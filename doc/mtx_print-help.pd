@@ -13,6 +13,14 @@
 #X obj 70 194 mtx_print label;
 #X text 211 116 [mtx_print] will print the matrix in a formatted way;
 #X text 216 143 you can give labels \, just like with [print];
+#N canvas 460 154 494 171 META 0;
+#X text 12 105 AUTHOR IOhannes m zmoelnig;
+#X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 65 INLET_0 matrix;
+#X text 12 44 DESCRIPTION print a matrix to the console;
+#X text 12 5 KEYWORDS control matrix;
+#X restore 631 16 pd META;
 #X connect 6 0 7 0;
 #X connect 7 0 8 0;
 #X connect 8 0 10 0;

@@ -16,6 +16,15 @@
 #X text 267 179 outlet: distance matrix (i \, j) \, where each element Y(i \, j)=(A(i)-B(i)).(A(i)-B(i))=|A(i)-B(i)|^2;
 #X text 166 69 calculate the (square of the) euclidian distance between two sets of vectors.;
 #X text 233 274 note: if you want the real-distance (non-squared) \, calculate the square-root with [mtx_.^ 0.5];
+#N canvas 460 154 564 171 META 0;
+#X text 12 115 AUTHOR IOhannes m zmoelnig;
+#X text 12 95 OUTLET_0 matrix;
+#X text 12 135 HELP_PATCH_AUTHORS IOhannes m zmölnig;
+#X text 12 25 LICENSE GPL-2+;
+#X text 12 75 INLET_0 matrix;
+#X text 13 5 KEYWORDS control matrix math;
+#X text 12 45 DESCRIPTION calculate the matrix of squared euclidian distances between a set of vectors, f 91;
+#X restore 551 326 pd META;
 #X connect 0 0 1 0;
 #X connect 2 0 0 1;
 #X connect 2 1 3 0;

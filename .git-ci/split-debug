@@ -50,8 +50,10 @@ list_files() {
   done | sort -u
 }
 
-
-list_files "$@" | while read f; do
+echo "stripping $@"
+for pattern in "$@"; do
+ list_files ${pattern}
+done | sort -u | while read f; do
   echo "splitting debug information for $f"
   strip_and_attach "$f"
 done

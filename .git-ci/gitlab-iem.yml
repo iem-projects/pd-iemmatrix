@@ -40,7 +40,7 @@ variables:
     - sed -e "s|^\(Package:\) .*|\1 builddeps-${CI_PROJECT_NAME}|" -e '/^Depends/d' -i "${IEM_CI_TMPDIR}"/builddeps
     - echo "Depends:"" puredata-dev, puredata-core, libsndfile1-dev, libgsl-dev, libfftw3-dev, ${TARGETDEBARCH:+cross}build-essential${TARGETDEBARCH:+-}${TARGETDEBARCH}" >> "${IEM_CI_TMPDIR}"/builddeps
     - (cd "${IEM_CI_TMPDIR}/"; equivs-build ${TARGETDEBARCH:+-a ${TARGETDEBARCH}} builddeps)
-    - find  "${IEM_CI_TMPDIR}/" -name "*.deb" -exec dpkg -i {} + || apt-get -f install -y --no-install-recommends)
+    - find  "${IEM_CI_TMPDIR}/" -name "*.deb" -exec dpkg -i {} + || apt-get -f install -y --no-install-recommends
     - date
 .build:macos: &build_macos
   extends:

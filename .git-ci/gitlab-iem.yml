@@ -19,17 +19,32 @@ variables:
 .build:
   stage: build
   script:
+    - |
+      DESTDIR="$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%%:*}"
     - echo "PDDIR ${PDDIR}"
     - echo "PD ${PD}"
     - echo "extension ${extension}"
     - echo "floatsize ${floatsize}"
     - echo "HOST_ARCH_GNU ${HOST_ARCH_GNU}"
     - echo "fatarchs ${fatarchs}"
+    - echo "DESTDIR ${DESTDIR}"
     - ./autogen.sh
     - ./configure ${fatarchs:+--enable-fat-binary=${fatarchs}} ${HOST_ARCH_GNU:+--host="${HOST_ARCH_GNU}"} ${PDDIR:+--with-pd="${PDDIR}"} ${extension:+--with-extension="${extension}"} ${floatsize:+--with-floatsize="${floatsize}"}
     - make check -j2
     - |
-      make install DESTDIR="$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%%:*}" libdir=/
+      make install DESTDIR="${DESTDIR}" libdir=/
+    # finally split the binaries from the debug information
+    - if command -v ${HOST_ARCH_GNU}${HOST_ARCH_GNU:+-}strip; then export STRIP=${HOST_ARCH_GNU}${HOST_ARCH_GNU:+-}strip; fi
+    - if command -v ${HOST_ARCH_GNU}${HOST_ARCH_GNU:+-}objcopy; then export OBJCOPY=${HOST_ARCH_GNU}${HOST_ARCH_GNU:+-}objcopy; fi
+    - echo "STRIP ${STRIP}"
+    - echo "OBJCOPY ${OBJCOPY}"
+    - base_dir_ci=$(pwd)
+    - cd "${DESTDIR}"
+    - du -sh
+    - |
+      "${base_dir_ci}/.git-ci/split-debug" ${extension:+*.${extension}} *.pd_* *.?_* *.dll *.so || echo "ignoring problems when splitting debug info"
+    - du -sh
+    - cd "${base_dir_ci}"
 
 .build:linux:
   extends:
@@ -230,6 +245,8 @@ deken:
     - chmod -R go-w artifacts/
 # remove ltlib leftovers
     - find artifacts/ "(" -name "*.la" -or -name "*.a" ")" -delete
+# remove debug information
+    - find ${ARTIFACTSDIR}/ -name "*.debug" -delete
 # create a source package
     - git archive --format=tar --prefix=artifacts/src/${CI_PROJECT_NAME}/ HEAD | tar xf -
 # create deken packages

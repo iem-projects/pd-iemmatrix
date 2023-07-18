@@ -1,15 +1,13 @@
 #!/bin/sh
 
-if [ "x${PD}" = "x" ]
-then
- PD=pd
-fi
 
-if [ "x${PDARGS}" = "x" ]
-then
- PDARGS="-noprefs -nosound -nrt"
-fi
+: ${PD:=pd}
+: ${PDARGS:=-noprefs -nosound -nrt}
 
+: ${libdir:=..}
+: ${absdir:=../abs}
+
+: ${IEMMATRIX:=-lib "${libdir}/iemmatrix" -path "${absdir}"}
 
 RUNTESTS_TXT=runtests.txt
 RUNTESTS_LOG=runtests.log
@@ -18,10 +16,6 @@ XITCODE=0
 for f in */*.pd; do
   test -e "${f}" && echo "${f%.pd};"
 done | LC_ALL=C sort > $RUNTESTS_TXT
-
-if [ "x${IEMMATRIX}" = "x" ]; then
- IEMMATRIX="-lib ../iemmatrix -path ../abs/"
-fi
 
 run_nogui() {
  ${PD} ${PDARGS} $IEMMATRIX -nogui runtests_nogui.pd > ${RUNTESTS_LOG} 2>&1

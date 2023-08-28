@@ -140,22 +140,22 @@ variables:
 ###################################################
 ### the actual jobs: (linux,macos,windows)*(single,double)
 
-Linux:
+linux-amd64-32:
   extends:
     - .build:linux
     - .snapshot
-Darwin:
+darwin-fat-32:
   extends:
     - .build:macos
     - .snapshot
   variables:
     extension: d_fat
     fatarchs: "x86_64,arm64"
-W32:
+windows-i386-32:
   extends:
     - .build:w32
     - .snapshot
-W64:
+windows-i386-64:
   extends:
     - .build:w64
     - .snapshot
@@ -165,66 +165,66 @@ W64:
     floatsize: 64
   allow_failure: true
 
-Linux:Pd64:
+linux-amd64-64:
   extends:
-    - Linux
+    - linux-amd64-32
     - .double
   variables:
     extension: linux-amd64-64.so
-Darwin:Pd64:
+darwin-fat-64:
   extends:
-    - Darwin
+    - darwin-fat-32
     - .double
   variables:
     extension: darwin-fat-64.so
-W32:Pd64:
+windows-i386-64:
   extends:
-    - W32
+    - windows-i386-32
     - .double
   variables:
     extension: windows-i386-64.dll
-W64:Pd64:
+windows-amd64-64:
   extends:
-    - W64
+    - windows-amd64-32
     - .double
   variables:
     extension: windows-amd64-64.dll
 
-Linux:i386:
+linux-i386-32:
   image: registry.git.iem.at/devtools/docker/debiancross:i386
   extends:
-    - Linux
+    - linux-amd64-32
   variables:
     extension: l_i386
-Linux:i386:Pd64:
+linux-i386-64:
   extends:
-    - Linux:i386
+    - linux-i386-32
     - .double
   variables:
     extension: linux-i386-64.so
 
-Linux:armhf:
+linux-armv7-32:
   image: registry.git.iem.at/devtools/docker/debiancross:armhf
   extends:
-    - Linux
+    - linux-amd64-32
   variables:
     extension: l_arm
-Linux:armhf:Pd64:
+linux-armv7-64:
   extends:
-    - Linux:armhf
+    - linux-armv7-32
     - .double
   variables:
     extension: linux-armv7-64.so
 
-Linux:arm64:
+linux-arm64-32:
   image: registry.git.iem.at/devtools/docker/debiancross:arm64
   extends:
-    - Linux
+    - linux-amd64-32
   variables:
     extension: l_arm64
-Linux:arm64:Pd64:
+linux-arm64-64:
   extends:
-    - Linux:arm64
+    - linux-arm64-32
     - .double
   variables:
     extension: linux-arm64-64.so

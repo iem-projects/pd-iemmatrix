@@ -155,7 +155,7 @@ windows-i386-32:
   extends:
     - .build:w32
     - .snapshot
-windows-i386-64:
+windows-amd64-32:
   extends:
     - .build:w64
     - .snapshot

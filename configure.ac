@@ -166,7 +166,9 @@ AS_IF([test "x${need_pdlib}" = "xyes"], [
 
 IEM_CHECK_FAT(ARCH_FLAG)
 
-IEM_CHECK_CFLAGS([-mms-bitfields])
+AS_IF([test "${WINDOWS}" = "yes"],
+      IEM_CHECK_CFLAGS([-mms-bitfields])
+)
 IEM_CHECK_SIMD
 
 have_pd="no"

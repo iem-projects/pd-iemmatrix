@@ -41,8 +41,8 @@ typedef struct matrix_multilde {
   t_float	*x_matend;
   t_float	*x_inc;
   t_float	*x_biginc;
-  t_float	**x_io;
-  t_float	*x_outsumbuf;
+  t_sample	**x_io;
+  t_sample	*x_outsumbuf;
   int		x_outsumbufsize;
   int		x_n_in;	/* columns */
   int		x_n_out; /* rows	*/
@@ -280,8 +280,8 @@ static t_int *matrix_multilde_perf8(t_int *w)
 {
   t_matrix_multilde *x = (t_matrix_multilde *)(w[1]);
   int n = (int)(w[2]);
-  t_float **io = x->x_io;
-  t_float *outsum, *houtsum;
+  t_sample **io = x->x_io;
+  t_sample *outsum, *houtsum;
   t_float *matcur, *matend;
   t_float *inc1 ,*biginc, inc;
   int n_in = x->x_n_in;   /* columns */
@@ -539,8 +539,8 @@ static t_int *matrix_multilde_perform(t_int *w)
 {
   t_matrix_multilde *x = (t_matrix_multilde *)(w[1]);
   int n = (int)(w[2]);
-  t_float **io = x->x_io;
-  t_float *outsum, *houtsum;
+  t_sample **io = x->x_io;
+  t_sample *outsum, *houtsum;
   t_float *matcur, *matend;
   t_float *inc1 ,*biginc, inc;
   int n_in = x->x_n_in;   /* columns */
@@ -707,11 +707,11 @@ static void matrix_multilde_dsp(t_matrix_multilde *x, t_signal **sp)
 
   if(!x->x_outsumbuf) {
     x->x_outsumbufsize = n;
-    x->x_outsumbuf = (t_float *)getbytes(x->x_outsumbufsize * sizeof(t_float));
+    x->x_outsumbuf = (t_sample*)getbytes(x->x_outsumbufsize * sizeof(t_sample));
   } else if(x->x_outsumbufsize != n) {
-    x->x_outsumbuf = (t_float *)resizebytes(x->x_outsumbuf,
-                                            x->x_outsumbufsize*sizeof(t_float),
-                                            n*sizeof(t_float));
+    x->x_outsumbuf = (t_sample*)resizebytes(x->x_outsumbuf,
+                                            x->x_outsumbufsize*sizeof(t_sample),
+                                            n*sizeof(t_sample));
     x->x_outsumbufsize = n;
   }
 
@@ -741,9 +741,9 @@ static void matrix_multilde_free(t_matrix_multilde *x)
   freebytes(x->x_matend, x->x_n_in * x->x_n_out * sizeof(t_float));
   freebytes(x->x_inc, x->x_n_in * x->x_n_out * sizeof(t_float));
   freebytes(x->x_biginc, x->x_n_in * x->x_n_out * sizeof(t_float));
-  freebytes(x->x_io, (x->x_n_in + x->x_n_out) * sizeof(t_float *));
+  freebytes(x->x_io, (x->x_n_in + x->x_n_out) * sizeof(t_sample*));
   if(x->x_outsumbuf) {
-    freebytes(x->x_outsumbuf, x->x_outsumbufsize * sizeof(t_float));
+    freebytes(x->x_outsumbuf, x->x_outsumbufsize * sizeof(t_sample));
   }
 }
 
@@ -846,7 +846,7 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
 
   /* setting up internal values */
   x->x_msi = 0;
-  x->x_outsumbuf = (t_float *)0;
+  x->x_outsumbuf = (t_sample *)0;
   x->x_outsumbufsize = 0;
   x->x_matcur = (t_float *)getbytes(x->x_n_in * x->x_n_out * sizeof(
                                       t_float));
@@ -855,8 +855,8 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
   x->x_inc = (t_float *)getbytes(x->x_n_in * x->x_n_out * sizeof(t_float));
   x->x_biginc = (t_float *)getbytes(x->x_n_in * x->x_n_out * sizeof(
                                       t_float));
-  x->x_io = (t_float **)getbytes((x->x_n_in + x->x_n_out) * sizeof(
-                                   t_float *));
+  x->x_io = (t_sample **)getbytes((x->x_n_in + x->x_n_out) * sizeof(
+                                   t_sample*));
   x->x_remaining_ticks = 0;
   x->x_retarget = 0;
   x->x_ms2tick = 0.001f * 44100.0f /

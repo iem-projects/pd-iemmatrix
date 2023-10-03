@@ -19,7 +19,6 @@
 #if defined _WIN32
 # include <io.h>
 # include <windows.h>
-# define close _close
 #else
 # define _GNU_SOURCE
 # include <dlfcn.h>
@@ -621,26 +620,6 @@ void*iemmatrix_getpdfun(const char*name)
     // search recursively, starting from the main program
     return dlsym(dlopen(0, RTLD_NOW), name);
 #endif
-}
-
-typedef int (*fdclose_fun_t)(int fd);
-static fdclose_fun_t get_sysclose(void)
-{
-  fdclose_fun_t my_close=(fdclose_fun_t)iemmatrix_getpdfun("sys_close");
-  if(!my_close) {
-    my_close=close;
-  }
-  return my_close;
-}
-
-
-int iemmatrix_fdclose(int fd)
-{
-  static fdclose_fun_t my_close=0;
-  if(!my_close) {
-    my_close=get_sysclose();
-  }
-  return my_close(fd);
 }
 
 const char*iemmatrix_objname(void*obj) {

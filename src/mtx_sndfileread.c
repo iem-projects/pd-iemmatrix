@@ -8,6 +8,7 @@
 #ifdef __WIN32__
 # include <io.h>
 # include <stdlib.h>
+# define close _close
 #else
 # include <unistd.h>
 #endif
@@ -139,10 +140,16 @@ static void mtx_sndfileread_close (t_mtx_sndfileread *x)
   x->x_float=0;
 }
 
+typedef int (*fdclose_fun_t)(int fd);
 static void mtx_sndfileread_open (t_mtx_sndfileread *x, t_symbol *s,
                                   t_symbol*type)
 {
 #ifdef HAVE_SNDFILE_H
+  static fdclose_fun_t myclose = 0;
+  if(!myclose)
+    myclose = (fdclose_fun_t)iemmatrix_getpdfun("sys_close");
+  if(!myclose)
+    myclose = close;
   char filenamebuf[MAXPDSTRING], *filenamebufptr;
   int fd;
 
@@ -155,7 +162,7 @@ static void mtx_sndfileread_open (t_mtx_sndfileread *x, t_symbol *s,
     pd_error(x, "[mtx_sndfileread]: failed to open %s : %s", s->s_name, filenamebuf);
     return;
   }
-  iemmatrix_fdclose(fd);
+  myclose(fd);
   if(!filenamebufptr[-1]) {
     filenamebufptr[-1]='/';
   }

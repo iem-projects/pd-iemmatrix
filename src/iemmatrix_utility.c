@@ -16,19 +16,13 @@
   G.Holzmann: this has been in mtx_matrix.c before
               now here should be the shared code !!!
 */
-#if defined __linux__ || defined __APPLE__
-# define DL_OPEN
-#endif
-
-#ifdef DL_OPEN
-# define _GNU_SOURCE
-# include <dlfcn.h>
-#endif
-
 #if defined _WIN32
 # include <io.h>
 # include <windows.h>
 # define close _close
+#else
+# define _GNU_SOURCE
+# include <dlfcn.h>
 #endif
 
 #include <unistd.h>
@@ -612,21 +606,27 @@ t_matrixfloat*mtx_doMultiply(int rowA, t_matrixfloat*A, int colArowB,
 }
 
 
-static void*get_function(const char*name)
+void*iemmatrix_getpdfun(const char*name)
 {
-#ifdef DL_OPEN
-  return (void*)dlsym(RTLD_DEFAULT, name);
-#elif defined _WIN32
-  return (void*)GetProcAddress( GetModuleHandle("pd.dll"), name);
+#ifdef _WIN32
+    // get a handle to the module containing the Pd API functions.
+    // NB: GetModuleHandle("pd.dll") does not cover all cases.
+    HMODULE module;
+    if (GetModuleHandleEx(
+        GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+            (LPCSTR)&pd_typedmess, &module)) {
+        return (void *)GetProcAddress(module, name);
+    }
 #else
-  // no loader for older Pd's....
+    // search recursively, starting from the main program
+    return dlsym(dlopen(0, RTLD_NOW), name);
 #endif
-  return NULL;
 }
+
 typedef int (*fdclose_fun_t)(int fd);
-static fdclose_fun_t get_sysclose()
+static fdclose_fun_t get_sysclose(void)
 {
-  fdclose_fun_t my_close=(fdclose_fun_t)get_function("sys_close");
+  fdclose_fun_t my_close=(fdclose_fun_t)iemmatrix_getpdfun("sys_close");
   if(!my_close) {
     my_close=close;
   }

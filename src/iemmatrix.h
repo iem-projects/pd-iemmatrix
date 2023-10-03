@@ -170,6 +170,9 @@ int iemmatrix_check(void*object, int argc, t_atom*argv, unsigned int tests);
  */
 const char*iemmatrix_objname(void*object);
 
+/* get a Pd function by name */
+void*iemmatrix_getpdfun(const char*name);
+
 
 /* basic I/O functions */
 void matrix_bang(t_matrix *x); /* output the matrix stored in atombuffer */

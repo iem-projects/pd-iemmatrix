@@ -215,7 +215,8 @@ t_matrixfloat*mtx_doTranspose(t_matrixfloat*output, int row, int col);
 /*  multiply matrix A=[rowA*colA] with matrix B=[rowB*colB]; C=A*B; colA=rowB=colArowB */
 t_matrixfloat*mtx_doMultiply(int rowA, t_matrixfloat*A, int colArowB,
                              t_matrixfloat*B, int colB);
-
+/* version comparison */
+#define KERNEL_VERSION(a, b, c)  ((a * 1000) + b) * 1000 + c
 
 /* for debugging purposes */
 #define MARK	startpost("MARK[%s:%d@%s]", __FILE__, __LINE__, __FUNCTION__), post

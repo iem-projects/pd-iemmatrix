@@ -1004,6 +1004,7 @@ void mtx_mul_tilde_setup(void)
 					     sizeof(t_matrix_multilde),
 					     0,
 					     A_GIMME, 0);
+    class_sethelpsymbol(matrix_multilde_class, gensym("mtx_mul~"));
   } else {
     matrix_multilde_class = class_new(gensym("mtx_mul~"),
 				      (t_newmethod)matrix_multilde_new,

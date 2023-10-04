@@ -14,11 +14,8 @@
 
 #include "iemmatrix.h"
 
-#if KERNEL_VERSION(PD_MAJOR_VERSION, PD_MINOR_VERSION, PD_BUGFIX_VERSION) < KERNEL_VERSION(0, 54, 0)
-# define IEMMATRIX_HAVE_MULTICHANNEL 0
+#ifndef CLASS_MULTICHANNEL
 # define CLASS_MULTICHANNEL 0
-#else
-# define IEMMATRIX_HAVE_MULTICHANNEL 1
 #endif
 
 typedef void (*setmultiout_f)(t_signal **sig, int nchans);
@@ -834,7 +831,7 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
         pd_error(x, "[%s] multichannel requested, but Pd-%d.%d-%d (run-time) doesn't support it", s->s_name, major, minor, bugfix);
       x->x_setmultiout = 0;
     } else {
-#if !IEMMATRIX_HAVE_MULTICHANNEL
+#if !CLASS_MULTICHANNEL
       if(warn_multichannel)
         pd_error(x, "[%s] multichannel requested, but Pd-%d.%d-%d (compile-time) doesn't support it", s->s_name, PD_MAJOR_VERSION, PD_MINOR_VERSION, PD_BUGFIX_VERSION);
       x->x_setmultiout = 0;

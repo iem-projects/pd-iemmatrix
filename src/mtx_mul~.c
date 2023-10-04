@@ -73,7 +73,6 @@ typedef struct matrix_multilde {
   t_float	x_time_ms;
   int		x_remaining_ticks;
   t_float	x_ms2tick;
-  t_float	x_1overn;
   int           x_compat; /* 0=mtx_*~; 1=matrix_mul_line~; 2=matrix~ */
 
   setmultiout_f x_setmultiout; /* Pd>=0.54 has multichannel! */
@@ -335,8 +334,8 @@ static t_int *matrix_multilde_perf8(t_int *w)
     biginc = x->x_biginc;
     matcur = x->x_matcur;
     matend = x->x_matend;
-    mul = x->x_1overn / (float)nticks;
-    bigmul = 1.0f / (float)nticks;
+    bigmul = 1.0f / (t_float)nticks;
+    mul = bigmul / ((t_float)n);
     i = n_out*n_in;
     while(i--) {
       inc = *matend++ - *matcur++;
@@ -594,8 +593,8 @@ static t_int *matrix_multilde_perform(t_int *w)
     biginc = x->x_biginc;
     matcur = x->x_matcur;
     matend = x->x_matend;
-    mul = x->x_1overn / (float)nticks;
-    bigmul = 1.0f / (float)nticks;
+    bigmul = 1.0f / ((t_float)nticks);
+    mul = bigmul / ((t_float)n);
     i = n_out*n_in;
     while(i--) {
       inc = *matend++ - *matcur++;
@@ -762,8 +761,7 @@ static void matrix_multilde_dsp(t_matrix_multilde *x, t_signal **sp)
   }
 
   n = sp[0]->s_n;
-  x->x_ms2tick = 0.001f * (float)(sp[0]->s_sr) / (float)n;
-  x->x_1overn = 1.0f / (float)n;
+  x->x_ms2tick = 0.001f * (t_float)(sp[0]->s_sr) / (t_float)n;
 
 
   if(n&7) {
@@ -944,12 +942,10 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
                                       t_float));
   x->x_io = (t_sample **)getbytes((x->x_n_in + x->x_n_out) * sizeof(
                                    t_sample*));
+
+
   x->x_remaining_ticks = 0;
   x->x_retarget = 0;
-  x->x_ms2tick = 0.001f * 44100.0f /
-                 64.0f; /* will be set in the dsp-routine */
-  x->x_1overn = 1.0f /
-                64.0f;               /* will be set in the dsp-routine */
 
   /* setting up internal matrices */
   n = x->x_n_in * x->x_n_out;

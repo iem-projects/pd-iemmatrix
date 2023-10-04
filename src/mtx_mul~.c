@@ -12,6 +12,15 @@
  *
  */
 
+
+/* NOTES on multichannel
+   - the number of incoming channels is not changeable by us
+   - non-multichannel ports are always *hard* restrictions (wrong matrix is discarded)
+   - the matrix dimension can only change while the DSP is off
+     - while the DSP is on, non-matching matrices are discarded
+   - if the dimensions change, the source and target matrices are resized
+ */
+
 #include "iemmatrix.h"
 
 #ifndef CLASS_MULTICHANNEL

@@ -72,8 +72,11 @@ typedef struct matrix_multilde {
   setmultiout_f x_setmultiout; /* Pd>=0.54 has multichannel! */
 } t_matrix_multilde;
 
-t_class *matrix_multilde_class;
-t_class *matrix_multilde_legacy_class;
+
+
+static t_class *matrix_multilde_mclass;
+static t_class *matrix_multilde_class;
+static t_class *matrix_multilde_proxy;
 
 static void matrix_multilde_time(t_matrix_multilde *x, t_floatarg time_ms)
 {
@@ -769,21 +772,61 @@ static void matrix_multilde_free(t_matrix_multilde *x)
 
 static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
 {
+  t_class*cls;
+  setmultiout_f setmultiout = iemmatrix_getpdfun("signal_setmultiout");
+  int nin, nout;
+  t_float interpoltime;
   int compat = 0;
+  int can_multichannel;
   t_matrix_multilde *x = 0;
   int i, n;
+
+  t_atom*ap_in  =argv+1;
+  t_atom*ap_out =argv+0;
+  t_atom*ap_time=argv+2;
 
   if(s==gensym("matrix~")) {
     compat=2;
   } else if (s==gensym("matrix_mul_line~")) {
     compat=1;
   }
-  t_atom*ap_in  =argv+1;
-  t_atom*ap_out =argv+0;
-  t_atom*ap_time=argv+2;
 
+  if (compat) {
+    ap_in=argv+0;
+    ap_out=argv+1;
+  }
 
-  x = (t_matrix_multilde *)pd_new((compat)?matrix_multilde_legacy_class:matrix_multilde_class);
+  switch(argc) {
+  case 0:
+    nin = nout = 1;
+    interpoltime = (compat==2)?0.f:50.0f;
+    break;
+  case 1:
+    nin = nout = (int)atom_getint(argv);
+    interpoltime = (compat==2)?0.f:50.0f;
+    break;
+  case 2:
+    nin = (int)atom_getint(ap_in);
+    nout = (int)atom_getint(ap_out);
+    interpoltime = (compat==2)?0.f:50.0f;
+    break;
+  default:
+    nin = (int)atom_getint(ap_in);
+    nout = (int)atom_getint(ap_out);
+    interpoltime = atom_getfloat(ap_time);
+    break;
+  }
+
+  /* can we do multichannel? */
+  cls = (compat || (!(CLASS_MULTICHANNEL && setmultiout)))?matrix_multilde_class:matrix_multilde_mclass;
+  if((nin>0) && (nout>0))
+    cls = matrix_multilde_class;
+
+  x = (t_matrix_multilde *)pd_new(cls);
+  if(compat) {
+    pd_error(x, "[%s] is deprecated! use [mtx_*~] instead!!", s->s_name);
+  }
+
 
   /* arguments parsing:
    *  this might depend on whether we are creating an object
@@ -801,50 +844,26 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
    */
   x->x_compat=compat;
 
-  if(x->x_compat) {
-    pd_error(x, "[%s] is deprecated! use [mtx_*~] instead!!", s->s_name);
-    ap_in=argv+0;
-    ap_out=argv+1;
-  }
+  x->x_n_in = nin;
+  x->x_n_out = nout;
+  x->x_time_ms = interpoltime;
 
-  switch(argc) {
-  case 0:
-    x->x_n_in = x->x_n_out = 1;
-    x->x_time_ms = (x->x_compat==2)?0.f:50.0f;
-    break;
-  case 1:
-    x->x_n_in = x->x_n_out = (int)atom_getint(argv);
-    x->x_time_ms = (x->x_compat==2)?0.f:50.0f;
-    break;
-  case 2:
-    x->x_n_in = (int)atom_getint(ap_in);
-    x->x_n_out = (int)atom_getint(ap_out);
-    x->x_time_ms = (x->x_compat==2)?0.f:50.0f;
-    break;
-  default:
-    x->x_n_in = (int)atom_getint(ap_in);
-    x->x_n_out = (int)atom_getint(ap_out);
-    x->x_time_ms = atom_getfloat(ap_time);
-    break;
-  }
+  x->x_setmultiout = (matrix_multilde_mclass == cls)?setmultiout:0;
 
-  x->x_setmultiout = (x->x_compat)?0:iemmatrix_getpdfun("signal_setmultiout");
-
-  if (!x->x_compat && ((x->x_n_in < 1) || (x->x_n_out < 1))) {
-    static int warn_multichannel = 1;
+  if (!compat && ((nin < 1) || (nout < 1))) {
     /* user requested multichannel */
+    /* warn (but only once) if we cannot actually do that */
+    static int warn_multichannel = 1;
     if(!x->x_setmultiout) {
       int major, minor, bugfix;
       sys_getversion(&major, &minor, &bugfix);
       if(warn_multichannel)
         pd_error(x, "[%s] multichannel requested, but Pd-%d.%d-%d (run-time) doesn't support it", s->s_name, major, minor, bugfix);
       x->x_setmultiout = 0;
-    } else {
-#if !CLASS_MULTICHANNEL
+    } else if (!CLASS_MULTICHANNEL) {
       if(warn_multichannel)
         pd_error(x, "[%s] multichannel requested, but Pd-%d.%d-%d (compile-time) doesn't support it", s->s_name, PD_MAJOR_VERSION, PD_MINOR_VERSION, PD_BUGFIX_VERSION);
       x->x_setmultiout = 0;
-#endif
     }
     warn_multichannel = 0;
   }
@@ -917,51 +936,72 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
   return (x);
 }
 
+static void mtx_mul_addmethods(t_class*c) {
+  class_addmethod(c, (t_method)matrix_multilde_dsp,
+                  gensym("dsp"), 0);
+
+  class_addmethod(c, (t_method)matrix_multilde_matrix,
+                  gensym("matrix"), A_GIMME, 0);
+  class_addmethod(c, (t_method)matrix_multilde_element,
+                  gensym("element"), A_GIMME, 0);
+  class_addmethod(c, (t_method)matrix_multilde_row,
+                  gensym("row"), A_GIMME, 0);
+  class_addmethod(c, (t_method)matrix_multilde_col,
+                  gensym("col"), A_GIMME, 0);
+  class_addmethod(c, (t_method)matrix_multilde_stop,
+                  gensym("stop"), 0);
+  class_addmethod(c, (t_method)matrix_multilde_time,
+                  gensym("time"), A_FLOAT, 0);
+
+  /* LATER: can we re-use the 'matrix' method and transpose
+   * depending on the compat level? */
+  class_addmethod(c, (t_method)matrix_multilde_matrixT,
+                  gensym(""), A_GIMME, 0);
+
+  CLASS_MAINSIGNALIN(c, t_matrix_multilde, x_msi);
+}
+
 void mtx_mul_tilde_setup(void)
 {
-  matrix_multilde_class = class_new(gensym("mtx_mul~"),
-                                    (t_newmethod)matrix_multilde_new,
-                                    (t_method)matrix_multilde_free,
-                                    sizeof(t_matrix_multilde),
-                                    0 | CLASS_MULTICHANNEL,
-                                    A_GIMME, 0);
+  if (CLASS_MULTICHANNEL && iemmatrix_getpdfun("signal_setmultiout")) {
+    /* multichannel variant */
+    matrix_multilde_mclass = class_new(gensym("mtx_mul~"),
+				      (t_newmethod)matrix_multilde_new,
+				      (t_method)matrix_multilde_free,
+				      sizeof(t_matrix_multilde),
+				      0 | CLASS_MULTICHANNEL,
+				      A_GIMME, 0);
+    /* non-multichannel cariant */
+    /* compatibility with jmz's zexy */
+    matrix_multilde_class = class_new(gensym("matrix~"),
+					     (t_newmethod)matrix_multilde_new,
+					     (t_method)matrix_multilde_free,
+					     sizeof(t_matrix_multilde),
+					     0,
+					     A_GIMME, 0);
+  } else {
+    matrix_multilde_class = class_new(gensym("mtx_mul~"),
+				      (t_newmethod)matrix_multilde_new,
+				      (t_method)matrix_multilde_free,
+				      sizeof(t_matrix_multilde),
+				      0,
+				      A_GIMME, 0);
+    matrix_multilde_mclass = matrix_multilde_class;
+  }
 
-  class_addcreator((t_newmethod)matrix_multilde_new, gensym("matrix_mul~"),
-                   A_GIMME, 0);
   class_addcreator((t_newmethod)matrix_multilde_new, gensym("mtx_*~"),
                    A_GIMME, 0);
+  class_addcreator((t_newmethod)matrix_multilde_new, gensym("matrix_mul~"),
+                   A_GIMME, 0);
 
-  /* compatibility with jmz's zexy */
-  matrix_multilde_legacy_class = class_new(gensym("matrix~"),
-                                    (t_newmethod)matrix_multilde_new,
-                                    (t_method)matrix_multilde_free,
-                                    sizeof(t_matrix_multilde),
-                                    0,
-                                    A_GIMME, 0);
   /* compatibility with tm's iem_matrix */
   class_addcreator((t_newmethod)matrix_multilde_new,
                    gensym("matrix_mul_line~"), A_GIMME, 0);
 
+  mtx_mul_addmethods(matrix_multilde_mclass);
+  if(matrix_multilde_mclass != matrix_multilde_class)
+    mtx_mul_addmethods(matrix_multilde_class);
 
-  class_addmethod(matrix_multilde_class, (t_method)matrix_multilde_dsp,
-                  gensym("dsp"), 0);
-  CLASS_MAINSIGNALIN(matrix_multilde_class, t_matrix_multilde, x_msi);
-
-  class_addmethod(matrix_multilde_class, (t_method)matrix_multilde_matrix,
-                  gensym("matrix"), A_GIMME, 0);
-  class_addmethod(matrix_multilde_class, (t_method)matrix_multilde_element,
-                  gensym("element"), A_GIMME, 0);
-  class_addmethod(matrix_multilde_class, (t_method)matrix_multilde_row,
-                  gensym("row"), A_GIMME, 0);
-  class_addmethod(matrix_multilde_class, (t_method)matrix_multilde_col,
-                  gensym("col"), A_GIMME, 0);
-  class_addmethod(matrix_multilde_class, (t_method)matrix_multilde_stop,
-                  gensym("stop"), 0);
-  class_addmethod(matrix_multilde_class, (t_method)matrix_multilde_time,
-                  gensym("time"), A_FLOAT, 0);
-
-  class_addmethod(matrix_multilde_class, (t_method)matrix_multilde_matrixT,
-                  gensym(""), A_GIMME, 0);
 }
 
 void iemtx_mul__setup(void)

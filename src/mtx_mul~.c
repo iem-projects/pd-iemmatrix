@@ -862,6 +862,13 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
     break;
   }
 
+  /* make sure that these are unsigned */
+  if((nin < 0) || (nout < 0)) {
+    pd_error(0, "[%s] matrix dimensions must not be negative [%dx%d]", s->s_name, nout, nin);
+    return 0;
+  }
+
+
   /* can we do multichannel? */
   cls = (compat || (!(CLASS_MULTICHANNEL && setmultiout)))?matrix_multilde_class:matrix_multilde_mclass;
   if((nin>0) && (nout>0))

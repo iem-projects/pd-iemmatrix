@@ -50,8 +50,15 @@ typedef void (*setmultiout_f)(t_signal **sig, int nchans);
  *  to achieve this, we silently ignore any signal that comes in at the first inlet
  */
 
+typedef struct _proxy {
+  t_object p_obj;
+  struct matrix_multilde*p_owner;
+} t_proxy;
+
+
 typedef struct matrix_multilde {
   t_object	x_obj;
+  t_proxy       *x_proxy;
   t_float       *x_matcur;
   t_float	*x_matend;
   t_float	*x_inc;
@@ -70,7 +77,13 @@ typedef struct matrix_multilde {
   int           x_compat; /* 0=mtx_*~; 1=matrix_mul_line~; 2=matrix~ */
 
   setmultiout_f x_setmultiout; /* Pd>=0.54 has multichannel! */
+  int           x_dsp;
 } t_matrix_multilde;
+
+static void proxy_dspstopped(t_proxy*p) {
+  p->p_owner->x_dsp = 0;
+}
+
 
 
 
@@ -728,6 +741,10 @@ static void matrix_multilde_dsp(t_matrix_multilde *x, t_signal **sp)
   int ichannels = x->x_n_in;
   int ochannels = x->x_n_out;
 
+  /* DSP is running */
+  x->x_dsp = 1;
+
+
   if(!x->x_outsumbuf) {
     x->x_outsumbufsize = n;
     x->x_outsumbuf = (t_sample*)getbytes(x->x_outsumbufsize * sizeof(t_sample));
@@ -767,6 +784,10 @@ static void matrix_multilde_free(t_matrix_multilde *x)
   freebytes(x->x_io, (x->x_n_in + x->x_n_out) * sizeof(t_sample*));
   if(x->x_outsumbuf) {
     freebytes(x->x_outsumbuf, x->x_outsumbufsize * sizeof(t_sample));
+  }
+  if(x->x_proxy) {
+    pd_unbind(&x->x_proxy->p_obj.ob_pd, gensym("pd-dsp-stopped"));
+    pd_free(&x->x_proxy->p_obj.ob_pd);
   }
 }
 
@@ -827,6 +848,10 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
     pd_error(x, "[%s] is deprecated! use [mtx_*~] instead!!", s->s_name);
   }
 
+
+  x->x_proxy = (t_proxy*)pd_new(matrix_multilde_proxy);
+  x->x_proxy->p_owner = x;
+  pd_bind(&x->x_proxy->p_obj.ob_pd, gensym("pd-dsp-stopped"));
 
   /* arguments parsing:
    *  this might depend on whether we are creating an object
@@ -1002,6 +1027,12 @@ void mtx_mul_tilde_setup(void)
   if(matrix_multilde_mclass != matrix_multilde_class)
     mtx_mul_addmethods(matrix_multilde_class);
 
+  matrix_multilde_proxy = class_new(gensym("mtx_*~ proxy"),
+				    0, 0,
+				    sizeof(t_proxy),
+				    CLASS_PD,
+				    0);
+  class_addbang(matrix_multilde_proxy, (t_method)proxy_dspstopped);
 }
 
 void iemtx_mul__setup(void)

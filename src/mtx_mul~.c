@@ -823,11 +823,24 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
     compat=1;
   }
 
+  /* arguments parsing:
+   *  this might depend on whether we are creating an object
+   *  [mtx_*~], [matrix~] or [matrix_mul_line~]
+   *
+   * [mtx_*~  [#out [#in [time]]]]:  in1=matrix; in2-in(#in+1)=signals; in(#in+2)=time
+   * [matrix~ [#in [#out [time]]]]:  in1-in(#in)=signals; in(#in+1)=matrix; in(#in+2)=time
+   * [matrix_mul_line~ [#in [#out [time]]]]: in1=matrix; in1=time; in1-in(#in):=signals
+   *
+   * furthermore:
+   *  [mtx_*~] and [matrix_mul_line~] : O^=A*I^
+   *  [matrix~]                       : O^'=I^'*B
+   *
+   *  with "matrix=(A or B)" and "A=B'"
+   */
   if (compat) {
     ap_in=argv+0;
     ap_out=argv+1;
   }
-
   switch(argc) {
   case 0:
     nin = nout = 1;
@@ -859,25 +872,10 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
     pd_error(x, "[%s] is deprecated! use [mtx_*~] instead!!", s->s_name);
   }
 
-
   x->x_proxy = (t_proxy*)pd_new(matrix_multilde_proxy);
   x->x_proxy->p_owner = x;
   pd_bind(&x->x_proxy->p_obj.ob_pd, gensym("pd-dsp-stopped"));
 
-  /* arguments parsing:
-   *  this might depend on whether we are creating an object
-   *  [mtx_*~], [matrix~] or [matrix_mul_line~]
-   *
-   * [mtx_*~  [#out [#in [time]]]]:  in1=matrix; in2-in(#in+1)=signals; in(#in+2)=time
-   * [matrix~ [#in [#out [time]]]]:  in1-in(#in)=signals; in(#in+1)=matrix; in(#in+2)=time
-   * [matrix_mul_line~ [#in [#out [time]]]]: in1=matrix; in1=time; in1-in(#in):=signals
-   *
-   * furthermore:
-   *  [mtx_*~] and [matrix_mul_line~] : O^=A*I^
-   *  [matrix~]                       : O^'=I^'*B
-   *
-   *  with "matrix=(A or B)" and "A=B'"
-   */
   x->x_compat=compat;
 
   x->x_n_in = nin;

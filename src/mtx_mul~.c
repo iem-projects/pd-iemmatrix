@@ -140,10 +140,11 @@ static void matrix_multilde_matrix_set(t_matrix_multilde *x, int argc,
         *matend++=atom_getfloat(argv+i+j*row);
       }
     }
-  } else
+  } else {
     for(i=0; i<length; i++) {
       *matend++=atom_getfloat(argv++);
     }
+  }
 
   if(x->x_time_ms <= 0.0f) {
     matend = x->x_matend;

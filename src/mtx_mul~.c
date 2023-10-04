@@ -57,26 +57,34 @@ typedef struct _proxy {
 
 
 typedef struct matrix_multilde {
+  /* private weirdo stuff at the beginning */
   t_object	x_obj;
   t_proxy       *x_proxy;
-  t_float       *x_matcur;
-  t_float	*x_matend;
-  t_float	*x_inc;
-  t_float	*x_biginc;
-  t_sample	**x_io;
-  t_sample	*x_outsumbuf;
-  int		x_outsumbufsize;
+  int           x_compat; /* 0=mtx_*~; 1=matrix_mul_line~; 2=matrix~ */
+  setmultiout_f x_setmultiout; /* when doing multichannel, this is Pd>=0.54's signal_setmultiout(); otherwise NULL */
+
+  t_sample	**x_io; /* input/output signals (for easier passing to perform()) */
+  t_float	x_msi; /* CLASS_MAINSIGNALIN() */
+
+  int           x_dsp; /* is the DSP running? */
+
+  /* interpolation data */
+  t_float	x_time_ms; /* interpolation time (when new matrix comes through) */
+  int		x_remaining_ticks; /* how long do we still need to interpolate */
+  t_float	*x_inc, *x_biginc; /* incrementation values */
+  int		x_retarget; /* bool: whether we need to start a new interpolation */
+  t_float	x_ms2tick; /* helper to translate time to ticks */
+
+
+  /* the matrix */
+  t_float       *x_matcur; /* current matrix (being interpolated) */
+  t_float	*x_matend; /* interpolation target */
   int		x_n_in;	/* columns */
   int		x_n_out; /* rows */
-  t_float	x_msi; /* for sending floats to signal~ins */
-  int		x_retarget;
-  t_float	x_time_ms;
-  int		x_remaining_ticks;
-  t_float	x_ms2tick;
-  int           x_compat; /* 0=mtx_*~; 1=matrix_mul_line~; 2=matrix~ */
 
-  setmultiout_f x_setmultiout; /* Pd>=0.54 has multichannel! */
-  int           x_dsp;
+  /* buffer for matrix multiplication */
+  t_sample	*x_outsumbuf; /* N samples for summing up */
+  int		x_outsumbufsize;
 } t_matrix_multilde;
 
 static void proxy_dspstopped(t_proxy*p) {
@@ -346,6 +354,7 @@ static t_int *matrix_multilde_perf8(t_int *w)
   }
 
   if(x->x_remaining_ticks) {
+    /* keep interpolating between current and target matrix */
     inc1 = x->x_inc;
     biginc = x->x_biginc;
     matcur = x->x_matcur;
@@ -460,6 +469,7 @@ static t_int *matrix_multilde_perf8(t_int *w)
       }
     }
   } else {
+    /* no remaining ticks left - matrix stays constant for now */
     matend = x->x_matend;
     /* 1. output-vector-row */
     in = io[0];
@@ -605,6 +615,7 @@ static t_int *matrix_multilde_perform(t_int *w)
   }
 
   if(x->x_remaining_ticks) {
+    /* keep interpolating between current and target matrix */
     inc1 = x->x_inc;
     biginc = x->x_biginc;
     matcur = x->x_matcur;
@@ -667,6 +678,7 @@ static t_int *matrix_multilde_perform(t_int *w)
       }
     }
   } else {
+    /* no remaining ticks left - matrix stays constant for now */
     matend = x->x_matend;
     /* 1. output-vector-row */
     in = io[0];

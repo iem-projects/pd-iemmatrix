@@ -819,8 +819,8 @@ static void matrix_multilde_dsp(t_matrix_multilde *x, t_signal **sp)
   int i, n=length * x->x_rows;
   /* [mtx_*~] ignores the signal on the very 1st inlet */
   int compat_offset=(x->x_compat)?0:1;
-  int ichannels = x->x_inports?x->x_inports:0;
-  int ochannels = x->x_outports?x->x_outports:x->x_rows;
+  size_t ichannels = x->x_inports?x->x_inports:0;
+  size_t ochannels = x->x_outports?x->x_outports:x->x_rows;
   t_sample**io;
 
   /* DSP is running */

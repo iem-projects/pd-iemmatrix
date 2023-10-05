@@ -828,6 +828,7 @@ static void matrix_multilde_dsp(t_matrix_multilde *x, t_signal **sp)
 
   if(x->x_setmultiout) {
 #if CLASS_MULTICHANNEL
+    size_t inports = (x->x_inports < 1)?1:x->x_inports;
     /* multichannel mode */
     if(!ichannels) {
       /* multichannel input */
@@ -837,11 +838,10 @@ static void matrix_multilde_dsp(t_matrix_multilde *x, t_signal **sp)
     if(x->x_outports) {
       /* create singlechannel outputs */
       for(i=0; i<ochannels; i++) {
-	x->x_setmultiout(&sp[compat_offset + ichannels + i], 1);
+	x->x_setmultiout(&sp[compat_offset + inports + i], 1);
       }
     } else {
       /* create multichannel output */
-      int inports = (x->x_inports < 1)?1:x->x_inports;
       ochannels = x->x_rows;
       x->x_setmultiout(&sp[compat_offset + inports], ochannels);
     }

@@ -48,7 +48,7 @@ variables:
   image: registry.git.iem.at/devtools/docker/debiancross:amd64
   before_script:
     - mkdir -p "${IEM_CI_TMPDIR}"
-    - apt-get update && apt-get install -y --no-install-recommends automake libtool make equivs ${TARGETDEBARCH:+cross}build-essential${TARGETDEBARCH:+-}${TARGETDEBARCH}
+    - apt-get update && apt-get install -y --no-install-recommends automake libtool make equivs curl ${TARGETDEBARCH:+cross}build-essential${TARGETDEBARCH:+-}${TARGETDEBARCH}
     - equivs-control "${IEM_CI_TMPDIR}"/builddeps
     - sed -e "s|^\(Package:\) .*|\1 builddeps-${CI_PROJECT_NAME}|" -e '/^Depends/d' -i "${IEM_CI_TMPDIR}"/builddeps
     - echo "Depends:"" puredata-dev, puredata-core, libsndfile1-dev, libgsl-dev, libfftw3-dev" >> "${IEM_CI_TMPDIR}"/builddeps

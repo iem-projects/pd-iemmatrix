@@ -63,7 +63,7 @@ variables:
     - test ! -d "${tmp_pdinc}" || export PDDIR="${tmp_pdinc}"
     - date
   after_script:
-    - find "${ARTIFACTSDIR}" -type f "(" -name "*.${extension}" -or -name "*.pd_linux" -or -name "*.so" ")" -exec .git-ci/iem-ci/localdeps/localdeps.linux.sh -d "${depdir}" {} +
+    - find "${ARTIFACTSDIR}" -type f "(" -name "*.${extension}" -or -name "*.pd_linux" -or -name "*.so" ")" -exec .git-ci/iem-ci/localdeps/localdeps.linux.sh -v -d "${depdir}" {} +
 
 .build:macos: &build_macos
   extends:
@@ -101,7 +101,7 @@ variables:
     - echo "PDDIR=${PDDIR}"
     - date
   after_script:
-    - find "${ARTIFACTSDIR}" -type f "(" -name "*.${extension}" -or -name "*.pd_darwin" -or -name "*.d_fat" -or -name "*.so" ")" -exec .git-ci/iem-ci/localdeps/localdeps.macos.sh -d "${depdir}" {} +
+    - find "${ARTIFACTSDIR}" -type f "(" -name "*.${extension}" -or -name "*.pd_darwin" -or -name "*.d_fat" -or -name "*.so" ")" -exec .git-ci/iem-ci/localdeps/localdeps.macos.sh -v -d "${depdir}" {} +
 
 .build:w32:
   extends:
@@ -123,7 +123,7 @@ variables:
     - pacman --noconfirm -S $(cat .git-ci/msys2.pacman  | sed -e 's|#.*||' -e "s|@MINGW@|${MINGW_PACKAGE_PREFIX}-|") || true
     - date
   after_script:
-    - find "${ARTIFACTSDIR}" -type f "(" -name "*.${extension}" -or -name "*.dll" ")" -exec .git-ci/iem-ci/localdeps/localdeps.win.sh -d "${depdir}" {} +
+    - find "${ARTIFACTSDIR}" -type f "(" -name "*.${extension}" -or -name "*.dll" ")" -exec .git-ci/iem-ci/localdeps/localdeps.win.sh -v -d "${depdir}" {} +
 
 .build:w64:
   extends:
@@ -145,7 +145,7 @@ variables:
     - pacman --noconfirm -S $(cat .git-ci/msys2.pacman  | sed -e 's|#.*||' -e "s|@MINGW@|${MINGW_PACKAGE_PREFIX}-|") || true
     - date
   after_script:
-    - find "${ARTIFACTSDIR}" -type f "(" -name "*.${extension}" -or -name "*.dll" ")" -exec .git-ci/iem-ci/localdeps/localdeps.win.sh -d "${depdir}" {} +
+    - find "${ARTIFACTSDIR}" -type f "(" -name "*.${extension}" -or -name "*.dll" ")" -exec .git-ci/iem-ci/localdeps/localdeps.win.sh -v -d "${depdir}" {} +
 
 ###################################################
 ### the actual jobs: (linux,macos,windows)*(single,double)

@@ -58,6 +58,9 @@ variables:
     - tmp_pdinc=$(find /usr/local/pd/ -name "m_pd.h" -exec dirname {} + -quit)
     - test ! -d "${tmp_pdinc}" || export PDDIR="${tmp_pdinc}"
     - date
+  after_script:
+    - find "${ARTIFACTSDIR}" -type f "(" -name "*.${extension}" -or -name "*.pd_linux" -or -name "*.so" ")" -exec .git-ci/iem-ci/localdeps/localdeps.linux.sh {} +
+
 .build:macos: &build_macos
   extends:
     - .build

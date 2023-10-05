@@ -1030,11 +1030,11 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
       int major, minor, bugfix;
       sys_getversion(&major, &minor, &bugfix);
       if(warn_multichannel)
-        pd_error(x, "[%s] multichannel requested, but Pd-%d.%d-%d (run-time) doesn't support it", s->s_name, major, minor, bugfix);
+        pd_error(x, "[%s] multichannel requested, but iemmatrix is running in Pd-%d.%d-%d, which doesn't support it", s->s_name, major, minor, bugfix);
       x->x_setmultiout = 0;
     } else if (!CLASS_MULTICHANNEL) {
       if(warn_multichannel)
-        pd_error(x, "[%s] multichannel requested, but Pd-%d.%d-%d (compile-time) doesn't support it", s->s_name, PD_MAJOR_VERSION, PD_MINOR_VERSION, PD_BUGFIX_VERSION);
+        pd_error(x, "[%s] multichannel requested, but iemmatrix was built against Pd-%d.%d-%d, which doesn't support it", s->s_name, PD_MAJOR_VERSION, PD_MINOR_VERSION, PD_BUGFIX_VERSION);
       x->x_setmultiout = 0;
     }
     warn_multichannel = 0;

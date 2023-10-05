@@ -54,6 +54,7 @@ variables:
     - echo "Depends:"" puredata-dev, puredata-core, libsndfile1-dev, libgsl-dev, libfftw3-dev" >> "${IEM_CI_TMPDIR}"/builddeps
     - (cd "${IEM_CI_TMPDIR}/"; equivs-build ${TARGETDEBARCH:+-a ${TARGETDEBARCH}} builddeps)
     - find  "${IEM_CI_TMPDIR}/" -name "*.deb" -exec dpkg -i {} + || apt-get -f install -y --no-install-recommends
+    - mkdir -p /usr/local/pd
     - test -z "${PDVERSION}" || curl -sL http://msp.ucsd.edu/Software/pd-${PDVERSION}.src.tar.gz | tar --extract --gzip --strip-components=1 --directory /usr/local/pd/
     - tmp_pdinc=$(find /usr/local/pd/ -name "m_pd.h" -exec dirname {} + -quit)
     - test ! -d "${tmp_pdinc}" || export PDDIR="${tmp_pdinc}"

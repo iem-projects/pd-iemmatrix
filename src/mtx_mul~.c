@@ -246,7 +246,7 @@ static void matrix_multilde_matrixT(t_matrix_multilde *x, t_symbol *s,
 static void matrix_multilde_element(t_matrix_multilde *x, t_symbol *s,
                                     int argc, t_atom *argv)
 {
-  int col, row, n_ix_cols=x->x_cols;
+  int col, row, n_in_cols=x->x_cols;
   t_float element;
   t_float *matcur = x->x_matcur;
   t_float *matend = x->x_matend;
@@ -269,8 +269,8 @@ static void matrix_multilde_element(t_matrix_multilde *x, t_symbol *s,
     return;
   }
 
-  matend += row * n_ix_cols + col;
-  matcur += row * n_ix_cols + col;
+  matend += row * n_in_cols + col;
+  matcur += row * n_in_cols + col;
 
   if(x->x_time_ms <= 0.0f) {
     *matend = *matcur = element;
@@ -1127,7 +1127,7 @@ void mtx_mul_tilde_setup(void)
 				      sizeof(t_matrix_multilde),
 				      0 | CLASS_MULTICHANNEL,
 				      A_GIMME, 0);
-    /* non-multichannel cariant */
+    /* non-multichannel variant */
     /* compatibility with jmz's zexy */
     matrix_multilde_class = class_new(gensym("matrix~"),
 					     (t_newmethod)matrix_multilde_new,

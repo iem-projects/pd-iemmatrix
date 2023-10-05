@@ -59,6 +59,7 @@ typedef struct _proxy {
 typedef struct matrix_multilde {
   /* private weirdo stuff at the beginning */
   t_object	x_obj;
+  t_symbol      *x_name;
   t_proxy       *x_proxy;
   int           x_compat; /* 0=mtx_*~; 1=matrix_mul_line~; 2=matrix~ */
   setmultiout_f x_setmultiout; /* when doing multichannel, this is Pd>=0.54's signal_setmultiout(); otherwise NULL */
@@ -129,7 +130,7 @@ static int matrix_multilde_resize(t_matrix_multilde *x, unsigned int rows, unsig
   x->x_inc    = resize_and_free(x->x_inc   , x->x_rows, x->x_cols, rows, cols);
   x->x_biginc = resize_and_free(x->x_biginc, x->x_rows, x->x_cols, rows, cols);
   if(!x->x_matend || !x->x_matcur || !x->x_inc || !x->x_biginc) {
-    pd_error(x, "[mtx_*~] failed to resize matrices to [%dx%d]", rows, cols);
+    pd_error(x, "[%s] failed to resize matrices to [%dx%d]", x->x_name->s_name, rows, cols);
     x->x_rows = x->x_cols = 0;
     return 0;
   }
@@ -158,7 +159,7 @@ static void matrix_multilde_matrix_set(t_matrix_multilde *x, int argc,
   t_float *matcur, *matend;
 
   if(argc<2) {
-    pd_error(x, "[mtx_*~]: bad matrix: <int:out_rows> <int:ix_cols> !");
+    pd_error(x, "[%s]: bad matrix: <int:out_rows> <int:in_cols> !", x->x_name->s_name);
     return;
   }
   if(iemmatrix_check(x, argc, argv, 0))return;
@@ -178,18 +179,21 @@ static void matrix_multilde_matrix_set(t_matrix_multilde *x, int argc,
   if (x->x_dsp) {
     /* matrix dimensions must match while DSP is running */
     if ((col != x->x_cols) || (row != x->x_rows)) {
-      pd_error(x,"[mtx_*~]: matrix dimensions must not change (%dx%d != %dx%d) while DSP is running!!",
+      pd_error(x, "[%s]: matrix dimensions must not change (%dx%d != %dx%d) while DSP is running!!",
+	       x->x_name->s_name,
 	       col, row, x->x_cols, x->x_rows);
       return;
     }
   } else {
     /* DSP is not running, check if we have a fixed number of iolets */
     if(x->x_inports && x->x_inports != col) {
-      pd_error(x, "[mtx_*~]: cannot change fixed number of input channels (%d) to %d", x->x_inports, col);
+      pd_error(x, "[%s]: cannot change fixed number of input channels (%d) to %d",
+	       x->x_name->s_name, x->x_inports, col);
       return;
     }
     if(x->x_outports && x->x_outports != row) {
-      pd_error(x, "[mtx_*~]: cannot change fixed number of output channels (%d) to %d", x->x_outports, row);
+      pd_error(x, "[%s]: cannot change fixed number of output channels (%d) to %d",
+	       x->x_name->s_name, x->x_outports, row);
       return;
     }
 
@@ -248,7 +252,7 @@ static void matrix_multilde_element(t_matrix_multilde *x, t_symbol *s,
   t_float *matend = x->x_matend;
 
   if(argc != 3) {
-    pd_error(x, "[mtx_*~]: bad arguments, expected <int:row> <int:column> <float:value>!");
+    pd_error(x, "[%s]: bad arguments, expected <int:row> <int:column> <float:value>!", x->x_name->s_name);
     return;
   }
 
@@ -257,11 +261,11 @@ static void matrix_multilde_element(t_matrix_multilde *x, t_symbol *s,
   element = atom_getfloat(argv+2);
 
   if((row >= x->x_rows) || (row < 0)) {
-    pd_error(x, "[mtx_*~]: out of bound row!!");
+    pd_error(x, "[%s]: out of bound row!!", x->x_name->s_name);
     return;
   }
-  if((col >= n_ix_cols) || (col < 0)) {
-    pd_error(x, "[mtx_*~]: out of bound column!!");
+  if((col >= n_in_cols) || (col < 0)) {
+    pd_error(x, "[%s]: out of bound column!!", x->x_name->s_name);
     return;
   }
 
@@ -285,7 +289,7 @@ static void matrix_multilde_row(t_matrix_multilde *x, t_symbol *s,
   t_float *matend = x->x_matend;
 
   if(argc<1) {
-    pd_error(x,"[mtx_*~]: bad row!");
+    pd_error(x,"[%s]: bad row!", x->x_name->s_name);
     return;
   }
 
@@ -294,12 +298,12 @@ static void matrix_multilde_row(t_matrix_multilde *x, t_symbol *s,
   argc--;
 
   if((nth_row >= x->x_rows) || (nth_row < 0)) {
-    pd_error(x, "[mtx_*~]: out of bound row!!");
+    pd_error(x, "[%s]: out of bound row!!", x->x_name->s_name);
     return;
   }
   col = x->x_cols;
   if(argc < col) {
-    pd_error(x,"[mtx_*~]: col dimensions do not match !!");
+    pd_error(x,"[%s]: col dimensions do not match !!", x->x_name->s_name);
     return;
   }
 
@@ -328,7 +332,7 @@ static void matrix_multilde_col(t_matrix_multilde *x, t_symbol *s,
   t_float *matend = x->x_matend;
 
   if(argc<1) {
-    pd_error(x,"[mtx_*~]: bad column!");
+    pd_error(x,"[%s]: bad column!", x->x_name->s_name);
     return;
   }
 
@@ -338,12 +342,12 @@ static void matrix_multilde_col(t_matrix_multilde *x, t_symbol *s,
 
   col = x->x_cols;
   if((nth_col < 0)||(nth_col >= col)) {
-    pd_error(x, "[mtx_*~]: out of bound column!!");
+    pd_error(x, "[%s]: out of bound column!!", x->x_name->s_name);
     return;
   }
   row = x->x_rows;
   if(argc < row) {
-    pd_error(x,"[mtx_*~]: row dimensions do not match !!");
+    pd_error(x,"[%s]: row dimensions do not match !!", x->x_name->s_name);
     return;
   }
 
@@ -1014,6 +1018,7 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
   if(compat) {
     pd_error(x, "[%s] is deprecated! use [mtx_*~] instead!!", s->s_name);
   }
+  x->x_name = s;
   x->x_compat=compat;
   x->x_setmultiout = (matrix_multilde_mclass == cls)?setmultiout:0;
 

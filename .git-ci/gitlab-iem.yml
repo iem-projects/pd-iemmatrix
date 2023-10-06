@@ -35,6 +35,7 @@ variables:
     - make check -j2
     - |
       make install DESTDIR="${DESTDIR}" libdir=/
+    - cp config.log "${DESTDIR}" || true
     # finally split the binaries from the debug information
     - if command -v ${HOST_ARCH_GNU}${HOST_ARCH_GNU:+-}strip; then export STRIP=${HOST_ARCH_GNU}${HOST_ARCH_GNU:+-}strip; fi
     - if command -v ${HOST_ARCH_GNU}${HOST_ARCH_GNU:+-}objcopy; then export OBJCOPY=${HOST_ARCH_GNU}${HOST_ARCH_GNU:+-}objcopy; fi

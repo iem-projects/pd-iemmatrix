@@ -80,7 +80,7 @@ variables:
      - bigsur
   before_script:
     - date
-    - brew bundle --no-upgrade --file=.git-ci/macOS.brew
+    - brew bundle --verbose --no-upgrade --file=.git-ci/macOS.brew
     - rm -rf /Applications/Pd*.app/
     - rm -rf "${IEM_CI_TMPDIR}"
     # get Pd tarball

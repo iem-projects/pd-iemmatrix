@@ -30,6 +30,13 @@ variables:
     - echo "HOST_ARCH_GNU ${HOST_ARCH_GNU}"
     - echo "fatarchs ${fatarchs}"
     - echo "DESTDIR ${DESTDIR}"
+    - pkg-config --cflags --libs fftw || true
+    - pkg-config --cflags --libs fftw3 || true
+    - pkg-config --cflags --libs libfftw || true
+    - pkg-config --cflags --libs libfftw3 || true
+    - pkg-config --cflags --libs sndfile || true
+    - pkg-config --cflags --libs libsndfile || true
+    - pkg-config --cflags --libs gsl || true
     - ./autogen.sh
     - ./configure ${fatarchs:+--enable-fat-binary=${fatarchs}} ${HOST_ARCH_GNU:+--host="${HOST_ARCH_GNU}"} ${PDDIR:+--with-pd="${PDDIR}"} ${extension:+--with-extension="${extension}"} ${floatsize:+--with-floatsize="${floatsize}"}
     - make check -j2

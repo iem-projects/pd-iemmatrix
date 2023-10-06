@@ -81,6 +81,9 @@ variables:
   before_script:
     - date
     - brew bundle --verbose --no-upgrade --file=.git-ci/macOS.brew
+    - brew ls --verbose "iem/fatbrew/fftw" || true
+    - brew ls --verbose "iem/fatbrew/libsndfile" || true
+    - brew ls --verbose "iem/fatbrew/gsl" || true
     - rm -rf /Applications/Pd*.app/
     - rm -rf "${IEM_CI_TMPDIR}"
     # get Pd tarball
@@ -130,6 +133,9 @@ variables:
     - export PDDIR="$(pwd)/_pd"
     - export PD=$(find "${PDDIR}" "(" -name "pd.com" -o -name "pd64.com" ")" -print -quit)
     - pacman --noconfirm -S $(cat .git-ci/msys2.pacman  | sed -e 's|#.*||' -e "s|@MINGW@|${MINGW_PACKAGE_PREFIX}-|") || true
+    - pacman -Ql "${MINGW_PACKAGE_PREFIX}-libsndfile" || true
+    - pacman -Ql "${MINGW_PACKAGE_PREFIX}-fftw" || true
+    - pacman -Ql "${MINGW_PACKAGE_PREFIX}-gsl" || true
     - date
   after_script:
     - depdir="${CI_JOB_NAME%-[0-9][0-9]}"
@@ -153,6 +159,9 @@ variables:
     - export PDDIR="$(pwd)/_pd"
     - export PD=$(find "${PDDIR}" "(" -name "pd.com" -o -name "pd64.com" ")" -print -quit)
     - pacman --noconfirm -S $(cat .git-ci/msys2.pacman  | sed -e 's|#.*||' -e "s|@MINGW@|${MINGW_PACKAGE_PREFIX}-|") || true
+    - pacman -Ql "${MINGW_PACKAGE_PREFIX}-libsndfile" || true
+    - pacman -Ql "${MINGW_PACKAGE_PREFIX}-fftw" || true
+    - pacman -Ql "${MINGW_PACKAGE_PREFIX}-gsl" || true
     - date
   after_script:
     - depdir="${CI_JOB_NAME%-[0-9][0-9]}"

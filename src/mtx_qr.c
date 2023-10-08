@@ -28,6 +28,8 @@ struct _MTXQr_ {
 #ifdef HAVE_LIBGSL
   gsl_matrix *a;
   gsl_vector *tau;
+  gsl_matrix *q;
+  gsl_matrix *r;
 #endif
   t_outlet *list_q_out;
   t_outlet *list_r_out;
@@ -43,7 +45,8 @@ static void allocMTXqr (MTXQr *x)
   x->a=(gsl_matrix*)gsl_matrix_alloc(x->rows,x->columns);
   x->tau=(gsl_vector*)gsl_vector_alloc(
            ((x->columns<x->rows)?x->columns:x->rows));
-
+  x->q=(gsl_matrix*)gsl_matrix_alloc(x->rows,x->rows);
+  x->r=(gsl_matrix*)gsl_matrix_alloc(x->rows,x->columns);
   x->list_q=(t_atom*)calloc(sizeof(t_atom),x->rows*x->rows+2);
   x->list_r=(t_atom*)calloc(sizeof(t_atom),x->rows*x->columns+2);
 }
@@ -66,8 +69,17 @@ static void deleteMTXqr (MTXQr *x)
     gsl_vector_free(x->tau);
   }
 
+  if (x->q!=0) {
+    gsl_matrix_free(x->q);
+  }
+  if (x->r!=0) {
+    gsl_matrix_free(x->r);
+  }
+
   x->a = 0;
   x->tau = 0;
+  x->q = 0;
+  x->r = 0;
 }
 #endif
 
@@ -87,6 +99,8 @@ static void *newMTXQr (t_symbol *s, int argc, t_atom *argv)
   x->list_r = 0;
 #ifdef HAVE_LIBGSL
   x->a=0;
+  x->q=0;
+  x->r=0;
   x->tau=0;
 #endif
 
@@ -96,10 +110,9 @@ static void *newMTXQr (t_symbol *s, int argc, t_atom *argv)
 static void mTXQrBang (MTXQr *x)
 {
   if (x->list_q) {
-    outlet_anything(x->list_r_out, gensym("matrix"), x->rows*x->columns+2,
+     outlet_anything(x->list_r_out, gensym("matrix"), x->rows*x->columns+2,
                     x->list_r);
-    pd_error(x, "[mtx_qr]: implementation outputs only R currently! Q has to be implemented...");
-    // outlet_anything(x->list_q_out, gensym("matrix"), x->rows*x->rows+2, x->list_q);
+     outlet_anything(x->list_q_out, gensym("matrix"), x->rows*x->rows+2, x->list_q);
   }
 }
 
@@ -126,50 +139,25 @@ static void mTXQrMatrix (MTXQr *x, t_symbol *s,
   }
 
   gsl_linalg_QR_decomp(x->a,x->tau);
+  gsl_linalg_QR_unpack(x->a,x->tau, x->q, x->r);
 
-
-  SETFLOAT((x->list_r),(float) x->rows);
-  SETFLOAT((x->list_r+1),(float) x->columns);
+  SETFLOAT((x->list_q),(float) x->rows);
+  SETFLOAT((x->list_q+1),(float) x->rows);
   for (n=0,size=0; n<x->rows; n++) {
-    for (m=0; m<n; m++) {
-      SETFLOAT((x->list_r+2+size), 0);
-      size++;
-    }
-    for (; m<x->columns; m++) {
-      SETFLOAT((x->list_r+2+size), (float) x->a->data[size]);
+    for (m=0; m<x->rows; m++) {
+      SETFLOAT((x->list_q+2+size), x->q->data[size]);
       size++;
     }
   }
 
-  SETFLOAT((x->list_q),(float) x->rows);
-  SETFLOAT((x->list_q+1),(float) x->rows);
-
-  //      TODO: Housholder transformations have to be decoded from
-  //
-  //      x->tau and lower triangular part of x->a.
-  //
-  //      with L=min(rows,columns)
-  //
-  //      Matrix multiplications have to be done:
-  //
-  //      Q=QL QL-1 ... Q1
-  //
-  //      using the matrix factors
-  //
-  //      Qi = I - tau[i] vi^T vi
-  //
-  //      employing the dyadic vector product of
-  //
-  //         [   0    ]
-  //         [   :    ]
-  //         [   0    ]
-  //      vi=[A[i+1,i]]
-  //         [A[i+1,i]]
-  //         [   :    ]
-  //         [ A[L,i] ]
-  //
-  //      on itself (out of x->a),
-  //      and the scalar tau[i] in the vector x->tau.
+  SETFLOAT((x->list_r),(float) x->rows);
+  SETFLOAT((x->list_r+1),(float) x->columns);
+  for (n=0,size=0; n<x->rows; n++) {
+    for (m=0; m<x->columns; m++) {
+      SETFLOAT((x->list_r+2+size), x->r->data[size]);
+      size++;
+    }
+  }
 
   mTXQrBang(x);
 #else

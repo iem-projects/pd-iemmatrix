@@ -25,7 +25,7 @@
 #X text 231 332 N_n^m=;
 #X text 278 332 (-1)^m sqrt((2n+1)(n-|m|)!(2-delta_m))/sqrt(4pi(n+|m|)!);
 #X text 618 317 (because of sin(m*azi) instead of sin(|m|*azi));
-#X text 231 317 Default/LEGACY \; N3D \, but with azi=-azi reversed \, before 2023;
+#X text 235 306 Default/LEGACY \; N3D \, but with azi=-azi reversed \, before 2023;
 #X obj 52 334 mtx_spherical_harmonics 1 N3D;
 #X obj 34 350 mtx_spherical_harmonics 1 N3D4PI;
 #X obj 46 366 mtx_spherical_harmonics 1 SN3D;

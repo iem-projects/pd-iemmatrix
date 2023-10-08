@@ -18,13 +18,22 @@
 #include <math.h>
 #include <stdlib.h>
 
+typedef enum _CHNormType_ {
+	N2D,
+	N2D2PI,
+	SN2D,
+	SN2D2PI,
+} CHNormType;
+
 typedef struct _Cheby12WorkSpace_ {
   size_t nmax;
   size_t l;
   double *t;
+  double n0; // normalizer for m==0
+  double nm; // normalizer for m>0
 } Cheby12WorkSpace;
 
-Cheby12WorkSpace *chebyshev12_alloc(const size_t nmax, const size_t l);
+Cheby12WorkSpace *chebyshev12_alloc(const size_t nmax, const size_t l, CHNormType type);
 
 void chebyshev12_free(Cheby12WorkSpace *wc);
 

@@ -27,6 +27,8 @@ struct _MTXSh_ {
   t_object x_obj;
   t_outlet *list_sh_out;
   t_atom *list_sh;
+  SHNormType ntype;
+  int legacy_azi_reverse;
   double *phi;
   double *theta;
   SHWorkSpace *ws;
@@ -41,6 +43,7 @@ struct _MTXCh_ {
   t_object x_obj;
   t_outlet *list_ch_out;
   t_atom *list_ch;
+  CHNormType ntype;
   double *phi;
   Cheby12WorkSpace *wc;
   size_t nmax;
@@ -52,7 +55,7 @@ static void allocMTXShdata (MTXSh *x)
 {
   x->phi=(double*)calloc(x->l,sizeof(double));
   x->theta=(double*)calloc(x->l,sizeof(double));
-  x->ws=sharmonics_alloc(x->nmax,x->l);
+  x->ws=sharmonics_alloc(x->nmax,x->l,x->ntype);
   x->list_sh=(t_atom*)calloc(x->l*(x->nmax+1)*(x->nmax+1)+2,sizeof(t_atom));
 }
 
@@ -84,12 +87,34 @@ static void *newMTXSh (t_symbol *s, int argc, t_atom *argv)
   x->theta = 0;
   x->ws = 0;
   x->l=0;
-  nmax=(int) atom_getfloat(argv);
-  if (nmax<0) {
-    nmax=0;
+  x->ntype=N3D;
+  x->legacy_azi_reverse=1;
+  t_symbol *nt;
+  if (argc<1) {
+     nmax=1;
+  } else {
+     if (argc>1) {
+         nt=atom_getsymbol(argv+1);
+	 x->legacy_azi_reverse=0;
+	 if (nt==gensym("N3D")) {
+	    x->ntype=N3D;
+	 } else if (nt==gensym("N3D4PI")) {
+	    x->ntype=N3D4PI;
+	 } else if (nt==gensym("SN3D")) {
+	    x->ntype=SN3D;
+	 } else if (nt==gensym("SN3D4PI")) {
+	    x->ntype=SN3D4PI;
+	 } else {
+	    x->legacy_azi_reverse=1;
+	    x->ntype=N3D;
+	 }
+     }
+     nmax=(int) atom_getfloat(argv);
+     if (nmax<0) {
+         nmax=0;
+     }
   }
   x->nmax=nmax;
-
   return ((void *) x);
 }
 
@@ -123,9 +148,19 @@ static void mTXShMatrix (MTXSh *x, t_symbol *s,
     x->l=columns;
     allocMTXShdata(x);
   }
-  for (n=0; n<x->l; n++) {
-    x->phi[n]=(double) atom_getfloat(argv+n);
-    x->theta[n]=(double) atom_getfloat(argv+columns+n);
+  switch (x->legacy_azi_reverse) {
+     case 0:
+       	for (n=0; n<x->l; n++) {
+		x->phi[n]=(double) atom_getfloat(argv+n);
+		x->theta[n]=(double) atom_getfloat(argv+columns+n);
+	}
+	break;
+     default:
+	for (n=0; n<x->l; n++) {
+		x->phi[n]=-(double) atom_getfloat(argv+n);
+		x->theta[n]=(double) atom_getfloat(argv+columns+n);
+	}
+	break;
   }
 
   if (x->ws!=0) {
@@ -146,7 +181,7 @@ static void mTXShMatrix (MTXSh *x, t_symbol *s,
 static void allocMTXChdata (MTXCh *x)
 {
   x->phi=(double*)calloc(x->l,sizeof(double));
-  x->wc=chebyshev12_alloc(x->nmax,x->l);
+  x->wc=chebyshev12_alloc(x->nmax,x->l,x->ntype);
   x->list_ch=(t_atom*)calloc(x->l*(2*x->nmax+1)+2,sizeof(t_atom));
 }
 
@@ -173,9 +208,29 @@ static void *newMTXCh (t_symbol *s, int argc, t_atom *argv)
   x->phi = 0;
   x->wc = 0;
   x->l=0;
-  nmax=(int) atom_getfloat(argv);
-  if (nmax<0) {
-    nmax=0;
+  x->ntype=N2D;
+  t_symbol *nt;
+  if (argc<1) {
+     nmax=1;
+  } else {
+     if (argc>1) {
+         nt=atom_getsymbol(argv+1);
+	 if (nt==gensym("N2D")) {
+            x->ntype=N2D;
+	 } else if (nt==gensym("N2D2PI")) {
+	    x->ntype=N2D2PI;
+	 } else if (nt==gensym("SN2D")) {
+	    x->ntype=SN2D;
+	 } else if (nt==gensym("SN2D2PI")) {
+	    x->ntype=SN2D2PI;
+	 } else {
+	    x->ntype=N2D;
+	 }
+     }
+     nmax=(int) atom_getfloat(argv);
+     if (nmax<0) {
+         nmax=0;
+     }
   }
   x->nmax=nmax;
 

@@ -70,7 +70,7 @@ static void sharmonics_multcheby12(SHWorkSpace *ws)
       ly0=0;
       lt0=nt0;
       for (l=0; l<ws->l; l++) {
-        ws->y[ly0+ny0-m]*= -ws->wc->t[lt0-m];
+        ws->y[ly0+ny0-m]*= ws->wc->t[lt0-m];
         ws->y[ly0+ny0+m]*= ws->wc->t[lt0+m];
         ly0+=yincr;
         lt0+=tincr;
@@ -113,16 +113,27 @@ static void sharmonics_multcheby12(SHWorkSpace *ws)
 
 */
 
-SHWorkSpace *sharmonics_alloc(size_t nmax, size_t l)
+SHWorkSpace *sharmonics_alloc(size_t nmax, size_t l, SHNormType ntype)
 {
   SHWorkSpace *ws=0;
+  CHNormType ctype;
 
   if ((ws=(SHWorkSpace*)calloc(1,sizeof(SHWorkSpace)))!=0) {
     ws->y=(double*)calloc(l*(nmax+1)*(nmax+1),sizeof(double));
+    switch(ntype) {
+       case N3D4PI:
+       case SN3D4PI:
+          ctype=N2D2PI;
+	  break;
+       case N3D:
+       case SN3D:
+       default: 
+	  ctype=N2D;
+    }
 
     ws->wl=(LegendreWorkSpace*)legendre_a_alloc(nmax,l);
-    ws->wc=(Cheby12WorkSpace*)chebyshev12_alloc(nmax,l);
-    ws->wn=(SHNorml*)sharmonics_normalization_new(nmax);
+    ws->wc=(Cheby12WorkSpace*)chebyshev12_alloc(nmax,l, ctype);
+    ws->wn=(SHNorml*)sharmonics_normalization_new(nmax, ntype);
 
     if ((ws->y==0)||(ws->wl==0)||(ws->wc==0)||(ws->wn==0)) {
       sharmonics_free(ws);

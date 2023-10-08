@@ -18,12 +18,19 @@
 #include <math.h>
 #include <stdlib.h>
 
+typedef enum _SHNormType_ {
+	N3D,
+	SN3D,
+	N3D4PI,
+	SN3D4PI,	
+} SHNormType;
+
 typedef struct _SHNorml_ {
   double *n;
   size_t nmax;
 } SHNorml;
 
-SHNorml *sharmonics_normalization_new (const size_t nmax);
+SHNorml *sharmonics_normalization_new (const size_t nmax, const SHNormType type);
 
 void sharmonics_normalization_free (SHNorml *wn);
 

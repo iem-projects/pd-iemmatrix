@@ -23,6 +23,7 @@
 typedef struct _SHWorkSpace_ {
   size_t nmax;
   size_t l;
+  SHNormType ntype;
 
   double *y;
 
@@ -32,7 +33,7 @@ typedef struct _SHWorkSpace_ {
 
 } SHWorkSpace;
 
-SHWorkSpace *sharmonics_alloc(size_t nmax, size_t l);
+SHWorkSpace *sharmonics_alloc(size_t nmax, size_t l, SHNormType ntype);
 
 void sharmonics_free(SHWorkSpace *sh);
 

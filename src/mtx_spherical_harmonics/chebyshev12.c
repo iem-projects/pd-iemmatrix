@@ -15,7 +15,7 @@
 
 #include "mtx_spherical_harmonics/chebyshev12.h"
 
-Cheby12WorkSpace *chebyshev12_alloc(const size_t nmax, const size_t l)
+Cheby12WorkSpace *chebyshev12_alloc(const size_t nmax, const size_t l, CHNormType type)
 {
   Cheby12WorkSpace *wc;
   // memory allocation
@@ -25,6 +25,23 @@ Cheby12WorkSpace *chebyshev12_alloc(const size_t nmax, const size_t l)
     if ((wc->t=(double*)calloc(l*(2*nmax+1),sizeof(double)))==0) {
       free(wc);
       return 0;
+    }
+    switch(type) {
+       case N2D2PI:
+	   wc->n0=1.0;
+	   wc->nm=sqrt(2.0);
+	   break;
+       case SN2D2PI:
+	   wc->n0=1.0;
+	   wc->nm=1.0;
+	   break;
+       case SN2D:
+           wc->n0=1.0/sqrt(2.0*M_PI);
+	   wc->nm=1.0/sqrt(2.0*M_PI);
+	   break;
+       default:  // N2D
+           wc->n0=1.0/sqrt(2.0*M_PI);
+	   wc->nm=1.0/sqrt(M_PI);
     }
     return wc;
   }
@@ -45,8 +62,6 @@ void chebyshev12(double *phi, Cheby12WorkSpace *wc)
   const int incr=wc?(2*wc->nmax+1):0;
   double *cosphi;
   double *sinphi;
-  const double oneoversqrt2pi=1.0/sqrt(2.0*M_PI);
-  const double oneoversqrtpi=1.0/sqrt(M_PI);
   // memory allocation
   if ((wc!=0)&&(phi!=0)) {
     if ((cosphi=(double*)calloc(wc->l,sizeof(double)))==0) {
@@ -61,9 +76,9 @@ void chebyshev12(double *phi, Cheby12WorkSpace *wc)
       cosphi[l]=cos(phi[l]);
       sinphi[l]=sin(phi[l]);
       // initial value T_0=1
-      wc->t[l0]=oneoversqrt2pi;
-      wc->t[l0+1]=cosphi[l]*oneoversqrtpi;
-      wc->t[l0-1]=sinphi[l]*oneoversqrtpi;
+      wc->t[l0]=wc->n0;
+      wc->t[l0+1]=cosphi[l]*wc->nm;
+      wc->t[l0-1]=sinphi[l]*wc->nm;
     }
     // recurrence for n>1
     for (n=2; n<=wc->nmax; n++) {

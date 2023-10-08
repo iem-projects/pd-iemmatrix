@@ -102,8 +102,6 @@ static void *newMTXSh (t_symbol *s, int argc, t_atom *argv)
 	    x->ntype=N3D4PI;
 	 } else if (nt==gensym("SN3D")) {
 	    x->ntype=SN3D;
-	 } else if (nt==gensym("SN3D4PI")) {
-	    x->ntype=SN3D4PI;
 	 } else {
 	    x->legacy_azi_reverse=1;
 	    x->ntype=N3D;
@@ -221,8 +219,6 @@ static void *newMTXCh (t_symbol *s, int argc, t_atom *argv)
 	    x->ntype=N2D2PI;
 	 } else if (nt==gensym("SN2D")) {
 	    x->ntype=SN2D;
-	 } else if (nt==gensym("SN2D2PI")) {
-	    x->ntype=SN2D2PI;
 	 } else {
 	    x->ntype=N2D;
 	 }

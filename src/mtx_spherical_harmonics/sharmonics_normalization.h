@@ -20,9 +20,8 @@
 
 typedef enum _SHNormType_ {
 	N3D,
-	SN3D,
 	N3D4PI,
-	SN3D4PI,	
+	SN3D,
 } SHNormType;
 
 typedef struct _SHNorml_ {

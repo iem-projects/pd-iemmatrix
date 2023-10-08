@@ -31,15 +31,12 @@ Cheby12WorkSpace *chebyshev12_alloc(const size_t nmax, const size_t l, CHNormTyp
 	   wc->n0=1.0;
 	   wc->nm=sqrt(2.0);
 	   break;
-       case SN2D2PI:
+       case SN2D:
 	   wc->n0=1.0;
 	   wc->nm=1.0;
 	   break;
-       case SN2D:
-           wc->n0=1.0/sqrt(2.0*M_PI);
-	   wc->nm=1.0/sqrt(2.0*M_PI);
-	   break;
-       default:  // N2D
+       case N2D:
+       default: 
            wc->n0=1.0/sqrt(2.0*M_PI);
 	   wc->nm=1.0/sqrt(M_PI);
     }

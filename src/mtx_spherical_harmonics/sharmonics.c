@@ -122,11 +122,10 @@ SHWorkSpace *sharmonics_alloc(size_t nmax, size_t l, SHNormType ntype)
     ws->y=(double*)calloc(l*(nmax+1)*(nmax+1),sizeof(double));
     switch(ntype) {
        case N3D4PI:
-       case SN3D4PI:
+       case SN3D:
           ctype=N2D2PI;
 	  break;
        case N3D:
-       case SN3D:
        default: 
 	  ctype=N2D;
     }

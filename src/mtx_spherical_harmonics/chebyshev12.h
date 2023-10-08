@@ -22,7 +22,6 @@ typedef enum _CHNormType_ {
 	N2D,
 	N2D2PI,
 	SN2D,
-	SN2D2PI,
 } CHNormType;
 
 typedef struct _Cheby12WorkSpace_ {

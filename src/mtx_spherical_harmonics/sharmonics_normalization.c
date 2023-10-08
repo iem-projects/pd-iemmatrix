@@ -30,11 +30,10 @@ SHNorml *sharmonics_normalization_new (const size_t nmax, const SHNormType type)
       // computing N_n^m for m=0,
       switch(type) {
        	 case N3D4PI:
-	 case SN3D4PI:
+	 case SN3D:
 	     wn->n[0]=1.0;
 	     break;
 	 case N3D:
-	 case SN3D:
 	 default:
 	     wn->n[0]=oneoversqrt2;
       }
@@ -47,7 +46,6 @@ SHNorml *sharmonics_normalization_new (const size_t nmax, const SHNormType type)
 	     }
 	     break;
 	  case SN3D:
-	  case SN3D4PI:
 	  default: 
              for (n=1,n0=1; n<=nmax; n++) {
 	        wn->n[n0]=wn->n[0];

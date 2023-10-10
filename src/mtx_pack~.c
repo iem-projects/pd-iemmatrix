@@ -28,7 +28,7 @@ void *newMtxPackTilde (t_floatarg f)
   }
   x->num_ports=num_ports;
   while (num_ports--) {
-    inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal);
+    signalinlet_new(&x->x_obj, 0);
   }
   x->message_outlet=(t_outlet*)outlet_new(&x->x_obj,&s_list);
 

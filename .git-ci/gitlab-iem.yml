@@ -2,7 +2,7 @@
 ### configuration templates (to be used for snapshot and release builds)
 variables:
   PDVERSION: 0.54-0
-  PDBASEURL: http://msp.ucsd.edu/Software/
+  PDBASEURL: https://msp.ucsd.edu/Software/
   LANG: C
   MACOSX_DEPLOYMENT_TARGET: "10.9"
   # however, it seems that CI_JOB_NAME is not expanded here!

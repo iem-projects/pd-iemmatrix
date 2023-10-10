@@ -19,6 +19,7 @@
 #if defined _WIN32
 # include <io.h>
 # include <windows.h>
+# define snprintf _snprintf
 #else
 # define _GNU_SOURCE
 # include <dlfcn.h>
@@ -627,15 +628,11 @@ const char*iemmatrix_objname(void*obj) {
   t_symbol*s = gensym("");
   if(x && x->te_binbuf) {
     char buf[MAXPDSTRING];
-    if(
-#ifdef _WIN32
-        _snprintf
-#else
-        snprintf
-#endif
-                (buf, MAXPDSTRING, "[%s]: ", atom_getsymbol(binbuf_getvec(x->te_binbuf))->s_name)
-        > 0)
+    t_symbol*objsym = atom_getsymbol(binbuf_getvec(x->te_binbuf));
+    if(snprintf(buf, MAXPDSTRING, "[%s]: ", objsym->s_name) > 0) {
+      buf[MAXPDSTRING-1] = 0;
       s = gensym(buf);
+    }
   }
   return s->s_name;
 }

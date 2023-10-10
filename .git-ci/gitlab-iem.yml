@@ -112,16 +112,17 @@ stages:
     - IEM_SIGN_SRCDIR="${ARTIFACTSDIR}/${CI_JOB_NAME%%:*}"
     - !reference [.script:codesign:macos]
 
-.build:w32:
+.build:w64:
   extends:
     - .build
   tags:
     - windows
   variables:
-    IEMCI_CONFIGURATIONS: mingw32
+    IEMCI_CONFIGURATIONS: mingw64
+    PDARCHSUFFIX: ""
   before_script:
-    - test "${floatsize}" = 64 || wget -q -O Pd.zip http://msp.ucsd.edu/Software/pd-${PDVERSION}-i386.msw.zip
-    - test "${floatsize}" != 64 || wget -q -O Pd.zip https://get.puredata.info/pure-data/releases/0.54-0-pd64/Pd64-0.54-0-i386.msw.zip
+    - test "${floatsize}" = 64 || wget -q -O Pd.zip "http://msp.ucsd.edu/Software/pd-${PDVERSION}${PDARCHSUFFIX}.msw.zip"
+    - test "${floatsize}" != 64 || wget -q -O Pd.zip "https://get.puredata.info/pure-data/releases/${PDVERSION}-pd64/Pd64-${PDVERSION}${PDARCHSUFFIX}.msw.zip"
     - mkdir -p _pd
     - unzip -q Pd.zip -d "_pd"
     - mv -v "_pd"/*/* "_pd"
@@ -135,28 +136,12 @@ stages:
     - depdir="${CI_JOB_NAME%-[0-9][0-9]}"
     - find "${ARTIFACTSDIR}" -type f "(" -name "*.${extension}" -or -name "*.dll" ")" -exec .git-ci/iem-ci/localdeps/localdeps.win.sh -v -d "${depdir}" {} +
 
-.build:w64:
+.build:w32:
   extends:
-    - .build
-  tags:
-    - windows
+    - .build:w64
   variables:
-    IEMCI_CONFIGURATIONS: mingw64
-  before_script:
-    - test "${floatsize}" = 64 || wget -q -O Pd.zip http://msp.ucsd.edu/Software/pd-${PDVERSION}.msw.zip
-    - test "${floatsize}" != 64 || wget -q -O Pd.zip https://get.puredata.info/pure-data/releases/0.54-0-pd64/Pd64-0.54-0.msw.zip
-    - mkdir -p _pd
-    - unzip -q Pd.zip -d "_pd"
-    - mv -v "_pd"/*/* "_pd"
-    - rm -f Pd.zip
-    - rm -f _pd/bin/msvcr*.dll
-    - export PDDIR="$(pwd)/_pd"
-    - export PD=$(find "${PDDIR}" "(" -name "pd.com" -o -name "pd64.com" ")" -print -quit)
-    - pacman --noconfirm -S $(cat .git-ci/msys2.pacman  | sed -e 's|#.*||' -e "s|@MINGW@|${MINGW_PACKAGE_PREFIX}-|") || true
-    - date
-  after_script:
-    - depdir="${CI_JOB_NAME%-[0-9][0-9]}"
-    - find "${ARTIFACTSDIR}" -type f "(" -name "*.${extension}" -or -name "*.dll" ")" -exec .git-ci/iem-ci/localdeps/localdeps.win.sh -v -d "${depdir}" {} +
+    IEMCI_CONFIGURATIONS: mingw32
+    PDARCHSUFFIX: "-i386"
 
 ###################################################
 ### the actual jobs: (linux,macos,windows)*(single,double)

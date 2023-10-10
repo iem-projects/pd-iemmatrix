@@ -109,6 +109,8 @@ stages:
   after_script:
     - depdir="${CI_JOB_NAME%-[0-9][0-9]}"
     - find "${ARTIFACTSDIR}" -type f "(" -name "*.${extension}" -or -name "*.pd_darwin" -or -name "*.d_fat" -or -name "*.so" ")" -exec .git-ci/iem-ci/localdeps/localdeps.macos.sh -v -d "${depdir}" {} +
+    - IEM_SIGN_SRCDIR="${ARTIFACTSDIR}/${CI_JOB_NAME%%:*}"
+    - !reference [.script:codesign:macos]
 
 .build:w32:
   extends:
@@ -282,5 +284,7 @@ sast:
   needs: []
 
 include:
+  # for the codesign templates
+  - https://git.iem.at/pd/iem-ci/-/raw/main/pd-lib-builder/codesign.yml
   # additionally run some static code analysis
   - template: Security/SAST.gitlab-ci.yml

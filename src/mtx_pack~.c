@@ -14,10 +14,9 @@ typedef struct _mtx_pack_tilde {
   size_t num_channels; /* number of input signals */
   t_sample **sig_in;
   t_atom *list_out;
-  t_outlet *message_outlet;
+  t_outlet *message_outlet, *info_outlet;
 
   t_clock*clock;
-
 } mtx_pack_tilde;
 
 static void mTxPackTildeOut(mtx_pack_tilde*x) {
@@ -27,17 +26,17 @@ static void mTxPackTildeOut(mtx_pack_tilde*x) {
 void *newMtxPackTilde (t_floatarg f)
 {
   int deferred = 0;
-  int num_ports=1;
   mtx_pack_tilde *x = (mtx_pack_tilde*) pd_new(mtx_pack_tilde_class);
-  num_ports=(int)f;
+  int num_ports = (int)f;
   if ((num_ports < 1) || (num_ports>MTX_PACK_MAXCHANNELS)) {
     num_ports=1;
   }
-  x->num_ports=num_ports;
+  x->num_ports = num_ports;
   while (num_ports--) {
     signalinlet_new(&x->x_obj, 0);
   }
-  x->message_outlet=(t_outlet*)outlet_new(&x->x_obj,&s_list);
+  x->message_outlet=(t_outlet*)outlet_new(&x->x_obj, 0);
+  x->info_outlet=(t_outlet*)outlet_new(&x->x_obj, 0);
 
   if(deferred)
     x->clock = clock_new(x, (t_method)mTxPackTildeOut);
@@ -61,8 +60,6 @@ static t_int *mTxPackTildePerform (t_int *arg)
   int chan;
   int samp;
   t_atom *lptr=x->list_out+2;
-  SETFLOAT(x->list_out,(t_float)x->num_channels);
-  SETFLOAT(x->list_out+1,(t_float)x->block_size);
 
   for (chan=0; chan<x->num_channels; chan++) {
     for (samp=0; samp<x->block_size; samp++,lptr++) {
@@ -116,6 +113,14 @@ static void mTxPackTildeDsp (mtx_pack_tilde *x, t_signal **sp)
   x->list_out = (t_atom*) getbytes ((x->num_channels * x->block_size + 2)
                                     * sizeof(*x->list_out));
   dsp_add(mTxPackTildePerform,1,x);
+  SETFLOAT(x->list_out+0, (t_float)x->num_channels);
+  SETFLOAT(x->list_out+1, (t_float)x->block_size);
+  outlet_anything(x->info_outlet,gensym("channels"),
+                  1, x->list_out+0);
+  outlet_anything(x->info_outlet,gensym("blocksize"),
+                  1, x->list_out+1);
+  outlet_anything(x->info_outlet,gensym("dimen"),
+                  2, x->list_out);
 }
 
 void mtx_pack_tilde_setup (void)

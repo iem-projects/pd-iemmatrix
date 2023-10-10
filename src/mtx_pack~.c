@@ -16,10 +16,17 @@ typedef struct _mtx_pack_tilde {
   t_atom *list_out;
   t_outlet *message_outlet;
 
+  t_clock*clock;
+
 } mtx_pack_tilde;
 
+static void mTxPackTildeOut(mtx_pack_tilde*x) {
+  outlet_anything(x->message_outlet,gensym("matrix"),
+                  x->block_size*x->num_channels+2,x->list_out);
+}
 void *newMtxPackTilde (t_floatarg f)
 {
+  int deferred = 0;
   int num_ports=1;
   mtx_pack_tilde *x = (mtx_pack_tilde*) pd_new(mtx_pack_tilde_class);
   num_ports=(int)f;
@@ -32,6 +39,9 @@ void *newMtxPackTilde (t_floatarg f)
   }
   x->message_outlet=(t_outlet*)outlet_new(&x->x_obj,&s_list);
 
+  if(deferred)
+    x->clock = clock_new(x, (t_method)mTxPackTildeOut);
+
   return (void *) x;
 }
 void deleteMtxPackTilde (mtx_pack_tilde *x)
@@ -42,6 +52,8 @@ void deleteMtxPackTilde (mtx_pack_tilde *x)
   if (x->list_out) {
     freebytes (x->list_out, (x->num_channels * x->block_size + 2)*sizeof(*x->list_out));
   }
+  if(x->clock)
+    clock_free(x->clock);
 }
 static t_int *mTxPackTildePerform (t_int *arg)
 {
@@ -58,8 +70,10 @@ static t_int *mTxPackTildePerform (t_int *arg)
     }
   }
 
-  outlet_anything(x->message_outlet,gensym("matrix"),
-                  x->block_size*x->num_channels+2,x->list_out);
+  if(x->clock)
+    clock_delay(x->clock, 0);
+  else
+    mTxPackTildeOut(x);
 
   return(arg+2);
 

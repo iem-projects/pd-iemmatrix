@@ -2,6 +2,7 @@
 ### configuration templates (to be used for snapshot and release builds)
 variables:
   PDVERSION: 0.54-0
+  PDBASEURL: http://msp.ucsd.edu/Software/
   LANG: C
   MACOSX_DEPLOYMENT_TARGET: "10.9"
   # however, it seems that CI_JOB_NAME is not expanded here!
@@ -63,7 +64,7 @@ stages:
     - (cd "${IEM_CI_TMPDIR}/"; equivs-build ${TARGETDEBARCH:+-a ${TARGETDEBARCH}} builddeps)
     - find  "${IEM_CI_TMPDIR}/" -name "*.deb" -exec dpkg -i {} + || apt-get -f install -y --no-install-recommends
     - mkdir -p /usr/local/pd
-    - test -z "${PDVERSION}" || curl -sL http://msp.ucsd.edu/Software/pd-${PDVERSION}.src.tar.gz | tar --extract --gzip --strip-components=1 --directory /usr/local/pd/
+    - test -z "${PDVERSION}" || curl -sL "${PDBASEURL}/pd-${PDVERSION}.src.tar.gz" | tar --extract --gzip --strip-components=1 --directory /usr/local/pd/
     - tmp_pdinc=$(find /usr/local/pd/ -name "m_pd.h" -exec dirname {} + -quit)
     - test ! -d "${tmp_pdinc}" || export PDDIR="${tmp_pdinc}"
     - date
@@ -82,9 +83,9 @@ stages:
     - rm -rf /Applications/Pd*.app/
     - rm -rf "${IEM_CI_TMPDIR}"
     # get Pd tarball
-    - curl -sL http://msp.ucsd.edu/Software/pd-${PDVERSION}.mac.tar.gz | tar --extract --gzip --directory /Applications/ || mkdir -p "${IEM_CI_TMPDIR}"
+    - curl -sL "${PDBASEURL}/pd-${PDVERSION}.mac.tar.gz" | tar --extract --gzip --directory /Applications/ || mkdir -p "${IEM_CI_TMPDIR}"
     # if there was no tarball, try to get a zip-file
-    - test ! -d "${IEM_CI_TMPDIR}" || wget -q -O "${IEM_CI_TMPDIR}"/Pd.zip http://msp.ucsd.edu/Software/pd-${PDVERSION}.macos.zip
+    - test ! -d "${IEM_CI_TMPDIR}" || wget -q -O "${IEM_CI_TMPDIR}"/Pd.zip "${PDBASEURL}/pd-${PDVERSION}.macos.zip"
     - test ! -f "${IEM_CI_TMPDIR}"/Pd.zip || unzip "${IEM_CI_TMPDIR}"/Pd.zip -d "${IEM_CI_TMPDIR}"
     # the ZIP-file contains a .dmg containing Pd
     - |
@@ -121,7 +122,7 @@ stages:
     IEMCI_CONFIGURATIONS: mingw64
     PDARCHSUFFIX: ""
   before_script:
-    - test "${floatsize}" = 64 || wget -q -O Pd.zip "http://msp.ucsd.edu/Software/pd-${PDVERSION}${PDARCHSUFFIX}.msw.zip"
+    - test "${floatsize}" = 64 || wget -q -O Pd.zip "${PDBASEURL}/pd-${PDVERSION}${PDARCHSUFFIX}.msw.zip"
     - test "${floatsize}" != 64 || wget -q -O Pd.zip "https://get.puredata.info/pure-data/releases/${PDVERSION}-pd64/Pd64-${PDVERSION}${PDARCHSUFFIX}.msw.zip"
     - mkdir -p _pd
     - unzip -q Pd.zip -d "_pd"

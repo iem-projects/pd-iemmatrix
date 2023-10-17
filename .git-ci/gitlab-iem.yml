@@ -247,6 +247,8 @@ deken:
   before_script:
     - apt-get update && apt-get --no-install-recommends -y install git
   script:
+    - |
+      : ${ARTIFACTSDIR:=artifacts}
 # regroup packages by OS
     - rm -rf __groups
     - for d in "${ARTIFACTSDIR}"/*-*-*/; do [ -d "${d}" ] || break; g="${d%/}"; g="${g##*/}"; g="${g%%-*}"; o="__groups/${g}"; mkdir -p "${o}"; tar c -C "${d}" . | tar x -C "${o}"; rm -rf "${d}"; done
@@ -261,7 +263,7 @@ deken:
 # create a source package
     - git archive --format=tar --prefix="${ARTIFACTSDIR}/src/${CI_PROJECT_NAME}/" HEAD | tar xf -
 # create deken packages
-    - find  "${ARTIFACTSDIR}" -mindepth 1 -maxdepth 2 -type d -name "${IEM_CI_PROJECT_NAME}" -exec deken package --version="${CI_COMMIT_TAG#v}" {} +
+    - find  "${ARTIFACTSDIR}"/ -mindepth 1 -maxdepth 2 -type d -name "${CI_PROJECT_NAME}" -exec deken package --version="${CI_COMMIT_TAG#v}" {} +
     - find . -name "*.dek"
 # upload deken packages
     - test -z "${CI_COMMIT_TAG}" || test -z "${DEKEN_USERNAME}" || test -z "${DEKEN_PASSWORD}" || deken upload --no-source-error ./*.dek

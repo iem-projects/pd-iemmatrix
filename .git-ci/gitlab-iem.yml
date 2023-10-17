@@ -247,6 +247,11 @@ deken:
   before_script:
     - apt-get update && apt-get --no-install-recommends -y install git
   script:
+# regroup packages by OS
+    - rm -rf __groups
+    - for d in "${ARTIFACTSDIR}"/*-*-*/; do [ -d "${d}" ] || break; g="${d%/}"; g="${g##*/}"; g="${g%%-*}"; o="__groups/${g}"; mkdir -p "${o}"; tar c -C "${d}" . | tar x -C "${o}"; rm -rf "${d}"; done
+    - mv __groups/* "${ARTIFACTSDIR}"
+    - rm -rf __groups
 # make sure all the files have the proper permissions
     - chmod -R a+rX,u+w,go-w "${ARTIFACTSDIR}"
 # remove ltlib leftovers

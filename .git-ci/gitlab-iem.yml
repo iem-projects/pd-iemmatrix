@@ -129,9 +129,9 @@ stages:
   before_script:
     - echo "floatsize=${floatsize}"
     - echo "${PDBASEURL}/pd-${PDVERSION}${PDARCHSUFFIX}.msw.zip"
-    - test "${floatsize}" = 64 || wget -q -O Pd.zip "${PDBASEURL}/pd-${PDVERSION}${PDARCHSUFFIX}.msw.zip"
+    - test "${floatsize}" = 64 || wget -O Pd.zip "${PDBASEURL}/pd-${PDVERSION}${PDARCHSUFFIX}.msw.zip" || echo "oops $?"
     - echo "https://get.puredata.info/pure-data/releases/${PDVERSION}-pd64/Pd64-${PDVERSION}${PDARCHSUFFIX}.msw.zip"
-    - test "${floatsize}" != 64 || wget -q -O Pd.zip "https://get.puredata.info/pure-data/releases/${PDVERSION}-pd64/Pd64-${PDVERSION}${PDARCHSUFFIX}.msw.zip"
+    - test "${floatsize}" != 64 || wget -O Pd.zip "https://get.puredata.info/pure-data/releases/${PDVERSION}-pd64/Pd64-${PDVERSION}${PDARCHSUFFIX}.msw.zip" || echo "oops $?"
     - mkdir -p _pd
     - unzip -q Pd.zip -d "_pd"
     - mv -v "_pd"/*/* "_pd"

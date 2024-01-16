@@ -250,11 +250,11 @@ macOS:notarize:
   stage: deploy
   image: python:alpine
   dependencies:
-    - Darwin-fat-32
-    - Darwin-fat-64
+    - darwin-fat-32
+    - darwin-fat-64
   needs:
-    - Darwin-fat-32
-    - Darwin-fat-64
+    - darwin-fat-32
+    - darwin-fat-64
   variables:
     IEM_NOTARIZE_SRCDIR: artifacts
   before_script:

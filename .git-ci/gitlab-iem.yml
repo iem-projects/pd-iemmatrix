@@ -246,6 +246,23 @@ linux-arm64-64:
   variables:
     extension: linux-arm64-64.so
 
+macOS:notarize:
+  stage: deploy
+  image: python:alpine
+  dependencies:
+    - Darwin-fat-32
+    - Darwin-fat-64
+  needs:
+    - Darwin-fat-32
+    - Darwin-fat-64
+  variables:
+    IEM_NOTARIZE_SRCDIR: artifacts
+  before_script:
+    - apk add zip git
+  script:
+    - !reference [.script:notarize:macos]
+  allow_failure: true
+
 
 deken:
   stage: deploy

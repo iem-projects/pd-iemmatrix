@@ -13,6 +13,7 @@ variables:
   GIT_SUBMODULE_DEPTH: 1
   ## gitlab-runner feature-flags
   #FF_SCRIPT_SECTIONS: 1
+  HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: 1
 
 stages:
   - build

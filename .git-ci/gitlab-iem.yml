@@ -27,9 +27,15 @@ stages:
       - ${ARTIFACTSDIR}
     expire_in: 1 week
 
+.script:zsh_compat: &script_zsh_compat
+  - | # zsh fixes
+    set -o shwordsplit || true     # zsh doesn't do wordsplitting by default...
+    set -o nonomatch   || true     # zsh bails out if globbing patterns do not expand
+
 .build:
   stage: build
   script:
+    - *script_zsh_compat
     - |
       DESTDIR="$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%%:*}"
     - echo "PDDIR ${PDDIR}"
@@ -82,6 +88,7 @@ stages:
     - tart
   image: ghcr.io/cirruslabs/macos-monterey-xcode:latest
   before_script:
+    - *script_zsh_compat
     - date
     # cleanup brew (tart is broken)
     - brew uninstall -f android-ndk android-sdk temurin8 libimobiledevice ideviceinstaller ios-deploy fastlane libusb libusbmuxd || true
@@ -126,6 +133,7 @@ stages:
     - echo "PDDIR=${PDDIR}"
     - date
   after_script:
+    - *script_zsh_compat
     - depdir="${CI_JOB_NAME%-[0-9][0-9]}"
     - find "${ARTIFACTSDIR}" -type f "(" -name "*.${extension}" -or -name "*.pd_darwin" -or -name "*.d_fat" -or -name "*.so" ")" -exec .git-ci/iem-ci/localdeps/localdeps.macos.sh -v -d "${depdir}" {} +
     - IEM_SIGN_SRCDIR="${ARTIFACTSDIR}/${CI_JOB_NAME%%:*}"

@@ -79,12 +79,23 @@ stages:
   extends:
     - .build
   tags:
-     - bigsur
+    - tart
+  image: ghcr.io/cirruslabs/macos-monterey-xcode:latest
   before_script:
     - date
+    # cleanup brew (tart is broken)
+    - brew uninstall -f android-ndk android-sdk temurin8 libimobiledevice ideviceinstaller ios-deploy fastlane libusb libusbmuxd || true
+    - brew unlink libpng || true
+    - brew list --full-name || true
+    - brew update || true
+    # make sure we have a good gitlab runner
+    - (which gitlab-runner; gitlab-runner --version) || brew install gitlab-runner || true
+    - (which gitlab-runner; gitlab-runner --version) || true
+    # install dependencies
     - brew bundle --no-upgrade --file=.git-ci/macOS.brew
     # some of the fatbrew files end up as keg-only (and are therefore not found by pkg-config), so:
     - brew  link $(brew list --full-name | grep iem/fatbrew)
+    # install Pd
     - rm -rf /Applications/Pd*.app/
     - rm -rf "${IEM_CI_TMPDIR}"
     # get Pd tarball

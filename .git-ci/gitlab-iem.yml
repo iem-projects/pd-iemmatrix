@@ -11,8 +11,8 @@ variables:
   IEM_CI_TMPDIR: .git-ci/_build/
   GIT_SUBMODULE_STRATEGY: recursive
   GIT_SUBMODULE_DEPTH: 1
-  # gitlab-runner feature-flags
-  FF_SCRIPT_SECTIONS: 1
+  ## gitlab-runner feature-flags
+  #FF_SCRIPT_SECTIONS: 1
 
 stages:
   - build

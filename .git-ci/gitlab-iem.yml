@@ -96,7 +96,7 @@ stages:
     # install dependencies
     - brew bundle --no-upgrade --file=.git-ci/macOS.brew
     # some of the fatbrew files end up as keg-only (and are therefore not found by pkg-config), so:
-    - brew  link $(brew list --full-name | grep iem/fatbrew)
+    - brew list --full-name | grep iem/fatbrew | while read pkg; do echo $pkg; brew unlink ${pkg} || true; brew link ${pkg} || true; done
     # install Pd
     - rm -rf /Applications/Pd*.app/
     - rm -rf "${IEM_CI_TMPDIR}"

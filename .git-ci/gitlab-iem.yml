@@ -88,6 +88,8 @@ stages:
   tags:
     - tart
   image: ghcr.io/cirruslabs/macos-monterey-xcode:latest
+  variables:
+    CODESIGNFLAGS: --timestamp --strict --force
   before_script:
     - *script_zsh_compat
     - date

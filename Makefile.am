@@ -25,35 +25,48 @@ AM_CFLAGS +=
 AM_LDFLAGS+= 
 
 
-noinst_LTLIBRARIES = libiemmatrixCore.la libiemmatrixSphericalHarmonics.la libiemmatrixSphericalRadial.la
+noinst_LTLIBRARIES = \
+	libiemmatrixCore.la \
+	libiemmatrixSphericalHarmonics.la libiemmatrixSphericalRadial.la \
+	libiemmatrixQhull.la \
+	$(empty)
+
+libiemmatrixCore_la_SOURCES=\
+	src/iemmatrix.h \
+	src/iemmatrix_sources.h src/mtx_binop_generic.h \
+	src/iemmatrix_binops.c \
+	src/iemmatrix_utility.c \
+	$(empty)
 
 libiemmatrixSphericalHarmonics_la_SOURCES =  \
 	src/mtx_spherical_harmonics/chebyshev12.c src/mtx_spherical_harmonics/chebyshev12.h \
 	src/mtx_spherical_harmonics/legendre_a.c src/mtx_spherical_harmonics/legendre_a.h \
 	src/mtx_spherical_harmonics/sharmonics.c src/mtx_spherical_harmonics/sharmonics.h \
-	src/mtx_spherical_harmonics/sharmonics_normalization.c src/mtx_spherical_harmonics/sharmonics_normalization.h
+	src/mtx_spherical_harmonics/sharmonics_normalization.c src/mtx_spherical_harmonics/sharmonics_normalization.h \
+	$(empty)
+
 libiemmatrixSphericalRadial_la_SOURCES =  \
- src/mtx_spherical_harmonics/sph_radial.c src/mtx_spherical_harmonics/sph_radial.h
-libiemmatrixCore_la_SOURCES=\
-	src/iemmatrix.h \
-	src/iemmatrix_sources.h src/mtx_binop_generic.h \
-	src/iemmatrix_binops.c \
-	src/iemmatrix_utility.c
+	src/mtx_spherical_harmonics/sph_radial.c src/mtx_spherical_harmonics/sph_radial.h \
+	$(empty)
+
 
 ## qhull-stuff
-libiemmatrixCore_la_SOURCES+=\
+libiemmatrixQhull_la_SOURCES = \
 	src/mtx_qhull/entry.h \
 	src/mtx_qhull/list.h \
         src/mtx_qhull/list.c \
 	src/mtx_qhull/vectors.h \
 	src/mtx_qhull/vectors.c \
 	src/mtx_qhull/zhull.h \
-	src/mtx_qhull/zhull.c
+	src/mtx_qhull/zhull.c \
+	$(empty)
 
 iemmatrix_la_CPPFLAGS=-DIEMMATRIX_LIBRARY $(AM_CPPFLAGS)
 iemmatrix_la_CFLAGS =$(AM_CFLAGS)
 iemmatrix_la_CFLAGS+=$(SNDFILE_CFLAGS) $(FFTW3_CFLAGS) $(GSL_CFLAGS)
-iemmatrix_la_LIBADD = libiemmatrixCore.la libiemmatrixSphericalHarmonics.la libiemmatrixSphericalRadial.la
+iemmatrix_la_LIBADD = libiemmatrixCore.la
+iemmatrix_la_LIBADD+= libiemmatrixSphericalHarmonics.la libiemmatrixSphericalRadial.la
+iemmatrix_la_LIBADD+= libiemmatrixQhull.la
 iemmatrix_la_LIBADD+= $(SNDFILE_LIBS) $(FFTW3_LIBS) $(GSL_LIBS)
 
 ### BEGIN GENERATED CONTENT ###################################################
@@ -297,7 +310,7 @@ mtx_print_la_LIBADD	= libiemmatrixCore.la
 mtx_prod_la_SOURCES	= src/mtx_prod.c
 mtx_prod_la_LIBADD	= libiemmatrixCore.la
 mtx_qhull_la_SOURCES	= src/mtx_qhull.c
-mtx_qhull_la_LIBADD	= libiemmatrixCore.la
+mtx_qhull_la_LIBADD	= libiemmatrixCore.la libiemmatrixQhull.la
 mtx_qr_la_SOURCES	= src/mtx_qr.c
 mtx_qr_la_CFLAGS	= $(AM_CFLAGS) $(GSL_CFLAGS)
 mtx_qr_la_LIBADD	= libiemmatrixCore.la $(GSL_LIBS)

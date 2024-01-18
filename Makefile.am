@@ -72,7 +72,7 @@ if SINGLEOBJECTS
 pkglib_LTLIBRARIES += \
 	matrix.la mtx_abs.la mtx_add.la \
 	mtx_and.la mtx_atan.la mtx_atan2.la \
-	mtx_bessel.la mtx_bitand.la mtx_bitleft.la \
+	mtx_bitand.la mtx_bitleft.la \
 	mtx_bitor.la mtx_bitright.la mtx_bspline.la \
 	mtx_check.la mtx_cholesky.la mtx_col.la \
 	mtx_colon.la mtx_concat.la mtx_conv.la \
@@ -80,7 +80,7 @@ pkglib_LTLIBRARIES += \
 	mtx_dbtopow.la mtx_dbtorms.la mtx_decay.la \
 	mtx_diag.la mtx_diegg.la mtx_diff.la \
 	mtx_dispersive_dline.la mtx_distance2.la mtx_egg.la \
-	mtx_eig.la mtx_ei~.la mtx_element.la \
+	mtx_ei~.la mtx_element.la \
 	mtx_eq.la mtx_exp.la mtx_eye.la \
 	mtx_fft.la mtx_fill.la mtx_find.la \
 	mtx_gauss.la mtx_ge.la mtx_gt.la \
@@ -92,14 +92,14 @@ pkglib_LTLIBRARIES += \
 	mtx_not.la mtx_ones.la mtx_or.la \
 	mtx_pack~.la mtx_pivot.la mtx_pow.la \
 	mtx_powtodb.la mtx_print.la mtx_prod.la \
-	mtx_qhull.la mtx_qr.la mtx_rand.la \
+	mtx_qhull.la mtx_rand.la \
 	mtx_repmat.la mtx_resize.la mtx_reverse.la \
-	mtx_rfft.la mtx_rifft.la mtx_rmstodb.la \
+	mtx_rmstodb.la \
 	mtx_roll.la mtx_row.la mtx_scroll.la \
 	mtx_sin.la mtx_size.la mtx_slice.la \
-	mtx_sndfileread.la mtx_sort.la mtx_spherical_harmonics.la \
+	mtx_sort.la mtx_spherical_harmonics.la \
 	mtx_spherical_radial.la mtx_sub.la mtx_sum.la \
-	mtx_svd.la mtx_trace.la mtx_transpose.la \
+	mtx_trace.la mtx_transpose.la \
 	mtx_unpack~.la mtx_zeros.la matrix_mul_line~.la \
 	matrix_mul~.la matrix~.la mtx.la \
 	mtx_0x21.la mtx_0x210x3d.la mtx_0x26.la \
@@ -112,13 +112,27 @@ pkglib_LTLIBRARIES += \
 	mtx_0x7c0x7c.la mtx_div.la 
 endif SINGLEOBJECTS
 
+# these objects are always built separately
+# hmm, these can either use fftw3 or Pd's mayerFFT
+# LATER provide both binaries, preferring fftw3 if available at runtime
+pkglib_LTLIBRARIES += mtx_rfft.la mtx_rifft.la
+
+# depends on libsndfile
+pkglib_LTLIBRARIES += mtx_sndfileread.la
+# depends on libgsl
+pkglib_LTLIBRARIES += \
+	mtx_bessel.la \
+	mtx_eig.la \
+	mtx_qr.la \
+	mtx_svd.la \
+	$(empty)
 
 iemmatrix_la_SOURCES = \
 	src/iemmatrix.c src/iemmatrix_sources.c 
 iemmatrix_la_SOURCES += \
 	src/matrix.c src/mtx_abs.c src/mtx_add.c \
 	src/mtx_and.c src/mtx_atan.c src/mtx_atan2.c \
-	src/mtx_bessel.c src/mtx_bitand.c src/mtx_bitleft.c \
+	src/mtx_bitand.c src/mtx_bitleft.c \
 	src/mtx_bitor.c src/mtx_bitright.c src/mtx_bspline.c \
 	src/mtx_check.c src/mtx_cholesky.c src/mtx_col.c \
 	src/mtx_colon.c src/mtx_concat.c src/mtx_conv.c \
@@ -126,7 +140,7 @@ iemmatrix_la_SOURCES += \
 	src/mtx_dbtopow.c src/mtx_dbtorms.c src/mtx_decay.c \
 	src/mtx_diag.c src/mtx_diegg.c src/mtx_diff.c \
 	src/mtx_dispersive_dline.c src/mtx_distance2.c src/mtx_egg.c \
-	src/mtx_eig.c src/mtx_ei~.c src/mtx_element.c \
+	src/mtx_ei~.c src/mtx_element.c \
 	src/mtx_eq.c src/mtx_exp.c src/mtx_eye.c \
 	src/mtx_fft.c src/mtx_fill.c src/mtx_find.c \
 	src/mtx_gauss.c src/mtx_ge.c src/mtx_gt.c \
@@ -138,14 +152,14 @@ iemmatrix_la_SOURCES += \
 	src/mtx_not.c src/mtx_ones.c src/mtx_or.c \
 	src/mtx_pack~.c src/mtx_pivot.c src/mtx_pow.c \
 	src/mtx_powtodb.c src/mtx_print.c src/mtx_prod.c \
-	src/mtx_qhull.c src/mtx_qr.c src/mtx_rand.c \
+	src/mtx_qhull.c src/mtx_rand.c \
 	src/mtx_repmat.c src/mtx_resize.c src/mtx_reverse.c \
-	src/mtx_rfft.c src/mtx_rifft.c src/mtx_rmstodb.c \
+	src/mtx_rmstodb.c \
 	src/mtx_roll.c src/mtx_row.c src/mtx_scroll.c \
 	src/mtx_sin.c src/mtx_size.c src/mtx_slice.c \
-	src/mtx_sndfileread.c src/mtx_sort.c src/mtx_spherical_harmonics.c \
+	src/mtx_sort.c src/mtx_spherical_harmonics.c \
 	src/mtx_spherical_radial.c src/mtx_sub.c src/mtx_sum.c \
-	src/mtx_svd.c src/mtx_trace.c src/mtx_transpose.c \
+	src/mtx_trace.c src/mtx_transpose.c \
 	src/mtx_unpack~.c src/mtx_zeros.c
 
 matrix_la_SOURCES	= src/matrix.c

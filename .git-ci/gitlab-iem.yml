@@ -132,7 +132,7 @@ stages:
   after_script:
     - *script_zsh_compat
     - depdir="${CI_JOB_NAME%-[0-9][0-9]}"
-    - find "${ARTIFACTSDIR}" -type f "(" -name "*.${extension}" -or -name "*.pd_darwin" -or -name "*.d_fat" -or -name "*.so" ")" -exec .git-ci/iem-ci/localdeps/localdeps.macos.sh -v -d "${depdir}" {} +
+    - find "${ARTIFACTSDIR}" -type f "(" -name "*.${extension}" -or -name "*.pd_darwin" -or -name "*.d_fat" -or -name "*.so" ")" -exec .git-ci/iem-ci/localdeps/localdeps.macos.sh -v -F -d "${depdir}" {} +
     - IEM_SIGN_SRCDIR="${ARTIFACTSDIR}/${CI_JOB_NAME%%:*}"
     - !reference [.script:codesign:macos]
 

@@ -59,6 +59,7 @@ AS_IF([test "xno" != "x${with_fftw}" ],[
 AS_IF([test "xyes" = "x${have_fftw3}" ],[
    AC_DEFINE(USE_FFTW, 1, [can we use fftw?])
 ])
+AM_CONDITIONAL(HAVE_FFTW, test "xyes" = "x${have_fftw3}")
 
 dnl for soundfile reading (and writing, if we do that...)
 AC_ARG_WITH([sndfile], AC_HELP_STRING([--without-sndfile], [compile without libsndfile support]))
@@ -70,6 +71,7 @@ AS_IF([test "xyes" = "x${have_sndfile}"],[
    AC_DEFINE([HAVE_LIBSNDFILE],1,[Define to 1 if you have the 'sndfile' library (-lsndfile).])
    AC_DEFINE([HAVE_SNDFILE_H],1,[Define to 1 if you have the <sndfile.h> header file.])
 ])
+AM_CONDITIONAL(HAVE_SNDFILE, test "xyes" = "x${have_sndfile}")
 
 
 dnl for gnu scientific library -lgsl:
@@ -81,6 +83,7 @@ AS_IF([test "xyes" = "x${have_gsl}"],[
   AC_SEARCH_LIBS([gsl_sf_bessel_Jn],[m],[have_gsl_bessel=yes],[],[${GSL_LIBS}])
   AC_DEFINE(HAVE_LIBGSL,1,[Define to 1 if you have the 'gsl' library (-lgsl).])
 ])
+AM_CONDITIONAL(HAVE_GSL, test "xyes" = "x${have_gsl}")
 
 
 AS_IF([test "x${have_gsl_eigen_nonsymm}" = "xyes"],[

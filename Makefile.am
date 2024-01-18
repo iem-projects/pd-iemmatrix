@@ -67,7 +67,6 @@ iemmatrix_la_CFLAGS+=$(SNDFILE_CFLAGS) $(FFTW3_CFLAGS) $(GSL_CFLAGS)
 iemmatrix_la_LIBADD = libiemmatrixCore.la
 iemmatrix_la_LIBADD+= libiemmatrixSphericalHarmonics.la libiemmatrixSphericalRadial.la
 iemmatrix_la_LIBADD+= libiemmatrixQhull.la
-iemmatrix_la_LIBADD+= $(SNDFILE_LIBS) $(FFTW3_LIBS) $(GSL_LIBS)
 
 ### BEGIN GENERATED CONTENT ###################################################
 ###############################################################################

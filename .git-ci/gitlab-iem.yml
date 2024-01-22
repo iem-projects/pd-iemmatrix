@@ -144,6 +144,7 @@ stages:
   variables:
     IEMCI_CONFIGURATIONS: mingw64
     PDARCHSUFFIX: ""
+    extension: m_amd64
   before_script:
     - echo "floatsize=${floatsize}"
     - echo "${PDBASEURL}/pd-${PDVERSION}${PDARCHSUFFIX}.msw.zip"
@@ -169,6 +170,7 @@ stages:
   variables:
     IEMCI_CONFIGURATIONS: mingw32
     PDARCHSUFFIX: "-i386"
+    extension: dll
 
 ###################################################
 ### the actual jobs: (linux,macos,windows)*(single,double)

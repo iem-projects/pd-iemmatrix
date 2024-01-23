@@ -1,12 +1,13 @@
+---
 language: c
 
 env:
   global:
-        ## COVERITY envs:
-        - secure: "aF/vtcGHUNt8RaUGR+fa5gUhVU58uVXfes9k0xLsCmII0mOL4lPoNOPRJCdaCQZ6udtVStgZ9XYZTVq2MPN/cVS/XOVOxM670TDNX7+TZ6yWsAiMEKZKsAQr+Pe4Af51iGRE9KA6xMlcTgnxBqfksSXz7+1thOJyNBw9MbTz+bgq2CysByHPOTjLziYtZCFfT361K0DJLCYF2vS5LPdiL186BvPqoQZA01/e/RnUfCAUztZ5VEfQU6lAJ3dnBbo6YyDcUcmweQzbJ6ALg/t6rG/E97w2p2sdWVs0F1XNwgmPCt/9Dx5R308sR274R+JbY8b+mgAfCSNT6oZuYXFVf/AzE3Q4i52CygmG5pw46KCctw/GKabHlxhQ9+m0hKLKqZ1c4uirqFRyno5JTeIJRnff3poAS56NSSqxkVXGSRPixAL/aQi7rkJLJdOPOTMmQx2MGHTxyW9KwibPWcxDFly4f2Eog9DlZScM4mvG5MKbHgVN2FiG81dg2JBIAvrKzhNC4cSyqbsQ/dC3niNEh6Wzf3THBRqjY+rY0vgYt1elxhdgXTAooaakJPX7FGBqCBS/zyClnM1WJ3T/ky7Ii+mmNj+pWX+wZl9LIO//36ZfH2L9Bx/gPIVN7kQz6L/kvNlmVEISo9jkYjuhegisNy/WeYdKbXydV09KsAcdi6M="
-        - COVERITY_SCAN_BRANCH_PATTERN="coverity_scan"
-        - COVERITY_SCAN_NOTIFICATION_EMAIL="dev@umlaeute.mur.at"
-        - COVERITY_SCAN_BUILD_COMMAND="make"
+    ## COVERITY envs:
+    - secure: "aF/vtcGHUNt8RaUGR+fa5gUhVU58uVXfes9k0xLsCmII0mOL4lPoNOPRJCdaCQZ6udtVStgZ9XYZTVq2MPN/cVS/XOVOxM670TDNX7+TZ6yWsAiMEKZKsAQr+Pe4Af51iGRE9KA6xMlcTgnxBqfksSXz7+1thOJyNBw9MbTz+bgq2CysByHPOTjLziYtZCFfT361K0DJLCYF2vS5LPdiL186BvPqoQZA01/e/RnUfCAUztZ5VEfQU6lAJ3dnBbo6YyDcUcmweQzbJ6ALg/t6rG/E97w2p2sdWVs0F1XNwgmPCt/9Dx5R308sR274R+JbY8b+mgAfCSNT6oZuYXFVf/AzE3Q4i52CygmG5pw46KCctw/GKabHlxhQ9+m0hKLKqZ1c4uirqFRyno5JTeIJRnff3poAS56NSSqxkVXGSRPixAL/aQi7rkJLJdOPOTMmQx2MGHTxyW9KwibPWcxDFly4f2Eog9DlZScM4mvG5MKbHgVN2FiG81dg2JBIAvrKzhNC4cSyqbsQ/dC3niNEh6Wzf3THBRqjY+rY0vgYt1elxhdgXTAooaakJPX7FGBqCBS/zyClnM1WJ3T/ky7Ii+mmNj+pWX+wZl9LIO//36ZfH2L9Bx/gPIVN7kQz6L/kvNlmVEISo9jkYjuhegisNy/WeYdKbXydV09KsAcdi6M="
+    - COVERITY_SCAN_BRANCH_PATTERN="coverity_scan"
+    - COVERITY_SCAN_NOTIFICATION_EMAIL="dev@umlaeute.mur.at"
+    - COVERITY_SCAN_BUILD_COMMAND="make"
 
 matrix:
   include:
@@ -16,8 +17,8 @@ matrix:
         - COVERITY_SCAN_PROJECT_NAME="$TRAVIS_REPO_SLUG"
 
 before_install:
-- sudo apt-get update -qq
-- sudo apt-get install -qq puredata-dev libfftw3-dev libsndfile1-dev libgsl0-dev
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq puredata-dev libfftw3-dev libsndfile1-dev libgsl0-dev
 
 before_script:
   - ./autogen.sh
@@ -28,4 +29,4 @@ before_script:
   - if [[ -e cov-int/scm_log.txt ]] ; then cat cov-int/scm_log.txt; else echo "no coverity log found"; fi
 
 script:
-- make
+  - make

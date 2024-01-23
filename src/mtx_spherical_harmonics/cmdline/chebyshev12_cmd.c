@@ -24,8 +24,8 @@ int main (int argc, char *argv[])
     return 0;
   }
   if ((wc=chebyshev12_alloc(nmax,l))==0) {
-    printf("chebyshev12 could not allocate memory for n=%d\n and l=%d\n",nmax,
-           l);
+    printf("chebyshev12 could not allocate memory for n=%d\n and l=%d\n",nmax, l);
+    free(phi);
     return 0;
   }
   for (n=0; n<l; n++) {

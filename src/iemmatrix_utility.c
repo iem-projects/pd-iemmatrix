@@ -621,6 +621,7 @@ void*iemmatrix_getpdfun(const char*name)
     // search recursively, starting from the main program
     return dlsym(dlopen(0, RTLD_NOW), name);
 #endif
+    return 0;
 }
 
 const char*iemmatrix_objname(void*obj) {

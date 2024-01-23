@@ -1109,7 +1109,7 @@ static void mtx_mul_addmethods(t_class*c) {
   class_addmethod(c, (t_method)matrix_multilde_time,
                   gensym("time"), A_FLOAT, 0);
 
-  /* LATER: can we re-use the 'matrix' method and transpose
+  /* LATER: can we reuse the 'matrix' method and transpose
    * depending on the compat level? */
   class_addmethod(c, (t_method)matrix_multilde_matrixT,
                   gensym(""), A_GIMME, 0);

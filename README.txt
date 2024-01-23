@@ -35,7 +35,7 @@ enabled, which might be missing otherwise.
 
 
  - autotools, libtool, gettext
-     thats the basic build-system
+     that's the basic build-system
 
  - a compiler, linker,...
      tested with
@@ -69,7 +69,7 @@ Once `make` has succeeded, you will have a `iemmatrix` binary in the (hidden)
 Installing
 ==========
 
-The ordinary way to install, is by running the following with the proper priviliges
+The ordinary way to install, is by running the following with the proper privileges
 (e.g. as root):
 
  # make install
@@ -89,7 +89,7 @@ You can then take this directory, and put it into a place, where Pd will look fo
 
 E.g.
 
- - linux: `~/pd-externals` (e.g. `/home/frodo/pd-externals`)
+ - Linux: `~/pd-externals` (e.g. `/home/frodo/pd-externals`)
  - OSX  : `~/Library/Pd`   (e.g. `/Users/frodo/Pd`)
  - W32  : `%AppData%\Pd`   (e.g. `C:\Documents and Settings\frodo\Application Data\Pd`)
 
@@ -100,7 +100,7 @@ A full list of default search paths for externals, can be found at
 System-specific instructions
 ============================
 
-linux (Debian-based)
+Linux (Debian-based)
 --------------------
 
 `iemmatrix` is available as Debian package
@@ -142,7 +142,7 @@ Microsoft W32
 -------------
 
 The only sane way to build iemmatrix for W32 using autotools,
-is currently by using `MinGW-w64` as a cross-compilation environment on linux.
+is currently by using `MinGW-w64` as a cross-compilation environment on Linux.
 
 Debian (and derivates) provides packages for this:
 
@@ -151,9 +151,9 @@ Debian (and derivates) provides packages for this:
 Run "./configure" and specify the path to your W32 installation of Pd
 (where you unzipped the W32 package of Pd) using the `--with-pd` flag.
 Make sure that the Pd-sources are in PDPATH/src and the compiled pd-binaries in PDPATH/bin.
-If they are scattered across you filesystem you can alternatively give explicitely the paths
+If they are scattered across you filesystem you can alternatively give explicitly the paths
 to your "m_pd.h" (with `--includedir`) and to your "pd.lib" (with `--libdir`).
-Don't forget to override the default extension ("pd_linux" on linux-systems)
+Don't forget to override the default extension ("pd_linux" on Linux-systems)
 with the more appropriate "dll".
 On bash this looks like:
 

@@ -12,7 +12,7 @@
  *
  */
 #include "iemmatrix.h"
-void iemmatrix_sources_setup(void);
+#include "iemmatrix_sources.h"
 
 #ifndef BUILD_DATE
 # define BUILD_DATE "" __DATE__ " : " __TIME__

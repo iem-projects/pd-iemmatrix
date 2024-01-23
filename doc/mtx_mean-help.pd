@@ -1,9 +1,7 @@
 #N canvas 128 104 450 300 10;
 #X declare -lib iemmatrix;
-#X text 228 47 updated for;
-#X obj 316 47 declare -lib iemmatrix;
-#X obj 365 73 matrix;
-#X text 235 72 see also help for;
+#X obj 385 73 matrix;
+#X text 255 72 see also help for;
 #X obj 57 176 mtx_mean;
 #X obj 57 231 print mean_row;
 #X obj 57 106 mtx_rand;
@@ -20,9 +18,10 @@
 #X text 12 65 INLET_0 matrix;
 #X text 12 5 KEYWORDS control matrix statistics;
 #X text 11 44 DESCRIPTION get mean values of each column of a matrix;
+#X obj 16 147 declare -lib iemmatrix;
 #X restore 381 16 pd META;
-#X connect 4 0 5 0;
-#X connect 6 0 8 0;
-#X connect 7 0 6 0;
-#X connect 8 0 4 0;
-#X connect 8 1 9 0;
+#X connect 2 0 3 0;
+#X connect 4 0 6 0;
+#X connect 5 0 4 0;
+#X connect 6 0 2 0;
+#X connect 6 1 7 0;

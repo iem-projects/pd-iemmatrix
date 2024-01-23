@@ -1,4 +1,5 @@
 #N canvas 94 0 1118 745 10;
+#X declare -lib iemmatrix;
 #X obj 258 -23 matrix;
 #X obj 61 187 mtx_check;
 #X obj 61 216 mtx_print;
@@ -91,6 +92,7 @@
 #X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
 #X text 12 65 INLET_0 message (matrix description);
 #X text 12 45 DESCRIPTION create and store a 2d matrix;
+#X obj 13 150 declare -lib iemmatrix;
 #X restore 971 676 pd META;
 #X connect 1 0 2 0;
 #X connect 5 0 4 0;

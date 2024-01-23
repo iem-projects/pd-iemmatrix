@@ -1,9 +1,7 @@
 #N canvas 61 0 491 290 10;
 #X declare -lib iemmatrix;
-#X text 295 230 updated for;
-#X obj 383 230 declare -lib iemmatrix;
-#X obj 432 256 matrix;
-#X text 302 255 see also help for;
+#X obj 432 246 matrix;
+#X text 302 245 see also help for;
 #X obj 103 201 mtx_ones 5;
 #X obj 103 227 mtx_print;
 #X msg 103 130 bang;
@@ -20,8 +18,9 @@
 #X text 12 65 INLET_0 matrix;
 #X text 12 5 KEYWORDS control matrix;
 #X text 12 44 DESCRIPTION create a matrix with all elements := 1;
+#X obj 16 147 declare -lib iemmatrix;
 #X restore 421 6 pd META;
-#X connect 4 0 5 0;
-#X connect 6 0 4 0;
-#X connect 7 0 4 0;
-#X connect 8 0 4 0;
+#X connect 2 0 3 0;
+#X connect 4 0 2 0;
+#X connect 5 0 2 0;
+#X connect 6 0 2 0;

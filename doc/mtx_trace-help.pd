@@ -1,7 +1,5 @@
 #N canvas 108 140 615 247 10;
 #X declare -lib iemmatrix;
-#X text 360 64 updated for;
-#X obj 448 64 declare -lib iemmatrix;
 #X text 83 25 get the trace of a matrix;
 #X obj 84 106 mtx_ones 7;
 #X msg 84 83 bang;
@@ -19,8 +17,9 @@
 #X text 12 25 LICENSE GPL-2+;
 #X text 12 65 INLET_0 matrix;
 #X text 12 5 KEYWORDS control matrix math;
-#X text 12 44 DESCRIPTION get the trace of a matrix (sum of diagonal elements);
+#X text 12 44 DESCRIPTION get the trace of a matrix (sum of diagonal elements), f 66;
+#X obj 16 147 declare -lib iemmatrix;
 #X restore 551 16 pd META;
-#X connect 3 0 5 0;
-#X connect 4 0 3 0;
-#X connect 5 0 6 0;
+#X connect 1 0 3 0;
+#X connect 2 0 1 0;
+#X connect 3 0 4 0;

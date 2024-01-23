@@ -1,4 +1,5 @@
 #N canvas 549 113 921 503 10;
+#X declare -lib iemmatrix;
 #X text 620 234 for m>=0;
 #X text 619 250 for m< 0;
 #X text 288 118 [mtx_circular_harmonics] requires a numerical creation argument <nmax> specifyiing the maximum order 0<=n<=nmax.;
@@ -85,6 +86,7 @@
 #X text 12 65 INLET_0 matrix;
 #X text 11 105 AUTHOR Franz Zotter;
 #X text 12 45 DESCRIPTION calculate circular harmonics for matrix;
+#X obj 13 150 declare -lib iemmatrix;
 #X restore 585 455 pd META;
 #X text 167 251 PHI_m(phi) = 1/sqrt(pi) * sin(|m|*phi);
 #X text 399 452 Franz Zotter \, 2009 \, 2023;

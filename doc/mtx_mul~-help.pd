@@ -1,4 +1,5 @@
-#N canvas 584 196 889 615 12;
+#N canvas 584 196 796 628 12;
+#X declare -lib iemmatrix;
 #X obj 116 339 osc~ 100;
 #X obj 116 360 *~ 0.2;
 #X obj 166 381 osc~ 1000;
@@ -64,8 +65,8 @@
 #X connect 8 0 7 2;
 #X connect 10 0 9 1;
 #X connect 12 0 9 0;
-#X restore 231 585 pd LEGACY;
-#N canvas 468 154 486 171 META 0;
+#X restore 65 587 pd LEGACY;
+#N canvas 468 154 486 187 META 0;
 #X text 12 135 HELP_PATCH_AUTHORS IOhannes m zmölnig;
 #X text 12 25 LICENSE GPL-2+;
 #X text 12 116 AUTHOR Franz Zotter;
@@ -74,7 +75,8 @@
 #X text 12 65 INLET_0 matrix;
 #X text 12 82 INLET_n signal;
 #X text 12 97 OUTLET_m signal;
-#X restore 521 586 pd META;
+#X obj 13 160 declare -lib iemmatrix;
+#X restore 731 586 pd META;
 #N canvas 112 13 964 803 multichannel 0;
 #X text 39 17 With recent versions of Pd (>=0.54) \, you can use multichannel connections.;
 #X text 41 76 To do so \, give '0' as the number of rows (outlets) and/or columns (inlets);
@@ -159,6 +161,7 @@
 #X connect 46 0 43 0;
 #X connect 47 0 43 0;
 #X restore 673 264 pd multichannel;
+#X text 142 589 <-- DEPRECATED uses;
 #X connect 0 0 1 0;
 #X connect 1 0 23 1;
 #X connect 2 0 3 0;

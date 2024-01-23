@@ -1,12 +1,12 @@
-#N canvas 128 118 687 471 10;
+#N canvas 128 113 545 476 10;
 #X declare -lib iemmatrix;
 #X msg 48 59 3 5;
-#X obj 555 66 exp;
+#X obj 445 336 exp;
 #X obj 48 134 mtx_exp;
 #X obj 48 81 mtx_eye;
 #X obj 125 100 mtx 3 3;
 #X msg 125 80 0 1 2 3 4 5 6 7 8;
-#X obj 555 86 mtx_log;
+#X obj 445 356 mtx_log;
 #X obj 48 162 mtx_print exponential;
 #X obj 64 285 mtx_rand 4 2;
 #X msg 64 263 bang;
@@ -17,10 +17,8 @@
 #X obj 105 357 mtx_print exp;
 #X obj 64 380 mtx_log;
 #X obj 64 407 mtx_print log;
-#X text 418 17 updated for;
-#X obj 506 17 declare -lib iemmatrix;
-#X obj 555 43 matrix;
-#X text 425 42 see also help for;
+#X obj 445 313 matrix;
+#X text 315 312 see also help for;
 #X text 45 42 compute the exponentials of matrix elements;
 #X text 188 7 exponentials of matrix elements;
 #N canvas 460 154 494 171 META 0;
@@ -31,7 +29,8 @@
 #X text 12 65 INLET_0 matrix;
 #X text 12 5 KEYWORDS control matrix math;
 #X text 12 45 DESCRIPTION compute the exponentials of matrix elements;
-#X restore 609 17 pd META;
+#X obj 16 147 declare -lib iemmatrix;
+#X restore 459 17 pd META;
 #X connect 0 0 3 0;
 #X connect 2 0 7 0;
 #X connect 3 0 2 0;

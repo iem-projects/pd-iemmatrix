@@ -1,9 +1,7 @@
 #N canvas 61 0 491 290 10;
 #X declare -lib iemmatrix;
-#X text 295 230 updated for;
-#X obj 383 230 declare -lib iemmatrix;
-#X obj 432 256 matrix;
-#X text 302 255 see also help for;
+#X obj 402 126 matrix;
+#X text 272 125 see also help for;
 #X obj 103 201 mtx_egg 5;
 #X obj 103 227 mtx_print;
 #X msg 103 130 bang;
@@ -20,8 +18,10 @@
 #X text 12 65 INLET_0 matrix;
 #X text 12 5 KEYWORDS control matrix;
 #X text 11 45 DESCRIPTION create a turned identity matrix;
-#X restore 421 206 pd META;
-#X connect 4 0 5 0;
-#X connect 6 0 4 0;
-#X connect 7 0 4 0;
-#X connect 8 0 4 0;
+#X obj 16 147 declare -lib iemmatrix;
+#X restore 431 16 pd META;
+#X obj 402 148 mtx_eye;
+#X connect 2 0 3 0;
+#X connect 4 0 2 0;
+#X connect 5 0 2 0;
+#X connect 6 0 2 0;

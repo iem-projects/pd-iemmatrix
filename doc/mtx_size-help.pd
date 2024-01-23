@@ -1,9 +1,7 @@
 #N canvas 161 60 453 283 10;
 #X declare -lib iemmatrix;
-#X text 108 233 updated for;
-#X obj 196 233 declare -lib iemmatrix;
-#X obj 245 259 matrix;
-#X text 115 258 see also help for;
+#X obj 245 239 matrix;
+#X text 115 238 see also help for;
 #X floatatom 151 178 4 0 0 0 - - - 0;
 #X text 148 68 get the size of a matrix;
 #X obj 151 140 mtx_size;
@@ -23,9 +21,10 @@
 #X text 12 65 INLET_0 matrix;
 #X text 12 44 DESCRIPTION get size of a matrix;
 #X text 12 5 KEYWORDS control matrix;
+#X obj 16 147 declare -lib iemmatrix;
 #X restore 401 16 pd META;
-#X connect 6 0 4 0;
-#X connect 6 1 10 0;
-#X connect 7 0 9 0;
-#X connect 8 0 9 0;
-#X connect 9 0 6 0;
+#X connect 4 0 2 0;
+#X connect 4 1 8 0;
+#X connect 5 0 7 0;
+#X connect 6 0 7 0;
+#X connect 7 0 4 0;

@@ -33,7 +33,7 @@ noinst_LTLIBRARIES = \
 
 libiemmatrixCore_la_SOURCES=\
 	src/iemmatrix.h \
-	src/iemmatrix_sources.h src/mtx_binop_generic.h \
+	src/mtx_binop_generic.h \
 	src/iemmatrix_binops.c \
 	src/iemmatrix_utility.c \
 	$(empty)
@@ -140,7 +140,9 @@ pkglib_LTLIBRARIES += \
 	$(empty)
 
 iemmatrix_la_SOURCES = \
-	src/iemmatrix.c src/iemmatrix_sources.c 
+	src/iemmatrix.c src/iemmatrix_sources.c \
+	src/iemmatrix_sources.h \
+	$(empty)
 iemmatrix_la_SOURCES += \
 	src/matrix.c src/mtx_abs.c src/mtx_add.c \
 	src/mtx_and.c src/mtx_atan.c src/mtx_atan2.c \

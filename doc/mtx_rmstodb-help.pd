@@ -1,7 +1,8 @@
 #N canvas 337 124 687 471 10;
+#X declare -lib iemmatrix;
 #X text 188 7 convert rms to dB(pd);
 #X text 458 17 updated for;
-#X obj 546 17 iemmatrix 0.2;
+#X obj 546 17 declare -lib iemmatrix;
 #X obj 181 90 mtx_eye;
 #X obj 64 258 mtx_rand 4 2;
 #X msg 64 233 bang;

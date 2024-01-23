@@ -1,6 +1,7 @@
 #N canvas 366 49 604 572 10;
+#X declare -lib iemmatrix;
 #X text 347 392 updated for;
-#X obj 435 392 iemmatrix 0.2;
+#X obj 435 392 declare -lib iemmatrix;
 #X obj 484 418 matrix;
 #X text 354 417 see also help for;
 #X text 243 142 singular;

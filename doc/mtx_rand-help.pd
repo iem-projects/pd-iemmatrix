@@ -1,7 +1,8 @@
 #N canvas 25 323 504 298 10;
+#X declare -lib iemmatrix;
 #X text 51 7 fill a matrix with random values;
 #X text 285 20 updated for;
-#X obj 363 20 iemmatrix 0.2;
+#X obj 363 20 declare -lib iemmatrix;
 #X obj 432 46 matrix;
 #X text 302 45 see also help for;
 #X obj 434 72 random;

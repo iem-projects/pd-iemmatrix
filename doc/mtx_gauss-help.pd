@@ -1,6 +1,7 @@
 #N canvas 66 122 731 401 10;
+#X declare -lib iemmatrix;
 #X text 458 17 updated for;
-#X obj 546 17 iemmatrix 0.2;
+#X obj 546 17 declare -lib iemmatrix;
 #X text 465 42 see also help for;
 #X text 26 12 mtx_gauss:: gauss elimination algorithm;
 #X text 71 62 apply row- & column-transformation to a matrix to shape it into an upper-triangle matrix;

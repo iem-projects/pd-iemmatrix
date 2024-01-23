@@ -16,7 +16,7 @@
 #X obj 56 317 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000;
 #X obj 94 93 *~ 2;
 #X obj 94 69 noise~;
-#N canvas 0 0 450 349 computegains 1;
+#N canvas 627 340 450 349 computegains 0;
 #X obj 141 55 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000;
 #X obj 45 206 mtx_print;
 #X obj 45 152 mtx_rmstodb;

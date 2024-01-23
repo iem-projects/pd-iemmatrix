@@ -18,7 +18,7 @@
 #X obj 347 159 mtx_print org;
 #X text 294 258 diagonal of the matrix;
 #X text 276 88 get the diagonal of a matrix;
-#N canvas 460 154 494 171 META 1;
+#N canvas 460 154 494 171 META 0;
 #X text 12 105 AUTHOR IOhannes m zmoelnig;
 #X text 12 85 OUTLET_0 matrix;
 #X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;

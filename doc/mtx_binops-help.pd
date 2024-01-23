@@ -1,4 +1,4 @@
-#N canvas 79 32 976 685 10;
+#N canvas 186 302 976 685 10;
 #X obj 87 360 mtx_mul;
 #X obj 157 360 mtx_*;
 #X obj 88 163 mtx_add;
@@ -97,7 +97,7 @@
 #X obj 763 575 mtx_.^;
 #X text 546 638 matrix-elements^f;
 #X text 720 636 elementA(i \, j)^elementB(i \, j);
-#N canvas 899 135 537 191 META 1;
+#N canvas 899 135 537 191 META 0;
 #X text 12 140 AUTHOR IOhannes m zmoelnig;
 #X text 12 5 KEYWORDS control matrix;
 #X text 12 120 OUTLET_0 matrix;

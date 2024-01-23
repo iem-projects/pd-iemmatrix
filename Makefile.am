@@ -121,7 +121,8 @@ pkglib_LTLIBRARIES += \
 	mtx_0x3a.la mtx_0x3c.la mtx_0x3c0x3c.la \
 	mtx_0x3c0x3d.la mtx_0x3d0x3d.la mtx_0x3e.la \
 	mtx_0x3e0x3d.la mtx_0x3e0x3e.la mtx_0x7c.la \
-	mtx_0x7c0x7c.la mtx_div.la 
+	mtx_0x7c0x7c.la mtx_div.la \
+	$(empty)
 endif SINGLEOBJECTS
 
 # these objects are always built separately
@@ -174,7 +175,8 @@ iemmatrix_la_SOURCES += \
 	src/mtx_sort.c src/mtx_spherical_harmonics.c \
 	src/mtx_spherical_radial.c src/mtx_sub.c src/mtx_sum.c \
 	src/mtx_trace.c src/mtx_transpose.c \
-	src/mtx_unpack~.c src/mtx_zeros.c
+	src/mtx_unpack~.c src/mtx_zeros.c \
+	$(empty)
 
 matrix_la_SOURCES	= src/matrix.c
 matrix_la_LIBADD	= libiemmatrixCore.la

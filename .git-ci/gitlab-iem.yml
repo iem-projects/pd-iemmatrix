@@ -88,7 +88,7 @@ stages:
     - .build
   tags:
     - tart
-  image: ghcr.io/cirruslabs/macos-monterey-xcode:latest
+  image: registry.git.iem.at/devtools/docker/tart/macos-monterey-xcode:latest
   variables:
     CODESIGNFLAGS: --timestamp --strict --force
   before_script:

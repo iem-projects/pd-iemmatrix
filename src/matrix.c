@@ -82,7 +82,7 @@ static void matrix_read(t_matrix *x, t_symbol *filename)
 
   if (binbuf_read_via_path(bbuf, filename->s_name,
                            canvas_getdir(x->x_canvas)->s_name, 0)) {
-    pd_error(x,"[matrix]: failed to read %128s", filename->s_name);
+    pd_error(x,"[matrix]: failed to read '%s'", filename->s_name);
   }
 
   ap=binbuf_getvec(bbuf);
@@ -108,7 +108,7 @@ static void matrix_write(t_matrix *x, t_symbol *filename)
 
   /* open file */
   if (!(f = fopen(filnam, "w"))) {
-    pd_error(x, "[matrix]: failed to open %128s", filnam);
+    pd_error(x, "[matrix]: failed to open '%s'", filnam);
   } else {
     char *text=(char *)getbytes(sizeof(char)*MAXPDSTRING);
     int textlen;
@@ -122,7 +122,7 @@ static void matrix_write(t_matrix *x, t_symbol *filename)
     text[MAXPDSTRING-1]=0;
     textlen = strlen(text);
     if (fwrite(text, textlen*sizeof(char), 1, f) < 1) {
-      pd_error(x, "[matrix]: failed to write %128s", filnam);
+      pd_error(x, "[matrix]: failed to write '%s'", filnam);
       goto end;
     }
 
@@ -134,12 +134,12 @@ static void matrix_write(t_matrix *x, t_symbol *filename)
         text[MAXPDSTRING-1]=0;
         textlen=strlen(text);
         if (fwrite(text, textlen*sizeof(char), 1, f) < 1) {
-          pd_error(x, "[matrix]: failed to write %128s", filnam);
+          pd_error(x, "[matrix]: failed to write '%s'", filnam);
           goto end;
         }
       }
       if (fwrite("\n", sizeof(char), 1, f) < 1) {
-        pd_error(x, "[matrix]: failed to write %128s", filnam);
+        pd_error(x, "[matrix]: failed to write '%s'", filnam);
         goto end;
       }
     }

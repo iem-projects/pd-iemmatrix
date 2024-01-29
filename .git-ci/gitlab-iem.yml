@@ -265,6 +265,18 @@ linux-arm64-64:
   variables:
     extension: linux-arm64-64.so
 
+
+distcheck:
+  extends:
+    - .build:linux
+  stage: test
+  dependencies: []
+  needs: []
+  script:
+    - autoreconf -fiv || ./autogen.sh
+    - ./configure ${fatarchs:+--enable-fat-binary=${fatarchs}} ${HOST_ARCH_GNU:+--host="${HOST_ARCH_GNU}"} ${PDDIR:+--with-pd="${PDDIR}"} ${extension:+--with-extension="${extension}"} ${floatsize:+--with-floatsize="${floatsize}"}
+    - make distcheck -j2
+
 macOS:notarize:
   stage: deploy
   image: python:alpine

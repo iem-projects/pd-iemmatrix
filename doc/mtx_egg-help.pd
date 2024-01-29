@@ -8,8 +8,8 @@
 #X msg 133 174 3 5;
 #X msg 119 150 10;
 #X text 129 20 [mtx_egg];
-#X text 30 89 create a turned identity matrix;
-#X text 79 246 turned identity matrix;
+#X text 30 89 create an exchange (turned identity) matrix;
+#X text 79 246 exchange matrix;
 #N canvas 460 154 494 171 META 0;
 #X text 12 105 AUTHOR IOhannes m zmoelnig;
 #X text 12 85 OUTLET_0 matrix;
@@ -17,7 +17,7 @@
 #X text 12 25 LICENSE GPL-2+;
 #X text 12 65 INLET_0 matrix;
 #X text 12 5 KEYWORDS control matrix;
-#X text 11 45 DESCRIPTION create a turned identity matrix;
+#X text 11 45 DESCRIPTION create an exchange matrix;
 #X obj 16 147 declare -lib iemmatrix;
 #X restore 431 16 pd META;
 #X obj 402 148 mtx_eye;

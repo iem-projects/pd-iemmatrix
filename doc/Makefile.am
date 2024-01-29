@@ -2,7 +2,9 @@ AUTOMAKE_OPTIONS = foreign
 SUFFIXES = .pd
 iemmatrixdir=$(pkglibdir)
 
-dist_iemmatrix_DATA= \
+dist_iemmatrix_DATA =
+
+dist_iemmatrix_DATA += \
 	 matrix-help.pd \
 	 matrix~-help.pd \
 	 mtx_abs-help.pd \
@@ -88,4 +90,9 @@ dist_iemmatrix_DATA= \
 	 mtx_trace-help.pd \
 	 mtx_transpose-help.pd \
 	 mtx_unpack~-help.pd \
-	 mtx_zeros-help.pd
+	 mtx_zeros-help.pd \
+	 $(empty)
+
+dist_iemmatrix_DATA += \
+	 test.mtx \
+	 $(empty)

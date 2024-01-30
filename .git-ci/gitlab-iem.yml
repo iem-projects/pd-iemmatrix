@@ -34,6 +34,11 @@ stages:
     set -o shwordsplit || true     # zsh doesn't do wordsplitting by default...
     set -o nonomatch   || true     # zsh bails out if globbing patterns do not expand
 
+.image:macos:
+  tags:
+    - tart
+  image: registry.git.iem.at/devtools/docker/tart/macos-monterey-xcode:latest
+
 .build:
   stage: build
   script:
@@ -85,10 +90,8 @@ stages:
 
 .build:macos: &build_macos
   extends:
+    - .image:macos
     - .build
-  tags:
-    - tart
-  image: registry.git.iem.at/devtools/docker/tart/macos-monterey-xcode:latest
   variables:
     CODESIGNFLAGS: --timestamp --strict --force
   before_script:

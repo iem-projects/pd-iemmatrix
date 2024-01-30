@@ -280,7 +280,7 @@ distcheck:
     - ./configure ${fatarchs:+--enable-fat-binary=${fatarchs}} ${HOST_ARCH_GNU:+--host="${HOST_ARCH_GNU}"} ${PDDIR:+--with-pd="${PDDIR}"} ${extension:+--with-extension="${extension}"} ${floatsize:+--with-floatsize="${floatsize}"}
     - make distcheck -j2
   after_script:
-    - true
+    - echo done
 
 macOS:notarize:
   stage: deploy

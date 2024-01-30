@@ -65,6 +65,8 @@ dist_iemmatrix_DATA= \
 	 mtx_phon_curve.pd \
 	 mtx_pinverse-help.pd \
 	 mtx_pinverse.pd \
+	 mtx_plot-help.pd \
+	 mtx_plot.pd \
 	 mtx_polyval-help.pd \
 	 mtx_polyval.pd \
 	 mtx_pseudoinverse.pd \

@@ -5,7 +5,7 @@ SUBDIRS = abs doc
 
 iemmatrixdir=$(pkglibdir)
 dist_iemmatrix_DATA = \
-	AUTHORS.txt  BUGS.txt  CHANGES.txt  GnuGPL.txt  INSTALL.txt  LICENSE.txt  VERSION.txt \
+	AUTHORS.txt  BUGS.txt  GnuGPL.txt  INSTALL.txt  LICENSE.txt  VERSION.txt \
 	iemmatrix-meta.pd
 
 pkglib_LTLIBRARIES=

@@ -86,7 +86,7 @@ static void mTxPackTildeDsp (mtx_pack_tilde *x, t_signal **sp)
   x->sig_in = 0;
 
 #if CLASS_MULTICHANNEL
-  /* with multichannels, we add concatenate all channels from all ports */
+  /* with multichannels, we concatenate all channels from all ports */
   chan = 0;
   for(i=0; i<x->num_ports; i++) {
     chan += sp[i]->s_nchans;

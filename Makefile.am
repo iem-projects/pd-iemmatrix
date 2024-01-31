@@ -24,8 +24,8 @@ endif
 AM_LDFLAGS+= @EXTRA_LTFLAGS@
 
 # RTE
-AM_CFLAGS += 
-AM_LDFLAGS+= 
+AM_CFLAGS +=
+AM_LDFLAGS+=
 
 
 noinst_LTLIBRARIES = \
@@ -424,5 +424,3 @@ mtx_0x7c0x7c_la_SOURCES	= alias/mtx_0x7c0x7c.c
 mtx_0x7c0x7c_la_LIBADD	= libiemmatrixCore.la
 mtx_div_la_SOURCES	= alias/mtx_div.c
 mtx_div_la_LIBADD	= libiemmatrixCore.la
-
-

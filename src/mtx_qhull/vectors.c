@@ -323,5 +323,3 @@ void printLine(const line_t l)
   printf(", p=");
   printVector(l.point);
 }
-
-

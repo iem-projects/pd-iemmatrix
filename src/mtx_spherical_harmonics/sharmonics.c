@@ -126,7 +126,7 @@ SHWorkSpace *sharmonics_alloc(size_t nmax, size_t l, SHNormType ntype)
           ctype=N2D2PI;
 	  break;
        case N3D:
-       default: 
+       default:
 	  ctype=N2D;
     }
 
@@ -167,5 +167,3 @@ void sharmonics(double *phi, double *theta, SHWorkSpace *ws)
     sharmonics_multcheby12(ws);
   }
 }
-
-

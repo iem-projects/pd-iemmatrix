@@ -387,4 +387,3 @@ void printList(list_t const list)
   }
   printf("]\n");
 }
-

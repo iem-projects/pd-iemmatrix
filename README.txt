@@ -160,7 +160,7 @@ On bash this looks like:
  $ ./configure --with-extension=dll --host=i686-w64-mingw32 --with-pd=/home/frodo/W32/pd-0.46-6
 
 Now run "make" and enjoy.
-	
+
 
 W32 using VisualStudio
 ----------------------

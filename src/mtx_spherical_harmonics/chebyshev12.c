@@ -36,7 +36,7 @@ Cheby12WorkSpace *chebyshev12_alloc(const size_t nmax, const size_t l, CHNormTyp
 	   wc->nm=1.0;
 	   break;
        case N2D:
-       default: 
+       default:
            wc->n0=1.0/sqrt(2.0*M_PI);
 	   wc->nm=1.0/sqrt(M_PI);
     }
@@ -88,5 +88,3 @@ void chebyshev12(double *phi, Cheby12WorkSpace *wc)
     free(sinphi);
   }
 }
-
-

@@ -126,4 +126,3 @@ void iemtx_resize_setup(void)
 {
   mtx_resize_setup();
 }
-

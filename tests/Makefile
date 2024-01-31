@@ -6,4 +6,3 @@ nogui:
 
 gui:
 	sh runtests.sh -gui
-

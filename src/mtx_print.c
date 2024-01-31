@@ -55,4 +55,3 @@ void iemtx_print_setup(void)
 {
   mtx_print_setup();
 }
-

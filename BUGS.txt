@@ -5,4 +5,3 @@ mtx_min2, mtx_max2: doesn't work with scalar
 mtx_r(i)fft: likes crashing
 
 lots of help-patches are missing
-

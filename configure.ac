@@ -3,7 +3,7 @@ AC_PREREQ([2.60])
 
 AC_INIT([iemmatrix], [0.3.3], [zmoelnig@iem.at], [iemmatrix], [https://git.iem.at/pd/iemmatrix])
 AM_INIT_AUTOMAKE([1.10 foreign])
-m4_ifdef([LT_INIT], 
+m4_ifdef([LT_INIT],
 	[LT_INIT([disable-static win32-dll])],
 	[AC_ENABLE_SHARED
 	 AC_DISABLE_STATIC
@@ -205,4 +205,3 @@ AC_SUBST([EXTRA_LTFLAGS])
 AC_SUBST([EXTENSION])
 
 AC_OUTPUT()
-

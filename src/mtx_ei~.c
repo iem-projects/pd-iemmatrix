@@ -222,5 +222,3 @@ void iemtx_ei__setup(void)
 {
   mtx_ei_tilde_setup();
 }
-
-

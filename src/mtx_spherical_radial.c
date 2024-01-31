@@ -195,5 +195,3 @@ void iemtx_spherical_radial_setup(void)
 {
   mtx_spherical_radial_setup();
 }
-
-

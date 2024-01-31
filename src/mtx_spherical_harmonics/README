@@ -4,7 +4,7 @@ The C-code is published under the Gnu General Public License.
 
 To make the c-sources, use:
 
-<sphbase-path>/c_src$ make 
+<sphbase-path>/c_src$ make
 
 You will get some test routines (legendre_a, sh_normalization, sh) and the library file (sh.o).
 

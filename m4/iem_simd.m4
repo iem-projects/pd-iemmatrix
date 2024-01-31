@@ -22,7 +22,7 @@ if test "$simd" != no; then
       SIMD="SSE2"
    fi
 
-   for smd in $SIMD 
+   for smd in $SIMD
    do
     case "${smd}" in
     SSE2|sse2)

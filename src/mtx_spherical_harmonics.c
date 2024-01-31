@@ -315,5 +315,3 @@ void iemtx_spherical_harmonics_setup(void)
   mtx_circular_harmonics_setup();
   mtx_spherical_harmonics_setup();
 }
-
-

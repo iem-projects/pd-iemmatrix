@@ -153,5 +153,3 @@ void iemtx_unpack__setup(void)
 {
   mtx_unpack_tilde_setup();
 }
-
-

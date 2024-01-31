@@ -44,5 +44,3 @@ int main (int argc, char *argv[])
   free(phi);
   return 1;
 }
-
-

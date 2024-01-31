@@ -47,5 +47,3 @@ int main (int argc, char *argv[])
   free(theta);
   return 1;
 }
-
-

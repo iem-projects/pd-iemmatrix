@@ -1,4 +1,4 @@
-dnl try to figure out the target operating system and set some AM-macros accordingly 
+dnl try to figure out the target operating system and set some AM-macros accordingly
 dnl
 dnl Copyright (C) 2011 IOhannes m zmölnig
 

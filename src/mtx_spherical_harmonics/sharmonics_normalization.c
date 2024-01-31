@@ -46,7 +46,7 @@ SHNorml *sharmonics_normalization_new (const size_t nmax, const SHNormType type)
 	     }
 	     break;
 	  case SN3D:
-	  default: 
+	  default:
              for (n=1,n0=1; n<=nmax; n++) {
 	        wn->n[n0]=wn->n[0];
 		n0+=n+1;
@@ -71,5 +71,3 @@ void sharmonics_normalization_free(SHNorml *wn)
     free(wn);
   }
 }
-
-

@@ -123,5 +123,3 @@ void legendre_a(double *theta, LegendreWorkSpace *wl)
     free(costheta);
   }
 }
-
-

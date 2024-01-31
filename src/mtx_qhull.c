@@ -164,5 +164,3 @@ void iemtx_qhull_setup(void)
 {
   mtx_qhull_setup();
 }
-
-

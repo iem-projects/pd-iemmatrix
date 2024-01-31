@@ -7,18 +7,18 @@
 CFG=IEMMATRIX - WIN32 RELEASE
 !MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
 !MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den Befehl
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "iemmatrix.mak".
-!MESSAGE 
+!MESSAGE
 !MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
 !MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "iemmatrix.mak" CFG="IEMMATRIX - WIN32 RELEASE"
-!MESSAGE 
+!MESSAGE
 !MESSAGE Für die Konfiguration stehen zur Auswahl:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "iemmatrix - Win32 Release" (basierend auf  "Win32 (x86) Dynamic-Link Library")
-!MESSAGE 
+!MESSAGE
 
 # Begin Project
 # PROP AllowPerConfigDependencies 1

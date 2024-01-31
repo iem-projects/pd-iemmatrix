@@ -308,4 +308,3 @@ void iemtx_sndfileread_setup (void)
 {
   mtx_sndfileread_setup();
 }
-

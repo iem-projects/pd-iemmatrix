@@ -34,5 +34,3 @@ int main (int argc, char *argv[])
   sharmonics_normalization_free(ws);
   return 1;
 }
-
-

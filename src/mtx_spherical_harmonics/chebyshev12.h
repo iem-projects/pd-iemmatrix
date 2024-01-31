@@ -39,5 +39,3 @@ void chebyshev12_free(Cheby12WorkSpace *wc);
 void chebyshev12(double *phi, Cheby12WorkSpace *wc);
 
 #endif
-
-

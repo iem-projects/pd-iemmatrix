@@ -759,4 +759,3 @@ void printFacet(const zhull_t * const zh,
   printf("pt %lu with maxdist %5.2f\n",
          (unsigned long)(f->farthest_outside_point), f->maxdistance);
 }
-

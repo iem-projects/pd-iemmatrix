@@ -12,4 +12,4 @@ libsharmonics_a_SOURCES = \
 
 include_HEADERS = \
 	legendre_a.h \
-	sharmonics_normalization.h 
+	sharmonics_normalization.h

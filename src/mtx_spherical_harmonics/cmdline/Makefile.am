@@ -1,5 +1,5 @@
 #check_PROGRAMS = \
-   # 
+   #
 
 bin_PROGRAMS = \
 	legendre_a_cmd \
@@ -26,4 +26,3 @@ sharmonics_normalization_cmd_SOURCES = sharmonics_normalization_cmd.c
 chebyshev12_cmd_SOURCES = chebyshev12_cmd.c
 
 sharmonics_cmd_SOURCES = sharmonics_cmd.c
-

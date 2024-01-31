@@ -40,4 +40,3 @@ void sharmonics_free(SHWorkSpace *sh);
 void sharmonics(double *phi, double *theta, SHWorkSpace *ws);
 
 #endif
-

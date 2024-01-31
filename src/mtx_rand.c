@@ -112,4 +112,3 @@ void iemtx_rand_setup(void)
 {
   mtx_rand_setup();
 }
-

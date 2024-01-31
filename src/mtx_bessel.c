@@ -215,5 +215,3 @@ void iemtx_bessel_setup(void)
 {
   mtx_bessel_setup();
 }
-
-

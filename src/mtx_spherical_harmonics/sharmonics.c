@@ -21,7 +21,7 @@
 // ny0 and np0 denote where the position (n,m)=(n,0) is in the arrays
 // ly0 and lp0 denote the starting position for one vertex in the arrays
 // see below to find out how the data is arranged
-static void sharmonics_initlegendrenormlzd(SHWorkSpace *ws)
+static void sharmonics_initlegendrenormalized(SHWorkSpace *ws)
 {
   unsigned int n,m,ny0,np0;
   unsigned int l,ly0,lp0;
@@ -98,7 +98,7 @@ static void sharmonics_multcheby12(SHWorkSpace *ws)
         with length L X (2*nmax+1); negative indices are sine, positive ones
 	cosine terms
 
-   norml ... vector containing normalization terms
+   normals ... vector containing normalization terms
         structure [N_0^0 N_1^0 N_1^1 N_2^0 N_2^1 N_2^2 .... N_nmax^nmax]
 	with length (nmax+1)*(nmax+2)/2
 
@@ -163,7 +163,7 @@ void sharmonics(double *phi, double *theta, SHWorkSpace *ws)
     chebyshev12(phi,ws->wc);
     legendre_a(theta,ws->wl);
 
-    sharmonics_initlegendrenormlzd(ws);
+    sharmonics_initlegendrenormalized(ws);
     sharmonics_multcheby12(ws);
   }
 }

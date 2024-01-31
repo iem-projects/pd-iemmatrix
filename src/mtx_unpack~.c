@@ -14,19 +14,18 @@ typedef struct _mtx_unpack_tilde {
   t_int *(*perform_fcn)(t_int*);
 } mtx_unpack_tilde;
 
-static t_int *mTxUnPackTildePerform (t_int *arg)
+static t_int *mtx_unpack_Perform (t_int *arg)
 {
   mtx_unpack_tilde *x = (mtx_unpack_tilde *) (arg[1]);
   return (x->perform_fcn(arg));
 }
 
-
-static t_int *mTxUnPackTildePerformInactive (t_int *arg)
+static t_int *mtx_unpack_PerformInactive (t_int *arg)
 {
   return(arg+2);
 }
 
-static t_int *mTxUnPackTildePerformSetInactive (t_int *arg)
+static t_int *mtx_unpack_PerformSetInactive (t_int *arg)
 {
   mtx_unpack_tilde *x = (mtx_unpack_tilde *) (arg[1]);
   int chan;
@@ -39,11 +38,11 @@ static t_int *mTxUnPackTildePerformSetInactive (t_int *arg)
     }
     lptr+=x->cols;
   }
-  x->perform_fcn=mTxUnPackTildePerformInactive;
+  x->perform_fcn=mtx_unpack_PerformInactive;
   return(arg+2);
 }
 
-static t_int *mTxUnPackTildePerformActive (t_int *arg)
+static t_int *mtx_unpack_PerformActive (t_int *arg)
 {
   mtx_unpack_tilde *x = (mtx_unpack_tilde *) (arg[1]);
   int chan;
@@ -77,13 +76,13 @@ static t_int *mTxUnPackTildePerformActive (t_int *arg)
 
   // delete in the next dsp cycle, unless overwritten
   // by new matrix:
-  x->perform_fcn=mTxUnPackTildePerformSetInactive;
+  x->perform_fcn=mtx_unpack_PerformSetInactive;
 
   return(arg+2);
 }
 
 
-void *newMtxUnPackTilde (t_floatarg f)
+void *mtx_unpack_new (t_floatarg f)
 {
   int num_chan=1;
   mtx_unpack_tilde *x = (mtx_unpack_tilde*) pd_new(mtx_unpack_tilde_class);
@@ -96,7 +95,7 @@ void *newMtxUnPackTilde (t_floatarg f)
   x->list_in=0;
   x->rows=0;
   x->cols=0;
-  x->perform_fcn=mTxUnPackTildePerformInactive;
+  x->perform_fcn=mtx_unpack_PerformInactive;
   while (num_chan--) {
     outlet_new(&x->x_obj, &s_signal);
   }
@@ -104,13 +103,13 @@ void *newMtxUnPackTilde (t_floatarg f)
 
   return (void *) x;
 }
-void deleteMtxUnPackTilde (mtx_unpack_tilde *x)
+void mtx_unpack_delete (mtx_unpack_tilde *x)
 {
   if (x->sig_out) {
     freebytes (x->sig_out, x->num_chan * sizeof (t_float));
   }
 }
-static void mTxUnPackTildeMatrix (mtx_unpack_tilde *x, t_symbol *s,
+static void mtx_unpack_matrix (mtx_unpack_tilde *x, t_symbol *s,
                                   int argc, t_atom *argv)
 {
   int rows, cols;
@@ -123,10 +122,10 @@ static void mTxUnPackTildeMatrix (mtx_unpack_tilde *x, t_symbol *s,
   x->rows=rows;
   x->cols=cols;
   x->list_in=argv;
-  x->perform_fcn=mTxUnPackTildePerformActive;
+  x->perform_fcn=mtx_unpack_PerformActive;
 }
 
-static void mTxUnPackTildeDsp (mtx_unpack_tilde *x, t_signal **sp)
+static void mtx_unpack_dsp (mtx_unpack_tilde *x, t_signal **sp)
 {
   int chan;
   for (chan=0; chan<x->num_chan; chan++) {
@@ -134,18 +133,18 @@ static void mTxUnPackTildeDsp (mtx_unpack_tilde *x, t_signal **sp)
   }
 
   x->block_size=sp[0]->s_n;
-  x->perform_fcn=mTxUnPackTildePerformInactive;
-  dsp_add(mTxUnPackTildePerform,1,x);
+  x->perform_fcn=mtx_unpack_PerformInactive;
+  dsp_add(mtx_unpack_Perform,1,x);
 }
 
 void mtx_unpack_tilde_setup (void)
 {
   mtx_unpack_tilde_class = class_new(gensym("mtx_unpack~"),
-                                     (t_newmethod)newMtxUnPackTilde, (t_method) deleteMtxUnPackTilde,
+                                     (t_newmethod)mtx_unpack_new, (t_method) mtx_unpack_delete,
                                      sizeof(mtx_unpack_tilde), CLASS_DEFAULT, A_DEFFLOAT, 0);
-  class_addmethod (mtx_unpack_tilde_class, (t_method) mTxUnPackTildeMatrix,
+  class_addmethod (mtx_unpack_tilde_class, (t_method) mtx_unpack_matrix,
                    gensym("matrix"),A_GIMME,0);
-  class_addmethod (mtx_unpack_tilde_class, (t_method) mTxUnPackTildeDsp,
+  class_addmethod (mtx_unpack_tilde_class, (t_method) mtx_unpack_dsp,
                    gensym("dsp"),0);
 }
 

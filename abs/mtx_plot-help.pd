@@ -71,6 +71,7 @@
 #X msg 371 283 gist_ncar;
 #X text 457 259 colorise the plot by encoding value->colors in a table, f 30;
 #X text 457 296 (the coloring takes effect when the next data arrives), f 31;
+#X msg 137 73 5 20;
 #X connect 2 0 6 0;
 #X connect 2 1 28 0;
 #X connect 2 2 4 0;
@@ -93,3 +94,4 @@
 #X connect 29 0 18 0;
 #X connect 30 0 18 0;
 #X connect 31 0 18 0;
+#X connect 34 0 5 0;

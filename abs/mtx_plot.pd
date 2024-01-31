@@ -41,7 +41,7 @@
 #X obj 306 517 f;
 #X obj 334 517 + 1;
 #X obj 306 568 element mtx_vis-plot mtx_vis-array;
-#X obj 135 601 set mtx_vis-element c x y dx dy;
+#X obj 135 601 set mtx_vis-element c y x dy dx;
 #X obj 135 557 pack f f f \$1 \$1;
 #X obj 188 228 t f f;
 #X obj 238 228 t f f;

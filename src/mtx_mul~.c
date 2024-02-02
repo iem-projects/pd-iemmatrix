@@ -1119,8 +1119,8 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
   x->x_outports = portsOut;
   x->x_time_ms = interpoltime;
 
-  x->x_cols = channelsIn;
   x->x_rows = channelsOut;
+  x->x_cols = channelsIn;
 
   /* creating signal ins & outs */
   /* in compat mode, the 1st signal inlet is already made */

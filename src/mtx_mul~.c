@@ -55,6 +55,12 @@ typedef struct _proxy {
   struct matrix_multilde*p_owner;
 } t_proxy;
 
+enum {
+  IEMMATRIX = 0,
+  IEM_MATRIX = 1, /* matrix_mul_line~ */
+  ZEXY = 2        /* matrix~ */
+} e_compat;
+
 
 typedef struct matrix_multilde {
   /* private weirdo stuff at the beginning */
@@ -946,8 +952,8 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
   setmultiout_f setmultiout = iemmatrix_getpdfun("signal_setmultiout");
   int nin, nout;
   t_float interpoltime;
-  int compat = 0;
   t_matrix_multilde *x = 0;
+  int compat = IEMMATRIX;
   int i, n;
 
   t_atom*ap_in  =argv+1;
@@ -955,9 +961,9 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
   t_atom*ap_time=argv+2;
 
   if(s==gensym("matrix~")) {
-    compat=2;
+    compat = ZEXY;
   } else if (s==gensym("matrix_mul_line~")) {
-    compat=1;
+    compat = IEM_MATRIX;
   }
   if(argc && A_FLOAT != argv->a_type) {
     goto usage;
@@ -984,16 +990,16 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
   switch(argc) {
   case 0:
     nin = nout = 1;
-    interpoltime = (compat==2)?0.f:50.0f;
+    interpoltime = (ZEXY == compat)?0.f:50.0f;
     break;
   case 1:
     nin = nout = (int)atom_getfloat(argv);
-    interpoltime = (compat==2)?0.f:50.0f;
+    interpoltime = (ZEXY == compat)?0.f:50.0f;
     break;
   case 2:
     nin = (int)atom_getfloat(ap_in);
     nout = (int)atom_getfloat(ap_out);
-    interpoltime = (compat==2)?0.f:50.0f;
+    interpoltime = (ZEXY == compat)?0.f:50.0f;
     break;
   default:
     nin = (int)atom_getfloat(ap_in);
@@ -1006,6 +1012,11 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
   if((nin < 0) || (nout < 0)) {
     pd_error(0, "[%s] matrix dimensions must not be negative [%dx%d]", s->s_name, nout, nin);
     return 0;
+  }
+
+  /* sanity check */
+  if(interpoltime < 0.0f) {
+    interpoltime = (IEM_MATRIX == compat)?50.f:0.0f;
   }
 
 
@@ -1058,11 +1069,6 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
   x->x_cols = (nin>1)?nin:1;
   x->x_rows = (nout>1)?nout:1;
 
-  /* sanity check */
-  if(x->x_time_ms < 0.0f) {
-    x->x_time_ms = (x->x_compat==1)?50.f:0.0f;
-  }
-
   /* creating signal ins & outs */
   /* in compat mode, the 1st signal inlet is already made */
   i = ((x->x_inports>0)?x->x_inports:1) - !!x->x_compat;
@@ -1075,12 +1081,12 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
   }
 
   /* creating the matrix-inlet for [matrix~] */
-  if(x->x_compat==2) {
+  if(ZEXY == x->x_compat) {
     inlet_new(&x->x_obj, &x->x_obj.ob_pd, gensym("matrix"), gensym(""));
   }
 
   /* creating time-inlet (not for [matrix_mul_linie~]) */
-  if(x->x_compat!=1) {
+  if(x->x_compat != IEM_MATRIX) {
     inlet_new(&x->x_obj,  &x->x_obj.ob_pd, &s_float, gensym("time"));
   }
 

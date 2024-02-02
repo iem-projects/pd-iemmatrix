@@ -959,6 +959,9 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
   } else if (s==gensym("matrix_mul_line~")) {
     compat=1;
   }
+  if(argc && A_FLOAT != argv->a_type) {
+    goto usage;
+  }
 
   /* arguments parsing:
    *  this might depend on whether we are creating an object
@@ -1089,6 +1092,10 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
   x->x_io = (t_sample **)getbytes((x->x_cols + x->x_rows) * sizeof(*x->x_io));
 
   return (x);
+
+usage:
+  pd_error(0, "[%s] bad arguments\n\tuse '<int:ouchannels> <int:inchannels>'\n\tor '-m <int:outchannels> <int:inchannels>'", s->s_name);
+  return 0;
 }
 
 static void mtx_mul_addmethods(t_class*c) {

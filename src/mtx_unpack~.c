@@ -155,8 +155,9 @@ void *mtx_unpack_new (t_symbol*s, int argc, t_atom*argv)
 
   /* check multichannel support */
   if(want_multi) {
+    static int warn_multichannel = 1;
     x->x_setmultiout = setmultiout;
-    if (!setmultiout) {
+    if (warn_multichannel && !setmultiout) {
       if(CLASS_MULTICHANNEL) {
         int major, minor, bugfix;
         sys_getversion(&major, &minor, &bugfix);
@@ -165,6 +166,7 @@ void *mtx_unpack_new (t_symbol*s, int argc, t_atom*argv)
         pd_error(x, "[%s] multichannel requested, but iemmatrix was built against Pd-%d.%d-%d, which doesn't support it", s->s_name, PD_MAJOR_VERSION, PD_MINOR_VERSION, PD_BUGFIX_VERSION);
       }
     }
+    warn_multichannel = 0;
   }
   if ((num_chan<1) || (num_chan>MTX_PACK_MAXCHANNELS)) {
     if(!want_multi)

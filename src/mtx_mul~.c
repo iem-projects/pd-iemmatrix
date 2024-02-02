@@ -947,7 +947,6 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
   int nin, nout;
   t_float interpoltime;
   int compat = 0;
-  int can_multichannel;
   t_matrix_multilde *x = 0;
   int i, n;
 

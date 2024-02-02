@@ -990,9 +990,7 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
   int compat = IEMMATRIX;
   int i, n;
 
-  t_atom*ap_in  =argv+1;
-  t_atom*ap_out =argv+0;
-  t_atom*ap_time=argv+2;
+  t_atom*ap_in, *ap_out, *ap_time;
 
   if(s==gensym("matrix~")) {
     compat = ZEXY;
@@ -1027,10 +1025,9 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
    *
    *  with "matrix=(A or B)" and "A=B'"
    */
-  if (compat) {
-    ap_in=argv+0;
-    ap_out=argv+1;
-  }
+  ap_in  =argv+(compat?0:1);
+  ap_out =argv+(compat?1:0);
+  ap_time=argv+2;
   switch(argc) {
   case 0:
     nin = nout = 1;

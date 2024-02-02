@@ -1,6 +1,6 @@
 #N canvas 697 324 312 252 10;
 #X declare -path .;
-#N canvas 6 50 564 876 run-test 1;
+#N canvas 6 50 564 876 run-test 0;
 #X obj 87 512 r \$0-receive;
 #X obj 71 532 f;
 #X msg 96 533 0;

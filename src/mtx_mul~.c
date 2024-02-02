@@ -984,17 +984,17 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
     interpoltime = (compat==2)?0.f:50.0f;
     break;
   case 1:
-    nin = nout = (int)atom_getint(argv);
+    nin = nout = (int)atom_getfloat(argv);
     interpoltime = (compat==2)?0.f:50.0f;
     break;
   case 2:
-    nin = (int)atom_getint(ap_in);
-    nout = (int)atom_getint(ap_out);
+    nin = (int)atom_getfloat(ap_in);
+    nout = (int)atom_getfloat(ap_out);
     interpoltime = (compat==2)?0.f:50.0f;
     break;
   default:
-    nin = (int)atom_getint(ap_in);
-    nout = (int)atom_getint(ap_out);
+    nin = (int)atom_getfloat(ap_in);
+    nout = (int)atom_getfloat(ap_out);
     interpoltime = atom_getfloat(ap_time);
     break;
   }

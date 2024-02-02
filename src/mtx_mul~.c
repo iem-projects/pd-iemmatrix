@@ -819,6 +819,8 @@ static t_int *matrix_multilde_perform(t_int *w)
 
   return (w+3);
 }
+
+
 static void matrix_multilde_dsp(t_matrix_multilde *x, t_signal **sp)
 {
   const int length = sp[0]->s_n;
@@ -948,11 +950,43 @@ static void matrix_multilde_free(t_matrix_multilde *x)
 
 static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
 {
-  t_class*cls;
-  setmultiout_f setmultiout = iemmatrix_getpdfun("signal_setmultiout");
-  int nin, nout;
-  t_float interpoltime;
+  /*
+    // singlechannel
+    [mtx_*~       ] singlechannel in:1/1 out:1/1
+    [mtx_*~ 3     ] singlechannel in:3/3 out:3/3
+    [mtx_*~ 3 4   ] singlechannel in:4/4 out:3/3
+
+    // in/out is singlechannel, out/in is multichannel
+    [mtx_*~ 0 4   ] mixedchannel  in:4/4 out:1/?
+    [mtx_*~ 3 0   ] mixedchannel  in:1/? out:3/3
+
+    // implicit full multichannel
+    [mtx_*~ 0     ] multichannel in:1/? out:1/?
+    [mtx_*~ 0 0   ] multichannel in:1/? out:1/?
+    // explicit full multichannel
+    [mtx_*~ -m    ] multichannel in:1/? out:1/?
+    [mtx_*~ -m 0  ] multichannel in:1/? out:1/?
+    [mtx_*~ -m 0 0] multichannel in:1/? out:1/?
+    [mtx_*~ -m 3  ] multichannel in:1/3 out:1/3
+    [mtx_*~ -m 3 4] multichannel in:1/4 out:1/3
+    [mtx_*~ -m 0 4] multichannel in:1/4 out:1/?
+    [mtx_*~ -m 3 0] multichannel in:1/? out:1/3
+
+
+    // other names
+    [matrix_mul~] ALIAS
+    [mtx_mul~]    ALIAS
+
+    [matrix_mul_line~]  LEGACY (iem_matrix); always singlechannel
+    [matrix~] LEGACY (zexy); always singlechannel
+   */
   t_matrix_multilde *x = 0;
+  t_class*cls;
+  int force_multi = 0, want_multi = 0;
+  setmultiout_f setmultiout = iemmatrix_getpdfun("signal_setmultiout");
+  unsigned int portsIn, portsOut, channelsIn, channelsOut;
+  int nin, nout;
+  t_float interpoltime = 0.;
   int compat = IEMMATRIX;
   int i, n;
 
@@ -964,6 +998,16 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
     compat = ZEXY;
   } else if (s==gensym("matrix_mul_line~")) {
     compat = IEM_MATRIX;
+  } else {
+    if(argc && A_SYMBOL == argv->a_type) {
+      if (atom_getsymbol(argv) == gensym("-m")) {
+	force_multi = want_multi = 1;
+	argc--;
+	argv++;
+      } else {
+	goto usage;
+      }
+    }
   }
   if(argc && A_FLOAT != argv->a_type) {
     goto usage;
@@ -1020,11 +1064,27 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
   }
 
 
-  /* can we do multichannel? */
-  cls = (compat || (!(CLASS_MULTICHANNEL && setmultiout)))?matrix_multilde_class:matrix_multilde_mclass;
   /* do we need multichannel? */
-  if((nin>0) && (nout>0))
-    cls = matrix_multilde_class;
+  if (!compat && (0==nin || 0==nout))
+    want_multi = 1;
+
+  /* can we do multichannel? */
+  cls = matrix_multilde_class;
+  if(!compat && want_multi) {
+    if (CLASS_MULTICHANNEL && setmultiout)
+      cls = matrix_multilde_mclass;
+  }
+
+  /* relate ports/channels to the arguments */
+  portsIn = channelsIn = nin;
+  portsOut = channelsOut = nout;
+  if(force_multi) {
+    portsIn = portsOut = 1;
+  }
+  if(portsIn <1) portsIn  = 1;
+  if(portsOut<1) portsOut = 1;
+  if(channelsIn <1) channelsIn  = 1;
+  if(channelsOut<1) channelsOut = 1;
 
   /* create the object */
   x = (t_matrix_multilde *)pd_new(cls);
@@ -1033,9 +1093,9 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
   }
   x->x_name = s;
   x->x_compat=compat;
-  x->x_setmultiout = (matrix_multilde_mclass == cls)?setmultiout:0;
+  x->x_setmultiout = (matrix_multilde_class == cls)?0:setmultiout;
 
-  if (!compat && ((nin < 1) || (nout < 1))) {
+  if (!compat && want_multi) {
     /* user requested multichannel */
     /* warn (but only once) if we cannot actually do that */
     static int warn_multichannel = 1;
@@ -1052,30 +1112,25 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
     }
     warn_multichannel = 0;
   }
-  if(!x->x_setmultiout) {
-    if(nin < 1) nin = 1;
-    if(nout < 1) nout = 1;
-  }
 
   x->x_proxy = (t_proxy*)pd_new(matrix_multilde_proxy);
   x->x_proxy->p_owner = x;
   pd_bind(&x->x_proxy->p_obj.ob_pd, gensym("pd-dsp-stopped"));
 
-
-  x->x_inports = nin;
-  x->x_outports = nout;
+  x->x_inports = portsIn;
+  x->x_outports = portsOut;
   x->x_time_ms = interpoltime;
 
-  x->x_cols = (nin>1)?nin:1;
-  x->x_rows = (nout>1)?nout:1;
+  x->x_cols = channelsIn;
+  x->x_rows = channelsOut;
 
   /* creating signal ins & outs */
   /* in compat mode, the 1st signal inlet is already made */
-  i = ((x->x_inports>0)?x->x_inports:1) - !!x->x_compat;
+  i = portsIn - !!x->x_compat;
   while(i--) {
     inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal);
   }
-  i = (x->x_outports>0)?x->x_outports:1;
+  i = portsOut;
   while(i--) {
     outlet_new(&x->x_obj, &s_signal);
   }

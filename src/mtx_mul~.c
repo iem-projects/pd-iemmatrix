@@ -1079,10 +1079,8 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
   portsIn = channelsIn = nin;
   portsOut = channelsOut = nout;
   if(force_multi) {
-    portsIn = portsOut = 1;
+    portsIn = portsOut = 0;
   }
-  if(portsIn <1) portsIn  = 1;
-  if(portsOut<1) portsOut = 1;
   if(channelsIn <1) channelsIn  = 1;
   if(channelsOut<1) channelsOut = 1;
 
@@ -1126,6 +1124,8 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
 
   /* creating signal ins & outs */
   /* in compat mode, the 1st signal inlet is already made */
+  if(portsIn<1)portsIn=1;
+  if(portsOut<1)portsOut=1;
   i = portsIn - !!x->x_compat;
   while(i--) {
     inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal);

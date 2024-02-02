@@ -167,7 +167,8 @@ void *mtx_unpack_new (t_symbol*s, int argc, t_atom*argv)
     }
   }
   if ((num_chan<1) || (num_chan>MTX_PACK_MAXCHANNELS)) {
-    pd_error(x, "[mtx_unpack~] invalid number of channels (%d), default to 1.", num_chan);
+    if(!want_multi)
+      pd_error(x, "[mtx_unpack~] invalid number of channels (%d), default to 1.", num_chan);
     num_chan=1;
   }
 

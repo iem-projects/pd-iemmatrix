@@ -187,7 +187,7 @@ static void matrix_multilde_matrix_set(t_matrix_multilde *x, int argc,
     if ((col != x->x_cols) || (row != x->x_rows)) {
       pd_error(x, "[%s]: matrix dimensions must not change (%dx%d != %dx%d) while DSP is running!!",
 	       x->x_name->s_name,
-	       col, row, x->x_cols, x->x_rows);
+	       row, col, x->x_rows, x->x_cols);
       return;
     }
   } else {

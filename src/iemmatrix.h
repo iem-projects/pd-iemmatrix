@@ -75,10 +75,7 @@
 #endif /* VERSION */
 
 #include <math.h>
-#include <stdio.h>
-
 #include <string.h>
-#include <memory.h>
 
 #ifdef __WIN32__
 #ifndef fabsf

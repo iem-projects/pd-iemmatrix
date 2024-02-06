@@ -3,6 +3,9 @@
 #ifndef CLASS_MULTICHANNEL
 # define CLASS_MULTICHANNEL 0
 #endif
+typedef void (*setmultiout_f)(t_signal **sig, int nchans);
+static int can_multiout = 0;
+
 #define MTX_PACK_MAXCHANNELS 200
 
 static t_class *mtx_pack_tilde_class;
@@ -86,28 +89,33 @@ static void mTxPackTildeDsp (mtx_pack_tilde *x, t_signal **sp)
   x->sig_in = 0;
 
 #if CLASS_MULTICHANNEL
-  /* with multichannels, we concatenate all channels from all ports */
-  chan = 0;
-  for(i=0; i<x->num_ports; i++) {
-    chan += sp[i]->s_nchans;
+  if(can_multiout) {
+    /* with multichannels, we concatenate all channels from all ports */
+    chan = 0;
+    for(i=0; i<x->num_ports; i++) {
+      chan += sp[i]->s_nchans;
+    }
   }
 #endif
 
   x->num_channels = chan;
   x->sig_in = (t_sample**)getbytes(sizeof(*x->sig_in)*x->num_channels);
 
+  if(0) {
 #if CLASS_MULTICHANNEL
-  for(i=0, chan=0; i<x->num_ports; i++) {
-    int j;
-    for(j=0; j<sp[i]->s_nchans; j++) {
-      x->sig_in[chan++] = sp[i]->s_vec + j * block_size;
+  } else if (can_multiout) {
+    for(i=0, chan=0; i<x->num_ports; i++) {
+      int j;
+      for(j=0; j<sp[i]->s_nchans; j++) {
+        x->sig_in[chan++] = sp[i]->s_vec + j * block_size;
+      }
+    }
+#endif
+  } else {
+    for (i=0; i < chan; i++) {
+      x->sig_in[i]=sp[i]->s_vec;
     }
   }
-#else
-  for (i=0; i < chan; i++) {
-    x->sig_in[i]=sp[i]->s_vec;
-  }
-#endif
 
   x->block_size=block_size;
   x->list_out = (t_atom*) getbytes ((x->num_channels * x->block_size + 2)
@@ -137,6 +145,8 @@ void mtx_pack_tilde_setup (void)
 				   A_DEFFLOAT, 0);
   class_addmethod (mtx_pack_tilde_class, (t_method) mTxPackTildeDsp,
                    gensym("dsp"),0);
+
+  can_multiout = (CLASS_MULTICHANNEL && 0!=iemmatrix_getpdfun("signal_setmultiout"));
 }
 
 void iemtx_pack__setup(void)

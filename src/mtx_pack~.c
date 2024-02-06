@@ -23,8 +23,11 @@ typedef struct _mtx_pack_tilde {
 } mtx_pack_tilde;
 
 static void mTxPackTildeOut(mtx_pack_tilde*x) {
-  outlet_anything(x->message_outlet,gensym("matrix"),
-                  x->block_size*x->num_channels+2,x->list_out);
+  if(x->block_size * x->num_channels) {
+    outlet_anything(x->message_outlet,gensym("matrix"),
+                    x->block_size*x->num_channels + 2,
+                    x->list_out);
+  }
 }
 void *newMtxPackTilde (t_floatarg f)
 {

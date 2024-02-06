@@ -638,6 +638,24 @@ const char*iemmatrix_objname(void*obj) {
   return s->s_name;
 }
 
+const char*iemmatrix_parentabstractionname(const t_glist*ccurrent) {
+#if IEMMATRIX_HAVE_G_CANVAS
+  t_canvas *canvas = 0;
+  t_glist*current = (t_glist*)ccurrent;
+  if(0 == current)
+    current = canvas_getcurrent();
+
+  canvas = glist_getcanvas(current);
+  while(canvas && !canvas_isabstraction(canvas)) {
+    canvas=canvas->gl_owner;
+  }
+  if(canvas && canvas->gl_name) {
+    return canvas->gl_name->s_name;
+  }
+#endif /* IEMMATRIX_HAVE_G_CANVAS */
+  return 0;
+}
+
 
 int iemmatrix_check(void*object, int argc, t_atom*argv, unsigned int tests) {
   t_object*x = (t_object*)object;

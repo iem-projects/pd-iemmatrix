@@ -175,6 +175,11 @@ int iemmatrix_check(void*object, int argc, t_atom*argv, unsigned int tests);
  */
 const char*iemmatrix_objname(void*object);
 
+/* get the name of the abstraction containing the object
+ * you can use current=0 when calling this in the constructor
+ */
+const char*iemmatrix_parentabstractionname(const t_glist*current);
+
 /* get a Pd function by name */
 void*iemmatrix_getpdfun(const char*name);
 

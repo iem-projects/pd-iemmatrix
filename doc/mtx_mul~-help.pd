@@ -170,8 +170,8 @@
 #X msg 262 197 eye 2;
 #X msg 322 197 egg 3;
 #X obj 99 225 matrix;
-#X obj 736 268 mtx_*~ -m 3 2;
-#X text 722 194 force multichannel-mode with the '-m' flag. the optional dimensions are tenative and can change while the DSP is stopped., f 32;
+#X obj 736 268 mtx_*~ -m 3;
+#X text 722 194 force multichannel-mode with the '-m' flag. the optional dimensions are tentative and can change while the DSP is stopped., f 32;
 #X obj 737 318 snapshot~;
 #X floatatom 737 343 5 0 0 0 - - - 0;
 #X obj 817 318 snapshot~;

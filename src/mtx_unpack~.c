@@ -169,8 +169,22 @@ void *mtx_unpack_new (t_symbol*s, int argc, t_atom*argv)
     warn_multichannel = 0;
   }
   if ((num_chan<1) || (num_chan>MTX_PACK_MAXCHANNELS)) {
-    if(!want_multi)
-      pd_error(x, "[mtx_unpack~] invalid number of channels (%d), default to 1.", num_chan);
+    if(!want_multi) {
+    /* when not doing multichannel, we require a valid channel count
+     * and error out otherwise */
+      /* however, suppress the error in help-patches */
+      const char*absname = iemmatrix_parentabstractionname(0);
+      if(absname) {
+        char*absext = strrchr(absname, '-');
+        if (absext && !strcmp(absext, "-help.pd")) {
+          /* the object lives in a help-patch: suppress error */
+        } else {
+          absname = 0;
+        }
+      }
+      if(!absname)
+        pd_error(x, "[mtx_unpack~] invalid number of channels (%d), default to 1.", num_chan);
+    }
     num_chan=1;
   }
 

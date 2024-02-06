@@ -1220,6 +1220,8 @@ void mtx_mul_tilde_setup(void)
 				      sizeof(t_matrix_multilde),
 				      0,
 				      A_GIMME, 0);
+    class_addcreator((t_newmethod)matrix_multilde_new, gensym("matrix~"),
+                     A_GIMME, 0);
     matrix_multilde_mclass = matrix_multilde_class;
   }
 

@@ -968,9 +968,9 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
     [mtx_*~ -m 0  ] multichannel in:1/? out:1/?
     [mtx_*~ -m 0 0] multichannel in:1/? out:1/?
     [mtx_*~ -m 3  ] multichannel in:1/3 out:1/3
-    [mtx_*~ -m 3 4] multichannel in:1/4 out:1/3
-    [mtx_*~ -m 0 4] multichannel in:1/4 out:1/?
-    [mtx_*~ -m 3 0] multichannel in:1/? out:1/3
+    [mtx_*~ -m 3 4] multichannel in:1/4 out:1/3 (useless, as inchannels are defined by signal-in)
+    [mtx_*~ -m 0 4] multichannel in:1/4 out:1/? (useless, as inchannels are defined by signal-in)
+    [mtx_*~ -m 3 0] multichannel in:1/? out:1/3 (useless, as inchannels are defined by signal-in)
 
 
     // other names

@@ -1084,7 +1084,20 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
   /* create the object */
   x = (t_matrix_multilde *)pd_new(cls);
   if(compat) {
-    pd_error(x, "[%s] is deprecated! use [mtx_*~] instead!!", s->s_name);
+    /* print an error, nudging the user to upgrade to [mtx_*~] */
+
+    /* however, suppress the error in help-patches */
+    const char*absname = iemmatrix_parentabstractionname(0);
+    if(absname) {
+      char*absext = strrchr(absname, '-');
+      if (absext && !strcmp(absext, "-help.pd")) {
+        /* the object lives in a help-patch: suppress error */
+      } else {
+        absname = 0;
+      }
+    }
+    if(!absname)
+      pd_error(x, "[%s] is deprecated! use [mtx_*~] instead!", s->s_name);
   }
   x->x_name = s;
   x->x_compat=compat;

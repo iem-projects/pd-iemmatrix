@@ -42,14 +42,20 @@
 
 #endif /* __WIN32__ */
 
-
-#include <m_pd.h>
-
-
-
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif /* HAVE_CONFIG_H */
+
+
+#ifdef HAVE_M_PD_H
+# include <m_pd.h>
+#elif defined HAVE_PD_M_PD_H
+# include <pd/m_pd.h>
+#else
+# include <m_pd.h>
+#endif
+
+
 
 #ifndef VERSION
 #ifdef PACKAGE_VERSION

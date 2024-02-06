@@ -37,14 +37,6 @@
  * other windows compilers might have to define it by hand
  */
 
-/* m_pd.h expects MSW rather than __WIN32__ */
-# ifndef MSW
-#  define MSW
-# endif
-# ifndef NT
-#  define NT
-# endif
-
 # pragma warning( disable : 4244 )
 # pragma warning( disable : 4305 )
 

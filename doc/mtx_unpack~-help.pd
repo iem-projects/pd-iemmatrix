@@ -28,7 +28,7 @@
 #X obj 310 179 tgl 20 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #X msg 310 204 \; pd dsp \$1;
 #N canvas 607 308 574 445 multichannel 0;
-#X text 98 22 With Pd>=0.54 \, [mtx_unpack~] has multichannel support \, if requested explitly with the '-m' flag.;
+#X text 98 22 With Pd>=0.54 \, [mtx_unpack~] has multichannel support \, if requested explicitly with the '-m' flag.;
 #X obj 182 120 mtx_print;
 #X obj 103 95 mtx_rand;
 #X msg 103 73 3 8;

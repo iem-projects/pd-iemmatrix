@@ -53,9 +53,7 @@
 
 #include <m_pd.h>
 
-#ifndef M_PI
 
-#endif
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"

@@ -56,6 +56,15 @@
 #endif
 
 
+#ifdef HAVE_G_CANVAS_H
+# include <g_canvas.h>
+# define IEMMATRIX_HAVE_G_CANVAS 1
+#elif defined HAVE_PD_G_CANVAS_H
+# include <pd/g_canvas.h>
+# define IEMMATRIX_HAVE_G_CANVAS 1
+#else
+# define IEMMATRIX_HAVE_G_CANVAS 0
+#endif
 
 #ifndef VERSION
 #ifdef PACKAGE_VERSION

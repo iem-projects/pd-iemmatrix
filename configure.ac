@@ -176,7 +176,7 @@ IEM_CHECK_SIMD
 
 have_pd="no"
 AC_CHECK_HEADERS([pd/m_pd.h m_pd.h], [have_pd="yes"])
-AC_CHECK_HEADERS([pd/g_canvas.h g_canvas_h], [], [], [
+AC_CHECK_HEADERS([pd/g_canvas.h g_canvas.h], [], [], [
 #ifdef HAVE_M_PD_H
 # include <m_pd.h>
 #elif defined HAVE_PD_M_PD_H

@@ -53,7 +53,7 @@ stages:
     - echo "fatarchs ${fatarchs}"
     - echo "DESTDIR ${DESTDIR}"
     - ./autogen.sh
-    - ./configure ${fatarchs:+--enable-fat-binary=${fatarchs}} ${HOST_ARCH_GNU:+--host="${HOST_ARCH_GNU}"} ${PDDIR:+--with-pd="${PDDIR}"} ${extension:+--with-extension="${extension}"} ${floatsize:+--with-floatsize="${floatsize}"}
+    - ./configure ${fatarchs:+--enable-fat-binary=${fatarchs}} ${HOST_ARCH_GNU:+--host="${HOST_ARCH_GNU}"} ${PDDIR:+--with-pd="${PDDIR}"} ${extension:+--with-extension="${extension}"} ${floatsize:+--with-floatsize="${floatsize}"} --with-build-date="${CI_COMMIT_TIMESTAMP}"
     - make check -j2
     - |
       make install DESTDIR="${DESTDIR}" libdir=/
@@ -277,7 +277,7 @@ distcheck:
   needs: []
   script:
     - autoreconf -fiv || ./autogen.sh
-    - ./configure ${fatarchs:+--enable-fat-binary=${fatarchs}} ${HOST_ARCH_GNU:+--host="${HOST_ARCH_GNU}"} ${PDDIR:+--with-pd="${PDDIR}"} ${extension:+--with-extension="${extension}"} ${floatsize:+--with-floatsize="${floatsize}"}
+    - ./configure ${fatarchs:+--enable-fat-binary=${fatarchs}} ${HOST_ARCH_GNU:+--host="${HOST_ARCH_GNU}"} ${PDDIR:+--with-pd="${PDDIR}"} ${extension:+--with-extension="${extension}"} ${floatsize:+--with-floatsize="${floatsize}"} --with-build-date="${CI_COMMIT_TIMESTAMP}"
     - make distcheck -j2
   after_script:
     - echo done

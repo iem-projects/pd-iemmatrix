@@ -143,7 +143,7 @@ void *mtx_unpack_new (t_symbol*s, int argc, t_atom*argv)
     goto usage;
   }
 
-  if(argv)
+  if(argc)
     num_chan = (int)atom_getfloat(argv);
 
   x = (mtx_unpack_tilde*) pd_new(mtx_unpack_tilde_class);

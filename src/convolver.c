@@ -1,9 +1,9 @@
-#include "fftw/fftw3.h"
-#include "array.h"
-#define NUM_CF 2 // there are 2 crossfase buffers (re-occurring array dimension)
+#include "../include/convolver.h"
+#include <math.h>
+#define TRUE 1
+#define FALSE 0
 
-
-* crossfade functions */
+/* crossfade functions */
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void crossfade(float *y,float* y_new, float* w, int len)
 {
@@ -47,7 +47,7 @@ void conv_process(conv_data *conv, float **in, float **out){
                 
         fftwf_execute(conv->ifftplan_y); // perform accumulated partitions iFFT
         conv->convolver_switch=1;
-        if(getNewIR(conv)==true)
+        if(getNewIR(conv)==TRUE)
         {
             conv->current_cf=(conv->current_cf+1)%NUM_CF;
             resetComplexArray(conv->yftemp,conv->L+1);
@@ -61,7 +61,7 @@ void conv_process(conv_data *conv, float **in, float **out){
             }
             fftwf_execute(conv->ifftplan_y_cf);
             crossfade(conv->y+conv->L,conv->y_cf+conv->L,conv->w,conv->L);
-            setNewIR(conv,false);  //update status
+            setNewIR(conv,FALSE);  //update status
         }
          copyArrayWithGain(&conv->y[conv->L],out[out_ch],conv->L,2*conv->L); //second half is result   
     }
@@ -133,7 +133,7 @@ void freeConvolution(conv_data conv){
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void setImpulseResponse(conv_data *conv, float***inh){
-    setNewIR(conv,true);
+    setNewIR(conv,TRUE);
     conv->convolver_switch=1;
 
     for (int out_ch=0; out_ch<conv->OUTPUT_Channel_Number; out_ch++)

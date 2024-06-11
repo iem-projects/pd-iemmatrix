@@ -1,6 +1,6 @@
-#include "fftw/fftw3.h"
-#include "array.h"
-#include "convolver.h"
+#include "../include/array.h"
+#include "../include/convolver.h"
+#include <math.h>
 
 
 /* MAIN TESTING ROUTINE */

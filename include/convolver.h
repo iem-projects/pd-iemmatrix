@@ -1,5 +1,6 @@
-#include "fftw/fftw3.h"
+#include "fftw3.h"
 #include "array.h"
+#define NUM_CF 2 // there are 2 crossfase buffers (re-occurring array dimension)
 typedef struct Conv_data{
     int L;  // signal block length (fft length = 2L)
     int P;  // number of convolution partitions (length of h)

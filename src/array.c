@@ -1,4 +1,4 @@
-#include "fftw/fftw3.h"
+#include "../include/fftw3.h"
 #include <windows.h> 
 #include <math.h> 
 
@@ -7,7 +7,7 @@
 /* HELPER FUNCTIONS, GENERATION, COPYING, RESETTING */
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void hann(float* w, int len){
-    float a=pi/(2*(len));
+    float a=M_PI/(2*(len));
     for(int n=0; n<len; n++)
     w[n]=cos(a*n)*cos(a*n);
 }

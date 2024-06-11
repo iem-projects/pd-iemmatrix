@@ -29,18 +29,18 @@ typedef struct Conv_data{
 } conv_data;
 /* crossfade functions */
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void crossfade(float *y,float* y_new, float* w, int len)
+void crossfade(float *y,float* y_new, float* w, int len);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void setNewIR(conv_data *conv, _Bool status)
+void setNewIR(conv_data *conv, _Bool status);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-_Bool getNewIR(conv_data *conv)
+_Bool getNewIR(conv_data *conv);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 /* PARTITIONED CONVOLUTION CORE */
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void conv_process(conv_data *conv, float **in, float **out)
+void conv_process(conv_data *conv, float **in, float **out);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-conv_data initConvolution(int L, int P, int Hann_len, int in_ch, int out_ch)
+conv_data initConvolution(int L, int P, int Hann_len, int in_ch, int out_ch);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void freeConvolution(conv_data conv)
+void freeConvolution(conv_data conv);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void setImpulseResponse(conv_data *conv, float***inh)
+void setImpulseResponse(conv_data *conv, float***inh);

@@ -1,8 +1,4 @@
 #include "fftw/fftw3.h"
-#include <windows.h> 
-#include <math.h> 
-
-
 
 /* HELPER FUNCTIONS, GENERATION, COPYING, RESETTING */
 /*-----------------------------------------------------------------------------------------------------------------------------*/

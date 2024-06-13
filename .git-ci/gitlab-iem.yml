@@ -105,6 +105,7 @@ stages:
     - (which gitlab-runner; gitlab-runner --version) || brew install gitlab-runner || true
     - (which gitlab-runner; gitlab-runner --version) || true
     # install dependencies
+    - brew update
     - brew bundle --no-upgrade --file=.git-ci/macOS.brew
     # some of the fatbrew files end up as keg-only (and are therefore not found by pkg-config), so:
     - brew list --full-name | grep iem/fatbrew | while read pkg; do echo $pkg; brew unlink ${pkg} || true; brew link ${pkg} || true; done

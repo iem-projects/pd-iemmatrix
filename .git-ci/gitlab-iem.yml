@@ -39,6 +39,10 @@ stages:
     - tart
   image: registry.git.iem.at/devtools/docker/tart/macos-monterey-xcode:latest
 
+.image:windows:
+  tags:
+    - windows
+
 .build:
   stage: build
   script:
@@ -142,9 +146,8 @@ stages:
 
 .build:w64:
   extends:
+    - .image:windows
     - .build
-  tags:
-    - windows
   variables:
     IEMCI_CONFIGURATIONS: mingw64
     PDARCHSUFFIX: ""

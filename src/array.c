@@ -1,5 +1,4 @@
-#include "../include/fftw3.h"
-#include <windows.h> 
+#include <../include/fftw3.h> 
 #include <math.h> 
 
 
@@ -352,6 +351,13 @@ void free2DArray(float** x, int I)
 {
     for (int i=0; i<I; i++)
         free1DArray(x[i]);
+    fftwf_free(x);
+}
+
+void free3DArray(float*** x, int I, int J)
+{
+    for (int i=0; i<I; i++)
+        free2DArray(x[i],J);
     fftwf_free(x);
 }
 

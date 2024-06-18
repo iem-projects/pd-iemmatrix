@@ -69,66 +69,67 @@ void conv_process(conv_data *conv, float **in, float **out){
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-conv_data initConvolution(int L, int P, int Hann_len, int in_ch, int out_ch){
-    conv_data conv;
-    conv.L=L;
-    conv.P=P;
-    conv.INPUT_Channel_Number=in_ch;
-    conv.OUTPUT_Channel_Number=out_ch;
-    conv.xtemp = new1DArray(conv.L*2);
-    conv.htemp = new1DArray(conv.L*2);
-    conv.y = new1DArray(conv.L*2);
-    conv.y_cf = new1DArray(conv.L*2);
-    conv.w = new1DArray(conv.L);
-    conv.current_rb=0;
-    conv.current_cf=1;
-    conv.Hann_len=Hann_len;
-    resetArray(conv.xtemp,conv.L*2);
-    resetArray(conv.htemp,conv.L*2);
-    resetArray(&conv.htemp[conv.L],conv.L); // zero pad
-    resetArray(conv.w,conv.L);
-    hann(conv.w,conv.Hann_len);
-    conv.convolver_switch=0;
+conv_data* initConvolution(int L, int P, int Hann_len, int in_ch, int out_ch){
+    conv_data* conv=(conv_data*)malloc(sizeof(conv_data));
+    conv->L=L;
+    conv->P=P;
+    conv->INPUT_Channel_Number=in_ch;
+    conv->OUTPUT_Channel_Number=out_ch;
+    conv->xtemp = new1DArray(conv->L*2);
+    conv->htemp = new1DArray(conv->L*2);
+    conv->y = new1DArray(conv->L*2);
+    conv->y_cf = new1DArray(conv->L*2);
+    conv->w = new1DArray(conv->L);
+    conv->current_rb=0;
+    conv->current_cf=1;
+    conv->Hann_len=Hann_len;
+    resetArray(conv->xtemp,conv->L*2);
+    resetArray(conv->htemp,conv->L*2);
+    resetArray(&conv->htemp[conv->L],conv->L); // zero pad
+    resetArray(conv->w,conv->L);
+    hann(conv->w,conv->Hann_len);
+    conv->convolver_switch=0;
 
 
-    conv.x_old=new2DArray(conv.INPUT_Channel_Number,conv.L);
-    reset2DArray(conv.x_old,conv.INPUT_Channel_Number,conv.L);
+    conv->x_old=new2DArray(conv->INPUT_Channel_Number,conv->L);
+    reset2DArray(conv->x_old,conv->INPUT_Channel_Number,conv->L);
 
-    conv.xf=new3DComplexArray(conv.INPUT_Channel_Number, conv.P, conv.L+1);
-    reset3DComplexArray(conv.xf,conv.INPUT_Channel_Number, conv.P, conv.L+1);
-    conv.hf=new5DComplexArray(NUM_CF,conv.OUTPUT_Channel_Number,conv.INPUT_Channel_Number, conv.P, conv.L+1);
-    reset5DComplexArray(conv.hf,NUM_CF,conv.OUTPUT_Channel_Number,conv.INPUT_Channel_Number, conv.P, conv.L+1);
+    conv->xf=new3DComplexArray(conv->INPUT_Channel_Number, conv->P, conv->L+1);
+    reset3DComplexArray(conv->xf,conv->INPUT_Channel_Number, conv->P, conv->L+1);
+    conv->hf=new5DComplexArray(NUM_CF,conv->OUTPUT_Channel_Number,conv->INPUT_Channel_Number, conv->P, conv->L+1);
+    reset5DComplexArray(conv->hf,NUM_CF,conv->OUTPUT_Channel_Number,conv->INPUT_Channel_Number, conv->P, conv->L+1);
 
-    conv.xftemp = new1DComplexArray(conv.L+1); 
-    conv.hftemp = new1DComplexArray(conv.L+1); 
-    conv.yftemp = new1DComplexArray(conv.L+1); 
+    conv->xftemp = new1DComplexArray(conv->L+1); 
+    conv->hftemp = new1DComplexArray(conv->L+1); 
+    conv->yftemp = new1DComplexArray(conv->L+1); 
 
-    conv.fftplan_xtemp = fftwf_plan_dft_r2c_1d(conv.L*2, conv.xtemp, conv.xftemp, FFTW_ESTIMATE);
-    conv.fftplan_htemp = fftwf_plan_dft_r2c_1d(conv.L*2, conv.htemp, conv.hftemp, FFTW_ESTIMATE);
-    conv.ifftplan_y = fftwf_plan_dft_c2r_1d(conv.L*2, conv.yftemp, conv.y, FFTW_ESTIMATE);
-    conv.ifftplan_y_cf = fftwf_plan_dft_c2r_1d(conv.L*2, conv.yftemp, conv.y_cf, FFTW_ESTIMATE);
+    conv->fftplan_xtemp = fftwf_plan_dft_r2c_1d(conv->L*2, conv->xtemp, conv->xftemp, FFTW_ESTIMATE);
+    conv->fftplan_htemp = fftwf_plan_dft_r2c_1d(conv->L*2, conv->htemp, conv->hftemp, FFTW_ESTIMATE);
+    conv->ifftplan_y = fftwf_plan_dft_c2r_1d(conv->L*2, conv->yftemp, conv->y, FFTW_ESTIMATE);
+    conv->ifftplan_y_cf = fftwf_plan_dft_c2r_1d(conv->L*2, conv->yftemp, conv->y_cf, FFTW_ESTIMATE);
     return conv;
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void freeConvolution(conv_data conv){
-    fftwf_destroy_plan(conv.fftplan_xtemp);
-    fftwf_destroy_plan(conv.fftplan_htemp);
-    fftwf_destroy_plan(conv.ifftplan_y);
-    fftwf_destroy_plan(conv.ifftplan_y_cf);
+void freeConvolution(conv_data *conv){
+    fftwf_destroy_plan(conv->fftplan_xtemp);
+    fftwf_destroy_plan(conv->fftplan_htemp);
+    fftwf_destroy_plan(conv->ifftplan_y);
+    fftwf_destroy_plan(conv->ifftplan_y_cf);
 
-    free3DComplexArray(conv.xf,conv.INPUT_Channel_Number,conv.P);
-    free5DComplexArray(conv.hf,NUM_CF,conv.OUTPUT_Channel_Number,conv.INPUT_Channel_Number,conv.P);
-    free2DArray(conv.x_old,conv.INPUT_Channel_Number);
+    free3DComplexArray(conv->xf,conv->INPUT_Channel_Number,conv->P);
+    free5DComplexArray(conv->hf,NUM_CF,conv->OUTPUT_Channel_Number,conv->INPUT_Channel_Number,conv->P);
+    free2DArray(conv->x_old,conv->INPUT_Channel_Number);
 
-    fftwf_free(conv.yftemp);
-    fftwf_free(conv.xtemp);
-    fftwf_free(conv.y);
-    fftwf_free(conv.w);
-    fftwf_free(conv.y_cf);
-    fftwf_free(conv.htemp);
-    fftwf_free(conv.hftemp); 
-    fftwf_free(conv.xftemp);
+    fftwf_free(conv->yftemp);
+    fftwf_free(conv->xtemp);
+    fftwf_free(conv->y);
+    fftwf_free(conv->w);
+    fftwf_free(conv->y_cf);
+    fftwf_free(conv->htemp);
+    fftwf_free(conv->hftemp); 
+    fftwf_free(conv->xftemp);
+    free(conv);
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/

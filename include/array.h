@@ -80,3 +80,4 @@ void free4DComplexArray(fftwf_complex**** x, int I,int J,int K);
 void free5DComplexArray(fftwf_complex***** x, int I,int J,int K,int L);
 void free1DArray(float* x);
 void free2DArray(float** x, int I);
+void free3DArray(float*** x, int I, int J);

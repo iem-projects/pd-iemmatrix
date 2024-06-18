@@ -40,8 +40,8 @@ _Bool getNewIR(conv_data *conv);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void conv_process(conv_data *conv, float **in, float **out);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-conv_data initConvolution(int L, int P, int Hann_len, int in_ch, int out_ch);
+conv_data* initConvolution(int L, int P, int Hann_len, int in_ch, int out_ch);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void freeConvolution(conv_data conv);
+void freeConvolution(conv_data *conv);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void setImpulseResponse(conv_data *conv, float***inh);

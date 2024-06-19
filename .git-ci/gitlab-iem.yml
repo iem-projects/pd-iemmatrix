@@ -42,7 +42,7 @@ stages:
 .image:windows:
   tags:
     - sardinecake
-  image: registry.git.iem.at/devtools/sardinecake/windows10:latest
+  image: registry.git.iem.at/devtools/sardinecake/windows:latest
 
 .build:
   stage: build

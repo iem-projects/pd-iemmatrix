@@ -94,6 +94,7 @@ stages:
   after_script:
     - depdir="${CI_JOB_NAME%-[0-9][0-9]}"
     - find "${ARTIFACTSDIR}" -type f "(" -name "*.${extension}" -or -name "*.pd_linux" -or -name "*.so" ")" -exec "${localdeps}.linux.sh" -v -d "${depdir}" {} +
+    - find . -iname "lib*.so*" || true
 
 .build:macos: &build_macos
   extends:
@@ -145,6 +146,7 @@ stages:
     - *script_zsh_compat
     - depdir="${CI_JOB_NAME%-[0-9][0-9]}"
     - find "${ARTIFACTSDIR}" -type f "(" -name "*.${extension}" -or -name "*.pd_darwin" -or -name "*.d_fat" -or -name "*.so" ")" -exec "${localdeps}.macos.sh" -v -F -d "${depdir}" {} +
+    - find . -iname "*.dylib*" || true
     - IEM_SIGN_SRCDIR="${ARTIFACTSDIR}/${CI_JOB_NAME%%:*}"
     - !reference [.script:codesign:macos]
 
@@ -174,6 +176,7 @@ stages:
   after_script:
     - depdir="${CI_JOB_NAME%-[0-9][0-9]}"
     - find "${ARTIFACTSDIR}" -type f "(" -name "*.${extension}" -or -name "*.dll" ")" -exec "${localdeps}.win.sh" -v -d "${depdir}" {} +
+    - find . -iname "*.dll" -or -iname "*.w32" -or -iname "*.w64" || true
 
 .build:w32:
   extends:

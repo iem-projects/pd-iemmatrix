@@ -46,6 +46,8 @@ stages:
 
 .build:
   stage: build
+  variables:
+    localdeps: ".git-ci/iem-ci/localdeps/localdeps"
   script:
     - *script_zsh_compat
     - |
@@ -91,7 +93,7 @@ stages:
     - date
   after_script:
     - depdir="${CI_JOB_NAME%-[0-9][0-9]}"
-    - find "${ARTIFACTSDIR}" -type f "(" -name "*.${extension}" -or -name "*.pd_linux" -or -name "*.so" ")" -exec .git-ci/iem-ci/localdeps/localdeps.linux.sh -v -d "${depdir}" {} +
+    - find "${ARTIFACTSDIR}" -type f "(" -name "*.${extension}" -or -name "*.pd_linux" -or -name "*.so" ")" -exec "${localdeps}.linux.sh" -v -d "${depdir}" {} +
 
 .build:macos: &build_macos
   extends:
@@ -142,7 +144,7 @@ stages:
   after_script:
     - *script_zsh_compat
     - depdir="${CI_JOB_NAME%-[0-9][0-9]}"
-    - find "${ARTIFACTSDIR}" -type f "(" -name "*.${extension}" -or -name "*.pd_darwin" -or -name "*.d_fat" -or -name "*.so" ")" -exec .git-ci/iem-ci/localdeps/localdeps.macos.sh -v -F -d "${depdir}" {} +
+    - find "${ARTIFACTSDIR}" -type f "(" -name "*.${extension}" -or -name "*.pd_darwin" -or -name "*.d_fat" -or -name "*.so" ")" -exec "${localdeps}.macos.sh" -v -F -d "${depdir}" {} +
     - IEM_SIGN_SRCDIR="${ARTIFACTSDIR}/${CI_JOB_NAME%%:*}"
     - !reference [.script:codesign:macos]
 
@@ -171,7 +173,7 @@ stages:
     - date
   after_script:
     - depdir="${CI_JOB_NAME%-[0-9][0-9]}"
-    - find "${ARTIFACTSDIR}" -type f "(" -name "*.${extension}" -or -name "*.dll" ")" -exec .git-ci/iem-ci/localdeps/localdeps.win.sh -v -d "${depdir}" {} +
+    - find "${ARTIFACTSDIR}" -type f "(" -name "*.${extension}" -or -name "*.dll" ")" -exec "${localdeps}.win.sh" -v -d "${depdir}" {} +
 
 .build:w32:
   extends:

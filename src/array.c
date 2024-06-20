@@ -266,7 +266,7 @@ fftwf_complex**** new4DComplexArray(int I,int J,int K,int L){
 }
 
 fftwf_complex***** new5DComplexArray(int I,int J,int K,int L, int M){
-    fftwf_complex***** x= (fftwf_complex*****) fftwf_malloc(sizeof(fftwf_complex) * I*J*K*L*M);
+    fftwf_complex***** x= (fftwf_complex*****) fftwf_malloc(sizeof(fftwf_complex****) * I);
     for(int i=0; i<I; i++)
         x[i]= new4DComplexArray(J,K,L,M);
     return x;

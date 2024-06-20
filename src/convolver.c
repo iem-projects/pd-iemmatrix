@@ -1,5 +1,7 @@
 #include "../include/convolver.h"
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 #define TRUE 1
 #define FALSE 0
 
@@ -150,4 +152,31 @@ void setImpulseResponse(conv_data *conv, float***inh){
         }
     }
 }
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void setImpulseResponse2DZeropad(conv_data *conv, float**inh,int num_samples){
+    int L = conv->L;
+    setNewIR(conv,TRUE);
+    conv->convolver_switch=1;
+
+    for (int out_ch=0; out_ch<conv->OUTPUT_Channel_Number; out_ch++)
+    {
+        for (int in_ch=0; in_ch<conv->INPUT_Channel_Number; in_ch++)
+        {
+           int offset=0;
+           for (int partition=0; partition<conv->L; partition++, offset+=conv->P)
+           {
+                if (num_samples-offset<conv->L) {
+                    L=num_samples-offset;
+                    resetArray(conv->htemp+L,conv->L-L);
+                } else {
+                    L=conv->L;
+                }
+                copyArray(&inh[out_ch*conv->OUTPUT_Channel_Number+in_ch][offset],conv->htemp,L);
+                fftwf_execute(conv->fftplan_htemp);
+                copyComplexArray(conv->hftemp,conv->hf[(conv->current_cf+1)%NUM_CF][out_ch][in_ch][partition],conv->L+1);
+            }
+        }
+    }
+}
+
 

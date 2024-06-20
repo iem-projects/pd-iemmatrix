@@ -16,7 +16,7 @@
  */
 #include "m_pd.h"
 #include "convolver.h"
-#include "include/array.h"
+#include "array.h"
 #include <stdlib.h>
 
 

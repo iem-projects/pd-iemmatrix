@@ -15,6 +15,7 @@
  * include the interface to Pd
  */
 #include "m_pd.h"
+#include <math.h>
 #include "convolver.h"
 #include "array.h"
 #include <stdlib.h>
@@ -279,7 +280,7 @@ void mtx_input_matrix(t_mtx_convolver_tilde *x, t_symbol *s, int argc, t_atom *a
     ir_len = ceil(cols / x->blocksize) * x->blocksize;
     mtx_convolver_init(x, ir_len);
     setImpulseResponse2DZeropad(x->conv, x->hin, x->cols);
-    dsp_add(mtx_convolver_tilde_perform, 2, x, sp);
+    //dsp_add(mtx_convolver_tilde_perform, 2, x, sp);
   }
  // Registrieren eines Updates der Impulsantwort für den Convolver 
  // bzw: wenn Blockgröße bereits bekannt aus dsp-Routine

@@ -1,4 +1,6 @@
-#include <../include/fftw3.h> 
+#include <fftw3.h> 
+#include <stdio.h>
+#include <stdlib.h>
 #include <math.h> 
 
 

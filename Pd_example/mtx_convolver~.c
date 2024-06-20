@@ -15,8 +15,8 @@
  * include the interface to Pd
  */
 #include "m_pd.h"
-#include "../include/convolver.h"
-#include "../include/array.h"
+#include "convolver.h"
+#include "include/array.h"
 #include <stdlib.h>
 
 

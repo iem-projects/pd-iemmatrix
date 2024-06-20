@@ -171,9 +171,13 @@ void setImpulseResponse2DZeropad(conv_data *conv, float**inh,int num_samples){
                 } else {
                     L=conv->L;
                 }
-                copyArray(&inh[out_ch*conv->OUTPUT_Channel_Number+in_ch][offset],conv->htemp,L);
+                copyArray(&inh[out_ch*conv->OUTPUT_Channel_Number+in_ch][offset],
+			  conv->htemp,
+			  L);
                 fftwf_execute(conv->fftplan_htemp);
-                copyComplexArray(conv->hftemp,conv->hf[(conv->current_cf+1)%NUM_CF][out_ch][in_ch][partition],conv->L+1);
+                copyComplexArray(conv->hftemp,
+				 conv->hf[(conv->current_cf+1)%NUM_CF][out_ch][in_ch][partition],
+				 conv->L+1);
             }
         }
     }

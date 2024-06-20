@@ -55,6 +55,15 @@ typedef struct _mtx_convolver_tilde {
 } t_mtx_convolver_tilde;
 
 
+int nextint(float f) {
+  int i = (int)f;
+  i += (i!=f);
+  if(i<1)
+    i=1;
+  return i;
+}
+
+
 /**
  * this is the core of the object
  * this perform-routine is called for each signal block
@@ -115,7 +124,7 @@ void mtx_convolver_init(t_mtx_convolver_tilde *x,int ir_len)
   if (x->conv)
     freeConvolution(x->conv);
   if (x->blocksize) {
-    int P = ceil(ir_len / x->blocksize);
+    int P = nextint(ir_len / x->blocksize);
     x->conv = initConvolution(x->blocksize, P, x->blocksize, x->ins, x->outs);
     post("init: x->conv=%d",x->conv);
   }
@@ -151,7 +160,7 @@ void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp)
   if ((x->blocksize != sp[0]->s_n) && (x->cols))
   {
     x->blocksize = sp[0]->s_n;
-    int ir_len = ceil(x->cols / x->blocksize) * x->blocksize;
+    int ir_len = nextint(x->cols / x->blocksize) * x->blocksize;
     mtx_convolver_init(x, ir_len);
     setImpulseResponse2DZeropad(x->conv, x->hin, x->cols);
     mtx_convolver_init(x, ir_len);
@@ -277,7 +286,7 @@ void mtx_input_matrix(t_mtx_convolver_tilde *x, t_symbol *s, int argc, t_atom *a
   }
   if (x->blocksize)
   {
-    ir_len = ceil(cols / x->blocksize) * x->blocksize;
+    ir_len = nextint(cols / x->blocksize) * x->blocksize;
     mtx_convolver_init(x, ir_len);
     setImpulseResponse2DZeropad(x->conv, x->hin, x->cols);
     //dsp_add(mtx_convolver_tilde_perform, 2, x, sp);

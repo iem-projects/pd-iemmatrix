@@ -45,3 +45,5 @@ conv_data* initConvolution(int L, int P, int Hann_len, int in_ch, int out_ch);
 void freeConvolution(conv_data *conv);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void setImpulseResponse(conv_data *conv, float***inh);
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void setImpulseResponse2DZeropad(conv_data *conv, float**inh, int num_samples);

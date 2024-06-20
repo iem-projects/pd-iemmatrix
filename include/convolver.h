@@ -9,10 +9,10 @@ typedef struct Conv_data{
     int Hann_len;
     _Bool convolver_switch; //parameter for swiching bitween different buffers
 
-    float *xtemp; // 2L fft-input time-domain signal x=[xprev, xcurr]  
+    float *xtemp; // 2L fft-input time-domain signal x=[xprev, xcurr]
     float *htemp; // 2L time-domain impulse response input h=[h, 0]
     float *y; // 2L time-domain result y=[ycircular, ylinear]
-    float *y_cf; // 2L time-domain result y=[ycircular, ylinear] 
+    float *y_cf; // 2L time-domain result y=[ycircular, ylinear]
     float **x_old; //previous input data
     float *w; // hann-function
     int current_rb; // current_rb ring buffer position
@@ -26,7 +26,7 @@ typedef struct Conv_data{
     fftwf_plan fftplan_htemp; // FFTW DFT plan for impulse response
     fftwf_plan ifftplan_y;    // FFTW iDFT plan for current output signal
     fftwf_plan ifftplan_y_cf;
-    
+
 } conv_data;
 /* crossfade functions */
 /*-----------------------------------------------------------------------------------------------------------------------------*/

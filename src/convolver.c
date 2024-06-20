@@ -46,7 +46,7 @@ void conv_process(conv_data *conv, float **in, float **out){
                 freq_mul_acc(conv->xf[in_ch][px%conv->P],conv->hf[conv->current_cf][out_ch][in_ch][p],conv->yftemp,conv->L+1);
             }
         }
-                
+
         fftwf_execute(conv->ifftplan_y); // perform accumulated partitions iFFT
         conv->convolver_switch=1;
         if(getNewIR(conv)==TRUE)
@@ -65,7 +65,7 @@ void conv_process(conv_data *conv, float **in, float **out){
             crossfade(conv->y+conv->L,conv->y_cf+conv->L,conv->w,conv->L);
             setNewIR(conv,FALSE);  //update status
         }
-         copyArrayWithGain(&conv->y[conv->L],out[out_ch],conv->L,2*conv->L); //second half is result   
+         copyArrayWithGain(&conv->y[conv->L],out[out_ch],conv->L,2*conv->L); //second half is result
     }
     conv->current_rb=(conv->current_rb+conv->P-1)%conv->P; // decrease ring buffer position
 }
@@ -101,9 +101,9 @@ conv_data* initConvolution(int L, int P, int Hann_len, int in_ch, int out_ch){
     conv->hf=new5DComplexArray(NUM_CF,conv->OUTPUT_Channel_Number,conv->INPUT_Channel_Number, conv->P, conv->L+1);
     reset5DComplexArray(conv->hf,NUM_CF,conv->OUTPUT_Channel_Number,conv->INPUT_Channel_Number, conv->P, conv->L+1);
 
-    conv->xftemp = new1DComplexArray(conv->L+1); 
-    conv->hftemp = new1DComplexArray(conv->L+1); 
-    conv->yftemp = new1DComplexArray(conv->L+1); 
+    conv->xftemp = new1DComplexArray(conv->L+1);
+    conv->hftemp = new1DComplexArray(conv->L+1);
+    conv->yftemp = new1DComplexArray(conv->L+1);
 
     conv->fftplan_xtemp = fftwf_plan_dft_r2c_1d(conv->L*2, conv->xtemp, conv->xftemp, FFTW_ESTIMATE);
     conv->fftplan_htemp = fftwf_plan_dft_r2c_1d(conv->L*2, conv->htemp, conv->hftemp, FFTW_ESTIMATE);
@@ -129,7 +129,7 @@ void freeConvolution(conv_data *conv){
     fftwf_free(conv->w);
     fftwf_free(conv->y_cf);
     fftwf_free(conv->htemp);
-    fftwf_free(conv->hftemp); 
+    fftwf_free(conv->hftemp);
     fftwf_free(conv->xftemp);
     free(conv);
 }
@@ -178,5 +178,3 @@ void setImpulseResponse2DZeropad(conv_data *conv, float**inh,int num_samples){
         }
     }
 }
-
-

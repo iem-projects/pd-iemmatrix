@@ -1,7 +1,7 @@
-#include <fftw3.h> 
+#include <fftw3.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h> 
+#include <math.h>
 
 
 
@@ -134,7 +134,7 @@ void copyExcerpt(float *src, float *dst, int src_offset, int dst_offset, int len
 void copyArrayWithGain(float *src, float *dst, int len, float gain){
     for (int i=0; i<len;i++){
         dst[i]=src[i]/gain;
-    } 
+    }
 }
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void resetComplexArray(fftwf_complex *in, int len){
@@ -196,11 +196,11 @@ void print2DSignal (float** in, int len1, int len2){
         if (i==0)
            printf("[");
         else
-           printf(" ");           
+           printf(" ");
         for(int j=0; j<len2; j++) {
             printf("%3.1f ", in[i][j]);
         }
-        if (i<len1-1) 
+        if (i<len1-1)
            printf(";\n");
         else
            printf("]\n");
@@ -362,5 +362,3 @@ void free3DArray(float*** x, int I, int J)
         free2DArray(x[i],J);
     fftwf_free(x);
 }
-
-

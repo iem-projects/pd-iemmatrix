@@ -156,31 +156,34 @@ void setImpulseResponse(conv_data *conv, float***inh){
 void setImpulseResponse2DZeropad(conv_data *conv, float**inh,int num_samples){
     const int L = conv->L;
     const int P = conv->P;
-    setNewIR(conv,TRUE);
-    conv->convolver_switch=1;
+    setNewIR(conv, TRUE);
+    conv->convolver_switch = 1;
 
-    for (int out_ch=0; out_ch<conv->OUTPUT_Channel_Number; out_ch++)
+    for (int out_ch = 0; out_ch < conv->OUTPUT_Channel_Number; out_ch++)
     {
-        for (int in_ch=0; in_ch<conv->INPUT_Channel_Number; in_ch++)
+        for (int in_ch = 0; in_ch < conv->INPUT_Channel_Number; in_ch++)
         {
-           int offset=0;
-	   for(int partition=0; partition<P; partition++, offset+=L)
-	     {
-	       int Lreal = conv->L;
+            int offset = 0;
+            for (int partition = 0; partition < P; partition++, offset += L)
+            {
+                int Lreal = conv->L;
 
-	       if (num_samples - offset < L) {
-		 Lreal = num_samples - offset;
-		 resetArray(conv->htemp, conv->L);
-	       }
+                if (num_samples - offset < L)
+                {
+                    Lreal = num_samples - offset;
+                    resetArray(conv->htemp, conv->L);
+                }
 
-	       copyArray(inh[out_ch*conv->OUTPUT_Channel_Number+in_ch], conv->htemp, Lreal);
+                copyArray(inh[out_ch * conv->INPUT_Channel_Number + in_ch], conv->htemp, Lreal);
 
-	       fftwf_execute(conv->fftplan_htemp);
+                printf("in_ch=%d,out_ch=%d", in_ch,out_ch);
 
-	       copyComplexArray(conv->hftemp,
-				conv->hf[(conv->current_cf+1)%NUM_CF][out_ch][in_ch][partition],
-				conv->L+1);
-	     }
-	}
+                fftwf_execute(conv->fftplan_htemp);
+
+                copyComplexArray(conv->hftemp,
+                                 conv->hf[(conv->current_cf + 1) % NUM_CF][out_ch][in_ch][partition],
+                                 conv->L + 1);
+            }
+        }
     }
 }

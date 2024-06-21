@@ -20,7 +20,7 @@ void addArray(float * array1, float * array2, int len, float * result){
 }
 float squaredArray(float* array, int len)
 {
-    float result;
+    float result=0;
     for(int i=0; i<len; i++)
     result+=array[i]*array[i];
 

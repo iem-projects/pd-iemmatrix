@@ -44,6 +44,7 @@ typedef struct _mtx_convolver_tilde {
   float **hin; 
   float **input;
   float **output;
+  t_sample **inout_buffers;
   int rows;
   int cols;
   conv_data *conv;
@@ -51,7 +52,6 @@ typedef struct _mtx_convolver_tilde {
   t_outlet**x_out;
   int blocksize;
   int partition;
-  t_signal **sp;
 } t_mtx_convolver_tilde;
 
 
@@ -81,43 +81,58 @@ int nextint(float f) {
  */
 t_int *mtx_convolver_tilde_perform(t_int *w)
 {
-  t_mtx_convolver_tilde *x = (t_mtx_convolver_tilde*) (w+1); 
-  t_signal **sp = (t_signal**) (w+2);
+  t_mtx_convolver_tilde *x = (t_mtx_convolver_tilde*) w[1]; 
 
+  post("perf0: x=%d",x);
   // hier einfüllen: Signalblöcke dem laufenden 
   // Convolver (conv_process) übergeben
   // sp[0]->s_vec ist das t_sample (=float) Array vom Eingang 1
   // sp[1]->s_vec ist ... von Eingang 2...
   // muss herauskopiert werden.
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!out
-
-
   
-  for(int i=0; i<x->ins;i++)
+  post("perf1: x->conv=%d, x->input=%d. x->output=%d", x->conv, x->input, x->output);
+  if (x->conv != 0)
   {
-    float* in=x->input[i];
-    t_sample*pd_in = sp[i]->s_vec;
-    for(int n=0; n<x->blocksize;n++)
+    
+    for (int i = 0; i < x->ins; i++)
     {
-      in[n]=(float)pd_in[n];
+      float *in = x->input[i];
+      t_sample *pd_in = x->inout_buffers[i];
+      for (int n = 0; n < x->blocksize; n++)
+      {
+        //in[n] = (float)pd_in[n];
+      }
     }
-  }
-  post("perf: x->conv=%d, x->input=%d. x->output=%d",x->conv,x->input,x->output);
-/*
-  conv_process(x->conv, x->input, x->output);
+    post("perf2: x->conv=%d, x->input=%d. x->output=%d", x->conv, x->input, x->output);
 
-  for(int i=0; i<x->outs;i++)
-  {
-    float* out=x->output[i];
-    t_sample*pd_out = sp[i+x->ins]->s_vec;
-    for(int n=0; n<x->blocksize;n++)
+    conv_process(x->conv, x->input, x->output);
+
+    for (int i = 0; i < x->outs; i++)
     {
-      pd_out[n]=(t_sample)out[n];
+      float *out = x->output[i];
+      t_sample *pd_out = x->inout_buffers[i + x->ins];
+      for (int n = 0; n < x->blocksize; n++)
+      {
+       // pd_out[n] = (t_sample)out[n];
+      }
+    }
+    
+  }
+  else
+  {
+    post("perf3: x->conv=%d, x->input=%d. x->output=%d, blocksize=%d", x->conv, x->input, x->output, x->blocksize);
+    for (int i = 0; i < x->outs; i++)
+    {
+      t_sample *pd_out = x->inout_buffers[i + x->ins];
+      for (int n = 0; n < x->blocksize; n++)
+      {
+        pd_out[n] = (t_sample) 0;
+      }
     }
   }
-*/
- 
-  return (w+3);
+
+  return (w+2);
 }
 void mtx_convolver_init(t_mtx_convolver_tilde *x,int ir_len)
 {
@@ -148,32 +163,37 @@ void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp)
 
   // JMZ: here goes all the allocation (and pre-deallocation)
 
-  if (x->output)
-    free2DArray(x->output, x->outs);
-  if (x->input)
-    free2DArray(x->input, x->ins);
+  if (x->inout_buffers)
+    free(x->inout_buffers);
+  x->inout_buffers=(t_sample**)malloc(sizeof(t_sample*)*(x->ins+x->outs));
+  for (int i=0; i<x->ins+x->outs; i++) {
+    x->inout_buffers[i]=sp[i]->s_vec;
+    post("sp[%d]->s_vec=%d",i,x->inout_buffers[i]);
+  }
 
-  x->input = new2DArray(x->ins, sp[0]->s_n);
-  x->output = new2DArray(x->outs, sp[0]->s_n);
-
-  post("dsp: x->cols=%d, x->blocksize=%d. sp[0]->s_n=%d", x->cols, x->blocksize, sp[0]->s_n);
-  if ((x->blocksize != sp[0]->s_n) && (x->cols))
-  {
+  if (x->blocksize != sp[0]->s_n) {
+    post("dsp0: trying to resize output and input temp buffers");
+    if (x->output)
+      free2DArray(x->output, x->outs);
+    if (x->input)
+      free2DArray(x->input, x->ins);
+    x->input = new2DArray(x->ins, sp[0]->s_n);
+    x->output = new2DArray(x->outs, sp[0]->s_n);
     x->blocksize = sp[0]->s_n;
+  }
+
+  post("dsp1: x->cols=%d, x->blocksize=%d. sp[0]->s_n=%d", x->cols, x->blocksize, sp[0]->s_n);
+  if ((x->cols))
+  {
     int ir_len = nextint(x->cols / x->blocksize) * x->blocksize;
     mtx_convolver_init(x, ir_len);
     setImpulseResponse2DZeropad(x->conv, x->hin, x->cols);
-    mtx_convolver_init(x, ir_len);
-
-    post("dsp: x->conv=%d, x->input=%d. x->output=%d", x->conv, x->input, x->output);
-
-    if (x->conv != 0)
-      dsp_add(mtx_convolver_tilde_perform, 2, x, sp);
+    post("dsp2: x->conv=%d, x->input=%d. x->output=%d", x->conv, x->input, x->output);
   }
-  if (x->cols==0) {
-    x->blocksize = sp[0]->s_n;
-    x->sp=sp;
-  }
+  post("dsp3: x->conv=%d",x->conv);
+  post("dsp4: x=%d, sp=%d",x,sp);
+
+  dsp_add(mtx_convolver_tilde_perform, 1, x);
 }
 
 /**
@@ -188,6 +208,9 @@ void mtx_convolver_tilde_free(t_mtx_convolver_tilde *x)
 
   /* free any ressources associated with the given outlet */
  // outlet_free(x->x_out);
+ 
+  if (x->inout_buffers)
+    free(x->inout_buffers);
   if (x->input)
     free2DArray((float **)x->input, x->ins);
   if (x->output)
@@ -232,6 +255,7 @@ void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv)
   }
   x->input=0;
   x->output=0;
+  x->inout_buffers=0;
   x->hin=0;
   x->conv=0;
   x->blocksize=0;
@@ -287,9 +311,10 @@ void mtx_input_matrix(t_mtx_convolver_tilde *x, t_symbol *s, int argc, t_atom *a
   if (x->blocksize)
   {
     ir_len = nextint(cols / x->blocksize) * x->blocksize;
+    //post("nextint=%d, ceil=%d", ir_len, ceil(cols / x->blocksize) * x->blocksize);
     mtx_convolver_init(x, ir_len);
+    post("mtx: x->conv=%d", x->conv);
     setImpulseResponse2DZeropad(x->conv, x->hin, x->cols);
-    //dsp_add(mtx_convolver_tilde_perform, 2, x, sp);
   }
  // Registrieren eines Updates der Impulsantwort für den Convolver 
  // bzw: wenn Blockgröße bereits bekannt aus dsp-Routine
@@ -322,5 +347,5 @@ void mtx_convolver_tilde_setup(void) {
   /* if no signal is connected to the first inlet, we can as well
    * connect a number box to it and use it as "signal"
    */
-  CLASS_MAINSIGNALIN(mtx_convolver_tilde_class, t_mtx_convolver_tilde, f);
+  //CLASS_MAINSIGNALIN(mtx_convolver_tilde_class, t_mtx_convolver_tilde, f);
 }

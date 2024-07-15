@@ -1,4 +1,17 @@
-#include <fftw3.h>
+/*
+Authors: 
+Sourena Mosleh
+Franz Zotter
+
+Email-address: 
+sourena.mosleh@student.kug.ac.at
+zotter@iem.at
+
+Institut fuer elektronische Musik (IEM)
+Date and place: 15.07.2024, Graz
+*/
+
+#include "../fftw/fftw3.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -10,7 +23,12 @@
 void hann(float* w, int len){
     float a=M_PI/(2*(len));
     for(int n=0; n<len; n++)
-    w[n]=cos(a*n)*cos(a*n);
+    {
+        w[n]=cos(a*n)*cos(a*n);
+        w[n]=sqrt(w[n]);
+        
+    }
+
 }
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void addArray(float * array1, float * array2, int len, float * result){

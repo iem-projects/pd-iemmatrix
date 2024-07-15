@@ -1,4 +1,17 @@
-#include "convolver.h"
+/*
+Authors: 
+Sourena Mosleh
+Franz Zotter
+
+Email-address: 
+sourena.mosleh@student.kug.ac.at
+zotter@iem.at
+
+Institut fuer elektronische Musik (IEM)
+Date and place: 15.07.2024, Graz
+*/
+
+#include "../include/convolver.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -48,7 +61,6 @@ void conv_process(conv_data *conv, float **in, float **out){
         }
 
         fftwf_execute(conv->ifftplan_y); // perform accumulated partitions iFFT
-        conv->convolver_switch=1;
         if(getNewIR(conv)==TRUE)
         {
             conv->current_cf=(conv->current_cf+1)%NUM_CF;
@@ -63,10 +75,10 @@ void conv_process(conv_data *conv, float **in, float **out){
             }
             fftwf_execute(conv->ifftplan_y_cf);
             crossfade(conv->y+conv->L,conv->y_cf+conv->L,conv->w,conv->L);
-            setNewIR(conv,FALSE);  //update status
         }
-         copyArrayWithGain(&conv->y[conv->L],out[out_ch],conv->L,2*conv->L); //second half is result
+        copyArrayWithGain(&conv->y[conv->L],out[out_ch],conv->L,2*conv->L); //second half is result
     }
+    setNewIR(conv,FALSE);  //update status
     conv->current_rb=(conv->current_rb+conv->P-1)%conv->P; // decrease ring buffer position
 }
 
@@ -157,7 +169,6 @@ void setImpulseResponse2DZeropad(conv_data *conv, float**inh,int num_samples){
     const int L = conv->L;
     const int P = conv->P;
     setNewIR(conv, TRUE);
-    conv->convolver_switch = 1;
 
     for (int out_ch = 0; out_ch < conv->OUTPUT_Channel_Number; out_ch++)
     {
@@ -174,9 +185,7 @@ void setImpulseResponse2DZeropad(conv_data *conv, float**inh,int num_samples){
                     resetArray(conv->htemp, conv->L);
                 }
 
-                copyArray(inh[out_ch * conv->INPUT_Channel_Number + in_ch], conv->htemp, Lreal);
-
-                printf("in_ch=%d,out_ch=%d", in_ch,out_ch);
+                copyArray(&inh[out_ch * conv->INPUT_Channel_Number + in_ch][partition*L], conv->htemp, Lreal);
 
                 fftwf_execute(conv->fftplan_htemp);
 

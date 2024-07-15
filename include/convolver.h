@@ -1,3 +1,16 @@
+/*
+Authors: 
+Sourena Mosleh
+Franz Zotter
+
+Email-address: 
+sourena.mosleh@student.kug.ac.at
+zotter@iem.at
+
+Institut fuer elektronische Musik (IEM)
+Date and place: 15.07.2024, Graz
+*/
+
 #include "fftw3.h"
 #include "array.h"
 #define NUM_CF 2 // there are 2 crossfase buffers (re-occurring array dimension)

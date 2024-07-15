@@ -7,8 +7,11 @@ Email-address:
 sourena.mosleh@student.kug.ac.at
 zotter@iem.at
 
-Institut fuer elektronische Musik (IEM)
-Date and place: 15.07.2024, Graz
+The authors thank IOhannes zmoelnig for his help!
+
+Institute of Electronic Music and Acoustics (IEM)
+University of Music and Performing Arts Graz
+2024
 */
 
 

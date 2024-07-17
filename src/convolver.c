@@ -64,13 +64,13 @@ void conv_process(conv_data *conv, float **in, float **out){
         fftwf_execute(conv->ifftplan_y); // perform accumulated partitions iFFT
         if(getNewIR(conv)==TRUE)
         {
-            conv->current_cf=(conv->current_cf+1)%NUM_CF;
+            int current_cf=(conv->current_cf+1)%NUM_CF;
             resetComplexArray(conv->yftemp,conv->L+1);
             for (int in_ch=0; in_ch<conv->INPUT_Channel_Number; in_ch++)
             {
                 for (int p=0, px=conv->current_rb; p<conv->P; p++)
                 {
-                    freq_mul_acc(conv->xf[in_ch][px%conv->P],conv->hf[conv->current_cf][out_ch][in_ch][p],conv->yftemp,conv->L+1);
+                    freq_mul_acc(conv->xf[in_ch][px%conv->P],conv->hf[current_cf][out_ch][in_ch][p],conv->yftemp,conv->L+1);
                     px++;
                 }
             }
@@ -79,7 +79,10 @@ void conv_process(conv_data *conv, float **in, float **out){
         }
         copyArrayWithGain(&conv->y[conv->L],out[out_ch],conv->L,2*conv->L); //second half is result
     }
-    setNewIR(conv,FALSE);  //update status
+    if(getNewIR(conv)==TRUE) {
+       conv->current_cf=(conv->current_cf+1)%NUM_CF;
+       setNewIR(conv,FALSE);  //update status
+    }
     conv->current_rb=(conv->current_rb+conv->P-1)%conv->P; // decrease ring buffer position
 }
 

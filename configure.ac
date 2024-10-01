@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.60])
 
-AC_INIT([iemmatrix], [0.4.0], [zmoelnig@iem.at], [iemmatrix], [https://git.iem.at/pd/iemmatrix])
+AC_INIT([iemmatrix], [0.4.2], [zmoelnig@iem.at], [iemmatrix], [https://git.iem.at/pd/iemmatrix])
 AM_INIT_AUTOMAKE([1.10 foreign])
 m4_ifdef([LT_INIT],
 	[LT_INIT([disable-static win32-dll])],

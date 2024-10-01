@@ -198,7 +198,7 @@ AS_IF([test "x$with_build_date" = "xyes" ],[with_build_date=""])
 AS_IF([test "x$with_build_date" = "xno"  ],[with_build_date=""])
 AS_IF([test "x$with_build_date" != "x"  ],[ AC_DEFINE_UNQUOTED([BUILD_DATE], ["$with_build_date"], [user-defined build-date string])])
 ## urgh, brackets need to be escaped with @<:@ and @:>@...
-AS_IF([test "x$with_build_date" != "x"  ],[ with_build_date="@<:@default@:>@" ])
+AS_IF([test "x$with_build_date" != "x"  ],[ with_build_date="@<:@$with_build_date@:>@" ])
 AC_MSG_RESULT([$with_build_date])
 
 AC_SUBST([IEMMATRIX_CPPFLAGS])

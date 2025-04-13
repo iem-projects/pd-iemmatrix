@@ -169,7 +169,7 @@ void setImpulseResponse(conv_data *conv, float***inh){
     }
 }
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void setImpulseResponse2DZeropad(conv_data *conv, float**inh,int num_samples){
+void setImpulseResponse2DZeropad(conv_data *conv, float**inh, int num_responses, int num_samples){
     const int L = conv->L;
     const int P = conv->P;
     setNewIR(conv, TRUE);
@@ -188,9 +188,9 @@ void setImpulseResponse2DZeropad(conv_data *conv, float**inh,int num_samples){
                     Lreal = num_samples - offset;
                     resetArray(conv->htemp, conv->L);
                 }
-
-                copyArray(&inh[out_ch * conv->INPUT_Channel_Number + in_ch][partition*L], conv->htemp, Lreal);
-
+                if (out_ch*conv->INPUT_Channel_Number+in_ch < num_responses) {
+                    copyArray(&inh[out_ch * conv->INPUT_Channel_Number + in_ch][partition*L], conv->htemp, Lreal);
+                }
                 fftwf_execute(conv->fftplan_htemp);
 
                 copyComplexArray(conv->hftemp,

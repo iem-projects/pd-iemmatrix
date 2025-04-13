@@ -1,9 +1,9 @@
 /*
-Uniformly Partitioned, Time-Variant, 
+Uniformly Partitioned, Time-Variant,
 Multichannel-Input-Mulichannel-Output Block Convolution
 (and because signal processing folks like incomprehensible
  abbreviations: UPTVMIMOBC, yeah!)
-mtx_convolver~ 
+mtx_convolver~
 for Pure-Data (with cross-faded outputs when updated)
 
 useful for all kinds of real-time processes
@@ -74,10 +74,10 @@ int ceildiv(int a, int b) {
   return c;
 }
 
-
 t_int *mtx_convolver_tilde_perform(t_int *w) {
   t_mtx_convolver_tilde *x = (t_mtx_convolver_tilde *)w[1];
-  if (x->conv != 0) { // Operation: copy input signals, convolve, copy output signals
+  if (x->conv !=
+      0) { // Operation: copy input signals, convolve, copy output signals
     for (int i = 0; i < x->ins; i++) {
       float *in = x->input[i];
       t_sample *pd_in = x->inout_buffers[i];
@@ -110,14 +110,11 @@ void mtx_convolver_init(t_mtx_convolver_tilde *x, int ir_len) {
   if (x->conv)
     freeConvolution(x->conv);
   x->conv = 0;
-  if (x->blocksize) {
+  if ((x->blocksize > 0) && (x->ins > 0) && (x->outs > 0)) {
     int P = ceildiv(ir_len, x->blocksize);
-    if ((x->ins > 0) && (x->outs > 0)) {
-      x->conv = initConvolution(x->blocksize, P, x->blocksize, x->ins, x->outs);
-    }
+    x->conv = initConvolution(x->blocksize, P, x->blocksize, x->ins, x->outs);
   }
 }
-
 
 void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
   int ins = x->ins;
@@ -180,18 +177,19 @@ void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
     x->blocksize = sp[0]->s_n;
     x->renew_convolver = 1;
   }
-  if ((x->outs) && (x->cols) && (x->renew_convolver)) {
+  if (x->renew_convolver) {
     int ir_len = ceildiv(x->cols, x->blocksize) * x->blocksize;
     mtx_convolver_init(x, ir_len);
-    setImpulseResponse2DZeropad(x->conv, x->hin, x->rows, x->cols);
-    post("dsp2: convolver did not exist previously\n new: x->conv=%d, "
-         "x->input=%d. x->output=%d",
-         x->conv, x->input, x->output);
+    if (x->conv) {
+      setImpulseResponse2DZeropad(x->conv, x->hin, x->rows, x->cols);
+      post("dsp2: convolver did not exist previously\n new: x->conv=%d, "
+           "x->input=%d. x->output=%d",
+           x->conv, x->input, x->output);
+    }
     x->renew_convolver = 0;
   }
   dsp_add(mtx_convolver_tilde_perform, 1, x);
 }
-
 
 void mtx_convolver_tilde_free(t_mtx_convolver_tilde *x) {
   if (x->inout_buffers)
@@ -205,7 +203,6 @@ void mtx_convolver_tilde_free(t_mtx_convolver_tilde *x) {
   if (x->output)
     free2DArray((float **)x->output, x->outs);
 }
-
 
 void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
   t_mtx_convolver_tilde *x;
@@ -257,6 +254,7 @@ void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
 void mtx_input_matrix(t_mtx_convolver_tilde *x, t_symbol *s, int argc,
                       t_atom *argv) {
   int rows, cols, ir_len = 0;
+  int mc_changed_outs = 0;
   if (argc < 3) {
     post("no valid matrix with just 2 entries");
     return;
@@ -274,47 +272,37 @@ void mtx_input_matrix(t_mtx_convolver_tilde *x, t_symbol *s, int argc,
   }
   argv += 2;
   post("rows=%d, cols=%d, x->blocksize=%d", rows, cols, x->blocksize);
-  if (x->multichannel_mode) {
-    if ((rows != x->rows) || (cols != x->cols)) {
-      x->renew_convolver = 1;
-      if (x->hin)
-        free2DArray(x->hin, x->rows);
-      x->hin = new2DArray(rows, cols);
-      x->rows = rows;
-      x->cols = cols;
-      post("input mtx: re-sizing/setting x->rows=%d, x->cols=%d", x->rows,x->cols);
-      int outs = ceildiv(x->rows, x->ins); // number of output signals
-      if (outs != x->outs) {
-        if (outs > x->outs) {
-          post("Of %d desired outputs, only %d can be convolved, as DSP-initialized", outs, x->outs); 
-        } else {
-          post("Of %d DSP-initialized outputs, only %d will be convolved", outs, x->outs);    
-        }
-      }
-    }
-  } else {
-    if ((rows != x->rows) || (cols != x->cols)) {
-      x->renew_convolver = 1;
-      if (x->hin)
-        free2DArray(x->hin, x->rows);
-      x->hin = new2DArray(rows, cols);
-      x->rows = rows;
-      x->cols = cols;
-      post("input mtx: re-sizing/setting x->rows=%d, x->cols=%d", x->rows,x->cols);
+  if ((rows != x->rows) || (cols != x->cols)) {
+    x->renew_convolver = 1;
+    if (x->hin)
+      free2DArray(x->hin, x->rows);
+    x->hin = new2DArray(rows, cols);
+    x->rows = rows;
+    x->cols = cols;
+    post("input mtx: re-sizing/setting x->rows=%d, x->cols=%d", x->rows,
+         x->cols);
+    if (x->multichannel_mode) {
+      mc_changed_outs = x->outs;
+      x->outs = ceildiv(x->rows, x->ins); // number of output signals
     }
   }
-  for (int io_idx = 0; io_idx < rows; io_idx++) {
+  for (int io_idx = 0; io_idx < rows; io_idx++) { // store input matrix
     for (int time_index = 0; time_index < cols; time_index++) {
       x->hin[io_idx][time_index] = (float)atom_getfloat(argv++);
     }
   }
-  if (x->blocksize) {
+  if (x->blocksize) { // if blocsize is already known
     if (x->renew_convolver) {
       ir_len = ceildiv(cols, x->blocksize) * x->blocksize;
       mtx_convolver_init(x, ir_len);
+      if ((mc_changed_outs != x->outs) &&
+          (canvas_dspstate)) { // outputs changed while dsp running
+        post("DSP update to get %d outputs instead of %d", x->outs, mc_changed_outs);
+        canvas_update_dsp();
+      }
       x->renew_convolver = 0;
     }
-    if (x->outs) {
+    if (x->conv) { // if convolver exists: update IRs
       setImpulseResponse2DZeropad(x->conv, x->hin, x->rows, x->cols);
     }
   }

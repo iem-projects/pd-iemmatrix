@@ -56,27 +56,22 @@ static t_class *mtx_convolver_tilde_mclass;
 
 typedef struct _mtx_convolver_tilde {
   t_object x_obj;
-  t_float x_pan;
-  t_float f;
-  int ins;
-  int outs;
-  int inlet_ins;
-  t_float **hin;
-  t_float **input;
-  t_float **output;
+  int ins; // given/instantiated/mc number of inputs
+  int outs; // given/instantiated number of inputs
   t_sample **inout_buffers;
-  int rows;
-  int cols;
-  int m_inputs;
-  int m_outputs;
-  int m_irlen;
-  t_canvas *x_canvas;
-  conv_data *conv;
-  t_inlet **x_in;
-  t_outlet **x_out;
+  float ***h; // 3D impulse response array h, h_num_ins x h_num_outs x h_len from array.h
+  int h_num_ins;
+  int h_num_outs;
+  int h_len;
+  t_canvas *x_canvas; // to open array3 file
+  conv_data *conv; // convolver structure from convolver.h
+  float **conv_input_buffer; // input buffers to call convolver
+  float **conv_output_buffer; // output buffers to call convolver
+  t_inlet **x_inlet; // object's input ports
+  t_outlet **x_outlet; // object's output ports
   int blocksize;
-  int partition;
   int multichannel_mode;
+  int set_ir_at_dsp_start; // retarded updated of input IR on dsp start
 } t_mtx_convolver_tilde;
 
 int ceildiv(int a, int b) {
@@ -90,34 +85,34 @@ int ceildiv(int a, int b) {
 
 t_int *mtx_convolver_tilde_perform(t_int *w) {
   t_mtx_convolver_tilde *x = (t_mtx_convolver_tilde *)w[1];
-  int min_ins = (x->m_inputs < x->ins) ? x->m_inputs : x->ins;
-  int min_outs = (x->m_outputs < x->outs) ? x->m_outputs : x->outs;
-  if (x->conv != 0) { // Operation: copy input signals, convolve, copy output signals
-    for (int i = 0; i < min_ins; i++) {
-      t_float *in = x->input[i];
+  int available_inputs = (x->h_num_ins < x->ins) ? x->h_num_ins : x->ins;
+  int available_outputs = (x->h_num_outs < x->outs) ? x->h_num_outs : x->outs;
+  if (x->conv) { // Operation: copy input signals, convolve, copy output signals
+    for (int i = 0; i < available_inputs; i++) { // copy from inout pd buffers
+      float *in = x->conv_input_buffer[i];
       t_sample *pd_in = x->inout_buffers[i];
       for (int n = 0; n < x->blocksize; n++) {
-        in[n] = (t_sample)pd_in[n];
+        in[n] = (float)pd_in[n];
       }
     }
-    for (int i=min_ins; i < x->m_outputs; i++) { //necessary zeropad spurious channels case ??
-      t_float *in = x->input[i];
+    for (int i=available_inputs; i < x->h_num_outs; i++) { // zeropad of unavailable convolver inputs
+      float *in = x->conv_input_buffer[i];
       for (int n = 0; n < x->blocksize; n++) {
-        in[n] = (t_sample)0;
+        in[n] = (float)0;
       }
     }
     if (getNewIR(x->conv))
       post("perf2: have to crossfade to a new IR");
-    conv_process(x->conv, x->input, x->output);
-    for (int i = 0; i <min_outs; i++) {
-      t_float *out = x->output[i];
+    conv_process(x->conv, x->conv_input_buffer, x->conv_output_buffer);
+    for (int i = 0; i <available_outputs; i++) {
+      float *out = x->conv_output_buffer[i];
       t_sample *pd_out = x->inout_buffers[i + x->ins];
       for (int n = 0; n < x->blocksize; n++) {
         pd_out[n] = (t_sample)out[n];
       }
     }
   } else { // DEFAULT: No convolver, deliver zero output signals.
-    for (int i = 0; i < min_outs; i++) {
+    for (int i = 0; i < available_outputs; i++) {
       t_sample *pd_out = x->inout_buffers[i + x->ins];
       for (int n = 0; n < x->blocksize; n++) {
         pd_out[n] = (t_sample)0;
@@ -127,78 +122,91 @@ t_int *mtx_convolver_tilde_perform(t_int *w) {
   return (w + 2);
 }
 
-void mtx_convolver_init(t_mtx_convolver_tilde *x, int ir_len) {
+void mtx_convolver_init(t_mtx_convolver_tilde *x) {
   if (x->conv)
     freeConvolution(x->conv);
   x->conv = 0;
-  if ((x->blocksize > 0) && (x->ins > 0) && (x->outs > 0)) {
-    int P = ceildiv(ir_len, x->blocksize);
-    x->conv = initConvolution(x->blocksize, P, x->blocksize, x->ins, x->outs);
+  if ((x->blocksize > 0) && (x->h_num_ins > 0) && (x->h_num_outs > 0) && (x->h_len >0)) {
+    int P = ceildiv(x->h_len, x->blocksize);
+    x->conv = initConvolution(x->blocksize, P, x->blocksize, x->h_num_ins, x->h_num_outs);
   } 
 }
 
-void mtx_convolver_resize(t_mtx_convolver_tilde *x, int new_blocksize) {
-  int P = ceildiv(x->m_irlen,new_blocksize);
+int mtx_convolver_resize(t_mtx_convolver_tilde *x) {
   if (x->conv) {
-    if ((x->blocksize!=new_blocksize)||(x->conv->P!=P)||(x->conv->num_inputs!=x->m_inputs)
-        ||(x->conv->num_outputs!=x->m_outputs)) {
-      if (x->output)
-        free2DArray(x->output, x->conv->num_outputs);
-      if (x->input)
-        free2DArray(x->input, x->conv->num_inputs);
-      x->input = new2DArray(x->m_inputs, new_blocksize);
-      x->output = new2DArray(x->m_outputs, new_blocksize);
-      x->blocksize = new_blocksize;
-    }
-    freeConvolution(x->conv);
-  }
-  int ir_len = ceildiv(x->cols, x->blocksize) * x->blocksize;
-  mtx_convolver_init(x, ir_len);
-  setImpulseResponse2DZeropad(x->conv, x->hin, x->rows, x->cols);
-  post("convolver/buffer new/resize: x->conv=%d, "
-        "x->input=%d. x->output=%d",
-        x->conv, x->input, x->output);
+    int P = ceildiv(x->h_len,x->blocksize);
+    if ((x->conv->L==x->blocksize)&&(x->conv->P==P)&&
+        (x->conv->num_inputs!=x->h_num_ins)&&
+        (x->conv->num_outputs!=x->h_num_outs)) { 
+        return 0; // keep convolver, it's size is perfect, exit!
+    } else { // resize required, resize buffers and free convolver
+      if (x->conv_output_buffer) {
+        free2DArray(x->conv_output_buffer, x->conv->num_outputs);
+        x->conv_output_buffer=0;
+      }
+      if (x->conv_input_buffer) {
+        free2DArray(x->conv_input_buffer, x->conv->num_inputs);
+        x->conv_input_buffer=0;
+      }
+      freeConvolution(x->conv);
+      x->conv = 0;
+      if ((x->blocksize)&&(x->h_num_ins)&&(x->h_num_outs)) {
+        x->conv_input_buffer = new2DArray(x->h_num_ins, x->blocksize);
+        x->conv_output_buffer = new2DArray(x->h_num_outs, x->blocksize);
+      }
+    } 
+ } // new convolver:
+ if ((x->blocksize)&&(x->h_num_ins)&&(x->h_num_outs)&&(x->h_len)) {
+  mtx_convolver_init(x);
+ }
+ return 1;
 }
 
 void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
   int ins = x->ins;
   int outs = x->outs;
-  if (x->rows == 0 || x->cols == 0) {
-    post("Warning: no valid matrix, skipping signal processing");
-    // return;
-  }
   if (x->multichannel_mode) { // override with num input signals in MC mode
     ins = sp[0]->s_nchans;
   }
   if (x->multichannel_mode) { // override with num input signals in MC mode
      // set number of outs in MC mode
-    signal_setmultiout(&sp[1], x->m_outputs);
-    outs = x->m_outputs;
+     if (x->h_num_outs) {
+        signal_setmultiout(&sp[1], x->h_num_outs);
+        outs = x->h_num_outs;
+     }
   }
-  x->ins = x->m_inputs;
   if ((ins+outs != x->ins+x->outs)){
+    if (x->inout_buffers) {
+      free(x->inout_buffers);
+      x->inout_buffers=0;
+    }
     if (x->ins + x->outs > 0) {
-      if (x->inout_buffers) {
-        free(x->inout_buffers);
-      }
       x->inout_buffers = (t_float **)malloc(sizeof(float *) * (ins + outs));
     }
   }
   x->outs = outs;
   x->ins = ins;
-  int length = sp[0]->s_n;
-  //mtx_convolver_resize(x,length);
+  x->blocksize = sp[0]->s_n;
+  post("[mtx_convolver~]: outs=%d, ins=%d, blocksize=%d",outs,ins,x->blocksize);
+  int resized;
+  resized = mtx_convolver_resize(x); // check if renewed convolver is required
   if (x->multichannel_mode) {
     for (int i = 0; i < x->ins; i++) {
-      x->inout_buffers[i] = sp[0]->s_vec + i * length;
+      x->inout_buffers[i] = sp[0]->s_vec + i * x->blocksize;
     }
     for (int i = 0; i < x->outs; i++) {
-      x->inout_buffers[x->ins + i] = sp[1]->s_vec + i * length;
+      x->inout_buffers[x->ins + i] = sp[1]->s_vec + i * x->blocksize;
     }
   } else {
     for (int i = 0; i < x->ins + x->outs; i++) {
       x->inout_buffers[i] = sp[i]->s_vec;
     }
+  }
+  if ((x->set_ir_at_dsp_start) || (resized)) {
+      if (x->conv) {
+        setImpulseResponseZeroPad(x->conv, x->h, x->h_len);
+        x->set_ir_at_dsp_start = 0;
+      }
   }
   dsp_add(mtx_convolver_tilde_perform, 1, x);
 }
@@ -206,14 +214,14 @@ void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
 void mtx_convolver_tilde_free(t_mtx_convolver_tilde *x) {
   if (x->inout_buffers)
     free(x->inout_buffers);
-  if (x->hin)
-    free2DArray(x->hin, x->rows);
+  if (x->h)
+    free3DArray(x->h, x->h_num_outs, x->h_num_ins);
   if (x->conv)
     freeConvolution(x->conv);
-  if (x->input)
-    free2DArray((t_float **)x->input, x->ins);
-  if (x->output)
-    free2DArray((t_float **)x->output, x->outs);
+  if (x->conv_input_buffer)
+    free2DArray(x->conv_input_buffer, x->h_num_ins);
+  if (x->conv_output_buffer)
+    free2DArray(x->conv_output_buffer, x->h_num_ins);
 }
 
 void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
@@ -249,19 +257,17 @@ void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
     outlet_new(&x->x_obj, &s_signal);
   }
   x->x_canvas = canvas_getcurrent();
-  x->input = 0;
-  x->output = 0;
+  x->conv_input_buffer = 0;
+  x->conv_output_buffer = 0;
   x->inout_buffers = 0;
-  x->hin = 0;
+  x->h = 0;
   x->conv = 0;
   x->blocksize = 0;
-  x->rows = 0;
-  x->cols = 0;
-
+  x->set_ir_at_dsp_start = 0;
   return (void *)x;
 }
 
-const char*mtx_convolver_objname(void*obj) {
+const char *mtx_convolver_objname(void *obj) {
   t_object*x = obj;
   t_symbol*s = gensym("");
   if(x && x->te_binbuf) {
@@ -307,51 +313,65 @@ int mtx_convolver_check(void*object, int argc, t_atom*argv, unsigned int tests) 
   return 0;
 }
 
-void mtx_convolver_tilde_matrix3D(t_mtx_convolver_tilde *x, t_symbol *s, int argc,
+void mtx_convolver_tilde_array3(t_mtx_convolver_tilde *x, t_symbol *s, int argc,
                       t_atom *argv) {
-  int m_inputs, m_outputs, m_ir_len, ir_len = 0;
-  
+  int h_num_ins;
+  int h_num_outs;
+  int h_len;
+  int resized_outs=0;
   if (argc < 3) {
-    post("matrix3D message must have at least 3 arguments: inputs, outputs, ir_len");
+    post("array3 message must have at least 3 arguments: num_inputs, num_outputs, ir_len");
     return;
   }
-  if(mtx_convolver_check(x, argc, argv, 0))return;
-  m_inputs = (int)atom_getfloat(argv);
-  m_outputs = (int)atom_getfloat(argv + 1);
-  m_ir_len = (int)atom_getfloat(argv + 2);
+  if (mtx_convolver_check(x, argc, argv, 0)) return;
+  h_num_ins = (int)atom_getfloat(argv);
+  h_num_outs = (int)atom_getfloat(argv + 1);
+  h_len = (int)atom_getfloat(argv + 2);
   argv += 3;
-  if ((m_inputs == 0) || (m_outputs == 0) || (m_ir_len==0)) {
-    post("%d inputs, %d outputs and %d ir_len specified", m_inputs, m_outputs, m_ir_len);
-    return;
+  post("inputs=%d, outputs=%d, ir_len=%d, x->blocksize=%d", h_num_ins, h_num_outs, h_len, x->blocksize);
+
+  if ((h_num_ins != x->h_num_ins) || (h_num_outs != x->h_num_outs) || (h_len != x->h_len)) {
+    post("input mtx: re-sizing/setting x->h_num_ins=%d, x->h_num_outs=%d, x->h_len=%d", h_num_ins,
+         h_num_outs, h_len);    
+    if (x->h) 
+      free3DArray(x->h, x->h_num_outs, x->h_num_ins);
+    x->h = new3DArray(h_num_outs, h_num_ins, h_len);
+    x->h_num_ins = h_num_ins;
+    if (x->h_num_outs!=h_num_outs) {
+      resized_outs=1;
+    }
+    x->h_num_outs = h_num_outs;
+    x->h_len = h_len;
   } 
-
-  post("inputs=%d, outputs=%d, ir_len=%d, x->blocksize=%d", m_inputs, m_outputs, m_ir_len, x->blocksize);
-
-  int rows = m_inputs*m_outputs; int cols = m_ir_len; 
-  if ((rows != x->rows) || (cols != x->cols)) {
-    if (x->hin)
-      free2DArray(x->hin, x->rows);
-    x->hin = new2DArray(rows, cols);
-    x->rows = rows;
-    x->cols = cols;
-    post("input mtx: re-sizing/setting x->rows=%d, x->cols=%d", x->rows,
-         x->cols);
-  }
-  for (int io_idx = 0; io_idx < rows; io_idx++) { // store input matrix
-    for (int time_index = 0; time_index < cols; time_index++) {
-      x->hin[io_idx][time_index] = (t_float)atom_getfloat(argv++);
+  for (int in = 0; in < x->h_num_ins; in++) { // store input array
+    for (int out = 0; out < x->h_num_outs; out++) { 
+      for (int i = 0; i < x->h_len; i++) {
+        x->h[out][in][i] = (float)atom_getfloat(argv++);
+      }
     }
   }
-
   if (x->blocksize) { // if blocksize is already known
-      ir_len = ceildiv(cols, x->blocksize) * x->blocksize;
-      mtx_convolver_init(x, ir_len);
-    if (x->conv) { // if convolver exists: update IRs
-      setImpulseResponse2DZeropad(x->conv, x->hin, x->rows, x->cols);
+    mtx_convolver_resize(x); // check if new convolver needs to be instantiated
+    if (x->conv)  {
+      if (canvas_dspstate) { // if convolver exists+dsp is running update IRs
+        post("[mtx_convolver~]: attempting ir update, dsp is running");
+        setImpulseResponseZeroPad(x->conv, x->h, x->h_len);
+        if (resized_outs) {
+          post("[mtx_convolver~]: convolver changed, calling dsp startup");
+          canvas_update_dsp();
+        }
+      } else {
+        x->set_ir_at_dsp_start = 1;
+        post("[mtx_convolver~]: ir update postponed to dsp start, dsp is off");
+      }
+    } else {
+        x->set_ir_at_dsp_start = 1;
+        post("[mtx_convolver~]: ir update postponed to dsp start, convolver missing");
     }
+  } else {
+    x->set_ir_at_dsp_start = 1;
+    post("[mtx_convolver~]: ir update postponed to dsp start, blocksize missing");
   }
-  x->m_inputs = m_inputs; 
-  x->m_outputs= m_outputs;
 }
 
 static void mtx_convolver_tilde_read(t_mtx_convolver_tilde *x, t_symbol *filename)
@@ -369,9 +389,9 @@ static void mtx_convolver_tilde_read(t_mtx_convolver_tilde *x, t_symbol *filenam
   n =binbuf_getnatom(bbuf)-1;
 
   if ((ap->a_type == A_SYMBOL) &&
-      (!strcmp(ap->a_w.w_symbol->s_name,"matrix3D")
-       || !strcmp(ap->a_w.w_symbol->s_name,"#matrix3D")) ) {
-    mtx_convolver_tilde_matrix3D(x, gensym("matrix3D"), n, ap+1);
+      (!strcmp(ap->a_w.w_symbol->s_name,"array3")
+       || !strcmp(ap->a_w.w_symbol->s_name,"#array3")) ) {
+    mtx_convolver_tilde_array3(x, gensym("array3"), n, ap+1);
   }
   binbuf_free(bbuf);
 }
@@ -389,25 +409,18 @@ void mtx_convolver_tilde_setup(void) {
 
   class_addmethod(mtx_convolver_tilde_class, (t_method)mtx_convolver_tilde_dsp,
                   gensym("dsp"), A_CANT, 0);
-  class_addmethod(mtx_convolver_tilde_class, (t_method)mtx_convolver_tilde_matrix3D,
-                  gensym("matrix3D"), A_GIMME, 0);
-  class_addmethod(mtx_convolver_tilde_class, (t_method)mtx_convolver_tilde_matrix3D,
-  gensym("#matrix3D"), A_GIMME, 0);
-  // class_addmethod(mtx_convolver_tilde_class, (t_method)mtx_convolver_tilde_matrix,
-  // gensym("matrix"), A_GIMME, 0);
+  class_addmethod(mtx_convolver_tilde_class, (t_method)mtx_convolver_tilde_array3,
+                  gensym("array3"), A_GIMME, 0);
+  class_addmethod(mtx_convolver_tilde_class, (t_method)mtx_convolver_tilde_array3,
+  gensym("#array3"), A_GIMME, 0);
 
   class_addmethod(mtx_convolver_tilde_mclass, (t_method)mtx_convolver_tilde_dsp,
                   gensym("dsp"), A_CANT, 0);
-  class_addmethod(mtx_convolver_tilde_mclass, (t_method)mtx_convolver_tilde_matrix3D,
-                  gensym("matrix3D"), A_GIMME, 0);
-  // class_addmethod(mtx_convolver_tilde_mclass, (t_method)mtx_convolver_tilde_matrix,
-  // gensym("matrix"), A_GIMME, 0);
+  class_addmethod(mtx_convolver_tilde_mclass, (t_method)mtx_convolver_tilde_array3,
+                  gensym("array3"), A_GIMME, 0);
 
   class_addmethod  (mtx_convolver_tilde_mclass, (t_method)mtx_convolver_tilde_read , gensym("read") ,
   A_SYMBOL, 0);
   class_addmethod  (mtx_convolver_tilde_class, (t_method)mtx_convolver_tilde_read , gensym("read") ,
   A_SYMBOL, 0);
-
-
-  // CLASS_MAINSIGNALIN(mtx_convolver_tilde_class, t_mtx_convolver_tilde, f);
 }

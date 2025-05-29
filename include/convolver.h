@@ -80,5 +80,4 @@ void freeConvolution(conv_data *conv);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void setImpulseResponse(conv_data *conv, float ***inh);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void setImpulseResponse2DZeropad(conv_data *conv, float **inh,
-                                 int num_responses, int num_samples);
+void setImpulseResponseZeroPad(conv_data *conv, float ***inh, int num_samples);

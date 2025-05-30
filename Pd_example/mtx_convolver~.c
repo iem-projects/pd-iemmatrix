@@ -242,55 +242,6 @@ void mtx_convolver_tilde_free(t_mtx_convolver_tilde *x) {
     free2DArray(x->conv_output_buffer, x->h_num_outs);
 }
 
-void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
-  t_mtx_convolver_tilde *x;
-  t_class *selected_class = mtx_convolver_tilde_class;
-
-  if (argc > 0 && argv[0].a_type == A_SYMBOL &&
-      strcmp(argv[0].a_w.w_symbol->s_name, "-m") == 0) {
-    selected_class = mtx_convolver_tilde_mclass;
-  }
-
-  x = (t_mtx_convolver_tilde *)pd_new(selected_class);
-  x->multichannel_mode = (selected_class == mtx_convolver_tilde_mclass);
-  if (!x->multichannel_mode) {
-    if (argc < 1) {
-      x->ins = x->outs = 1;
-    } else if (argc < 2) {
-      x->ins = x->outs = (int)atom_getfloat(argv);
-    } else {
-      x->ins = (int)atom_getfloat(argv);
-      x->outs = (int)atom_getfloat(argv + 1);
-    }
-    for (int i = 0; i < x->ins; i++) {
-      inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal);
-    }
-    for (int i = 0; i < x->outs; i++) {
-      outlet_new(&x->x_obj, &s_signal);
-    }
-  }
-  else {
-    x->ins = x->outs = 1;
-    inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal);
-    outlet_new(&x->x_obj, &s_signal);
-  }
-  x->x_canvas = canvas_getcurrent();
-  x->conv_input_buffer = 0;
-  x->conv_output_buffer = 0;
-  x->inout_buffers = 0;
-  x->h = 0;
-  x->conv = 0;
-  x->blocksize = 0;
-  x->set_ir_at_dsp_start = 0;
-
-  if ((x->multichannel_mode) && (argc > 1 && argv[1].a_type == A_SYMBOL)) {
-    t_symbol *matrix_file = argv[1].a_w.w_symbol;
-    mtx_convolver_tilde_read(x, matrix_file);
-  }
-
-  return (void *)x;
-}
-
 const char *mtx_convolver_objname(void *obj) {
   t_object*x = obj;
   t_symbol*s = gensym("");
@@ -413,6 +364,59 @@ void mtx_convolver_tilde_read(t_mtx_convolver_tilde *x, t_symbol *filename)
   binbuf_free(bbuf);
 }
 
+void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
+  t_mtx_convolver_tilde *x;
+  t_class *selected_class = mtx_convolver_tilde_class;
+
+  if (argc > 0 && argv[0].a_type == A_SYMBOL &&
+      strcmp(argv[0].a_w.w_symbol->s_name, "-m") == 0) {
+    selected_class = mtx_convolver_tilde_mclass;
+  }
+
+  x = (t_mtx_convolver_tilde *)pd_new(selected_class);
+  x->multichannel_mode = (selected_class == mtx_convolver_tilde_mclass);
+  if (!x->multichannel_mode) {
+    if (argc < 1) {
+      x->ins = x->outs = 1;
+    } else if (argc < 2) {
+      x->ins = x->outs = (int)atom_getfloat(argv);
+    } else {
+      x->ins = (int)atom_getfloat(argv);
+      x->outs = (int)atom_getfloat(argv + 1);
+    }
+    for (int i = 0; i < x->ins; i++) {
+      inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal);
+    }
+    for (int i = 0; i < x->outs; i++) {
+      outlet_new(&x->x_obj, &s_signal);
+    }
+  }
+  else {
+    x->ins = x->outs = 1;
+    inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal);
+    outlet_new(&x->x_obj, &s_signal);
+  }
+  x->x_canvas = canvas_getcurrent();
+  x->conv_input_buffer = 0;
+  x->conv_output_buffer = 0;
+  x->inout_buffers = 0;
+  x->h = 0;
+  x->conv = 0;
+  x->blocksize = 0;
+  x->set_ir_at_dsp_start = 0;
+
+  if ((x->multichannel_mode) && (argc > 1 && argv[1].a_type == A_SYMBOL)) {
+    t_symbol *matrix_file = argv[1].a_w.w_symbol;
+    mtx_convolver_tilde_read(x, matrix_file);
+  }
+  if ((!x->multichannel_mode) && (argc > 2 && argv[2].a_type == A_SYMBOL)) {
+    t_symbol *matrix_file = argv[2].a_w.w_symbol;
+    mtx_convolver_tilde_read(x, matrix_file);
+  }
+
+  return (void *)x;
+}
+
 void mtx_convolver_tilde_setup(void) {
   mtx_convolver_tilde_class =
       class_new(gensym("mtx_convolver~"), (t_newmethod)mtx_convolver_tilde_new,
@@ -439,9 +443,4 @@ void mtx_convolver_tilde_setup(void) {
                 gensym("read"), A_SYMBOL, 0);
   class_addmethod(mtx_convolver_tilde_class, (t_method)mtx_convolver_tilde_read,
                 gensym("read"), A_SYMBOL, 0);
-
-  class_addmethod  (mtx_convolver_tilde_mclass, (t_method)mtx_convolver_tilde_read , gensym("read") ,
-  A_SYMBOL, 0);
-  class_addmethod  (mtx_convolver_tilde_class, (t_method)mtx_convolver_tilde_read , gensym("read") ,
-  A_SYMBOL, 0);
 }

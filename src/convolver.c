@@ -201,6 +201,8 @@ void setImpulseResponse(conv_data *conv, float ***inh) {
 void setImpulseResponseZeroPad(conv_data *conv, float ***inh, int num_samples) {
   int offset;
   int copy_length;
+  if (!conv)
+    return;
   setNewIR(conv, TRUE);
   conv->convolver_switch = 1;
   for (int out_ch = 0; out_ch < conv->num_outputs; out_ch++) {

@@ -239,7 +239,7 @@ void mtx_convolver_tilde_free(t_mtx_convolver_tilde *x) {
   if (x->conv_input_buffer)
     free2DArray(x->conv_input_buffer, x->h_num_ins);
   if (x->conv_output_buffer)
-    free2DArray(x->conv_output_buffer, x->h_num_ins);
+    free2DArray(x->conv_output_buffer, x->h_num_outs);
 }
 
 void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {

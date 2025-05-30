@@ -282,6 +282,12 @@ void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
   x->conv = 0;
   x->blocksize = 0;
   x->set_ir_at_dsp_start = 0;
+
+  if ((x->multichannel_mode) && (argc > 1 && argv[1].a_type == A_SYMBOL)) {
+    t_symbol *matrix_file = argv[1].a_w.w_symbol;
+    mtx_convolver_tilde_read(x, matrix_file);
+  }
+
   return (void *)x;
 }
 
@@ -388,7 +394,7 @@ void mtx_convolver_tilde_array3(t_mtx_convolver_tilde *x, t_symbol *s, int argc,
   }
 }
 
-static void mtx_convolver_tilde_read(t_mtx_convolver_tilde *x, t_symbol *filename)
+void mtx_convolver_tilde_read(t_mtx_convolver_tilde *x, t_symbol *filename)
 {
   t_binbuf *bbuf = binbuf_new();
   t_atom *ap;
@@ -429,6 +435,10 @@ void mtx_convolver_tilde_setup(void) {
                   gensym("dsp"), A_CANT, 0);
   class_addmethod(mtx_convolver_tilde_mclass, (t_method)mtx_convolver_tilde_array3,
                   gensym("array3"), A_GIMME, 0);
+  class_addmethod(mtx_convolver_tilde_mclass, (t_method)mtx_convolver_tilde_read,
+                gensym("read"), A_SYMBOL, 0);
+  class_addmethod(mtx_convolver_tilde_class, (t_method)mtx_convolver_tilde_read,
+                gensym("read"), A_SYMBOL, 0);
 
   class_addmethod  (mtx_convolver_tilde_mclass, (t_method)mtx_convolver_tilde_read , gensym("read") ,
   A_SYMBOL, 0);

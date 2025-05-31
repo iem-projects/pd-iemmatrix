@@ -141,7 +141,7 @@ t_int *mtx_convolver_tilde_perform(t_int *w) {
     }
   } else { // DEFAULT: No convolver, deliver zero output signals.
     #ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
-      post("%sNOP with convolver inexistent, deleting %d outs with blocksize %d",objname,x->outs,x->blocksize);
+      post("%sNOP with convolver inexistent, zeroing %d outs with blocksize %d",objname,x->outs,x->blocksize);
     #endif
     for (int i = 0; i < x->outs; i++) {
       t_sample *pd_out = x->inout_buffers[i + x->ins];

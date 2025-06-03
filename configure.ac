@@ -61,6 +61,15 @@ AS_IF([test "xyes" = "x${have_fftw3}" ],[
 ])
 AM_CONDITIONAL(HAVE_FFTW, test "xyes" = "x${have_fftw3}")
 
+AC_ARG_WITH([fftwf], AC_HELP_STRING([--without-fftwf], [compile without FFTWF]))
+AS_IF([test "xno" != "x${with_fftwf}" ],[
+   PKG_CHECK_MODULES([FFTW3F], [fftw3f], [have_fftw3f=yes], [have_fftw3f=no])
+])
+AS_IF([test "xyes" = "x${have_fftw3f}" ],[
+   AC_DEFINE(USE_FFTWF, 1, [can we use fftwf?])
+])
+AM_CONDITIONAL(HAVE_FFTWF, test "xyes" = "x${have_fftw3f}")
+
 dnl for soundfile reading (and writing, if we do that...)
 AC_ARG_WITH([sndfile], AC_HELP_STRING([--without-sndfile], [compile without libsndfile support]))
 have_sndfile="no"

@@ -32,6 +32,7 @@ noinst_LTLIBRARIES = \
 	libiemmatrixCore.la \
 	libiemmatrixSphericalHarmonics.la libiemmatrixSphericalRadial.la \
 	libiemmatrixQhull.la \
+	libiemmatrixConvolver.la \
 	$(empty)
 
 libiemmatrixCore_la_SOURCES=\
@@ -64,12 +65,24 @@ libiemmatrixQhull_la_SOURCES = \
 	src/mtx_qhull/zhull.c \
 	$(empty)
 
+## convolver~-stuff
+libiemmatrixConvolver_la_SOURCES = \
+	src/mtx_convolver/convolver.c \
+	src/mtx_convolver/convolver.h \
+	src/mtx_convolver/array.h \
+        src/mtx_convolver/array.c \
+	$(empty)
+
+libiemmatrixConvolver_la_CFLAGS = $(FFTW3F_CFLAGS)
+libiemmatrixConvolver_la_LIBADD = $(FFTW3F_LIBS)
+
 iemmatrix_la_CPPFLAGS=-DIEMMATRIX_LIBRARY $(AM_CPPFLAGS)
 iemmatrix_la_CFLAGS =$(AM_CFLAGS)
 iemmatrix_la_CFLAGS+=$(SNDFILE_CFLAGS) $(FFTW3_CFLAGS) $(GSL_CFLAGS)
 iemmatrix_la_LIBADD = libiemmatrixCore.la
 iemmatrix_la_LIBADD+= libiemmatrixSphericalHarmonics.la libiemmatrixSphericalRadial.la
 iemmatrix_la_LIBADD+= libiemmatrixQhull.la
+iemmatrix_la_LIBADD+= libiemmatrixConvolver.la
 
 
 
@@ -84,6 +97,7 @@ pkglib_LTLIBRARIES += \
 	mtx_bitor.la mtx_bitright.la mtx_bspline.la \
 	mtx_check.la mtx_cholesky.la mtx_col.la \
 	mtx_colon.la mtx_concat.la mtx_conv.la \
+	mtx_convoler~.la \
 	mtx_cos.la mtx_cumprod.la mtx_cumsum.la \
 	mtx_dbtopow.la mtx_dbtorms.la mtx_decay.la \
 	mtx_diag.la mtx_diegg.la mtx_diff.la \
@@ -124,7 +138,7 @@ endif SINGLEOBJECTS
 # these objects are always built separately
 # hmm, these can either use fftw3 or Pd's mayerFFT
 # LATER provide both binaries, preferring fftw3 if available at runtime
-pkglib_LTLIBRARIES += mtx_rfft.la mtx_rifft.la
+pkglib_LTLIBRARIES += mtx_rfft.la mtx_rifft.la mtx_convolver~.la
 
 # depends on libsndfile
 pkglib_LTLIBRARIES += mtx_sndfileread.la
@@ -216,6 +230,9 @@ mtx_concat_la_SOURCES	= src/mtx_concat.c
 mtx_concat_la_LIBADD	= libiemmatrixCore.la
 mtx_conv_la_SOURCES	= src/mtx_conv.c
 mtx_conv_la_LIBADD	= libiemmatrixCore.la
+mtx_convolver__la_CFLAGS=  $(AM_CFLAGS) $(FFTW3F_CFLAGS)
+mtx_convolver__la_SOURCES= src/mtx_convolver~.c
+mtx_convolver__la_LIBADD = libiemmatrixCore.la libiemmatrixConvolver.la
 mtx_cos_la_SOURCES	= src/mtx_cos.c
 mtx_cos_la_LIBADD	= libiemmatrixCore.la
 mtx_cumprod_la_SOURCES	= src/mtx_cumprod.c
@@ -330,7 +347,7 @@ mtx_rfft_la_SOURCES	= src/mtx_rfft.c
 mtx_rfft_la_CFLAGS      = $(AM_CFLAGS) $(FFTW3_CFLAGS)
 mtx_rfft_la_LIBADD	= libiemmatrixCore.la $(FFTW3_LIBS)
 mtx_rifft_la_SOURCES	= src/mtx_rifft.c
-mtx_rifft_la_CFLAGS      = $(AM_CFLAGS) $(FFTW3_CFLAGS)
+mtx_rifft_la_CFLAGS     = $(AM_CFLAGS) $(FFTW3_CFLAGS)
 mtx_rifft_la_LIBADD	= libiemmatrixCore.la $(FFTW3_LIBS)
 mtx_rmstodb_la_SOURCES	= src/mtx_rmstodb.c
 mtx_rmstodb_la_LIBADD	= libiemmatrixCore.la

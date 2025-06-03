@@ -32,7 +32,7 @@ University of Music and Performing Arts Graz
 2024, 2025
 */
 
-#include "../include/convolver.h"
+#include "convolver.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>

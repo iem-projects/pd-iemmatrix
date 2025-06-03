@@ -34,9 +34,8 @@ University of Music and Performing Arts Graz
 2024, 2025
 */
 
-#include "array.h"
-#include "convolver.h"
-#include "m_pd.h"
+#include "mtx_convolver/array.h"
+#include "mtx_convolver/convolver.h"
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
@@ -47,8 +46,6 @@ University of Music and Performing Arts Graz
 # define snprintf _snprintf
 #endif
 
-# include <g_canvas.h>
-# define IEMMATRIX_HAVE_G_CANVAS 1
 //# define MTX_CONVOLVER_DEBUG_VERBOSITY
 
 

@@ -1,0 +1,22 @@
+What's Trumps is a recording found under 
+https://www.dega-akustik.de/va/stimulus-datenbank
+in partiular the DOI: 10.5281/zenodo.3601032
+on zenodo.org. 
+https://zenodo.org/records/3601032
+
+The Jazz/Funk composition and recording is by
+Rhythmus-Sportgruppe, the piece called What's Trumps,
+and it has been supported by DEGA, led by Dieter Leckschat
+and Max Bier, and recorded by Max Bier, Lukas Prinz, Hendrik 
+Schulte, who also documented the recording in detail.
+Music What's Trumps is composed by Lukas Lohner, 
+and was performed by Niklas Dahlheimer, Jonas Scheler, Stephan Salgert,
+Lukas Lohner, Jonas Geyersberger, Thomas Gärtner, Nils Schmalenströr, 
+Wilhelm Krätzig. Check out the great documentation and DEGA
+memorandom on how to document such recordings for scientific use.
+
+
+More can be found at
+https://zenodo.org/communities/dega-audiodatabase-for-virtual-acoustics/
+
+

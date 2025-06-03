@@ -119,10 +119,13 @@ stages:
     # make sure we have a good gitlab runner
     - (which gitlab-runner; gitlab-runner --version) || brew install gitlab-runner || true
     - (which gitlab-runner; gitlab-runner --version) || true
-    # install dependencies
+    # install build tools
     - brew update
-    - brew bundle --no-upgrade --file=.git-ci/macOS.brew
+    - which automake || brew install automake || true
+    - which glibtool || brew install libtool || true
     - libtoolize --version || glibtoolize --version || brew install libtool || true
+    # install dependencies
+    - brew bundle --no-upgrade --file=.git-ci/macOS.brew
     # some of the fatbrew files end up as keg-only (and are therefore not found by pkg-config), so:
     - brew list --full-name | grep iem/fatbrew | while read pkg; do echo $pkg; brew unlink ${pkg} || true; brew link ${pkg} || true; done
     # install Pd

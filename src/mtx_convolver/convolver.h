@@ -36,19 +36,20 @@ University of Music and Performing Arts Graz
 #include "fftw3.h"
 #define NUM_CF 2 // there are 2 crossfase buffers (re-occurring array dimension)
 typedef struct Conv_data {
-  int L;          // signal block length (fft length = 2L)
-  int P;          // number of convolution partitions (length of h)
+  int blocksize;          // signal block length (fft length = 2L)
+  int num_partitions;          // number of convolution partitions (length of h)
   int num_inputs; // number of input channels
   int num_outputs;
-  int Hann_len;
-  _Bool convolver_switch; // parameter for swiching bitween different buffers
+  int xfade_length;
+  _Bool register_crossfade; // parameter for swiching bitween different buffers
 
   float *xtemp;   // 2L fft-input time-domain signal x=[xprev, xcurr]
   float *htemp;   // 2L time-domain impulse response input h=[h, 0]
   float *y;       // 2L time-domain result y=[ycircular, ylinear]
   float *y_cf;    // 2L time-domain result y=[ycircular, ylinear]
   float **x_old;  // previous input data
-  float *w;       // hann-function
+  float *w_old;   // fade-out window
+  float *w_new;   // fade-in window
   int current_rb; // current_rb ring buffer position
   int current_cf;
   fftwf_complex ***xf;   // L+1 positive-half DFT, partition input ring buffer
@@ -64,20 +65,18 @@ typedef struct Conv_data {
 } conv_data;
 /* crossfade functions */
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void crossfade(float *y, float *y_new, float *w, int len);
+void crossFade(float *y, float *y_new, float *w_old, float *w_new, int len);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void setNewIR(conv_data *conv, _Bool status);
+void registerCrossFade(conv_data *conv);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-_Bool getNewIR(conv_data *conv);
+_Bool wasCrossFadeRegistered(conv_data *conv);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 /* PARTITIONED CONVOLUTION CORE */
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void conv_process(conv_data *conv, float **in, float **out);
+void convProcess(conv_data *conv, float **in, float **out);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-conv_data *initConvolution(int L, int P, int Hann_len, int num_inputs, int num_outputs);
+conv_data *initConvolution(int blocksize, int num_partitions, int xfade_length, int num_inputs, int num_outputs, _Bool coherent_xfade);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void freeConvolution(conv_data *conv);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void setImpulseResponse(conv_data *conv, float ***inh);
-/*-----------------------------------------------------------------------------------------------------------------------------*/
-void setImpulseResponseZeroPad(conv_data *conv, float ***inh, int num_samples);
+void setImpulseResponseZeroPad(conv_data *conv, float ***inh, int num_samples, _Bool no_xfade_init);

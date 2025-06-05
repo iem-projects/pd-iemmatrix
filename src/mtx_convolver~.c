@@ -48,6 +48,10 @@ University of Music and Performing Arts Graz
 
 //# define MTX_CONVOLVER_DEBUG_VERBOSITY
 
+#ifndef CLASS_MULTICHANNEL
+# define CLASS_MULTICHANNEL 0
+#endif
+
 
 static t_class *mtx_convolver_tilde_class;
 static t_class *mtx_convolver_tilde_mclass;
@@ -207,6 +211,7 @@ void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
   int ins = x->ins;
   int outs = x->outs;
   const char*objname=mtx_convolver_objname(x);
+#if CLASS_MULTICHANNEL
   if (x->multichannel_mode) {
     // override with num input signals in MC mode
     ins = sp[0]->s_nchans;
@@ -230,6 +235,7 @@ void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
       post("%snon-multichannel mode, in=%d, out=%d",objname,ins,outs);
 # endif
   }
+#endif
   if (!x->inout_buffers) {
       x->inout_buffers = (t_float **)malloc(sizeof(float *) * (x->ins + x->outs));
   }
@@ -239,13 +245,16 @@ void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
   #endif
   int resized;
   resized = mtx_convolver_resize(x); // check if renewed convolver is required
-  if (x->multichannel_mode) {
+  if (0) {
+#if CLASS_MULTICHANNEL
+  } else if (x->multichannel_mode) {
     for (int i = 0; i < x->ins; i++) {
       x->inout_buffers[i] = sp[0]->s_vec + i * x->blocksize;
     }
     for (int i = 0; i < x->outs; i++) {
       x->inout_buffers[x->ins + i] = sp[1]->s_vec + i * x->blocksize;
     }
+#endif
   } else {
     for (int i = 0; i < x->ins + x->outs; i++) {
       x->inout_buffers[i] = sp[i]->s_vec;
@@ -402,14 +411,20 @@ void mtx_convolver_tilde_read(t_mtx_convolver_tilde *x, t_symbol *filename)
 void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
   t_mtx_convolver_tilde *x;
   t_class *selected_class = mtx_convolver_tilde_class;
-
   if (argc > 0 && argv[0].a_type == A_SYMBOL &&
       strcmp(argv[0].a_w.w_symbol->s_name, "-m") == 0) {
+#if CLASS_MULTICHANNEL
     selected_class = mtx_convolver_tilde_mclass;
+#else
+    pd_error(x, "[%s] has been compiled without multichannel support");
+    return 0;
+#endif
   }
 
   x = (t_mtx_convolver_tilde *)pd_new(selected_class);
+#if CLASS_MULTICHANNEL
   x->multichannel_mode = (selected_class == mtx_convolver_tilde_mclass);
+#endif
   if (!x->multichannel_mode) {
     if (argc < 1) {
       x->ins = x->outs = 1;

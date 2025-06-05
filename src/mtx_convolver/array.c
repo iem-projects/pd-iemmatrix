@@ -21,15 +21,29 @@ University of Music and Performing Arts Graz
 
 /* HELPER FUNCTIONS, GENERATION, COPYING, RESETTING */
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void hann(float* w, int len){
+void cos2win(float* w, int len){
     float a=M_PI/(2*(len));
-    for(int n=0; n<len; n++)
-    {
-        w[n]=cos(a*n)*cos(a*n);
-        w[n]=sqrt(w[n]);
-        
+    for(int n=0; n<len; n++) {
+        w[n]=cosf(a*n)*cosf(a*n);
     }
-
+}
+void sin2win(float* w, int len){
+    float a=M_PI/(2*(len));
+    for(int n=0; n<len; n++) {
+        w[n]=sinf(a*n)*sinf(a*n);
+    }
+}
+void coswin(float* w, int len){
+    float a=M_PI/(2*(len));
+    for(int n=0; n<len; n++) {
+        w[n]=cosf(a*n);
+    }
+}
+void sinwin(float* w, int len){
+    float a=M_PI/(2*(len));
+    for(int n=0; n<len; n++) {
+        w[n]=sinf(a*n);
+    }
 }
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void addArray(float * array1, float * array2, int len, float * result){

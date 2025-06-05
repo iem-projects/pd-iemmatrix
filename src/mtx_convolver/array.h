@@ -16,7 +16,10 @@ Date and place: 15.07.2024, Graz
 
 /* HELPER FUNCTIONS, GENERATION, COPYING, RESETTING */
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void hann(float* w, int len);
+void cos2win(float* w, int len);
+void sin2win(float* w, int len);
+void coswin(float* w, int len);
+void sinwin(float* w, int len);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void addArray(float * array1, float * array2, int len, float * result);
 float squaredArray(float* array, int len);

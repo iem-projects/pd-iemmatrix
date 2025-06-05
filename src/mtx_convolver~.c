@@ -122,7 +122,7 @@ t_int *mtx_convolver_tilde_perform(t_int *w) {
         in[n] = (float)0;
       }
     }
-    if (getNewIR(x->conv)) 
+    if (getNewIR(x->conv))
       post("%shave to crossfade to a new IR",objname);
     #ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
       post("%sL=%d, P=%d, ins=%d, outs=%d",objname,x->conv->L,x->conv->P,x->conv->num_inputs,x->conv->num_outputs);
@@ -157,7 +157,7 @@ void mtx_convolver_init(t_mtx_convolver_tilde *x) {
   if ((x->blocksize > 0) && (x->h_num_ins > 0) && (x->h_num_outs > 0) && (x->h_len >0)) {
     int P = ceildiv(x->h_len, x->blocksize);
     x->conv = initConvolution(x->blocksize, P, x->blocksize, x->h_num_ins, x->h_num_outs);
-  } 
+  }
 }
 
 int mtx_convolver_resize(t_mtx_convolver_tilde *x) {
@@ -166,7 +166,7 @@ int mtx_convolver_resize(t_mtx_convolver_tilde *x) {
     int P = ceildiv(x->h_len,x->blocksize);
     if ((x->conv->L==x->blocksize)&&(x->conv->P==P)&&
         (x->conv->num_inputs==x->h_num_ins)&&
-        (x->conv->num_outputs==x->h_num_outs)) { 
+        (x->conv->num_outputs==x->h_num_outs)) {
           #ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
             post("%skeeping convolver with ins=%d, outs=%d, partitions=%d, blocksize=%d",
             objname,x->conv->num_inputs,x->conv->num_outputs,x->conv->P,x->conv->L);
@@ -187,11 +187,11 @@ int mtx_convolver_resize(t_mtx_convolver_tilde *x) {
         x->conv_input_buffer = new2DArray(x->h_num_ins, x->blocksize);
         x->conv_output_buffer = new2DArray(x->h_num_outs, x->blocksize);
       }
-    } 
+    }
  } // new convolver:
  if ((x->blocksize)&&(x->h_num_ins)&&(x->h_num_outs)&&(x->h_len)) {
   mtx_convolver_init(x);
-  if (x->conv){  
+  if (x->conv){
     post("%sre-instantiated convolver with ins=%d, outs=%d, partitions=%d, blocksize=%d",
       objname,x->conv->num_inputs,x->conv->num_outputs,x->conv->P,x->conv->L);
   }
@@ -207,7 +207,7 @@ void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
   int ins = x->ins;
   int outs = x->outs;
   const char*objname=mtx_convolver_objname(x);
-  if (x->multichannel_mode) { 
+  if (x->multichannel_mode) {
     // override with num input signals in MC mode
     ins = sp[0]->s_nchans;
     post("%smultichannel mode, in=%d",objname,ins);
@@ -226,9 +226,9 @@ void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
     x->outs = outs;
     x->ins = ins;
   } else {
-    #ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
+# ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
       post("%snon-multichannel mode, in=%d, out=%d",objname,ins,outs);
-    #endif
+# endif
   }
   if (!x->inout_buffers) {
       x->inout_buffers = (t_float **)malloc(sizeof(float *) * (x->ins + x->outs));
@@ -326,9 +326,9 @@ void mtx_convolver_tilde_array3(t_mtx_convolver_tilde *x, t_symbol *s, int argc,
   if ((h_num_ins != x->h_num_ins) || (h_num_outs != x->h_num_outs) || (h_len != x->h_len)) {
     #ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
       post("%sinput array3: re-sizing/setting x->h_num_ins=%d, x->h_num_outs=%d, x->h_len=%d", objname,h_num_ins,
-         h_num_outs, h_len);  
+         h_num_outs, h_len);
     #endif
-    if (x->h) 
+    if (x->h)
       free3DArray(x->h, x->h_num_outs, x->h_num_ins);
     x->h = new3DArray(h_num_outs, h_num_ins, h_len);
     x->h_num_ins = h_num_ins;
@@ -337,9 +337,9 @@ void mtx_convolver_tilde_array3(t_mtx_convolver_tilde *x, t_symbol *s, int argc,
     }
     x->h_num_outs = h_num_outs;
     x->h_len = h_len;
-  } 
+  }
   for (int in = 0; in < x->h_num_ins; in++) { // store input array
-    for (int out = 0; out < x->h_num_outs; out++) { 
+    for (int out = 0; out < x->h_num_outs; out++) {
       for (int i = 0; i < x->h_len; i++) {
         x->h[out][in][i] = (float)atom_getfloat(argv++);
       }

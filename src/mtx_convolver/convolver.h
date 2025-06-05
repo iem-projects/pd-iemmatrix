@@ -1,5 +1,5 @@
 /*
-Uniformly Partitioned, Time-Variant, 
+Uniformly Partitioned, Time-Variant,
 Multichannel-Input-Mulichannel-Output Block Convolution
 (and because signal processing folks like incomprehensible
  abbreviations: UPTVMIMOBC, yeah!)

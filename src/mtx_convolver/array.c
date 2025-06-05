@@ -1,9 +1,9 @@
 /*
-Authors: 
+Authors:
 Sourena Mosleh
 Franz Zotter
 
-Email-address: 
+Email-address:
 sourena.mosleh@student.kug.ac.at
 zotter@iem.at
 
@@ -31,7 +31,7 @@ void hann(float* w, int len){
     {
         w[n]=cos(a*n)*cos(a*n);
         w[n]=sqrt(w[n]);
-        
+
     }
 
 }

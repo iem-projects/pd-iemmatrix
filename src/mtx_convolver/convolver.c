@@ -1,5 +1,5 @@
 /*
-Uniformly Partitioned, Time-Variant, 
+Uniformly Partitioned, Time-Variant,
 Multichannel-Input-Mulichannel-Output Block Convolution
 (and because signal processing folks like incomprehensible
  abbreviations: UPTVMIMOBC, yeah!)
@@ -82,7 +82,7 @@ void conv_process(conv_data *conv, float **in, float **out) {
     }
     fftwf_execute(conv->ifftplan_y); // perform iFFT of the main-IR output partition
     /* IF IR WAS UPDATED: ALSO COMPUTE NEW OUTPUT FOR CROSSFADE AT THE OUT CHANNEL */
-    if (getNewIR(conv) == TRUE) { 
+    if (getNewIR(conv) == TRUE) {
       int current_cf = (conv->current_cf + 1) % NUM_CF;
       resetComplexArray(conv->yftemp, conv->L + 1); // zero output's partitions accumulator
       for (int in_ch = 0; in_ch < conv->num_inputs; in_ch++) { // MIMO convolutions (update)
@@ -95,7 +95,7 @@ void conv_process(conv_data *conv, float **in, float **out) {
       }
       fftwf_execute(conv->ifftplan_y_cf); // perform iFFT of the updated-IR output partition
       crossfade(conv->y + conv->L, conv->y_cf + conv->L, conv->w, conv->L); // xfade main->updated
-    } 
+    }
     /* IF IR WAS UPDATED: CROSSFADE TO NEW OUTPUT OF THE OUT CHANNEL COMPLETE */
     copyArrayWithGain(&conv->y[conv->L], out[out_ch], conv->L,
                       2 * conv->L); // second half times N is the output's resulting signal block
@@ -113,9 +113,9 @@ conv_data *initConvolution(int L, int P, int Hann_len, int num_inputs, int num_o
   conv_data *conv = (conv_data *)malloc(sizeof(conv_data));
   conv->L = L; // block length (2L=FFT length)
   conv->P = P; // number of partitions
-  conv->num_inputs = num_inputs; 
+  conv->num_inputs = num_inputs;
   conv->num_outputs = num_outputs;
-  conv->xtemp = new1DArray(conv->L * 2); // input signal FFT buffer 
+  conv->xtemp = new1DArray(conv->L * 2); // input signal FFT buffer
   conv->htemp = new1DArray(conv->L * 2); // IR signal partition FFT buffer
   conv->y = new1DArray(conv->L * 2);     // output signal FFT buffer main/old
   conv->y_cf = new1DArray(conv->L * 2);  // output signal FFT buffer new for crossfade

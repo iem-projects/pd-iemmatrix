@@ -422,6 +422,18 @@ void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
   }
 
   x = (t_mtx_convolver_tilde *)pd_new(selected_class);
+
+#if USE_FFTWF
+#else
+# warning "Building without FFTW3"
+  static int warn_fftw = 1;
+  if(warn_fftw) {
+    pd_error(x, "[%s] built with FFTW3! Object not operational.", s->s_name);
+    warn_fftw = 0;
+  }
+#endif
+
+
 #if CLASS_MULTICHANNEL
   x->multichannel_mode = (selected_class == mtx_convolver_tilde_mclass);
 #endif

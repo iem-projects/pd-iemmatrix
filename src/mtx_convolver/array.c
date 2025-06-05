@@ -21,6 +21,11 @@ University of Music and Performing Arts Graz
 #include <stdlib.h>
 #include <math.h>
 
+#if USE_FFTWF
+#else
+#define fftwf_malloc malloc
+#define fftwf_free free
+#endif
 
 
 /* HELPER FUNCTIONS, GENERATION, COPYING, RESETTING */

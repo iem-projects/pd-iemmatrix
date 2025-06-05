@@ -43,6 +43,13 @@ University of Music and Performing Arts Graz
 #define TRUE 1
 #define FALSE 0
 
+
+#if USE_FFTWF
+#else
+# warning "Building without FFTW3"
+#endif
+
+
 /* crossfade functions */
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void crossfade(float *y, float *y_new, float *w, int len) {
@@ -51,11 +58,15 @@ void crossfade(float *y, float *y_new, float *w, int len) {
 }
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void setNewIR(conv_data *conv, _Bool status) {
+  if(!conv)
+    return;
   conv->convolver_switch = status;
 }
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 _Bool getNewIR(conv_data *conv) {
   _Bool result;
+  if(!conv)
+    return FALSE;
   result = conv->convolver_switch;
   return result;
 }
@@ -63,6 +74,7 @@ _Bool getNewIR(conv_data *conv) {
 /* PARTITIONED CONVOLUTION CORE */
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void conv_process(conv_data *conv, float **in, float **out) {
+#if USE_FFTWF
   for (int in_ch = 0; in_ch < conv->num_inputs; in_ch++) {
     copyArray(conv->x_old[in_ch], conv->xtemp, conv->L); // copy old signal block
     copyArray(in[in_ch], &conv->xtemp[conv->L],conv->L);// append new signal block
@@ -106,10 +118,12 @@ void conv_process(conv_data *conv, float **in, float **out) {
   }
   conv->current_rb = (conv->current_rb + conv->P - 1) %
                      conv->P; // decrease ring for IR partitions
+#endif
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 conv_data *initConvolution(int L, int P, int Hann_len, int num_inputs, int num_outputs) {
+#if USE_FFTWF
   conv_data *conv = (conv_data *)malloc(sizeof(conv_data));
   conv->L = L; // block length (2L=FFT length)
   conv->P = P; // number of partitions
@@ -155,10 +169,13 @@ conv_data *initConvolution(int L, int P, int Hann_len, int num_inputs, int num_o
   conv->ifftplan_y_cf = fftwf_plan_dft_c2r_1d(conv->L * 2, conv->yftemp,
                                               conv->y_cf, FFTW_ESTIMATE);
   return conv;
+#endif
+  return 0;
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void freeConvolution(conv_data *conv) {
+#if USE_FFTWF
   // single-channel FFT and IFFT plans of temporary signals
   fftwf_destroy_plan(conv->fftplan_xtemp);
   fftwf_destroy_plan(conv->fftplan_htemp);
@@ -182,12 +199,14 @@ void freeConvolution(conv_data *conv) {
   fftwf_free(conv->hftemp);
   fftwf_free(conv->xftemp);
   free(conv);
+#endif
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void setImpulseResponse(conv_data *conv, float ***inh) {
   if (!conv)
     return;
+#if USE_FFTWF
   setNewIR(conv, TRUE);
   conv->convolver_switch = 1;
   for (int out_ch = 0; out_ch < conv->num_outputs; out_ch++) {
@@ -203,11 +222,15 @@ void setImpulseResponse(conv_data *conv, float ***inh) {
       }
     }
   }
+#endif
 }
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void setImpulseResponseZeroPad(conv_data *conv, float ***inh, int num_samples) {
   int offset;
   int copy_length;
+  if(!conv)
+    return;
+#if USE_FFTWF
   setNewIR(conv, TRUE);
   conv->convolver_switch = 1;
   for (int out_ch = 0; out_ch < conv->num_outputs; out_ch++) {
@@ -227,4 +250,5 @@ void setImpulseResponseZeroPad(conv_data *conv, float ***inh, int num_samples) {
       }
     }
   }
+#endif
 }

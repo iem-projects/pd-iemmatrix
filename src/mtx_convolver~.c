@@ -52,12 +52,17 @@ University of Music and Performing Arts Graz
 # define CLASS_MULTICHANNEL 0
 #endif
 
+#if KERNEL_VERSION(PD_VERSION_MAJOR, PD_VERSION_MINOR, PD_VERSION_BUGFIX) < KERNEL_VERSION(0, 53, 0)
+# define PD_NORMAL 2
+#endif
+
 
 static t_class *mtx_convolver_tilde_class;
 static t_class *mtx_convolver_tilde_mclass;
 
 typedef struct _mtx_convolver_tilde {
   t_object x_obj;
+  t_symbol *x_objname;
   int ins; // given/instantiated/mc number of inputs
   int outs; // given/instantiated number of inputs
   t_sample **inout_buffers;
@@ -86,31 +91,17 @@ int ceildiv(int a, int b) {
 }
 
 
-const char *mtx_convolver_objname(void *obj) {
-  t_object*x = obj;
-  t_symbol*s = gensym("");
-  if(x && x->te_binbuf) {
-    char buf[MAXPDSTRING];
-    t_symbol*objsym = atom_getsymbol(binbuf_getvec(x->te_binbuf));
-    if(snprintf(buf, MAXPDSTRING, "[%s]: ", objsym->s_name) > 0) {
-      buf[MAXPDSTRING-1] = 0;
-      s = gensym(buf);
-    }
-  }
-  return s->s_name;
-}
-
 t_int *mtx_convolver_tilde_perform(t_int *w) {
   t_mtx_convolver_tilde *x = (t_mtx_convolver_tilde *)w[1];
-  const char*objname=mtx_convolver_objname(x);
+  const char*objname=x->x_objname->s_name;
   int available_inputs = (x->h_num_ins < x->ins) ? x->h_num_ins : x->ins;
   int available_outputs = (x->h_num_outs < x->outs) ? x->h_num_outs : x->outs;
   #ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
-   post("%savailable ins=%d, outs=%d", objname,available_inputs,available_outputs);
+   logpost(x, PD_NORMAL, "[%s] available ins=%d, outs=%d", objname,available_inputs,available_outputs);
   #endif
   if (x->conv) {
     #ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
-      post("%sprocessing with existing convolver",objname);
+      logpost(x, PD_NORMAL, "[%s] processing with existing convolver",objname);
     #endif
     // Operation: copy input signals, convolve, copy output signals
     for (int i = 0; i < available_inputs; i++) { // copy from inout pd buffers
@@ -127,10 +118,10 @@ t_int *mtx_convolver_tilde_perform(t_int *w) {
       }
     }
     if (getNewIR(x->conv))
-      post("%shave to crossfade to a new IR",objname);
+      logpost(x, PD_NORMAL, "[%s] have to crossfade to a new IR",objname);
     #ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
-      post("%sL=%d, P=%d, ins=%d, outs=%d",objname,x->conv->L,x->conv->P,x->conv->num_inputs,x->conv->num_outputs);
-      post("%sconv=%d, inbuf=%d, outpuf=%d",objname,x->conv,x->conv_input_buffer, x->conv_output_buffer);
+      logpost(x, PD_NORMAL, "[%s] L=%d, P=%d, ins=%d, outs=%d",objname,x->conv->L,x->conv->P,x->conv->num_inputs,x->conv->num_outputs);
+      logpost(x, PD_NORMAL, "[%s] conv=%d, inbuf=%d, outpuf=%d",objname,x->conv,x->conv_input_buffer, x->conv_output_buffer);
     #endif
     conv_process(x->conv, x->conv_input_buffer, x->conv_output_buffer);
     for (int i = 0; i <available_outputs; i++) {
@@ -142,7 +133,7 @@ t_int *mtx_convolver_tilde_perform(t_int *w) {
     }
   } else { // DEFAULT: No convolver, deliver zero output signals.
     #ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
-      post("%sNOP with convolver inexistent, zeroing %d outs with blocksize %d",objname,x->outs,x->blocksize);
+      logpost(x, PD_NORMAL, "[%s] NOP with convolver inexistent, zeroing %d outs with blocksize %d",objname,x->outs,x->blocksize);
     #endif
     for (int i = 0; i < x->outs; i++) {
       t_sample *pd_out = x->inout_buffers[i + x->ins];
@@ -165,14 +156,14 @@ void mtx_convolver_init(t_mtx_convolver_tilde *x) {
 }
 
 int mtx_convolver_resize(t_mtx_convolver_tilde *x) {
-  const char*objname=mtx_convolver_objname(x);
+  const char*objname=x->x_objname->s_name;
   if (x->conv) {
     int P = ceildiv(x->h_len,x->blocksize);
     if ((x->conv->L==x->blocksize)&&(x->conv->P==P)&&
         (x->conv->num_inputs==x->h_num_ins)&&
         (x->conv->num_outputs==x->h_num_outs)) {
           #ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
-            post("%skeeping convolver with ins=%d, outs=%d, partitions=%d, blocksize=%d",
+            logpost(x, PD_NORMAL, "[%s] keeping convolver with ins=%d, outs=%d, partitions=%d, blocksize=%d",
             objname,x->conv->num_inputs,x->conv->num_outputs,x->conv->P,x->conv->L);
           #endif
         return 0; // keep convolver, it's size is perfect, exit!
@@ -196,7 +187,7 @@ int mtx_convolver_resize(t_mtx_convolver_tilde *x) {
  if ((x->blocksize)&&(x->h_num_ins)&&(x->h_num_outs)&&(x->h_len)) {
   mtx_convolver_init(x);
   if (x->conv){
-    post("%sre-instantiated convolver with ins=%d, outs=%d, partitions=%d, blocksize=%d",
+    logpost(x, PD_NORMAL, "[%s] re-instantiated convolver with ins=%d, outs=%d, partitions=%d, blocksize=%d",
       objname,x->conv->num_inputs,x->conv->num_outputs,x->conv->P,x->conv->L);
   }
   if (!x->conv_input_buffer)
@@ -210,16 +201,16 @@ int mtx_convolver_resize(t_mtx_convolver_tilde *x) {
 void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
   int ins = x->ins;
   int outs = x->outs;
-  const char*objname=mtx_convolver_objname(x);
+  const char*objname=x->x_objname->s_name;
 #if CLASS_MULTICHANNEL
   if (x->multichannel_mode) {
     // override with num input signals in MC mode
     ins = sp[0]->s_nchans;
-    post("%smultichannel mode, in=%d",objname,ins);
+    logpost(x, PD_NORMAL, "[%s] multichannel mode, in=%d",objname,ins);
     // set number of outs in MC mode
     if (x->h_num_outs) {
         outs = x->h_num_outs;
-        post("%smultichannel mode, outs=%d",objname,outs);
+        logpost(x, PD_NORMAL, "[%s] multichannel mode, outs=%d",objname,outs);
         signal_setmultiout(&sp[1], outs);
     }
     if ((ins+outs != x->ins+x->outs)){
@@ -232,7 +223,7 @@ void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
     x->ins = ins;
   } else {
 # ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
-      post("%snon-multichannel mode, in=%d, out=%d",objname,ins,outs);
+      logpost(x, PD_NORMAL, "[%s] non-multichannel mode, in=%d, out=%d",objname,ins,outs);
 # endif
   }
 #endif
@@ -241,7 +232,7 @@ void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
   }
   x->blocksize = sp[0]->s_n;
   #ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
-    post("%souts=%d, ins=%d, blocksize=%d",objname,outs,ins,x->blocksize);
+    logpost(x, PD_NORMAL, "[%s] outs=%d, ins=%d, blocksize=%d",objname,outs,ins,x->blocksize);
   #endif
   int resized;
   resized = mtx_convolver_resize(x); // check if renewed convolver is required
@@ -263,7 +254,7 @@ void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
   if ((x->set_ir_at_dsp_start) || (resized)) {
       if (x->conv) {
         #ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
-          post("%sconvolver has ins=%d, outs=%d, partitions=%d, blocksize=%d",
+          logpost(x, PD_NORMAL, "[%s] convolver has ins=%d, outs=%d, partitions=%d, blocksize=%d",
             objname,x->conv->num_inputs,x->conv->num_outputs,x->conv->P,x->conv->L);
         #endif
         setImpulseResponseZeroPad(x->conv, x->h, x->h_len);
@@ -286,9 +277,8 @@ void mtx_convolver_tilde_free(t_mtx_convolver_tilde *x) {
     free2DArray(x->conv_output_buffer, x->h_num_outs);
 }
 
-int mtx_convolver_check(void*object, int argc, t_atom*argv, unsigned int tests) {
-  t_object*x = (t_object*)object;
-  const char*objname=mtx_convolver_objname(x);
+int mtx_convolver_check(t_mtx_convolver_tilde*x, int argc, t_atom*argv, unsigned int tests) {
+  const char*objname=x->x_objname->s_name;
   int inputs=(argc>2)?atom_getfloat(argv+0):0;
   int outputs=(argc>2)?atom_getfloat(argv+1):0;
   int length=(argc>2)?atom_getfloat(argv+2):0;
@@ -314,13 +304,13 @@ int mtx_convolver_check(void*object, int argc, t_atom*argv, unsigned int tests) 
 
 void mtx_convolver_tilde_array3(t_mtx_convolver_tilde *x, t_symbol *s, int argc,
                       t_atom *argv) {
-  const char*objname=mtx_convolver_objname(x);
+  const char*objname=x->x_objname->s_name;
   int h_num_ins;
   int h_num_outs;
   int h_len;
   int resized_outs=0;
   if (argc < 3) {
-    post("%sarray3 message must have at least 3 arguments: num_inputs, num_outputs, ir_len",objname);
+    logpost(x, PD_NORMAL, "[%s] array3 message must have at least 3 arguments: num_inputs, num_outputs, ir_len",objname);
     return;
   }
   if (mtx_convolver_check(x, argc, argv, 0)) return;
@@ -329,12 +319,12 @@ void mtx_convolver_tilde_array3(t_mtx_convolver_tilde *x, t_symbol *s, int argc,
   h_len = (int)atom_getfloat(argv + 2);
   argv += 3;
   #ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
-    post("%sinputs=%d, outputs=%d, ir_len=%d, x->blocksize=%d", objname,h_num_ins, h_num_outs, h_len, x->blocksize);
+    logpost(x, PD_NORMAL, "[%s] inputs=%d, outputs=%d, ir_len=%d, x->blocksize=%d", objname,h_num_ins, h_num_outs, h_len, x->blocksize);
   #endif
 
   if ((h_num_ins != x->h_num_ins) || (h_num_outs != x->h_num_outs) || (h_len != x->h_len)) {
     #ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
-      post("%sinput array3: re-sizing/setting x->h_num_ins=%d, x->h_num_outs=%d, x->h_len=%d", objname,h_num_ins,
+      logpost(x, PD_NORMAL, "[%s] input array3: re-sizing/setting x->h_num_ins=%d, x->h_num_outs=%d, x->h_len=%d", objname,h_num_ins,
          h_num_outs, h_len);
     #endif
     if (x->h)
@@ -359,32 +349,32 @@ void mtx_convolver_tilde_array3(t_mtx_convolver_tilde *x, t_symbol *s, int argc,
     if (x->conv)  {
       if (canvas_dspstate) { // if convolver exists+dsp is running update IRs
         #ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
-          post("%sattempting IR update with dsp on, ins=%d, outs=%d, partitions=%d, blocksize=%d",
+          logpost(x, PD_NORMAL, "[%s] attempting IR update with dsp on, ins=%d, outs=%d, partitions=%d, blocksize=%d",
             objname,x->conv->num_inputs,x->conv->num_outputs,x->conv->P,x->conv->L);
         #endif
         setImpulseResponseZeroPad(x->conv, x->h, x->h_len);
         if (resized_outs) {
           #ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
-            post("%sconvolver changed, calling dsp startup",objname);
+            logpost(x, PD_NORMAL, "[%s] convolver changed, calling dsp startup",objname);
           #endif
           canvas_update_dsp();
         }
       } else {
         x->set_ir_at_dsp_start = 1;
         #ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
-          post("%sir update postponed to dsp start, dsp is off",objname);
+          logpost(x, PD_NORMAL, "[%s] ir update postponed to dsp start, dsp is off",objname);
         #endif
       }
     } else {
         x->set_ir_at_dsp_start = 1;
         #ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
-          post("%sir update postponed to dsp start, convolver missing",objname);
+          logpost(x, PD_NORMAL, "[%s] ir update postponed to dsp start, convolver missing",objname);
         #endif
     }
   } else {
     x->set_ir_at_dsp_start = 1;
     #ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
-      post("%sir update postponed to dsp start, blocksize missing",objname);
+      logpost(x, PD_NORMAL, "[%s] ir update postponed to dsp start, blocksize missing",objname);
     #endif
   }
 }
@@ -416,13 +406,13 @@ void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
 #if CLASS_MULTICHANNEL
     selected_class = mtx_convolver_tilde_mclass;
 #else
-    pd_error(x, "[%s] has been compiled without multichannel support");
+    pd_error(x, "[%s] has been compiled without multichannel support", s->s_name);
     return 0;
 #endif
   }
 
   x = (t_mtx_convolver_tilde *)pd_new(selected_class);
-
+  x->x_objname = s;
 #if USE_FFTWF
 #else
 # warning "Building without FFTW3"

@@ -1,5 +1,5 @@
 /*
-Uniformly Partitioned, Time-Variant, 
+Uniformly Partitioned, Time-Variant,
 Multichannel-Input-Mulichannel-Output Block Convolution
 (and because signal processing folks like incomprehensible
  abbreviations: UPTVMIMOBC, yeah!)
@@ -32,10 +32,21 @@ University of Music and Performing Arts Graz
 2024, 2025
 */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif /* HAVE_CONFIG_H */
+
 #include "convolver.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+
+#if USE_FFTWF
+#else
+# warning "Building without FFTW3"
+#endif
+
 
 /* crossfade functions */
 /*-----------------------------------------------------------------------------------------------------------------------------*/
@@ -58,6 +69,7 @@ _Bool wasCrossFadeRegistered(conv_data *conv) {
 /* PARTITIONED CONVOLUTION CORE */
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void convProcess(conv_data *conv, float **in, float **out) {
+#if USE_FFTWF
   for (int in_ch = 0; in_ch < conv->num_inputs; in_ch++) {
     copyArray(conv->x_old[in_ch], conv->xtemp, conv->blocksize); // copy old signal block
     copyArray(in[in_ch], &conv->xtemp[conv->blocksize],conv->blocksize);// append new signal block
@@ -77,7 +89,7 @@ void convProcess(conv_data *conv, float **in, float **out) {
     }
     fftwf_execute(conv->ifftplan_y); // perform iFFT of the main-IR output partition
     /* IF IR WAS UPDATED: ALSO COMPUTE NEW OUTPUT FOR CROSSFADE AT THE OUT CHANNEL */
-    if (wasCrossFadeRegistered(conv)) { 
+    if (wasCrossFadeRegistered(conv)) {
       int current_cf = (conv->current_cf + 1) % NUM_CF;
       resetComplexArray(conv->yftemp, conv->blocksize + 1); // zero output's partitions accumulator
       for (int in_ch = 0; in_ch < conv->num_inputs; in_ch++) { // MIMO convolutions (update)
@@ -90,7 +102,7 @@ void convProcess(conv_data *conv, float **in, float **out) {
       }
       fftwf_execute(conv->ifftplan_y_cf); // perform iFFT of the updated-IR output partition
       crossFade(conv->y + conv->blocksize, conv->y_cf + conv->blocksize, conv->w_old, conv->w_new, conv->blocksize); // xfade main->updated
-    } 
+    }
     /* IF IR WAS UPDATED: CROSSFADE TO NEW OUTPUT OF THE OUT CHANNEL COMPLETE */
     copyArrayWithGain(&conv->y[conv->blocksize], out[out_ch], conv->blocksize,
                       2 * conv->blocksize); // second half times N is the output's resulting signal block
@@ -101,10 +113,12 @@ void convProcess(conv_data *conv, float **in, float **out) {
   }
   conv->current_rb = (conv->current_rb + conv->num_partitions - 1) %
                      conv->num_partitions; // decrease ring for IR partitions
+#endif
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 conv_data *initConvolution(int blocksize, int num_partitions, int xfade_length, int num_inputs, int num_outputs, _Bool coherent_xfade) {
+#if USE_FFTWF
   conv_data *conv = (conv_data *)malloc(sizeof(conv_data));
   conv->blocksize = blocksize; // block length (2L=FFT length)
   conv->num_partitions = num_partitions; // number of partitions
@@ -158,10 +172,13 @@ conv_data *initConvolution(int blocksize, int num_partitions, int xfade_length, 
   conv->ifftplan_y_cf = fftwf_plan_dft_c2r_1d(conv->blocksize * 2, conv->yftemp,
                                               conv->y_cf, FFTW_ESTIMATE);
   return conv;
+#endif
+  return 0;
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void freeConvolution(conv_data *conv) {
+#if USE_FFTWF
   // single-channel FFT and IFFT plans of temporary signals
   fftwf_destroy_plan(conv->fftplan_xtemp);
   fftwf_destroy_plan(conv->fftplan_htemp);
@@ -186,6 +203,7 @@ void freeConvolution(conv_data *conv) {
   fftwf_free(conv->hftemp);
   fftwf_free(conv->xftemp);
   free(conv);
+#endif
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
@@ -193,6 +211,7 @@ void setImpulseResponseZeroPad(conv_data *conv, float ***inh, int num_samples, _
   int offset;
   int copy_length;
   int hot_or_cold_stream;
+#if USE_FFTWF
   if (!conv)
     return;
   if (no_xfade_init) { // update hot stream directly, without crossfading, for initialization
@@ -219,4 +238,5 @@ void setImpulseResponseZeroPad(conv_data *conv, float ***inh, int num_samples, _
       }
     }
   }
+#endif
 }

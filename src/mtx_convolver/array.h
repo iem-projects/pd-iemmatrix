@@ -1,9 +1,9 @@
 /*
-Authors: 
+Authors:
 Sourena Mosleh
 Franz Zotter
 
-Email-address: 
+Email-address:
 sourena.mosleh@student.kug.ac.at
 zotter@iem.at
 
@@ -11,8 +11,12 @@ Institut fuer elektronische Musik (IEM)
 Date and place: 15.07.2024, Graz
 */
 
-
-#include "fftw3.h"
+#if USE_FFTWF
+# include <fftw3.h>
+#else
+/* from fftw3.h */
+typedef float fftwf_complex[2];
+#endif
 
 /* HELPER FUNCTIONS, GENERATION, COPYING, RESETTING */
 /*-----------------------------------------------------------------------------------------------------------------------------*/

@@ -24,7 +24,7 @@ IEMMATRIX_CPPFLAGS=""
 
 need_pdlib=no
 AS_CASE([$host],
- [*darwin],                [EXTENSION=pd_darwin],
+ [*darwin*],               [EXTENSION=pd_darwin],
  [*linux*|*kfreebsd*gnu*], [EXTENSION=pd_linux],
  [*-*-gnu*],               [EXTENSION=pd_linux],
  [*mingw*|*cygwin*],       [EXTENSION=dll; need_pdlib=yes],

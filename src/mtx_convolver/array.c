@@ -1,9 +1,9 @@
 /*
-Authors: 
+Authors:
 Sourena Mosleh
 Franz Zotter
 
-Email-address: 
+Email-address:
 sourena.mosleh@student.kug.ac.at
 zotter@iem.at
 
@@ -12,11 +12,20 @@ University of Music and Performing Arts Graz
 2024
 */
 
-#include <fftw3.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif /* HAVE_CONFIG_H */
+
+#include "array.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 
+#if USE_FFTWF
+#else
+#define fftwf_malloc malloc
+#define fftwf_free free
+#endif
 
 
 /* HELPER FUNCTIONS, GENERATION, COPYING, RESETTING */

@@ -61,6 +61,7 @@ typedef struct _mtx_convolver_tilde {
   int h_num_ins;
   int h_num_outs;
   int h_len;
+  _Bool coherent_xfade;
   t_canvas *x_canvas; // to open array3 file
   conv_data *conv; // convolver structure from convolver.h
   float **conv_input_buffer; // input buffers to call convolver
@@ -122,13 +123,13 @@ t_int *mtx_convolver_tilde_perform(t_int *w) {
         in[n] = (float)0;
       }
     }
-    if (getNewIR(x->conv)) 
-      post("%shave to crossfade to a new IR",objname);
     #ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
-      post("%sL=%d, P=%d, ins=%d, outs=%d",objname,x->conv->L,x->conv->P,x->conv->num_inputs,x->conv->num_outputs);
+       if (wasCrossFadeRegistered(x->conv)) 
+        post("%shave to crossfade to a new IR",objname);
+      post("%sL=%d, P=%d, ins=%d, outs=%d",objname,x->conv->blocksize,x->conv->num_partitions,x->conv->num_inputs,x->conv->num_outputs);
       post("%sconv=%d, inbuf=%d, outpuf=%d",objname,x->conv,x->conv_input_buffer, x->conv_output_buffer);
     #endif
-    conv_process(x->conv, x->conv_input_buffer, x->conv_output_buffer);
+    convProcess(x->conv, x->conv_input_buffer, x->conv_output_buffer);
     for (int i = 0; i <available_outputs; i++) {
       float *out = x->conv_output_buffer[i];
       t_sample *pd_out = x->inout_buffers[i + x->ins];
@@ -155,21 +156,22 @@ void mtx_convolver_init(t_mtx_convolver_tilde *x) {
     freeConvolution(x->conv);
   x->conv = 0;
   if ((x->blocksize > 0) && (x->h_num_ins > 0) && (x->h_num_outs > 0) && (x->h_len >0)) {
-    int P = ceildiv(x->h_len, x->blocksize);
-    x->conv = initConvolution(x->blocksize, P, x->blocksize, x->h_num_ins, x->h_num_outs);
+    int num_partitions = ceildiv(x->h_len, x->blocksize);
+    x->conv = initConvolution(x->blocksize, num_partitions, x->blocksize, x->h_num_ins, x->h_num_outs,
+                              x->coherent_xfade);
   } 
 }
 
 int mtx_convolver_resize(t_mtx_convolver_tilde *x) {
   const char*objname=mtx_convolver_objname(x);
   if (x->conv) {
-    int P = ceildiv(x->h_len,x->blocksize);
-    if ((x->conv->L==x->blocksize)&&(x->conv->P==P)&&
+    int num_partitions = ceildiv(x->h_len,x->blocksize);
+    if ((x->conv->blocksize==x->blocksize)&&(x->conv->num_partitions==num_partitions)&&
         (x->conv->num_inputs==x->h_num_ins)&&
         (x->conv->num_outputs==x->h_num_outs)) { 
           #ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
             post("%skeeping convolver with ins=%d, outs=%d, partitions=%d, blocksize=%d",
-            objname,x->conv->num_inputs,x->conv->num_outputs,x->conv->P,x->conv->L);
+            objname,x->conv->num_inputs,x->conv->num_outputs,x->conv->num_partitions,x->conv->blocksize);
           #endif
         return 0; // keep convolver, it's size is perfect, exit!
     } else { // resize required, resize buffers and free convolver
@@ -193,7 +195,7 @@ int mtx_convolver_resize(t_mtx_convolver_tilde *x) {
   mtx_convolver_init(x);
   if (x->conv){  
     post("%sre-instantiated convolver with ins=%d, outs=%d, partitions=%d, blocksize=%d",
-      objname,x->conv->num_inputs,x->conv->num_outputs,x->conv->P,x->conv->L);
+      objname,x->conv->num_inputs,x->conv->num_outputs,x->conv->num_partitions,x->conv->blocksize);
   }
   if (!x->conv_input_buffer)
     x->conv_input_buffer = new2DArray(x->h_num_ins, x->blocksize);
@@ -255,9 +257,9 @@ void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
       if (x->conv) {
         #ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
           post("%sconvolver has ins=%d, outs=%d, partitions=%d, blocksize=%d",
-            objname,x->conv->num_inputs,x->conv->num_outputs,x->conv->P,x->conv->L);
+            objname,x->conv->num_inputs,x->conv->num_outputs,x->conv->num_partitions,x->conv->blocksize);
         #endif
-        setImpulseResponseZeroPad(x->conv, x->h, x->h_len);
+        setImpulseResponseZeroPad(x->conv, x->h, x->h_len, resized); // init with no xfade when conv was resized
         x->set_ir_at_dsp_start = 0;
       }
   }
@@ -346,14 +348,14 @@ void mtx_convolver_tilde_array3(t_mtx_convolver_tilde *x, t_symbol *s, int argc,
     }
   }
   if (x->blocksize) { // if blocksize is already known
-    mtx_convolver_resize(x); // check if new convolver needs to be instantiated
+    int resized = mtx_convolver_resize(x); // check if new convolver needs to be instantiated
     if (x->conv)  {
       if (canvas_dspstate) { // if convolver exists+dsp is running update IRs
         #ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
           post("%sattempting IR update with dsp on, ins=%d, outs=%d, partitions=%d, blocksize=%d",
-            objname,x->conv->num_inputs,x->conv->num_outputs,x->conv->P,x->conv->L);
+            objname,x->conv->num_inputs,x->conv->num_outputs,x->conv->num_partitions,x->conv->blocksize);
         #endif
-        setImpulseResponseZeroPad(x->conv, x->h, x->h_len);
+        setImpulseResponseZeroPad(x->conv, x->h, x->h_len, resized); // init with no xfade if conv was resized, with xfade otherwise
         if (resized_outs) {
           #ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
             post("%sconvolver changed, calling dsp startup",objname);
@@ -387,7 +389,7 @@ void mtx_convolver_tilde_read(t_mtx_convolver_tilde *x, t_symbol *filename)
   int n;
   if (binbuf_read_via_path(bbuf, filename->s_name,
                            canvas_getdir(x->x_canvas)->s_name, 0)) {
-    pd_error(x,"[mtx_convolver~]: failed to read '%s'", filename->s_name);
+    pd_error(x,"%sfailed to read '%s'", mtx_convolver_objname(x), filename->s_name);
   }
   ap=binbuf_getvec(bbuf);
   n =binbuf_getnatom(bbuf)-1;
@@ -439,6 +441,7 @@ void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
   x->conv = 0;
   x->blocksize = 0;
   x->set_ir_at_dsp_start = 0;
+  x->coherent_xfade = 1;
 
   for (int i=1; i<argc; i++) { // use first symbol after argv[0] as init file name
     if (argv[i].a_type == A_SYMBOL) {

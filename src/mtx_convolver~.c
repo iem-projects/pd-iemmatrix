@@ -428,7 +428,7 @@ void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
 # warning "Building without FFTW3"
   static int warn_fftw = 1;
   if(warn_fftw) {
-    pd_error(x, "[%s] built with FFTW3! Object not operational.", s->s_name);
+    pd_error(x, "[%s] built without FFTW3! Object not operational.", s->s_name);
     warn_fftw = 0;
   }
 #endif

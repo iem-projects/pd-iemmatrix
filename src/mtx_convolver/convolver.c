@@ -32,6 +32,10 @@ University of Music and Performing Arts Graz
 2024, 2025
 */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif /* HAVE_CONFIG_H */
+
 #include "convolver.h"
 #include <math.h>
 #include <stdio.h>

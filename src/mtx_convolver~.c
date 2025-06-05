@@ -34,12 +34,12 @@ University of Music and Performing Arts Graz
 2024, 2025
 */
 
+#include "iemmatrix.h"
 #include "mtx_convolver/array.h"
 #include "mtx_convolver/convolver.h"
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
-#include "iemmatrix.h"
 #include <stdio.h>
 #ifdef _WIN32
 /* or should we use the security enhanced _snprintf_s() ?? */

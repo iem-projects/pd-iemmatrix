@@ -12,7 +12,7 @@ University of Music and Performing Arts Graz
 2024
 */
 
-#include <fftw3.h>
+#include "array.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>

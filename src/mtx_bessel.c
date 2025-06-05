@@ -194,7 +194,7 @@ static void mTXBesselMatrix (MTXBessel *x, t_symbol *s,
 
   mTXBesselBang(x);
 #else
-  pd_error("[mtx_bessel]: implementation requires math.h that implements jn and yn Bessel functions or gsl_sf_bessel.h");
+  pd_error(x, "[mtx_bessel]: implementation requires math.h that implements jn and yn Bessel functions or gsl_sf_bessel.h");
 #endif
 }
 

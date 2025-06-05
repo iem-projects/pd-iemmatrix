@@ -12,7 +12,7 @@ Date and place: 15.07.2024, Graz
 */
 
 
-#include "fftw3.h"
+#include <fftw3.h>
 
 /* HELPER FUNCTIONS, GENERATION, COPYING, RESETTING */
 /*-----------------------------------------------------------------------------------------------------------------------------*/

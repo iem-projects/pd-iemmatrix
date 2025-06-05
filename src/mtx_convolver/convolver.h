@@ -33,7 +33,7 @@ University of Music and Performing Arts Graz
 */
 
 #include "array.h"
-#include <fftw3.h>
+
 #define NUM_CF 2 // there are 2 crossfase buffers (re-occurring array dimension)
 typedef struct Conv_data {
   int L;          // signal block length (fft length = 2L)

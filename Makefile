@@ -17,7 +17,7 @@ with-fftw=yes
 cflags =
 ldlibs =
 
-cflags += -Isrc
+cflags += -I. -Isrc
 
 
 # libsndfile
@@ -276,3 +276,8 @@ datafiles += \
 # include Makefile.pdlibbuilder from submodule directory 'pd-lib-builder'
 PDLIBBUILDER_DIR=pd-lib-builder/
 include $(PDLIBBUILDER_DIR)/Makefile.pdlibbuilder
+
+src/iemmatrix.c: iemmatrix_sources.h
+
+iemmatrix_sources.h:
+	src/makesource.sh $(sort $(class.sources)) >$@

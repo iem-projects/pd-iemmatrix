@@ -289,15 +289,15 @@ int mtx_convolver_check(t_mtx_convolver_tilde*x, int argc, t_atom*argv, unsigned
       | IEMMATRIX_CHECK_DIMENSIONS
       | IEMMATRIX_CHECK_SPARSE;
   if ((tests & IEMMATRIX_CHECK_CRIPPLED) && argc<3) {
-    pd_error(x, "%scrippled array3", objname);
+    pd_error(x, "[%s] crippled array3", objname);
     return 1;
   }
   if ((tests & IEMMATRIX_CHECK_DIMENSIONS) && ((inputs<1)||(outputs<1)||(length<1))) {
-    pd_error(x, "%sinvalid dimensions %dx%dx%d", objname, inputs, outputs, length);
+    pd_error(x, "[%s] invalid dimensions %dx%dx%d", objname, inputs, outputs, length);
     return 1;
   }
   if ((tests & IEMMATRIX_CHECK_SPARSE)&&(inputs* outputs*length>argc-3)) {
-    pd_error(x, "%ssparse array3 not yet supported", objname);
+    pd_error(x, "[%s] sparse array3 not yet supported", objname);
     return 1;
   }
   return 0;
@@ -387,7 +387,7 @@ void mtx_convolver_tilde_read(t_mtx_convolver_tilde *x, t_symbol *filename)
   int n;
   if (binbuf_read_via_path(bbuf, filename->s_name,
                            canvas_getdir(x->x_canvas)->s_name, 0)) {
-    pd_error(x,"%sfailed to read '%s'", x->x_objname->s_name, filename->s_name);
+    pd_error(x,"[%s] failed to read '%s'", x->x_objname->s_name, filename->s_name);
   }
   ap=binbuf_getvec(bbuf);
   n =binbuf_getnatom(bbuf)-1;

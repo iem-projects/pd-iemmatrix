@@ -437,6 +437,8 @@ void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
       x->ins = (int)atom_getfloat(argv);
       x->outs = (int)atom_getfloat(argv + 1);
     }
+    x->ins = (x->ins < 1)?1:x->ins;
+    x->outs = (x->outs < 1)?1:x->outs;
     for (int i = 0; i < x->ins; i++) {
       inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal);
     }

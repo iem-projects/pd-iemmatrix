@@ -4,6 +4,7 @@
 
 # library name
 lib.name = iemmatrix
+lib.version = unknown
 
 # mtx_*~ and friends make problems...
 make-lib-executable=yes
@@ -277,7 +278,10 @@ datafiles += \
 PDLIBBUILDER_DIR=pd-lib-builder/
 include $(PDLIBBUILDER_DIR)/Makefile.pdlibbuilder
 
-src/iemmatrix.c: iemmatrix_sources.h
+src/iemmatrix.c: iemmatrix_sources.h VERSION.txt iemmatrix-meta.pd
 
 iemmatrix_sources.h:
 	src/makesource.sh $(sort $(class.sources)) >$@
+
+%: %.in
+	sed -e 's|@PACKAGE_NAME@|$(lib.name)|g' -e 's|@PACKAGE_VERSION@|$(lib.version)|g' $< > $@

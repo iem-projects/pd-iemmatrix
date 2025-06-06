@@ -498,3 +498,7 @@ void mtx_convolver_tilde_setup(void) {
   class_addmethod(mtx_convolver_tilde_class, (t_method)mtx_convolver_tilde_read,
                 gensym("read"), A_SYMBOL, 0);
 }
+void iemtx_convolver__setup(void)
+{
+  mtx_convolver_tilde_setup();
+}

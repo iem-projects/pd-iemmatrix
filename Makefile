@@ -8,9 +8,87 @@ lib.name = iemmatrix
 # mtx_*~ and friends make problems...
 make-lib-executable=yes
 
+
+with-sndfile=yes
+with-gsl=yes
+with-fftw=yes
+
+
 cflags =
+ldlibs =
 
 cflags += -Isrc
+
+
+# libsndfile
+have-sndfile := $(shell pkg-config --exists sndfile && echo yes || echo no)
+ifneq ($(with-sndfile),no)
+ifeq ($(have-sndfile),yes)
+SNDFILE_CFLAGS = $(shell pkg-config --cflags sndfile)
+SNDFILE_LIBS = $(shell pkg-config --libs sndfile)
+endif
+endif
+ifneq ($(SNDFILE_LIBS),)
+SNDFILE_CFLAGS += -DUSE_SNDFILE=1 -DHAVE_SNDFILE_H=1
+else
+have-sndfile=no
+endif
+cflags += $(SNDFILE_CFLAGS)
+mtx_sndfileread.class.ldlibs += $(SNDFILE_LIBS)
+ifeq ($(make-lib-executable),yes)
+ldlibs += $(SNDFILE_LIBS)
+endif
+
+# GNU scientific library
+ifneq ($(with-gsl),no)
+GSL_CFLAGS = $(shell pkg-config --cflags gsl)
+GSL_LIBS = $(shell pkg-config --libs gsl)
+endif
+ifneq ($(GSL_LIBS),)
+have-gsl=yes
+GSL_CFLAGS += -DHAVE_LIBGSL=1 -DHAVE_GSL_EIGEN_NONSYMM=1 -DHAVE_GSL_BESSEL=1
+else
+have-gsl=no
+endif
+cflags += $(GSL_CFLAGS)
+mtx_bessel.class.ldlibs += $(GSL_LIBS)
+mtx_eig.class.ldlibs += $(GSL_LIBS)
+mtx_qr.class.ldlibs += $(GSL_LIBS)
+mtx_svd.class.ldlibs += $(GSL_LIBS)
+ifeq ($(make-lib-executable),yes)
+ldlibs += $(GSL_LIBS)
+endif
+# afaik, all libm implementations have a bessel function
+cflags += -DHAVE_MATH_BESSEL=1
+
+# FFTW
+ifneq ($(with-fftw),no)
+FFTW_CFLAGS = $(shell pkg-config --cflags fftw3)
+FFTW_LIBS = $(shell pkg-config --libs fftw3)
+FFTWF_CFLAGS = $(shell pkg-config --cflags fftw3f)
+FFTWF_LIBS = $(shell pkg-config --libs fftw3f)
+endif
+ifneq ($(FFTW_LIBS),)
+have-fftw=yes
+FFTW_CFLAGS += -DUSE_FFTW=1
+else
+have-fftw=no
+endif
+ifneq ($(FFTWF_LIBS),)
+have-fftwf=yes
+FFTWF_CFLAGS += -DUSE_FFTWF=1
+else
+have-fftwf=no
+endif
+cflags += $(FFTW_CFLAGS) $(FFTWF_CFLAGS)
+mtx_rfft.class.ldlibs += $(FFTW_LIBS)
+mtx_rifft.class.ldlibs += $(FFTW_LIBS)
+mtx_convolver~.class.ldlibs += $(FFTWF_LIBS)
+ifeq ($(make-lib-executable),yes)
+ldlibs += $(FFTW_LIBS) $(FFTWF_LIBS)
+endif
+
+
 
 lib.setup.sources = \
 	src/iemmatrix.c

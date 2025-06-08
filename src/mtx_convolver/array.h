@@ -1,4 +1,7 @@
 /*
+For information on usage and redistribution, and for a DISCLAIMER OF ALL
+WARRANTIES, see the file, "LICENSE.txt," in this distribution.
+
 Authors:
 Sourena Mosleh
 Franz Zotter
@@ -7,8 +10,9 @@ Email-address:
 sourena.mosleh@student.kug.ac.at
 zotter@iem.at
 
-Institut fuer elektronische Musik (IEM)
-Date and place: 15.07.2024, Graz
+Institute of Electronic Music and Acoustics (IEM)
+University of Music and Performing Arts Graz
+2024
 */
 
 #if USE_FFTWF

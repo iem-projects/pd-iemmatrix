@@ -3,6 +3,9 @@ Authors:
 Sourena Mosleh
 Franz Zotter
 
+For information on usage and redistribution, and for a DISCLAIMER OF ALL
+WARRANTIES, see the file, "LICENSE.txt," in this distribution.
+
 Email-address:
 sourena.mosleh@student.kug.ac.at
 zotter@iem.at

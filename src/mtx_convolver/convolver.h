@@ -18,6 +18,9 @@ adaptive signal processing,
 frequency response equalization,
 ...
 
+For information on usage and redistribution, and for a DISCLAIMER OF ALL
+WARRANTIES, see the file, "LICENSE.txt," in this distribution.
+
 Franz Zotter
 Hannes Pescoller
 Sourena Mosleh

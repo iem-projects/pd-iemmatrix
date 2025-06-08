@@ -20,6 +20,9 @@ adaptive signal processing,
 frequency response equalization,
 ...
 
+For information on usage and redistribution, and for a DISCLAIMER OF ALL
+WARRANTIES, see the file, "LICENSE.txt," in this distribution.
+
 Franz Zotter
 Hannes Pescoller
 Sourena Mosleh
@@ -382,12 +385,13 @@ void mtx_convolver_tilde_array3(t_mtx_convolver_tilde *x, t_symbol *s, int argc,
 
 void mtx_convolver_tilde_read(t_mtx_convolver_tilde *x, t_symbol *filename)
 {
+  const char *objname=x->x_objname->s_name;
   t_binbuf *bbuf = binbuf_new();
   t_atom *ap;
   int n;
   if (binbuf_read_via_path(bbuf, filename->s_name,
                            canvas_getdir(x->x_canvas)->s_name, 0)) {
-    pd_error(x,"[%s] failed to read '%s'", x->x_objname->s_name, filename->s_name);
+    pd_error(x,"[%s] failed to read '%s'", objname, filename->s_name);
   }
   ap=binbuf_getvec(bbuf);
   n =binbuf_getnatom(bbuf)-1;

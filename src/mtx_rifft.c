@@ -13,17 +13,32 @@
  */
 
 #include "iemmatrix.h"
+#include "iemmatrix_stub.h"
+
 #include <stdlib.h>
 
-#ifdef USE_FFTW
+#ifdef HAVE_FFTW
 #include <fftw3.h>
 #endif
 
+#ifndef HAVE_FFTW
+typedef struct _fftw_plan_private_tag *fftw_plan;
+typedef double fftw_complex[2];
+#define FFTW_ESTIMATE (1U << 6)
+#endif
+typedef void(*t_fftw_destroy_plan)(fftw_plan);
+typedef void(*t_fftw_execute)(const fftw_plan);
+typedef fftw_plan(*t_fftw_plan_dft_c2r_1d)(int, fftw_complex*, double*, unsigned);
+
+static t_fftw_destroy_plan my_destroy_plan = 0;
+static t_fftw_execute my_execute = 0;
+static t_fftw_plan_dft_c2r_1d my_plan_dft_c2r_1d = 0;
+
+static int have_fftw = 0;
+
 static t_class *mtx_rifft_class;
 
-#ifdef USE_FFTW
 enum ComplexPart { REALPART=0,  IMAGPART=1};
-#endif
 
 typedef struct _MTXRifft_ {
   t_object x_obj;
@@ -33,14 +48,15 @@ typedef struct _MTXRifft_ {
   int size;
   int size2;
   t_float renorm_fac;
-#ifdef USE_FFTW
+
+  /* fftw */
   fftw_plan *fftplan;
   fftw_complex *f_in;
   double *f_out;
-#else
+
+  /* mayer */
   t_float *f_re;
   t_float *f_im;
-#endif
 
   t_outlet *list_re_out;
   t_outlet *list_im_out;
@@ -94,7 +110,6 @@ static void ifftPrepareReal (int n, t_float *re, t_float *im)
   }
 }
 
-#ifdef USE_FFTW
 static void readFFTWComplexPartFromList (int n, t_atom *l, fftw_complex *f,
     enum ComplexPart p)
 {
@@ -118,8 +133,6 @@ static void multiplyDoubleVector (int n, double *f, t_float fac)
   }
 }
 
-#endif
-
 static void *newMTXRifft (t_symbol *s, int argc, t_atom *argv)
 {
   MTXRifft *x = (MTXRifft *) pd_new (mtx_rifft_class);
@@ -140,13 +153,16 @@ static void mTXRifftMatrixCold (MTXRifft *x, t_symbol *s,
   int size = rows * columns;
   int ifft_count;
   t_atom *list_re = x->list_re;
-#ifdef USE_FFTW
+
+  /* fftw */
   fftw_complex *f_in = x->f_in;
   double *f_out = x->f_out;
-#else
+
+  /* mayer */
   t_float *f_re = x->f_re;
   t_float *f_im = x->f_im;
-#endif
+
+  const int use_fftw = have_fftw;
 
   /* ifftsize check */
   if (columns_re < 3) {
@@ -160,35 +176,34 @@ static void mTXRifftMatrixCold (MTXRifft *x, t_symbol *s,
   } else if (columns == (1 << ilog2(columns))) {
 
     /* memory things */
-#ifdef USE_FFTW
-    if ((x->rows!=rows)||(columns!=x->columns)) {
-      for (ifft_count=0; ifft_count<x->rows; ifft_count++) {
-        fftw_destroy_plan(x->fftplan[ifft_count]);
+    if(use_fftw) {
+      if ((x->rows!=rows)||(columns!=x->columns)) {
+        for (ifft_count=0; ifft_count<x->rows; ifft_count++) {
+          my_destroy_plan(x->fftplan[ifft_count]);
+        }
+        x->fftplan=(fftw_plan*)realloc(x->fftplan,sizeof(fftw_plan)*rows);
+        f_in=(fftw_complex*)realloc(f_in,sizeof(fftw_complex)*size2);
+        f_out=(double*)realloc(f_out,sizeof(double)*size);
+        list_re=(t_atom*)realloc(list_re, sizeof(t_atom)*(size+2));
+        x->list_re = list_re;
+        x->f_out = f_out;
+        x->f_in = f_in;
+        for (ifft_count=0; ifft_count<rows; ifft_count++) {
+          x->fftplan[ifft_count]=my_plan_dft_c2r_1d(columns,f_in,f_out,FFTW_ESTIMATE);
+          f_out+=columns;
+          f_in+=columns_re;
+        }
+        f_in=x->f_in;
+        f_out=x->f_out;
       }
-      x->fftplan=(fftw_plan*)realloc(x->fftplan,sizeof(fftw_plan)*rows);
-      f_in=(fftw_complex*)realloc(f_in,sizeof(fftw_complex)*size2);
-      f_out=(double*)realloc(f_out,sizeof(double)*size);
+    } else {
+      f_re=(t_float*)realloc(f_re, sizeof(t_float)*size);
+      f_im=(t_float*)realloc(f_im, sizeof(t_float)*size);
+      x->f_re = f_re;
+      x->f_im = f_im;
       list_re=(t_atom*)realloc(list_re, sizeof(t_atom)*(size+2));
       x->list_re = list_re;
-      x->f_out = f_out;
-      x->f_in = f_in;
-      for (ifft_count=0; ifft_count<rows; ifft_count++) {
-        x->fftplan[ifft_count]=fftw_plan_dft_c2r_1d(columns,f_in,f_out,
-                               FFTW_ESTIMATE);
-        f_out+=columns;
-        f_in+=columns_re;
-      }
-      f_in=x->f_in;
-      f_out=x->f_out;
     }
-#else
-    f_re=(t_float*)realloc(f_re, sizeof(t_float)*size);
-    f_im=(t_float*)realloc(f_im, sizeof(t_float)*size);
-    x->f_re = f_re;
-    x->f_im = f_im;
-    list_re=(t_atom*)realloc(list_re, sizeof(t_atom)*(size+2));
-    x->list_re = list_re;
-#endif
 
     x->size = size;
     x->size2 = size2;
@@ -200,13 +215,13 @@ static void mTXRifftMatrixCold (MTXRifft *x, t_symbol *s,
     ifft_count = rows;
     x->renorm_fac = 1.0f / columns;
     for (ifft_count=0; ifft_count<rows; ifft_count++) {
-#ifdef USE_FFTW
-      readFFTWComplexPartFromList(columns_re, argv, f_in, IMAGPART);
-      f_in += columns_re;
-#else
-      readFloatFromList (columns_re, argv, f_im);
-      f_im += columns;
-#endif
+      if(use_fftw) {
+        readFFTWComplexPartFromList(columns_re, argv, f_in, IMAGPART);
+        f_in += columns_re;
+      } else {
+        readFloatFromList (columns_re, argv, f_im);
+        f_im += columns;
+      }
       argv += columns_re;
     }
     /* do nothing else! */
@@ -225,13 +240,14 @@ static void mTXRifftMatrixHot (MTXRifft *x, t_symbol *s,
   int in_size = argc-2;
   int size2 = x->size2;
   int ifft_count;
-#ifdef USE_FFTW
+  /* fftw */
   fftw_complex *f_in = x->f_in;
-#else
+  /* mayer */
   t_float *f_re = x->f_re;
   t_float *f_im = x->f_im;
-#endif
+
   t_float renorm_fac = x->renorm_fac;
+  const int use_fftw = have_fftw;
 
   /* ifftsize check */
   if ((rows != x->rows) ||
@@ -243,33 +259,33 @@ static void mTXRifftMatrixHot (MTXRifft *x, t_symbol *s,
     pd_error(x, "[mtx_rifft]: invalid right side matrix");
   } else { /* main part */
     for (ifft_count=0; ifft_count<rows; ifft_count++) {
-#ifdef USE_FFTW
-      readFFTWComplexPartFromList(columns_re,argv,f_in,REALPART);
-      fftw_execute(x->fftplan[ifft_count]);
-      f_in+=columns_re;
-#else
-      readFloatFromList (columns_re, argv, f_re);
-      ifftPrepareReal (columns, f_re, f_im);
-      mayer_realifft (columns, f_re);
-      f_im += columns;
-      f_re += columns;
-#endif
+      if(use_fftw) {
+        readFFTWComplexPartFromList(columns_re,argv,f_in,REALPART);
+        my_execute(x->fftplan[ifft_count]);
+        f_in+=columns_re;
+      } else {
+        readFloatFromList (columns_re, argv, f_re);
+        ifftPrepareReal (columns, f_re, f_im);
+        mayer_realifft (columns, f_re);
+        f_im += columns;
+        f_re += columns;
+      }
       argv += columns_re;
     }
-#ifndef USE_FFTW
-    f_re = x->f_re;
-#endif
+    if (use_fftw)
+      f_re = x->f_re;
+
     size2 = x->size2;
 
     SETFLOAT(x->list_re, rows);
     SETFLOAT(x->list_re+1, x->columns);
-#ifdef USE_FFTW
-    multiplyDoubleVector (size, x->f_out, renorm_fac);
-    writeDoubleIntoList (size, x->list_re+2, x->f_out);
-#else
-    multiplyVector (size, f_re, renorm_fac);
-    writeFloatIntoList  (size, x->list_re+2, f_re);
-#endif
+    if(use_fftw) {
+      multiplyDoubleVector (size, x->f_out, renorm_fac);
+      writeDoubleIntoList (size, x->list_re+2, x->f_out);
+    } else {
+      multiplyVector (size, f_re, renorm_fac);
+      writeFloatIntoList  (size, x->list_re+2, f_re);
+    }
     outlet_anything(x->list_re_out, gensym("matrix"), size+2, x->list_re);
   }
 }
@@ -284,28 +300,28 @@ static void mTXRifftBang (MTXRifft *x)
 
 static void deleteMTXRifft (MTXRifft *x)
 {
-#ifdef USE_FFTW
-  int n;
-  if (x->fftplan) {
-    for (n=0; n<x->rows; n++) {
-      fftw_destroy_plan(x->fftplan[n]);
+  if(have_fftw) {
+    int n;
+    if (x->fftplan) {
+      for (n=0; n<x->rows; n++) {
+        my_destroy_plan(x->fftplan[n]);
+      }
+      free(x->fftplan);
     }
-    free(x->fftplan);
+    if (x->f_out) {
+      free(x->f_out);
+    }
+    if (x->f_in) {
+      free(x->f_in);
+    }
+  } else {
+    if (x->f_re) {
+      free(x->f_re);
+    }
+    if (x->f_im) {
+      free(x->f_im);
+    }
   }
-  if (x->f_out) {
-    free(x->f_out);
-  }
-  if (x->f_in) {
-    free(x->f_in);
-  }
-#else
-  if (x->f_re) {
-    free(x->f_re);
-  }
-  if (x->f_im) {
-    free(x->f_im);
-  }
-#endif
   if (x->list_re) {
     free(x->list_re);
   }
@@ -327,6 +343,17 @@ void mtx_rifft_setup (void)
                    gensym("matrix"), A_GIMME,0);
   class_addmethod (mtx_rifft_class, (t_method) mTXRifftMatrixCold,
                    gensym(""), A_GIMME,0);
+
+#ifdef HAVE_FFTW
+  my_destroy_plan = iemmatrix_get_stub("fftw_destroy_plan", mtx_rifft_class);
+  my_execute = iemmatrix_get_stub("fftw_execute", mtx_rifft_class);
+  my_plan_dft_c2r_1d = iemmatrix_get_stub("fftw_plan_dft_c2r_1d", mtx_rifft_class);
+#endif
+  have_fftw = (1
+               && my_destroy_plan
+               && my_execute
+               && my_plan_dft_c2r_1d
+               );
 }
 
 void iemtx_rifft_setup(void)

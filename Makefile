@@ -35,10 +35,6 @@ else
 have-sndfile=no
 endif
 cflags += $(SNDFILE_CFLAGS)
-mtx_sndfileread.class.ldlibs += $(SNDFILE_LIBS)
-ifeq ($(make-lib-executable),yes)
-ldlibs += $(SNDFILE_LIBS)
-endif
 
 # GNU scientific library
 ifneq ($(with-gsl),no)
@@ -52,13 +48,6 @@ else
 have-gsl=no
 endif
 cflags += $(GSL_CFLAGS)
-mtx_bessel.class.ldlibs += $(GSL_LIBS)
-mtx_eig.class.ldlibs += $(GSL_LIBS)
-mtx_qr.class.ldlibs += $(GSL_LIBS)
-mtx_svd.class.ldlibs += $(GSL_LIBS)
-ifeq ($(make-lib-executable),yes)
-ldlibs += $(GSL_LIBS)
-endif
 # afaik, all libm implementations have a bessel function
 cflags += -DHAVE_MATH_BESSEL=1
 
@@ -82,13 +71,6 @@ else
 have-fftwf=no
 endif
 cflags += $(FFTW_CFLAGS) $(FFTWF_CFLAGS)
-mtx_rfft.class.ldlibs += $(FFTW_LIBS)
-mtx_rifft.class.ldlibs += $(FFTW_LIBS)
-mtx_convolver~.class.ldlibs += $(FFTWF_LIBS)
-ifeq ($(make-lib-executable),yes)
-ldlibs += $(FFTW_LIBS) $(FFTWF_LIBS)
-endif
-
 
 
 lib.setup.sources = \

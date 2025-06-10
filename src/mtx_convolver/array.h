@@ -15,7 +15,7 @@ University of Music and Performing Arts Graz
 2024
 */
 
-#if USE_FFTWF
+#if HAVE_FFTWF
 # include <fftw3.h>
 #else
 /* from fftw3.h */

@@ -418,7 +418,7 @@ void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
 
   x = (t_mtx_convolver_tilde *)pd_new(selected_class);
   x->x_objname = s;
-#if USE_FFTWF
+#if HAVE_FFTWF
 #else
 # warning "Building without FFTW3"
   static int warn_fftw = 1;

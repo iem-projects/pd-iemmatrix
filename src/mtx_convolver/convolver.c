@@ -45,7 +45,7 @@ University of Music and Performing Arts Graz
 #include <stdlib.h>
 
 
-#if USE_FFTWF
+#if HAVE_FFTWF
 #else
 # warning "Building without FFTW3"
 #endif
@@ -72,7 +72,7 @@ _Bool wasCrossFadeRegistered(conv_data *conv) {
 /* PARTITIONED CONVOLUTION CORE */
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void convProcess(conv_data *conv, float **in, float **out) {
-#if USE_FFTWF
+#if HAVE_FFTWF
   for (int in_ch = 0; in_ch < conv->num_inputs; in_ch++) {
     copyArray(conv->x_old[in_ch], conv->xtemp, conv->blocksize); // copy old signal block
     copyArray(in[in_ch], &conv->xtemp[conv->blocksize],conv->blocksize);// append new signal block
@@ -121,7 +121,7 @@ void convProcess(conv_data *conv, float **in, float **out) {
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 conv_data *initConvolution(int blocksize, int num_partitions, int xfade_length, int num_inputs, int num_outputs, _Bool coherent_xfade) {
-#if USE_FFTWF
+#if HAVE_FFTWF
   conv_data *conv = (conv_data *)malloc(sizeof(conv_data));
   conv->blocksize = blocksize; // block length (2L=FFT length)
   conv->num_partitions = num_partitions; // number of partitions
@@ -181,7 +181,7 @@ conv_data *initConvolution(int blocksize, int num_partitions, int xfade_length, 
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void freeConvolution(conv_data *conv) {
-#if USE_FFTWF
+#if HAVE_FFTWF
   // single-channel FFT and IFFT plans of temporary signals
   fftwf_destroy_plan(conv->fftplan_xtemp);
   fftwf_destroy_plan(conv->fftplan_htemp);
@@ -214,7 +214,7 @@ void setImpulseResponseZeroPad(conv_data *conv, float ***inh, int num_samples, _
   int offset;
   int copy_length;
   int hot_or_cold_stream;
-#if USE_FFTWF
+#if HAVE_FFTWF
   if (!conv)
     return;
   if (no_xfade_init) { // update hot stream directly, without crossfading, for initialization

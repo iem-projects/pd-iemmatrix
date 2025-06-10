@@ -14,23 +14,34 @@
  */
 
 #include "iemmatrix.h"
+#include "iemmatrix_stub.h"
 #include <stdlib.h>
 
 #ifdef HAVE_LIBGSL
-#include <gsl/gsl_linalg.h>
+# include <gsl/gsl_linalg.h>
+#else
+# include "stub/gsl.h"
 #endif
+
+IEMMATRIX_DECLARE_ALLOCFREE_STUB(my_vector);
+IEMMATRIX_DECLARE_ALLOCFREE2_STUB(my_matrix);
+typedef int(*t_linalg_SV_decomp)(gsl_matrix*, gsl_matrix*, gsl_vector*, gsl_vector*);
+static t_linalg_SV_decomp my_linalg_SV_decomp = 0;
+
+static int have_gsl = 0;
+
 
 static t_class *mtx_svd_class;
 
 typedef struct _MTXSvd_ MTXSvd;
 struct _MTXSvd_ {
   t_object x_obj;
-#ifdef HAVE_LIBGSL
+
   gsl_matrix *u;
   gsl_vector *s;
   gsl_matrix *v;
   gsl_vector *w;
-#endif
+
   t_outlet *list_u_out;
   t_outlet *list_s_out;
   t_outlet *list_v_out;
@@ -41,17 +52,18 @@ struct _MTXSvd_ {
   int columns;
 };
 
-#ifdef HAVE_LIBGSL
 static void allocMTXusvw (MTXSvd *x)
 {
-  x->u=(gsl_matrix*)gsl_matrix_alloc(x->rows,x->columns);
-  x->s=(gsl_vector*)gsl_vector_alloc(x->columns);
-  x->v=(gsl_matrix*)gsl_matrix_alloc(x->columns,x->columns);
-  x->w=(gsl_vector*)gsl_vector_alloc(x->columns);
+  if(have_gsl) {
+    x->u=(gsl_matrix*)my_matrix_alloc(x->rows,x->columns);
+    x->s=(gsl_vector*)my_vector_alloc(x->columns);
+    x->v=(gsl_matrix*)my_matrix_alloc(x->columns,x->columns);
+    x->w=(gsl_vector*)my_vector_alloc(x->columns);
 
-  x->list_u=(t_atom*)calloc(sizeof(t_atom),x->rows*x->columns+2);
-  x->list_s=(t_atom*)calloc(sizeof(t_atom),x->columns);
-  x->list_v=(t_atom*)calloc(sizeof(t_atom),x->columns*x->columns+2);
+    x->list_u=(t_atom*)calloc(sizeof(t_atom),x->rows*x->columns+2);
+    x->list_s=(t_atom*)calloc(sizeof(t_atom),x->columns);
+    x->list_v=(t_atom*)calloc(sizeof(t_atom),x->columns*x->columns+2);
+  }
 }
 
 static void deleteMTXusvw (MTXSvd *x)
@@ -68,17 +80,19 @@ static void deleteMTXusvw (MTXSvd *x)
 
   x->list_u = x->list_s = x->list_v = 0;
 
-  if (x->u!=0) {
-    gsl_matrix_free(x->u);
-  }
-  if (x->s!=0) {
-    gsl_vector_free(x->s);
-  }
-  if (x->v!=0) {
-    gsl_matrix_free(x->v);
-  }
-  if (x->w!=0) {
-    gsl_vector_free(x->w);
+  if(have_gsl) {
+    if (x->u!=0) {
+      my_matrix_free(x->u);
+    }
+    if (x->s!=0) {
+      my_vector_free(x->s);
+    }
+    if (x->v!=0) {
+      my_matrix_free(x->v);
+    }
+    if (x->w!=0) {
+      my_vector_free(x->w);
+    }
   }
 
   x->u = 0;
@@ -86,13 +100,10 @@ static void deleteMTXusvw (MTXSvd *x)
   x->v = 0;
   x->w = 0;
 }
-#endif
 
 static void deleteMTXSvd (MTXSvd *x)
 {
-#ifdef HAVE_LIBGSL
   deleteMTXusvw(x);
-#endif
 }
 
 static void *newMTXSvd (t_symbol *s, int argc, t_atom *argv)
@@ -101,16 +112,16 @@ static void *newMTXSvd (t_symbol *s, int argc, t_atom *argv)
   x->list_u_out = outlet_new (&x->x_obj, gensym("matrix"));
   x->list_s_out = outlet_new (&x->x_obj, gensym("list"));
   x->list_v_out = outlet_new (&x->x_obj, gensym("matrix"));
-  x->list_u = 0;
-  x->list_s = 0;
-  x->list_v = 0;
+  if (!have_gsl) {
+    static int warn_gsl = 1;
+    if(warn_gsl)
 #ifdef HAVE_LIBGSL
-  x->u=0;
-  x->s=0;
-  x->v=0;
-  x->w=0;
+      pd_error(x, "[%s] couldn't find (recent enough) GSL", s->s_name);
+#else
+      pd_error(x, "[%s] compiled without GSL", s->s_name);
 #endif
-
+    warn_gsl = 0;
+  }
   return ((void *) x);
 }
 
@@ -135,10 +146,11 @@ static void mTXSvdMatrix (MTXSvd *x, t_symbol *s,
   columns = atom_getint (argv++);
   size=rows*columns;
 
-#ifdef HAVE_LIBGSL
+  if(!have_gsl)
+    return;
   /* size check */
   if (rows<columns) {
-    pd_error(x, "[mtx_svd]: gsl_linalg_SVD_decomp does not support M<N");
+    pd_error(x, "[mtx_svd]: gsl_linalg_SV_decomp does not support M<N");
     return;
   }
   x->rows=rows;
@@ -151,7 +163,7 @@ static void mTXSvdMatrix (MTXSvd *x, t_symbol *s,
     x->u->data[n]=(double) atom_getfloat(argv++);
   }
 
-  gsl_linalg_SV_decomp(x->u,x->v,x->s,x->w);
+  my_linalg_SV_decomp(x->u,x->v,x->s,x->w);
 
   SETFLOAT((x->list_u),(float) x->rows);
   SETFLOAT((x->list_u+1),(float) x->columns);
@@ -171,9 +183,6 @@ static void mTXSvdMatrix (MTXSvd *x, t_symbol *s,
   }
 
   mTXSvdBang(x);
-#else
-  pd_error(x, "[mtx_svd]: implementation requires gsl");
-#endif
 }
 
 void mtx_svd_setup (void)
@@ -187,6 +196,19 @@ void mtx_svd_setup (void)
   class_addbang (mtx_svd_class, (t_method) mTXSvdBang);
   class_addmethod (mtx_svd_class, (t_method) mTXSvdMatrix, gensym("matrix"),
                    A_GIMME,0);
+
+#ifdef HAVE_LIBGSL
+  my_matrix_alloc = iemmatrix_get_stub("gsl_matrix_alloc", mtx_svd_class);
+  my_matrix_free = iemmatrix_get_stub("gsl_matrix_free", mtx_svd_class);
+  my_vector_alloc = iemmatrix_get_stub("gsl_vector_complex_alloc", mtx_svd_class);
+  my_vector_free = iemmatrix_get_stub("gsl_vector_complex_free", mtx_svd_class);
+  my_linalg_SV_decomp = iemmatrix_get_stub("gsl_linalg_SV_decomp", mtx_svd_class);
+#endif
+  have_gsl = (
+              my_matrix_alloc && my_matrix_free
+              && my_vector_alloc && my_vector_free
+              && my_linalg_SV_decomp
+              );
 }
 
 void iemtx_svd_setup(void)

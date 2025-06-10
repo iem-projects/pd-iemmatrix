@@ -58,6 +58,7 @@ AS_IF([test "xno" != "x${with_fftw}" ],[
 ])
 AS_IF([test "xyes" = "x${have_fftw3}" ],[
    AC_DEFINE(USE_FFTW, 1, [can we use fftw?])
+   AC_DEFINE(HAVE_FFTW, 1, [have fftw?])
 ])
 AM_CONDITIONAL(HAVE_FFTW, test "xyes" = "x${have_fftw3}")
 
@@ -67,6 +68,7 @@ AS_IF([test "xno" != "x${with_fftwf}" ],[
 ])
 AS_IF([test "xyes" = "x${have_fftw3f}" ],[
    AC_DEFINE(USE_FFTWF, 1, [can we use fftwf?])
+   AC_DEFINE(HAVE_FFTWF, 1, [have fftwf?])
 ])
 AM_CONDITIONAL(HAVE_FFTWF, test "xyes" = "x${have_fftw3f}")
 

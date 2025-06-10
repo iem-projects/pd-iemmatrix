@@ -38,6 +38,9 @@ University of Music and Performing Arts Graz
 */
 
 #include "iemmatrix.h"
+#include "iemmatrix_stub.h"
+
+
 #include "mtx_convolver/array.h"
 #include "mtx_convolver/convolver.h"
 
@@ -52,6 +55,10 @@ University of Music and Performing Arts Graz
 #if KERNEL_VERSION(PD_VERSION_MAJOR, PD_VERSION_MINOR, PD_VERSION_BUGFIX) < KERNEL_VERSION(0, 53, 0)
 # define PD_NORMAL 2
 #endif
+
+t_fftwf_functions my_functions;
+
+static int warn_fftwf = 1;
 
 
 static t_class *mtx_convolver_tilde_class;
@@ -412,16 +419,14 @@ void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
 
   x = (t_mtx_convolver_tilde *)pd_new(selected_class);
   x->x_objname = s;
-#if HAVE_FFTWF
+  if(warn_fftwf) {
+#if HAVE_FFTW
+    pd_error(x, "[%s] couldn't find (recent enough) FFTWF. object not operational!", s->s_name);
 #else
-# warning "Building without FFTW3"
-  static int warn_fftw = 1;
-  if(warn_fftw) {
-    pd_error(x, "[%s] built without FFTW3! Object not operational.", s->s_name);
-    warn_fftw = 0;
-  }
+    pd_error(x, "[%s] compiled without FFTWF. object not operational!", s->s_name);
 #endif
-
+    warn_fftwf = 0;
+  }
 
 #if CLASS_MULTICHANNEL
   x->multichannel_mode = (selected_class == mtx_convolver_tilde_mclass);
@@ -495,6 +500,18 @@ void mtx_convolver_tilde_setup(void) {
                 gensym("read"), A_SYMBOL, 0);
   class_addmethod(mtx_convolver_tilde_class, (t_method)mtx_convolver_tilde_read,
                 gensym("read"), A_SYMBOL, 0);
+
+#ifdef HAVE_FFTWF
+  my_functions.malloc = iemmatrix_get_stub("fftwf_malloc", mtx_convolver_tilde_class);
+  my_functions.free = iemmatrix_get_stub("fftwf_free", mtx_convolver_tilde_class);
+  my_functions.destroy_plan = iemmatrix_get_stub("fftwf_destroy_plan", mtx_convolver_tilde_class);
+  my_functions.execute = iemmatrix_get_stub("fftwf_execute", mtx_convolver_tilde_class);
+  my_functions.plan_dft_r2c_1d = iemmatrix_get_stub("fftwf_plan_dft_r2c_1d", mtx_convolver_tilde_class);
+  my_functions.plan_dft_c2r_1d = iemmatrix_get_stub("fftwf_plan_dft_c2r_1d", mtx_convolver_tilde_class);
+  IEMCONVOLVE(array_set_fftwf_functions) (&my_functions);
+
+  warn_fftwf = !(IEMCONVOLVE(convolver_set_fftwf_functions) (&my_functions));
+#endif
 }
 void iemtx_convolver__setup(void)
 {

@@ -1,8 +1,21 @@
 
 #include "iemmatrix.h"
+#include "iemmatrix_stub.h"
 
 #ifdef HAVE_SNDFILE_H
 # include <sndfile.h>
+#else
+typedef	struct sf_private_tag	SNDFILE;
+typedef int64_t sf_count_t;
+typedef struct
+{    sf_count_t  frames ;     /* Used to be called samples. */
+  int         samplerate ;
+  int         channels ;
+  int         format ;
+  int         sections ;
+  int         seekable ;
+} SF_INFO ;
+#define SFM_READ 0x10
 #endif
 
 #ifdef __WIN32__
@@ -102,14 +115,21 @@
 //          };
 //
 
+
+typedef SNDFILE*(*t_sf_open)(const char*, int, SF_INFO*);
+typedef SNDFILE*(*t_sf_close)(SNDFILE*);
+typedef sf_count_t(*t_sf_readf_float)(SNDFILE*, float*, sf_count_t) ;
+
+static t_sf_open my_open = 0;
+static t_sf_close my_close = 0;
+static t_sf_readf_float my_readf_float = 0;
+
 static t_class *mtx_sndfileread_class;
 
 typedef struct mtx_sndfileread {
   t_object x_ob;
-#ifdef HAVE_SNDFILE_H
   SNDFILE *x_sndfileread;
   SF_INFO x_sfinfo;
-#endif
   t_outlet *x_message_outlet;
   t_outlet *x_readybang_outlet;
   t_canvas *x_canvas;
@@ -122,12 +142,10 @@ typedef struct mtx_sndfileread {
 
 static void mtx_sndfileread_close (t_mtx_sndfileread *x)
 {
-#ifdef HAVE_SNDFILE_H
-  if(x->x_sndfileread) {
-    sf_close (x->x_sndfileread);
+  if(my_close && x->x_sndfileread) {
+    my_close (x->x_sndfileread);
   }
   x->x_sndfileread=0;
-#endif
 
   if(x->x_outlist) {
     freebytes(x->x_outlist, sizeof(t_atom)*(2+x->num_chan*x->num_frames));
@@ -144,7 +162,6 @@ typedef int (*fdclose_fun_t)(int fd);
 static void mtx_sndfileread_open (t_mtx_sndfileread *x, t_symbol *s,
                                   t_symbol*type)
 {
-#ifdef HAVE_SNDFILE_H
   static fdclose_fun_t myclose = 0;
   if(!myclose)
     myclose = (fdclose_fun_t)iemmatrix_getpdfun("sys_close");
@@ -154,6 +171,11 @@ static void mtx_sndfileread_open (t_mtx_sndfileread *x, t_symbol *s,
   int fd;
 
   mtx_sndfileread_close(x);
+
+  if(!my_open) {
+    pd_error(x, "[mtx_sndfileread] missing libsndfile");
+    return;
+  }
 
   /* directory, filename, extension, dirresult, nameresult, unsigned int size, int bin */
   fd=canvas_open(x->x_canvas, s->s_name, "", filenamebuf, &filenamebufptr,
@@ -166,18 +188,16 @@ static void mtx_sndfileread_open (t_mtx_sndfileread *x, t_symbol *s,
   if(!filenamebufptr[-1]) {
     filenamebufptr[-1]='/';
   }
-  if (!(x->x_sndfileread = sf_open (filenamebuf, SFM_READ, &x->x_sfinfo))) {
+  if (!(x->x_sndfileread = my_open (filenamebuf, SFM_READ, &x->x_sfinfo))) {
     pd_error(x, "[mtx_sndfileread]: failed to sfopen %s : %s", s->s_name, filenamebuf);
     mtx_sndfileread_close(x);
     return;
   }
   x->num_chan = x->x_sfinfo.channels;
-#endif
 }
 
 static void mtx_sndfileread_frame (t_mtx_sndfileread *x)
 {
-#ifdef HAVE_SNDFILE_H
   int n;
   t_atom *ptr;
 
@@ -200,7 +220,7 @@ static void mtx_sndfileread_frame (t_mtx_sndfileread *x)
     x->num_frames=1;
   }
 
-  if (sf_readf_float(x->x_sndfileread, x->x_float, (sf_count_t)1)<1) {
+  if (my_readf_float(x->x_sndfileread, x->x_float, (sf_count_t)1)<1) {
     mtx_sndfileread_close(x);
     outlet_bang(x->x_readybang_outlet);
   } else {
@@ -213,12 +233,10 @@ static void mtx_sndfileread_frame (t_mtx_sndfileread *x)
     outlet_anything(x->x_message_outlet,gensym("matrix"),x->num_chan+2,
                     x->x_outlist);
   }
-#endif
 }
 
 static void mtx_sndfileread_frames (t_mtx_sndfileread *x, t_float f)
 {
-#ifdef HAVE_SNDFILE_H
   int n,n2,c;
   sf_count_t frames_read;
   int num_frames=(int)f;
@@ -244,7 +262,7 @@ static void mtx_sndfileread_frames (t_mtx_sndfileread *x, t_float f)
     x->num_frames=num_frames;
   }
 
-  if ((frames_read=sf_readf_float(x->x_sndfileread,
+  if ((frames_read=my_readf_float(x->x_sndfileread,
                                   x->x_float,
                                   (sf_count_t)num_frames))<1) {
     mtx_sndfileread_close(x);
@@ -265,7 +283,6 @@ static void mtx_sndfileread_frames (t_mtx_sndfileread *x, t_float f)
       outlet_bang(x->x_readybang_outlet);
     }
   }
-#endif
 }
 
 static void mtx_sndfileread_free (t_mtx_sndfileread *x)
@@ -280,11 +297,13 @@ static void *mtx_sndfileread_new(void)
   t_mtx_sndfileread *x = (t_mtx_sndfileread *)pd_new(mtx_sndfileread_class);
   x->x_message_outlet = outlet_new(&x->x_ob, &s_list);
   x->x_readybang_outlet = outlet_new(&x->x_ob, &s_bang);
-#ifdef HAVE_SNDFILE_H
   x->x_sndfileread=0;
-#else
-  pd_error(x, "[mtx_sndfileread] won't work: compiled without libsndfile!");
-#endif
+  if (!(my_open && my_close && my_readf_float)) {
+    static int warn_sndfile = 1;
+    if(warn_sndfile)
+      pd_error(x, "[mtx_sndfileread] won't work: missing libsndfile!");
+    warn_sndfile = 0;
+  }
   x->num_chan=0;
   x->num_frames=0;
   x->x_canvas = canvas_getcurrent();
@@ -302,6 +321,12 @@ void mtx_sndfileread_setup(void)
                   gensym("close"), A_NULL, 0);
   class_addbang(mtx_sndfileread_class, (t_method)mtx_sndfileread_frame);
   class_addfloat(mtx_sndfileread_class, (t_method)mtx_sndfileread_frames);
+
+#ifdef HAVE_SNDFILE_H
+  my_open = iemmatrix_get_stub("sf_open", mtx_sndfileread_class);
+  my_close = iemmatrix_get_stub("sf_close", mtx_sndfileread_class);
+  my_readf_float = iemmatrix_get_stub("sf_readf_float", mtx_sndfileread_class);
+#endif
 }
 
 void iemtx_sndfileread_setup (void)

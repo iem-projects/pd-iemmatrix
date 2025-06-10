@@ -34,8 +34,18 @@ Institute of Electronic Music and Acoustics (IEM)
 University of Music and Performing Arts Graz
 2024, 2025
 */
+#ifndef _mtx_convolver_convolver_h
+#define _mtx_convolver_convolver_h
 
 #include "array.h"
+#if HAVE_FFTWF
+# include <fftw3.h>
+#else
+# include "stub/fftwf.h"
+#endif
+
+int IEMCONVOLVE(convolver_set_fftwf_functions) (const t_fftwf_functions*funs);
+
 
 #define NUM_CF 2 // there are 2 crossfase buffers (re-occurring array dimension)
 typedef struct Conv_data {
@@ -83,3 +93,5 @@ conv_data *IEMCONVOLVE(initConvolution) (int blocksize, int num_partitions, int 
 void IEMCONVOLVE(freeConvolution) (conv_data *conv);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void IEMCONVOLVE(setImpulseResponseZeroPad) (conv_data *conv, float ***inh, int num_samples, _Bool no_xfade_init);
+
+#endif /* _mtx_convolver_convolver_h */

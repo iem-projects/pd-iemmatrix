@@ -33,37 +33,37 @@ University of Music and Performing Arts Graz
 
 /* HELPER FUNCTIONS, GENERATION, COPYING, RESETTING */
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void cos2win(float* w, int len){
+void IEMCONVOLVE(cos2win) (float* w, int len){
     float a=M_PI/(2*(len));
     for(int n=0; n<len; n++) {
         w[n]=cosf(a*n)*cosf(a*n);
     }
 }
-void sin2win(float* w, int len){
+void IEMCONVOLVE(sin2win) (float* w, int len){
     float a=M_PI/(2*(len));
     for(int n=0; n<len; n++) {
         w[n]=sinf(a*n)*sinf(a*n);
     }
 }
-void coswin(float* w, int len){
+void IEMCONVOLVE(coswin) (float* w, int len){
     float a=M_PI/(2*(len));
     for(int n=0; n<len; n++) {
         w[n]=cosf(a*n);
     }
 }
-void sinwin(float* w, int len){
+void IEMCONVOLVE(sinwin) (float* w, int len){
     float a=M_PI/(2*(len));
     for(int n=0; n<len; n++) {
         w[n]=sinf(a*n);
     }
 }
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void addArray(float * array1, float * array2, int len, float * result){
+void IEMCONVOLVE(addArray) (float * array1, float * array2, int len, float * result){
 
     for (int i=0; i<len; i++)
     result[i]=array1[i]+array2[i];
 }
-float squaredArray(float* array, int len)
+float IEMCONVOLVE(squaredArray) (float* array, int len)
 {
     float result=0;
     for(int i=0; i<len; i++)
@@ -72,35 +72,35 @@ float squaredArray(float* array, int len)
     return result;
 }
 
-float squared2DArray(float **x, int len1, int len2){
+float IEMCONVOLVE(squared2DArray) (float **x, int len1, int len2){
     float result=0;
     for (int i=0; i<len1;i++){
-        result+=squaredArray(x[i],len2);
+      result+=IEMCONVOLVE(squaredArray) (x[i],len2);
     }
     return result;
 }
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void resetArray(float *in, int len){
+void IEMCONVOLVE(resetArray) (float *in, int len){
     for (int i=0; i<len;i++){
         in[i]=0;
     }
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void reset2DArray(float **in, int len1, int len2){
+void IEMCONVOLVE(reset2DArray) (float **in, int len1, int len2){
     for (int i=0; i<len1;i++){
-	resetArray(in[i],len2);
+	IEMCONVOLVE(resetArray)(in[i],len2);
     }
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void reset3DArray(float ***in, int len1, int len2, int len3){
+void IEMCONVOLVE(reset3DArray) (float ***in, int len1, int len2, int len3){
     for (int i=0; i<len1;i++){
-	reset2DArray(in[i],len2,len3);
+	IEMCONVOLVE(reset2DArray)(in[i],len2,len3);
     }
 }
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void unit_impulse(float *x, int len, int n){
+void IEMCONVOLVE(unit_impulse) (float *x, int len, int n){
     for (int i=0; i<len;i++){
         if (i==n){
             x[i]=1;
@@ -112,31 +112,31 @@ void unit_impulse(float *x, int len, int n){
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void unitImpulse2D(float **x, int len1, int len2, int k, int n){
-    reset2DArray(x,len1,len2);
+void IEMCONVOLVE(unitImpulse2D) (float **x, int len1, int len2, int k, int n){
+    IEMCONVOLVE(reset2DArray)(x,len1,len2);
     if ((k<len1)&&(n<len2)) {
        x[k][n]=1;
     }
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void unitImpulse3D(float ***x, int len1, int len2, int len3, int m, int n, int o){
-    reset3DArray(x,len1,len2,len3);
+void IEMCONVOLVE(unitImpulse3D) (float ***x, int len1, int len2, int len3, int m, int n, int o){
+    IEMCONVOLVE(reset3DArray)(x,len1,len2,len3);
     if ((m<len1)&&(n<len2)&&(o<len3)) {
          x[m][n][o]=1;
     }
 }
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void Rectangle2D(float **x, int len1, int len2, int k){
-    reset2DArray(x,len1,len2);
+void IEMCONVOLVE(Rectangle2D) (float **x, int len1, int len2, int k){
+    IEMCONVOLVE(reset2DArray)(x,len1,len2);
     if ((k<len1)) {
         for (int i=0; i<len2;i++)
         x[k][i]=1;
     }
 }
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void OneImpulse3D(float ***x, int len1, int len2, int len3, int m, int n){
-    reset3DArray(x,len1,len2,len3);
+void IEMCONVOLVE(OneImpulse3D) (float ***x, int len1, int len2, int len3, int m, int n){
+    IEMCONVOLVE(reset3DArray)(x,len1,len2,len3);
     if ((m<len1)&&(n<len2)) {
         for (int i=0; i<len3;i++)
         x[m][n][i]=1;
@@ -144,7 +144,7 @@ void OneImpulse3D(float ***x, int len1, int len2, int len3, int m, int n){
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void copyComplexArray(fftwf_complex *src, fftwf_complex *dst, int len){
+void IEMCONVOLVE(copyComplexArray) (fftwf_complex *src, fftwf_complex *dst, int len){
     for (int i=0; i<len;i++){
         dst[i][0]=src[i][0];
         dst[i][1]=src[i][1];
@@ -152,13 +152,13 @@ void copyComplexArray(fftwf_complex *src, fftwf_complex *dst, int len){
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void copyArray(float *src, float *dst, int len){
+void IEMCONVOLVE(copyArray) (float *src, float *dst, int len){
         for (int i=0; i<len;i++){
         dst[i]=src[i];
     }
 }
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void copy2DArray(float **src, float **dst, int channels,  int src_offset, int dst_offset, int len)
+void IEMCONVOLVE(copy2DArray) (float **src, float **dst, int channels,  int src_offset, int dst_offset, int len)
 {
     for (int ch=0; ch<channels;ch++)
     {
@@ -167,7 +167,7 @@ void copy2DArray(float **src, float **dst, int channels,  int src_offset, int ds
     }
 }
 
-void copyExcerpt(float *src, float *dst, int src_offset, int dst_offset, int len)
+void IEMCONVOLVE(copyExcerpt) (float *src, float *dst, int src_offset, int dst_offset, int len)
 {
     for (int n=0; n<len; n++)
     {
@@ -176,49 +176,49 @@ void copyExcerpt(float *src, float *dst, int src_offset, int dst_offset, int len
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void copyArrayWithGain(float *src, float *dst, int len, float gain){
+void IEMCONVOLVE(copyArrayWithGain) (float *src, float *dst, int len, float gain){
     for (int i=0; i<len;i++){
         dst[i]=src[i]/gain;
     }
 }
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void resetComplexArray(fftwf_complex *in, int len){
+void IEMCONVOLVE(resetComplexArray) (fftwf_complex *in, int len){
         for (int i=0; i<len;i++){
             in[i][0]=0;
             in[i][1]=0;
     }
 }
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void reset2DComplexArray(fftwf_complex **in, int len1, int len2){
+void IEMCONVOLVE(reset2DComplexArray) (fftwf_complex **in, int len1, int len2){
     for (int i=0; i<len1;i++){
-	  resetComplexArray(in[i],len2);
+	  IEMCONVOLVE(resetComplexArray)(in[i],len2);
     }
 }
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void reset3DComplexArray(fftwf_complex ***in, int len1, int len2, int len3){
+void IEMCONVOLVE(reset3DComplexArray) (fftwf_complex ***in, int len1, int len2, int len3){
     for (int i=0; i<len1;i++){
-	  reset2DComplexArray(in[i],len2,len3);
+	  IEMCONVOLVE(reset2DComplexArray)(in[i],len2,len3);
     }
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void reset4DComplexArray(fftwf_complex ****in, int len1, int len2, int len3, int len4){
+void IEMCONVOLVE(reset4DComplexArray) (fftwf_complex ****in, int len1, int len2, int len3, int len4){
     for (int i=0; i<len1;i++){
-	  reset3DComplexArray(in[i],len2,len3,len4);
+	  IEMCONVOLVE(reset3DComplexArray)(in[i],len2,len3,len4);
     }
 }
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void reset5DComplexArray(fftwf_complex *****in, int len1, int len2, int len3, int len4, int len5){
+void IEMCONVOLVE(reset5DComplexArray) (fftwf_complex *****in, int len1, int len2, int len3, int len4, int len5){
     for (int i=0; i<len1;i++){
-	  reset4DComplexArray(in[i],len2,len3,len4,len5);
+	  IEMCONVOLVE(reset4DComplexArray)(in[i],len2,len3,len4,len5);
     }
 }
 
 /* COMPLEX MULTIPLY ACCUMULATE */
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void freq_mul_acc(fftwf_complex *array1, fftwf_complex *array2, fftwf_complex *result, int len){
+void IEMCONVOLVE(freq_mul_acc) (fftwf_complex *array1, fftwf_complex *array2, fftwf_complex *result, int len){
     for (int i=0; i< len; i++)
     {
         result[i][0]+=array1[i][0]*array2[i][0]-array1[i][1]*array2[i][1];
@@ -229,14 +229,14 @@ void freq_mul_acc(fftwf_complex *array1, fftwf_complex *array2, fftwf_complex *r
 /* PRINTING AND ERROR COMPUTATION TO DEBUG */
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 
-void print_signal (float* in, int len){
+void IEMCONVOLVE(print_signal ) (float* in, int len){
      for(int i=0; i<len; i++)
         printf("%3.1f ", in[i]);
     printf("\n");
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void print2DSignal (float** in, int len1, int len2){
+void IEMCONVOLVE(print2DSignal ) (float** in, int len1, int len2){
      for (int i=0; i<len1; i++) {
         if (i==0)
            printf("[");
@@ -252,14 +252,14 @@ void print2DSignal (float** in, int len1, int len2){
     }
 }
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void print_complex_signal (fftwf_complex* in, int len){
+void IEMCONVOLVE(print_complex_signal ) (fftwf_complex* in, int len){
      for(int i=0; i<len; i++)
         printf("(%3.1f+i%3.1f) ", in[i][0], in[i][1]);
     printf("\n");
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-float squared_error(float *x,float *y, int len){
+float IEMCONVOLVE(squared_error) (float *x,float *y, int len){
     float error=0;
     for (int i=0; i<len;i++){
         error+=(x[i]-y[i])*(x[i]-y[i]);
@@ -268,10 +268,10 @@ float squared_error(float *x,float *y, int len){
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-float squared2DError(float **x,float **y, int len1, int len2){
+float IEMCONVOLVE(squared2DError) (float **x,float **y, int len1, int len2){
     float error=0;
     for (int i=0; i<len1;i++){
-        error+=squared_error(x[i],y[i],len2);
+      error+=IEMCONVOLVE(squared_error) (x[i],y[i],len2);
     }
     return error;
 }
@@ -281,39 +281,39 @@ float squared2DError(float **x,float **y, int len1, int len2){
 /*complex arrays*/
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 
-fftwf_complex* new1DComplexArray(int I)
+fftwf_complex* IEMCONVOLVE(new1DComplexArray) (int I)
 {
     fftwf_complex* x= (fftwf_complex*) fftwf_malloc(sizeof(fftwf_complex) * I);
     return x;
 }
 
-fftwf_complex** new2DComplexArray(int I,int J)
+fftwf_complex** IEMCONVOLVE(new2DComplexArray) (int I,int J)
 {
     fftwf_complex** x= (fftwf_complex**) fftwf_malloc(sizeof(fftwf_complex*) * I);
     for(int i=0; i<I; i++)
-        x[i]= new1DComplexArray(J);
+        x[i]= IEMCONVOLVE(new1DComplexArray) (J);
     return x;
 }
 
-fftwf_complex*** new3DComplexArray(int I,int J,int K)
+fftwf_complex*** IEMCONVOLVE(new3DComplexArray) (int I,int J,int K)
 {
     fftwf_complex*** x= (fftwf_complex***) fftwf_malloc(sizeof(fftwf_complex**) * I);
     for(int i=0; i<I; i++)
-        x[i]= new2DComplexArray(J,K);
+        x[i]= IEMCONVOLVE(new2DComplexArray) (J,K);
     return x;
 }
 
-fftwf_complex**** new4DComplexArray(int I,int J,int K,int L){
+fftwf_complex**** IEMCONVOLVE(new4DComplexArray) (int I,int J,int K,int L){
     fftwf_complex**** x= (fftwf_complex****) fftwf_malloc(sizeof(fftwf_complex***) * I);
     for(int i=0; i<I; i++)
-        x[i]= new3DComplexArray(J,K,L);
+        x[i]= IEMCONVOLVE(new3DComplexArray) (J,K,L);
     return x;
 }
 
-fftwf_complex***** new5DComplexArray(int I,int J,int K,int L, int M){
+fftwf_complex***** IEMCONVOLVE(new5DComplexArray) (int I,int J,int K,int L, int M){
     fftwf_complex***** x= (fftwf_complex*****) fftwf_malloc(sizeof(fftwf_complex****) * I);
     for(int i=0; i<I; i++)
-        x[i]= new4DComplexArray(J,K,L,M);
+        x[i]= IEMCONVOLVE(new4DComplexArray) (J,K,L,M);
     return x;
 }
 
@@ -324,86 +324,86 @@ fftwf_complex***** new5DComplexArray(int I,int J,int K,int L, int M){
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 
 
-float* new1DArray(int I)
+float* IEMCONVOLVE(new1DArray) (int I)
 {
     float* x= (float*) fftwf_malloc(sizeof(float) * I);
     return x;
 }
 
-float** new2DArray(int I,int J)
+float** IEMCONVOLVE(new2DArray) (int I,int J)
 {
     float** x= (float**) fftwf_malloc(sizeof(float*) * I);
     for(int i=0; i<I; i++)
-        x[i]= new1DArray(J);
+        x[i]= IEMCONVOLVE(new1DArray) (J);
     return x;
 }
 
-float*** new3DArray(int I,int J,int K)
+float*** IEMCONVOLVE(new3DArray) (int I,int J,int K)
 {
     float*** x= (float***) fftwf_malloc(sizeof(float**) * I);
     for(int i=0; i<I; i++)
-        x[i]= new2DArray(J,K);
+        x[i]= IEMCONVOLVE(new2DArray) (J,K);
     return x;
 }
 
-float**** new4DArray(int I,int J,int K,int L)
+float**** IEMCONVOLVE(new4DArray) (int I,int J,int K,int L)
 {
     float**** x= (float****) fftwf_malloc(sizeof(float***) * I);
     for(int i=0; i<I; i++)
-        x[i]= new3DArray(J,K,L);
+        x[i]= IEMCONVOLVE(new3DArray) (J,K,L);
     return x;
 }
 /*free memory*/
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void free1DComplexArray(fftwf_complex* x)
+void IEMCONVOLVE(free1DComplexArray) (fftwf_complex* x)
 {
     fftwf_free(x);
 }
 
-void free2DComplexArray(fftwf_complex** x, int I)
+void IEMCONVOLVE(free2DComplexArray) (fftwf_complex** x, int I)
 {
     for (int i=0; i<I; i++)
-        free1DComplexArray(x[i]);
+        IEMCONVOLVE(free1DComplexArray)(x[i]);
     fftwf_free(x);
 }
 
-void free3DComplexArray(fftwf_complex*** x, int I,int J)
+void IEMCONVOLVE(free3DComplexArray) (fftwf_complex*** x, int I,int J)
 {
     for (int i=0; i<I; i++)
-        free2DComplexArray(x[i],J);
+        IEMCONVOLVE(free2DComplexArray)(x[i],J);
     fftwf_free(x);
 }
 
-void free4DComplexArray(fftwf_complex**** x, int I,int J,int K)
+void IEMCONVOLVE(free4DComplexArray) (fftwf_complex**** x, int I,int J,int K)
 {
     for (int i=0; i<I; i++)
-        free3DComplexArray(x[i],J,K);
+        IEMCONVOLVE(free3DComplexArray)(x[i],J,K);
     fftwf_free(x);
 }
-void free5DComplexArray(fftwf_complex***** x, int I,int J,int K,int L)
+void IEMCONVOLVE(free5DComplexArray) (fftwf_complex***** x, int I,int J,int K,int L)
 {
     for (int i=0; i<I; i++)
-        free4DComplexArray(x[i],J,K,L);
+        IEMCONVOLVE(free4DComplexArray)(x[i],J,K,L);
     fftwf_free(x);
 }
 
 
 
-void free1DArray(float* x)
+void IEMCONVOLVE(free1DArray) (float* x)
 {
     fftwf_free(x);
 }
 
-void free2DArray(float** x, int I)
-{
-    for (int i=0; i<I; i++)
-        free1DArray(x[i]);
-    fftwf_free(x);
-}
-
-void free3DArray(float*** x, int I, int J)
+void IEMCONVOLVE(free2DArray) (float** x, int I)
 {
     for (int i=0; i<I; i++)
-        free2DArray(x[i],J);
+        IEMCONVOLVE(free1DArray)(x[i]);
+    fftwf_free(x);
+}
+
+void IEMCONVOLVE(free3DArray) (float*** x, int I, int J)
+{
+    for (int i=0; i<I; i++)
+        IEMCONVOLVE(free2DArray)(x[i],J);
     fftwf_free(x);
 }

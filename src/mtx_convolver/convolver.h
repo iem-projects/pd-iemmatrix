@@ -69,18 +69,18 @@ typedef struct Conv_data {
 } conv_data;
 /* crossfade functions */
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void crossFade(float *y, float *y_new, float *w_old, float *w_new, int len);
+void IEMCONVOLVE(crossFade) (float *y, float *y_new, float *w_old, float *w_new, int len);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void registerCrossFade(conv_data *conv);
+void IEMCONVOLVE(registerCrossFade) (conv_data *conv);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-_Bool wasCrossFadeRegistered(conv_data *conv);
+_Bool IEMCONVOLVE(wasCrossFadeRegistered)(conv_data *conv);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 /* PARTITIONED CONVOLUTION CORE */
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void convProcess(conv_data *conv, float **in, float **out);
+void IEMCONVOLVE(convProcess) (conv_data *conv, float **in, float **out);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-conv_data *initConvolution(int blocksize, int num_partitions, int xfade_length, int num_inputs, int num_outputs, _Bool coherent_xfade);
+conv_data *IEMCONVOLVE(initConvolution) (int blocksize, int num_partitions, int xfade_length, int num_inputs, int num_outputs, _Bool coherent_xfade);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void freeConvolution(conv_data *conv);
+void IEMCONVOLVE(freeConvolution) (conv_data *conv);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void setImpulseResponseZeroPad(conv_data *conv, float ***inh, int num_samples, _Bool no_xfade_init);
+void IEMCONVOLVE(setImpulseResponseZeroPad) (conv_data *conv, float ***inh, int num_samples, _Bool no_xfade_init);

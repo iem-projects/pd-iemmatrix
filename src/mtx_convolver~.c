@@ -121,13 +121,13 @@ t_int *mtx_convolver_tilde_perform(t_int *w) {
         in[n] = (float)0;
       }
     }
-    if (wasCrossFadeRegistered(x->conv))
+    if (IEMCONVOLVE(wasCrossFadeRegistered) (x->conv))
       logpost(x, PD_NORMAL, "[%s] have to crossfade to a new IR",objname);
     #ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
       logpost(x, PD_NORMAL, "[%s] L=%d, P=%d, ins=%d, outs=%d",objname,x->conv->blocksize,x->conv->num_partitions,x->conv->num_inputs,x->conv->num_outputs);
       logpost(x, PD_NORMAL, "[%s] conv=%d, inbuf=%d, outpuf=%d",objname,x->conv,x->conv_input_buffer, x->conv_output_buffer);
     #endif
-    convProcess(x->conv, x->conv_input_buffer, x->conv_output_buffer);
+    IEMCONVOLVE(convProcess) (x->conv, x->conv_input_buffer, x->conv_output_buffer);
     for (int i = 0; i <available_outputs; i++) {
       float *out = x->conv_output_buffer[i];
       t_sample *pd_out = x->inout_buffers[i + x->ins];
@@ -151,11 +151,11 @@ t_int *mtx_convolver_tilde_perform(t_int *w) {
 
 void mtx_convolver_init(t_mtx_convolver_tilde *x) {
   if (x->conv)
-    freeConvolution(x->conv);
+    IEMCONVOLVE(freeConvolution) (x->conv);
   x->conv = 0;
   if ((x->blocksize > 0) && (x->h_num_ins > 0) && (x->h_num_outs > 0) && (x->h_len >0)) {
     int num_partitions = ceildiv(x->h_len, x->blocksize);
-    x->conv = initConvolution(x->blocksize, num_partitions, x->blocksize, x->h_num_ins, x->h_num_outs, x->coherent_xfade);
+    x->conv = IEMCONVOLVE(initConvolution) (x->blocksize, num_partitions, x->blocksize, x->h_num_ins, x->h_num_outs, x->coherent_xfade);
   }
 }
 
@@ -173,18 +173,18 @@ int mtx_convolver_resize(t_mtx_convolver_tilde *x) {
         return 0; // keep convolver, it's size is perfect, exit!
     } else { // resize required, resize buffers and free convolver
       if (x->conv_output_buffer) {
-        free2DArray(x->conv_output_buffer, x->conv->num_outputs);
+        IEMCONVOLVE(free2DArray) (x->conv_output_buffer, x->conv->num_outputs);
         x->conv_output_buffer=0;
       }
       if (x->conv_input_buffer) {
-        free2DArray(x->conv_input_buffer, x->conv->num_inputs);
+        IEMCONVOLVE(free2DArray) (x->conv_input_buffer, x->conv->num_inputs);
         x->conv_input_buffer=0;
       }
-      freeConvolution(x->conv);
+      IEMCONVOLVE(freeConvolution(x->conv));
       x->conv = 0;
       if ((x->blocksize)&&(x->h_num_ins)&&(x->h_num_outs)) {
-        x->conv_input_buffer = new2DArray(x->h_num_ins, x->blocksize);
-        x->conv_output_buffer = new2DArray(x->h_num_outs, x->blocksize);
+        x->conv_input_buffer = IEMCONVOLVE(new2DArray) (x->h_num_ins, x->blocksize);
+        x->conv_output_buffer = IEMCONVOLVE(new2DArray) (x->h_num_outs, x->blocksize);
       }
     }
  } // new convolver:
@@ -195,9 +195,9 @@ int mtx_convolver_resize(t_mtx_convolver_tilde *x) {
       objname,x->conv->num_inputs,x->conv->num_outputs,x->conv->num_partitions,x->conv->blocksize);
   }
   if (!x->conv_input_buffer)
-    x->conv_input_buffer = new2DArray(x->h_num_ins, x->blocksize);
+    x->conv_input_buffer = IEMCONVOLVE(new2DArray) (x->h_num_ins, x->blocksize);
   if (!x->conv_output_buffer)
-    x->conv_output_buffer = new2DArray(x->h_num_outs, x->blocksize);
+    x->conv_output_buffer = IEMCONVOLVE(new2DArray) (x->h_num_outs, x->blocksize);
  }
  return 1;
 }
@@ -261,7 +261,7 @@ void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
           logpost(x, PD_NORMAL, "[%s] convolver has ins=%d, outs=%d, partitions=%d, blocksize=%d",
             objname,x->conv->num_inputs,x->conv->num_outputs,x->conv->num_partitions,x->conv->blocksize);
         #endif
-        setImpulseResponseZeroPad(x->conv, x->h, x->h_len, resized); // init with no xfade when conv was resized
+          IEMCONVOLVE(setImpulseResponseZeroPad) (x->conv, x->h, x->h_len, resized); // init with no xfade when conv was resized
         x->set_ir_at_dsp_start = 0;
       }
   }
@@ -272,13 +272,13 @@ void mtx_convolver_tilde_free(t_mtx_convolver_tilde *x) {
   if (x->inout_buffers)
     free(x->inout_buffers);
   if (x->h)
-    free3DArray(x->h, x->h_num_outs, x->h_num_ins);
+    IEMCONVOLVE(free3DArray) (x->h, x->h_num_outs, x->h_num_ins);
   if (x->conv)
-    freeConvolution(x->conv);
+    IEMCONVOLVE(freeConvolution) (x->conv);
   if (x->conv_input_buffer)
-    free2DArray(x->conv_input_buffer, x->h_num_ins);
+    IEMCONVOLVE(free2DArray) (x->conv_input_buffer, x->h_num_ins);
   if (x->conv_output_buffer)
-    free2DArray(x->conv_output_buffer, x->h_num_outs);
+    IEMCONVOLVE(free2DArray) (x->conv_output_buffer, x->h_num_outs);
 }
 
 int mtx_convolver_check(t_mtx_convolver_tilde*x, int argc, t_atom*argv, unsigned int tests) {
@@ -332,8 +332,8 @@ void mtx_convolver_tilde_array3(t_mtx_convolver_tilde *x, t_symbol *s, int argc,
          h_num_outs, h_len);
     #endif
     if (x->h)
-      free3DArray(x->h, x->h_num_outs, x->h_num_ins);
-    x->h = new3DArray(h_num_outs, h_num_ins, h_len);
+      IEMCONVOLVE(free3DArray) (x->h, x->h_num_outs, x->h_num_ins);
+    x->h = IEMCONVOLVE(new3DArray) (h_num_outs, h_num_ins, h_len);
     x->h_num_ins = h_num_ins;
     if (x->h_num_outs!=h_num_outs) {
       resized_outs=1;
@@ -356,7 +356,7 @@ void mtx_convolver_tilde_array3(t_mtx_convolver_tilde *x, t_symbol *s, int argc,
           logpost(x, PD_NORMAL, "[%s] attempting IR update with dsp on, ins=%d, outs=%d, partitions=%d, blocksize=%d",
             objname,x->conv->num_inputs,x->conv->num_outputs,x->conv->num_partitions,x->conv->blocksize);
         #endif
-        setImpulseResponseZeroPad(x->conv, x->h, x->h_len, resized); // init with no xfade if conv was resized, with xfade otherwise
+        IEMCONVOLVE(setImpulseResponseZeroPad) (x->conv, x->h, x->h_len, resized); // init with no xfade if conv was resized, with xfade otherwise
         if (resized_outs) {
           #ifdef MTX_CONVOLVER_DEBUG_VERBOSITY
             logpost(x, PD_NORMAL, "[%s] convolver changed, calling dsp startup",objname);

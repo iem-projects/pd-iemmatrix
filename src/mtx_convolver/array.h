@@ -14,18 +14,36 @@ Institute of Electronic Music and Acoustics (IEM)
 University of Music and Performing Arts Graz
 2024
 */
+#ifndef _mtx_convolver_array_h
+#define _mtx_convolver_array_h
 
 #if HAVE_FFTWF
 # include <fftw3.h>
 #else
-/* from fftw3.h */
-typedef float fftwf_complex[2];
+# include "stub/fftwf.h"
 #endif
+typedef void*(*t_fftwf_malloc)(size_t);
+typedef void(*t_fftwf_free)(void*);
+typedef void(*t_fftwf_destroy_plan)(fftwf_plan);
+typedef void(*t_fftwf_execute)(const fftwf_plan);
+typedef fftwf_plan(*t_fftwf_plan_dft_r2c_1d)(int, float*, fftwf_complex*, unsigned);
+typedef fftwf_plan(*t_fftwf_plan_dft_c2r_1d)(int, fftwf_complex*, float*, unsigned);
+
+typedef struct _fftwf_functions {
+  t_fftwf_malloc malloc;
+  t_fftwf_free free;
+  t_fftwf_destroy_plan destroy_plan;
+  t_fftwf_execute execute;
+  t_fftwf_plan_dft_r2c_1d plan_dft_r2c_1d;
+  t_fftwf_plan_dft_c2r_1d plan_dft_c2r_1d;
+} t_fftwf_functions;
 
 #define IEMCONVOLVE(x) mtxconv_##x
 
 /* HELPER FUNCTIONS, GENERATION, COPYING, RESETTING */
 /*-----------------------------------------------------------------------------------------------------------------------------*/
+int IEMCONVOLVE(array_set_fftwf_functions) (const t_fftwf_functions*funs);
+
 void IEMCONVOLVE(cos2win) (float* w, int len);
 void IEMCONVOLVE(sin2win) (float* w, int len);
 void IEMCONVOLVE(coswin) (float* w, int len);
@@ -108,3 +126,6 @@ void IEMCONVOLVE(free5DComplexArray) (fftwf_complex***** x, int I,int J,int K,in
 void IEMCONVOLVE(free1DArray) (float* x);
 void IEMCONVOLVE(free2DArray) (float** x, int I);
 void IEMCONVOLVE(free3DArray) (float*** x, int I, int J);
+
+
+#endif /* _mtx_convolver_array_h */

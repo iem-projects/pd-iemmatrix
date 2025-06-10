@@ -24,11 +24,23 @@ University of Music and Performing Arts Graz
 #include <stdlib.h>
 #include <math.h>
 
-#ifdef HAVE_FFTWF
+#ifdef USE_FFTWF
+static const t_fftwf_malloc my_malloc = fftwf_malloc;
+static const t_fftwf_free my_free = fftwf_free;
 #else
-#define fftwf_malloc malloc
-#define fftwf_free free
+static t_fftwf_malloc my_malloc = malloc;
+static t_fftwf_free my_free = free;
 #endif
+
+int IEMCONVOLVE(array_set_fftwf_functions) (const t_fftwf_functions*funs) {
+#ifndef USE_FFTWF
+  if(funs && funs->malloc)
+    my_malloc = funs->malloc;
+  if(funs && funs->free)
+    my_free = funs->free;
+#endif
+  return 1;
+}
 
 
 /* HELPER FUNCTIONS, GENERATION, COPYING, RESETTING */
@@ -59,7 +71,6 @@ void IEMCONVOLVE(sinwin) (float* w, int len){
 }
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void IEMCONVOLVE(addArray) (float * array1, float * array2, int len, float * result){
-
     for (int i=0; i<len; i++)
     result[i]=array1[i]+array2[i];
 }
@@ -283,13 +294,15 @@ float IEMCONVOLVE(squared2DError) (float **x,float **y, int len1, int len2){
 
 fftwf_complex* IEMCONVOLVE(new1DComplexArray) (int I)
 {
-    fftwf_complex* x= (fftwf_complex*) fftwf_malloc(sizeof(fftwf_complex) * I);
+    if(!my_malloc)return 0;
+    fftwf_complex* x= (fftwf_complex*) my_malloc(sizeof(fftwf_complex) * I);
     return x;
 }
 
 fftwf_complex** IEMCONVOLVE(new2DComplexArray) (int I,int J)
 {
-    fftwf_complex** x= (fftwf_complex**) fftwf_malloc(sizeof(fftwf_complex*) * I);
+    if(!my_malloc)return 0;
+    fftwf_complex** x= (fftwf_complex**) my_malloc(sizeof(fftwf_complex*) * I);
     for(int i=0; i<I; i++)
         x[i]= IEMCONVOLVE(new1DComplexArray) (J);
     return x;
@@ -297,21 +310,24 @@ fftwf_complex** IEMCONVOLVE(new2DComplexArray) (int I,int J)
 
 fftwf_complex*** IEMCONVOLVE(new3DComplexArray) (int I,int J,int K)
 {
-    fftwf_complex*** x= (fftwf_complex***) fftwf_malloc(sizeof(fftwf_complex**) * I);
+    if(!my_malloc)return 0;
+    fftwf_complex*** x= (fftwf_complex***) my_malloc(sizeof(fftwf_complex**) * I);
     for(int i=0; i<I; i++)
         x[i]= IEMCONVOLVE(new2DComplexArray) (J,K);
     return x;
 }
 
 fftwf_complex**** IEMCONVOLVE(new4DComplexArray) (int I,int J,int K,int L){
-    fftwf_complex**** x= (fftwf_complex****) fftwf_malloc(sizeof(fftwf_complex***) * I);
+    if(!my_malloc)return 0;
+    fftwf_complex**** x= (fftwf_complex****) my_malloc(sizeof(fftwf_complex***) * I);
     for(int i=0; i<I; i++)
         x[i]= IEMCONVOLVE(new3DComplexArray) (J,K,L);
     return x;
 }
 
 fftwf_complex***** IEMCONVOLVE(new5DComplexArray) (int I,int J,int K,int L, int M){
-    fftwf_complex***** x= (fftwf_complex*****) fftwf_malloc(sizeof(fftwf_complex****) * I);
+    if(!my_malloc)return 0;
+    fftwf_complex***** x= (fftwf_complex*****) my_malloc(sizeof(fftwf_complex****) * I);
     for(int i=0; i<I; i++)
         x[i]= IEMCONVOLVE(new4DComplexArray) (J,K,L,M);
     return x;
@@ -326,13 +342,15 @@ fftwf_complex***** IEMCONVOLVE(new5DComplexArray) (int I,int J,int K,int L, int 
 
 float* IEMCONVOLVE(new1DArray) (int I)
 {
-    float* x= (float*) fftwf_malloc(sizeof(float) * I);
+    if(!my_malloc)return 0;
+    float* x= (float*) my_malloc(sizeof(float) * I);
     return x;
 }
 
 float** IEMCONVOLVE(new2DArray) (int I,int J)
 {
-    float** x= (float**) fftwf_malloc(sizeof(float*) * I);
+    if(!my_malloc)return 0;
+    float** x= (float**) my_malloc(sizeof(float*) * I);
     for(int i=0; i<I; i++)
         x[i]= IEMCONVOLVE(new1DArray) (J);
     return x;
@@ -340,7 +358,8 @@ float** IEMCONVOLVE(new2DArray) (int I,int J)
 
 float*** IEMCONVOLVE(new3DArray) (int I,int J,int K)
 {
-    float*** x= (float***) fftwf_malloc(sizeof(float**) * I);
+    if(!my_malloc)return 0;
+    float*** x= (float***) my_malloc(sizeof(float**) * I);
     for(int i=0; i<I; i++)
         x[i]= IEMCONVOLVE(new2DArray) (J,K);
     return x;
@@ -348,7 +367,8 @@ float*** IEMCONVOLVE(new3DArray) (int I,int J,int K)
 
 float**** IEMCONVOLVE(new4DArray) (int I,int J,int K,int L)
 {
-    float**** x= (float****) fftwf_malloc(sizeof(float***) * I);
+    if(!my_malloc)return 0;
+    float**** x= (float****) my_malloc(sizeof(float***) * I);
     for(int i=0; i<I; i++)
         x[i]= IEMCONVOLVE(new3DArray) (J,K,L);
     return x;
@@ -357,53 +377,61 @@ float**** IEMCONVOLVE(new4DArray) (int I,int J,int K,int L)
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void IEMCONVOLVE(free1DComplexArray) (fftwf_complex* x)
 {
-    fftwf_free(x);
+    if(!my_free)return;
+    my_free(x);
 }
 
 void IEMCONVOLVE(free2DComplexArray) (fftwf_complex** x, int I)
 {
     for (int i=0; i<I; i++)
         IEMCONVOLVE(free1DComplexArray)(x[i]);
-    fftwf_free(x);
+    if(!my_free)return;
+    my_free(x);
 }
 
 void IEMCONVOLVE(free3DComplexArray) (fftwf_complex*** x, int I,int J)
 {
     for (int i=0; i<I; i++)
         IEMCONVOLVE(free2DComplexArray)(x[i],J);
-    fftwf_free(x);
+    if(!my_free)return;
+    my_free(x);
 }
 
 void IEMCONVOLVE(free4DComplexArray) (fftwf_complex**** x, int I,int J,int K)
 {
     for (int i=0; i<I; i++)
         IEMCONVOLVE(free3DComplexArray)(x[i],J,K);
-    fftwf_free(x);
+    if(!my_free)return;
+    my_free(x);
 }
 void IEMCONVOLVE(free5DComplexArray) (fftwf_complex***** x, int I,int J,int K,int L)
 {
     for (int i=0; i<I; i++)
         IEMCONVOLVE(free4DComplexArray)(x[i],J,K,L);
-    fftwf_free(x);
+    if(!my_free)return;
+    my_free(x);
 }
 
 
 
 void IEMCONVOLVE(free1DArray) (float* x)
 {
-    fftwf_free(x);
+    if(!my_free)return;
+    my_free(x);
 }
 
 void IEMCONVOLVE(free2DArray) (float** x, int I)
 {
     for (int i=0; i<I; i++)
         IEMCONVOLVE(free1DArray)(x[i]);
-    fftwf_free(x);
+    if(!my_free)return;
+    my_free(x);
 }
 
 void IEMCONVOLVE(free3DArray) (float*** x, int I, int J)
 {
     for (int i=0; i<I; i++)
         IEMCONVOLVE(free2DArray)(x[i],J);
-    fftwf_free(x);
+    if(!my_free)return;
+    my_free(x);
 }

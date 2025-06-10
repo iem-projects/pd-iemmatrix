@@ -16,11 +16,12 @@
 #include "iemmatrix.h"
 #include <math.h>
 #include <stdlib.h>
-#ifdef HAVE_GSL_BESSEL
-#include <gsl/gsl_sf_bessel.h>
-#endif
+#include "iemmatrix_stub.h"
 
 static t_class *mtx_bessel_class;
+
+static t_besselfn my_jn = 0;
+static t_besselfn my_yn = 0;
 
 typedef struct _MTXBessel_ MTXBessel;
 struct _MTXBessel_ {
@@ -100,7 +101,7 @@ static void *newMTXBessel (t_symbol *s, int argc, t_atom *argv)
   case 'H':
   case 'h':
     x->list_h_re_out = outlet_new (&x->x_obj, gensym("matrix"));
-  /* coverity[unterminated_case]: H has both real&imag outlet */
+  /* coverity[unterminated_case]: H has both real&imag outlet */ /* fall through */
   case 'Y':
   case 'y':
     x->list_h_im_out = outlet_new (&x->x_obj, gensym("matrix"));
@@ -138,64 +139,48 @@ static void mTXBesselMatrix (MTXBessel *x, t_symbol *s,
   columns = atom_getint (argv++);
   size = rows * columns;
 
-#if defined HAVE_MATH_BESSEL || defined HAVE_GSL_BESSEL
-
-  if (x->l!=columns) {
-    deleteMTXBesseldata(x);
-    x->l=columns;
-    allocMTXBesseldata(x);
-  }
-  for (n=0; n<x->l; n++) {
-    x->kr[n]=(double) atom_getfloat(argv+n);
-  }
-
-#ifdef HAVE_GSL_BESSEL
-  if (x->h_re!=0)
-    for (m=0; m<x->l; m++)
-      for (n=0; n<x->nmax+1; n++) {
-	x->h_re[n+m*(x->nmax+1)]=gsl_sf_bessel_Jn(n,x->kr[m]);
-      }
-
-  if (x->h_im!=0)
-    for (m=0; m<x->l; m++)
-      for (n=0; n<x->nmax+1; n++) {
-	x->h_im[n+m*(x->nmax+1)]=gsl_sf_bessel_Yn(n,x->kr[m]);
-      }
-#else
-  if (x->h_re!=0)
-    for (m=0; m<x->l; m++)
-      for (n=0; n<x->nmax+1; n++) {
-	x->h_re[n+m*(x->nmax+1)]=jn(n,x->kr[m]);
-      }
-
-  if (x->h_im!=0)
-    for (m=0; m<x->l; m++)
-      for (n=0; n<x->nmax+1; n++) {
-	x->h_im[n+m*(x->nmax+1)]=yn(n,x->kr[m]);
-      }
-#endif
-
-
-  if (x->h_re!=0) {
-    SETFLOAT(x->list_h_re+1,(t_float)(x->nmax+1));
-    SETFLOAT(x->list_h_re,(t_float)x->l);
-    for (n=0; n<x->l*(x->nmax+1); n++) {
-      SETFLOAT(x->list_h_re+n+2,(t_float)x->h_re[n]);
+  if(my_jn && my_yn) {
+    if (x->l!=columns) {
+      deleteMTXBesseldata(x);
+      x->l=columns;
+      allocMTXBesseldata(x);
     }
-  }
-
-  if (x->h_im!=0) {
-    SETFLOAT(x->list_h_im+1,(t_float)(x->nmax+1));
-    SETFLOAT(x->list_h_im,(t_float)x->l);
-    for (n=0; n<x->l*(x->nmax+1); n++) {
-      SETFLOAT(x->list_h_im+n+2,(t_float)x->h_im[n]);
+    for (n=0; n<x->l; n++) {
+      x->kr[n]=(double) atom_getfloat(argv+n);
     }
-  }
 
-  mTXBesselBang(x);
-#else
-  pd_error(x, "[mtx_bessel]: implementation requires math.h that implements jn and yn Bessel functions or gsl_sf_bessel.h");
-#endif
+    if (x->h_re!=0)
+      for (m=0; m<x->l; m++)
+        for (n=0; n<x->nmax+1; n++) {
+          x->h_re[n+m*(x->nmax+1)]=my_jn(n,x->kr[m]);
+        }
+
+    if (x->h_im!=0)
+      for (m=0; m<x->l; m++)
+        for (n=0; n<x->nmax+1; n++) {
+          x->h_im[n+m*(x->nmax+1)]=my_yn(n,x->kr[m]);
+        }
+
+    if (x->h_re!=0) {
+      SETFLOAT(x->list_h_re+1,(t_float)(x->nmax+1));
+      SETFLOAT(x->list_h_re,(t_float)x->l);
+      for (n=0; n<x->l*(x->nmax+1); n++) {
+        SETFLOAT(x->list_h_re+n+2,(t_float)x->h_re[n]);
+      }
+    }
+
+    if (x->h_im!=0) {
+      SETFLOAT(x->list_h_im+1,(t_float)(x->nmax+1));
+      SETFLOAT(x->list_h_im,(t_float)x->l);
+      for (n=0; n<x->l*(x->nmax+1); n++) {
+        SETFLOAT(x->list_h_im+n+2,(t_float)x->h_im[n]);
+      }
+    }
+
+    mTXBesselBang(x);
+  } else {
+    pd_error(x, "[mtx_bessel]: implementation requires math.h that implements jn and yn Bessel functions or gsl_sf_bessel.h");
+  }
 }
 
 void mtx_bessel_setup (void)
@@ -209,6 +194,9 @@ void mtx_bessel_setup (void)
   class_addbang (mtx_bessel_class, (t_method) mTXBesselBang);
   class_addmethod (mtx_bessel_class, (t_method) mTXBesselMatrix,
                    gensym("matrix"), A_GIMME,0);
+
+  my_jn = iemmatrix_get_stub("jn", mtx_bessel_class);
+  my_yn = iemmatrix_get_stub("yn", mtx_bessel_class);
 }
 
 void iemtx_bessel_setup(void)

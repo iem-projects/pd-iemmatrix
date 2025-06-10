@@ -1,0 +1,10 @@
+# build system
+@MINGW@gcc
+@MINGW@pkgconf
+@MINGW@ntldd
+
+# libraries
+@MINGW@libsndfile
+@MINGW@fftw
+@MINGW@gsl
+

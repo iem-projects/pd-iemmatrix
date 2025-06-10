@@ -1,0 +1,9 @@
+tap "iem/fatbrew", "https://git.iem.at/dependencies/fatbrew"
+
+# build-system
+brew "pkg-config"
+
+# the real stuff
+brew "iem/fatbrew/fftw"
+brew "iem/fatbrew/libsndfile"
+brew "iem/fatbrew/gsl"

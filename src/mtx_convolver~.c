@@ -40,14 +40,8 @@ University of Music and Performing Arts Graz
 #include "iemmatrix.h"
 #include "mtx_convolver/array.h"
 #include "mtx_convolver/convolver.h"
-#include <math.h>
+
 #include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#ifdef _WIN32
-/* or should we use the security enhanced _snprintf_s() ?? */
-# define snprintf _snprintf
-#endif
 
 //# define MTX_CONVOLVER_DEBUG_VERBOSITY
 

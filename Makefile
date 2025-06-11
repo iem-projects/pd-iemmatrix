@@ -285,3 +285,48 @@ iemmatrix_sources.h:
 
 %: %.in
 	sed -e 's|@PACKAGE_NAME@|$(lib.name)|g' -e 's|@PACKAGE_VERSION@|$(lib.version)|g' $< > $@
+
+# stub-libraries help with weak linking against some optional libraries
+# - dylink against their stubbed library
+# - can be dlopen()ed
+# - have a well-known name and path
+# - stub-libraries provide the addresses of (some) symbols in the stubbed library
+ifneq ($(filter %.$(shared.extension), .$(extension)), )
+  # $(extension) already ends with $(shared.extension), no need to duplicate it
+  shared.fullextension = $(extension)
+else
+  shared.fullextension = $(extension).$(shared.extension)
+endif
+
+c.flags += -DSHARED_LIBRARY_EXTENSION='"$(shared.fullextension)"'
+
+
+
+
+lib$(lib.name)Stub_%.$(shared.fullextension): stub/%.$(object.extension)
+	$(info ++++ info: linking objects in shared lib $@)
+	$(compile-c) $(shared.ldflags) -o $@ $< $(c.ldlibs) $(shared.ldlibs) $(stub.ldlibs)
+
+
+lib$(lib.name)Stub_fftw.$(shared.fullextension): stub.ldlibs = $(FFTW_LIBS)
+lib$(lib.name)Stub_fftwf.$(shared.fullextension): stub.ldlibs = $(FFTWF_LIBS)
+lib$(lib.name)Stub_sndfile.$(shared.fullextension): stub.ldlibs = $(SNDFILE_LIBS)
+lib$(lib.name)Stub_gsl.$(shared.fullextension): stub.ldlibs = $(GSL_LIBS)
+
+stub.libs =
+stub.libs += lib$(lib.name)Stub_fftw.$(shared.fullextension)
+stub.libs += lib$(lib.name)Stub_fftwf.$(shared.fullextension)
+stub.libs += lib$(lib.name)Stub_sndfile.$(shared.fullextension)
+stub.libs += lib$(lib.name)Stub_gsl.$(shared.fullextension)
+
+executables += $(stub.libs)
+
+.PHONY: stubs
+stubs: $(stub.libs)
+post: $(stub.libs)
+
+.PHONY: clean.local
+clean: clean.local
+clean.local:
+	rm -f $(stub.libs)
+	rm -f $(stub.libs:%.$(shared.fullextension)=%.$(object.extension))

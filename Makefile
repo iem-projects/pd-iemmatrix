@@ -108,6 +108,7 @@ lib.setup.sources = \
 common.sources = \
 	src/iemmatrix_binops.c \
 	src/iemmatrix_utility.c \
+	src/iemmatrix_stub.c \
 	$(empty)
 
 # input source file (class name == source file basename)
@@ -288,6 +289,7 @@ datafiles += \
 # include Makefile.pdlibbuilder from submodule directory 'pd-lib-builder'
 PDLIBBUILDER_DIR=pd-lib-builder/
 include $(PDLIBBUILDER_DIR)/Makefile.pdlibbuilder
+
 
 src/iemmatrix.c: iemmatrix_sources.h VERSION.txt iemmatrix-meta.pd
 

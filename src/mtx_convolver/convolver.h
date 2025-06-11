@@ -55,7 +55,7 @@ typedef struct Conv_data {
   float *w_new;   // fade-in window
   int current_rb; // current_rb ring buffer position
   int current_cf;
-#if HAVE_FFTWF
+
   fftwf_complex ***xf;   // L+1 positive-half DFT, partition input ring buffer
   fftwf_complex *****hf; // L+1 positive-half DFT, partition stack of h
   fftwf_complex *yftemp; // L+1 positive-half DFT output buffer
@@ -65,7 +65,6 @@ typedef struct Conv_data {
   fftwf_plan fftplan_htemp; // FFTW DFT plan for impulse response
   fftwf_plan ifftplan_y;    // FFTW iDFT plan for current output signal
   fftwf_plan ifftplan_y_cf;
-#endif
 } conv_data;
 /* crossfade functions */
 /*-----------------------------------------------------------------------------------------------------------------------------*/

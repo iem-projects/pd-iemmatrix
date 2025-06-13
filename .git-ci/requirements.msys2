@@ -6,5 +6,5 @@
 # libraries
 @MINGW@libsndfile
 @MINGW@fftw
-@MINGW@gsl
+#OPT:@MINGW@gsl
 

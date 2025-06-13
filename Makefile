@@ -288,7 +288,7 @@ c.flags += -DSHARED_LIBRARY_EXTENSION='"$(shared.fullextension)"'
 
 
 lib$(lib.name)Stub_%.$(shared.fullextension): stub/%.$(object.extension)
-	$(info ++++ info: linking objects in shared lib $@)
+	$(info ++++ info: linking objects with ($<), ($(c.ldlibs)), ($(shared.ldibs)) and ($(stub.ldlibs)) to shared lib $@)
 	$(compile-c) $(shared.ldflags) -o $@ $< $(c.ldlibs) $(shared.ldlibs) $(stub.ldlibs)
 
 

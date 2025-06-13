@@ -4,30 +4,45 @@
 
 # library name
 lib.name = iemmatrix
-lib.version = unknown
+# use 'lib.version' to set the library version from the cmdline
+#lib.version =
 
 # mtx_*~ and friends make problems...
 make-lib-executable=yes
 
-PKG_CONFIG ?= pkg-config
-with-sndfile=yes
-with-gsl=yes
-with-fftw=yes
-
-
 cflags =
 ldlibs =
+ifneq ($(strip $(lib.version)),)
+cflags += -DVERSION='"$(lib.version)"'
+endif
 
 cflags += -I. -Isrc
 
+#####################################################################
+## external dependencies (used by STUB LIBRARIES at the end)
+
+# set any of these to 'no' to disable the library
+# typically this is not needed, as
+# - dependencies are only used if found
+# - we do "weak" linking (so the external can still be used
+#   if the dependencies are not present on the host systems
+with-sndfile := yes
+with-gsl := yes
+with-fftw := yes
+
+# make pkg-config overridable (for cross-building)
+PKG_CONFIG ?= pkg-config
 
 # libsndfile
-have-sndfile := $(shell $(PKG_CONFIG) --exists sndfile && echo yes || echo no)
 ifneq ($(with-sndfile),no)
+have-sndfile := $(shell $(PKG_CONFIG) --exists sndfile && echo yes || echo no)
+endif
 ifeq ($(have-sndfile),yes)
+$(info ++++ info: found libsndfile)
 SNDFILE_CFLAGS = $(shell $(PKG_CONFIG) --cflags sndfile)
 SNDFILE_LIBS = $(shell $(PKG_CONFIG) --libs sndfile)
-endif
+else
+$(info ++++ info: missing libsndfile)
 endif
 ifneq ($(SNDFILE_LIBS),)
 SNDFILE_CFLAGS += -DUSE_SNDFILE=1 -DHAVE_SNDFILE_H=1
@@ -38,8 +53,14 @@ cflags += $(SNDFILE_CFLAGS)
 
 # GNU scientific library
 ifneq ($(with-gsl),no)
+have-gsl := $(shell $(PKG_CONFIG) --exists gsl && echo yes || echo no)
+endif
+ifeq ($(have-gsl),yes)
+$(info ++++ info: found GSL)
 GSL_CFLAGS = $(shell $(PKG_CONFIG) --cflags gsl)
 GSL_LIBS = $(shell $(PKG_CONFIG) --libs gsl)
+else
+$(info ++++ info: missing GSL)
 endif
 ifneq ($(GSL_LIBS),)
 have-gsl=yes
@@ -53,10 +74,16 @@ cflags += -DHAVE_MATH_BESSEL=1
 
 # FFTW
 ifneq ($(with-fftw),no)
+have-fftw3 := $(shell $(PKG_CONFIG) --exists fftw3 && echo yes || echo no)
+endif
+ifeq ($(have-fftw3),yes)
+$(info ++++ info: found FFTW3)
 FFTW_CFLAGS = $(shell $(PKG_CONFIG) --cflags fftw3)
 FFTW_LIBS = $(shell $(PKG_CONFIG) --libs fftw3)
 FFTWF_CFLAGS = $(shell $(PKG_CONFIG) --cflags fftw3f)
 FFTWF_LIBS = $(shell $(PKG_CONFIG) --libs fftw3f)
+else
+$(info ++++ info: missing FFTW3)
 endif
 ifneq ($(FFTW_LIBS),)
 have-fftw=yes
@@ -72,6 +99,8 @@ have-fftwf=no
 endif
 cflags += $(FFTW_CFLAGS) $(FFTWF_CFLAGS)
 
+##
+#####################################################################
 
 lib.setup.sources = \
 	src/iemmatrix.c
@@ -268,47 +297,6 @@ iemmatrix_sources.h:
 %: %.in
 	sed -e 's|@PACKAGE_NAME@|$(lib.name)|g' -e 's|@PACKAGE_VERSION@|$(lib.version)|g' $< > $@
 
-# stub-libraries help with weak linking against some optional libraries
-# - dylink against their stubbed library
-# - can be dlopen()ed
-# - have a well-known name and path
-# - stub-libraries provide the addresses of (some) symbols in the stubbed library
-ifneq ($(filter %.$(shared.extension), .$(extension)), )
-  # $(extension) already ends with $(shared.extension), no need to duplicate it
-  shared.fullextension = $(extension)
-else
-  shared.fullextension = $(extension).$(shared.extension)
-endif
 
-c.flags += -DSHARED_LIBRARY_EXTENSION='"$(shared.fullextension)"'
-
-
-
-
-lib$(lib.name)Stub_%.$(shared.fullextension): stub/%.$(object.extension)
-	$(info ++++ info: linking objects in shared lib $@)
-	$(compile-c) $(shared.ldflags) -o $@ $< $(c.ldlibs) $(shared.ldlibs) $(stub.ldlibs)
-
-
-lib$(lib.name)Stub_fftw.$(shared.fullextension): stub.ldlibs = $(FFTW_LIBS)
-lib$(lib.name)Stub_fftwf.$(shared.fullextension): stub.ldlibs = $(FFTWF_LIBS)
-lib$(lib.name)Stub_sndfile.$(shared.fullextension): stub.ldlibs = $(SNDFILE_LIBS)
-lib$(lib.name)Stub_gsl.$(shared.fullextension): stub.ldlibs = $(GSL_LIBS)
-
-stub.libs =
-stub.libs += lib$(lib.name)Stub_fftw.$(shared.fullextension)
-stub.libs += lib$(lib.name)Stub_fftwf.$(shared.fullextension)
-stub.libs += lib$(lib.name)Stub_sndfile.$(shared.fullextension)
-stub.libs += lib$(lib.name)Stub_gsl.$(shared.fullextension)
-
-executables += $(stub.libs)
-
-.PHONY: stubs
-stubs: $(stub.libs)
-post: $(stub.libs)
-
-.PHONY: clean.local
-clean: clean.local
-clean.local:
-	rm -f $(stub.libs)
-	rm -f $(stub.libs:%.$(shared.fullextension)=%.$(object.extension))
+# build stub libraries
+-include Make.stublibs

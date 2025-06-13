@@ -1,0 +1,76 @@
+#####################################################################
+# STUB LIBRARIES
+
+# this is a makefile snippet (to be included by the main Makefile
+# it depends on pd-lib-builder,...
+
+
+# stub-libraries help with weak linking against some optional libraries
+# - dylink against their stubbed library
+# - can be dlopen()ed
+# - have a well-known name and path
+# - stub-libraries provide the addresses of (some) symbols in the stubbed library
+ifneq ($(filter %.$(shared.extension), .$(extension)), )
+  # $(extension) already ends with $(shared.extension), no need to duplicate it
+  shared.fullextension = $(extension)
+else
+  shared.fullextension = $(extension).$(shared.extension)
+endif
+
+c.flags += -DSHARED_LIBRARY_EXTENSION='"$(shared.fullextension)"'
+
+lib$(lib.name)Stub_%.$(shared.fullextension): stub/%.$(object.extension)
+	$(info ++++ info: linking stub library $@: $<, $(c.ldlibs), $(shared.ldlibs), $(stub.ldlibs))
+	$(compile-c) $(shared.ldflags) -o $@ $< $(c.ldlibs) $(shared.ldlibs) $(stub.ldlibs)
+
+# sometimes dependencies for the stub libraries are not picked up correctly,
+# and the stub libraries are built with the default shared-library dependencies
+# (leaving out our stub object!)
+# listing each stub-library explicitly, seems to fix this... ¯\_(ツ)_/¯
+# I don't know exactly when it happens;
+# at least I've seen this for
+# - Windows/.dll
+# - Linux/.Linux-amd64.32.so
+# however NOT for
+# - Linux/.pd_linux.so
+lib$(lib.name)Stub_fftw.$(extension).$(shared.extension): stub/fftw.$(object.extension)
+lib$(lib.name)Stub_fftwf.$(extension).$(shared.extension): stub/fftwf.$(object.extension)
+lib$(lib.name)Stub_gsl.$(extension).$(shared.extension): stub/gsl.$(object.extension)
+lib$(lib.name)Stub_sndfile.$(extension).$(shared.extension): stub/sndfile.$(object.extension)
+lib$(lib.name)Stub_fftw.$(extension): stub/fftw.$(object.extension)
+lib$(lib.name)Stub_fftwf.$(extension): stub/fftwf.$(object.extension)
+lib$(lib.name)Stub_gsl.$(extension): stub/gsl.$(object.extension)
+lib$(lib.name)Stub_sndfile.$(extension): stub/sndfile.$(object.extension)
+
+
+lib$(lib.name)Stub_fftw.$(shared.fullextension): stub.ldlibs = $(FFTW_LIBS)
+lib$(lib.name)Stub_fftwf.$(shared.fullextension): stub.ldlibs = $(FFTWF_LIBS)
+lib$(lib.name)Stub_sndfile.$(shared.fullextension): stub.ldlibs = $(SNDFILE_LIBS)
+lib$(lib.name)Stub_gsl.$(shared.fullextension): stub.ldlibs = $(GSL_LIBS)
+
+## on macOS this is needed to properly set the install_name.
+## on Linux, it is used to set the soname
+## (on Windows it doesn't do anythng, at least if the correct linking rule is invoked)
+lib$(lib.name)Stub_fftw.$(shared.fullextension): shared.lib = lib$(lib.name)Stub_fftw.$(shared.fullextension)
+lib$(lib.name)Stub_fftwf.$(shared.fullextension): shared.lib = lib$(lib.name)Stub_fftwf.$(shared.fullextension)
+lib$(lib.name)Stub_sndfile.$(shared.fullextension): shared.lib = lib$(lib.name)Stub_sndfile.$(shared.fullextension)
+lib$(lib.name)Stub_gsl.$(shared.fullextension): shared.lib = lib$(lib.name)Stub_gsl.$(shared.fullextension)
+
+stub.libs =
+stub.libs += lib$(lib.name)Stub_fftw.$(shared.fullextension)
+stub.libs += lib$(lib.name)Stub_fftwf.$(shared.fullextension)
+stub.libs += lib$(lib.name)Stub_sndfile.$(shared.fullextension)
+stub.libs += lib$(lib.name)Stub_gsl.$(shared.fullextension)
+
+executables += $(stub.libs)
+
+.PHONY: stubs
+stubs: $(stub.libs)
+post: $(stub.libs)
+
+.PHONY: clean.local
+clean: clean.local
+clean.local:
+	rm -f $(stub.libs)
+	rm -f $(stub.libs:%.$(shared.fullextension)=%.$(object.extension))
+	rm -f $(stub.libs:lib$(lib.name)Stub_%.$(shared.fullextension)=stub/%.$(object.extension))

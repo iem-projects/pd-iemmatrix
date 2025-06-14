@@ -26,6 +26,10 @@ typedef HINSTANCE module_t;
 typedef void* module_t;
 #endif
 
+# if defined(__GNUC__)
+# warning iemmatrix_stub
+#endif
+
 
 /* dlopen() well-known libraries and get symbols */
 const char*extension =

@@ -284,14 +284,10 @@ endif
 
 c.flags += -DSHARED_LIBRARY_EXTENSION='"$(shared.fullextension)"'
 
-
-
-
 lib$(lib.name)Stub_%.$(shared.fullextension): stub/%.$(object.extension)
 	@echo STUB $(stub.$(patsubst lib$(lib.name)Stub_%.$(shared.fullextension),%,$@).ldlibs)
 	$(info ++++ info: linking objects with ($<), ($(c.ldlibs)), ($(shared.ldibs)) and ($(stub.ldlibs)) to shared lib $@)
 	$(compile-c) $(shared.ldflags) -o $@ $< $(c.ldlibs) $(shared.ldlibs) $(stub.ldlibs) $(stub.$(patsubst lib$(lib.name)Stub_%.$(shared.fullextension),%,$@).ldlibs)
-
 
 lib$(lib.name)Stub_fftw.$(shared.fullextension): stub.ldlibs = $(FFTW_LIBS)
 lib$(lib.name)Stub_fftwf.$(shared.fullextension): stub.ldlibs = $(FFTWF_LIBS)

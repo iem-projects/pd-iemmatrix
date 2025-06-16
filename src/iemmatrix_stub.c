@@ -51,6 +51,11 @@ static module_t getmodule(const char*modulename, const char*path) {
 #else
   // search recursively, starting from the main program
   mod = dlopen(modulename, RTLD_NOW);
+  if(!mod && path) {
+    char fullmodulename[MAXPDSTRING];
+    if(snprintf(fullmodulename, MAXPDSTRING, "%s/%s", path, modulename) < MAXPDSTRING)
+      mod = dlopen(fullmodulename, RTLD_NOW);
+  }
 #endif
   return mod;
 }

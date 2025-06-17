@@ -125,7 +125,7 @@ static void mtxbin_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
     return;
   }
 
-  if(x->m2.col==1&&x->m2.row==1) {
+  if(x->m2.col==1 && x->m2.row==1) {
 #ifdef MTXBIN_GENERIC__INTEGEROP
     t_int offset=atom_getint(m2);
 #else

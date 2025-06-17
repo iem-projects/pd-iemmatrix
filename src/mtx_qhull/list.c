@@ -264,7 +264,7 @@ void removeEntryListFromList(list_t *list, const list_t indices)
 {
   index_t i,j;
   for (i=j=0; i<getLength(*list); i++) {
-    entry_t e= {i};
+    entry_t e = {i};
     if (notInList(e,indices)) {
       setEntry(*list, j++, getEntry(*list,i));
     }

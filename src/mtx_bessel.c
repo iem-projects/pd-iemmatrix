@@ -139,39 +139,39 @@ static void mTXBesselMatrix (MTXBessel *x, t_symbol *s,
   columns = atom_getint (argv++);
 
   if(my_jn && my_yn) {
-    if (x->l!=columns) {
+    if (x->l != columns) {
       deleteMTXBesseldata(x);
       x->l=columns;
       allocMTXBesseldata(x);
     }
-    for (n=0; n<x->l; n++) {
+    for (n=0; n < x->l; n++) {
       x->kr[n]=(double) atom_getfloat(argv+n);
     }
 
-    if (x->h_re!=0)
-      for (m=0; m<x->l; m++)
-        for (n=0; n<x->nmax+1; n++) {
+    if (x->h_re != 0)
+      for (m=0; m < x->l; m++)
+        for (n=0; n < x->nmax+1; n++) {
           x->h_re[n+m*(x->nmax+1)]=my_jn(n,x->kr[m]);
         }
 
-    if (x->h_im!=0)
-      for (m=0; m<x->l; m++)
-        for (n=0; n<x->nmax+1; n++) {
+    if (x->h_im != 0)
+      for (m=0; m < x->l; m++)
+        for (n=0; n < x->nmax+1; n++) {
           x->h_im[n+m*(x->nmax+1)]=my_yn(n,x->kr[m]);
         }
 
-    if (x->h_re!=0) {
+    if (x->h_re != 0) {
       SETFLOAT(x->list_h_re+1,(t_float)(x->nmax+1));
       SETFLOAT(x->list_h_re,(t_float)x->l);
-      for (n=0; n<x->l*(x->nmax+1); n++) {
+      for (n=0; n < x->l*(x->nmax+1); n++) {
         SETFLOAT(x->list_h_re+n+2,(t_float)x->h_re[n]);
       }
     }
 
-    if (x->h_im!=0) {
+    if (x->h_im != 0) {
       SETFLOAT(x->list_h_im+1,(t_float)(x->nmax+1));
       SETFLOAT(x->list_h_im,(t_float)x->l);
-      for (n=0; n<x->l*(x->nmax+1); n++) {
+      for (n=0; n < x->l*(x->nmax+1); n++) {
         SETFLOAT(x->list_h_im+n+2,(t_float)x->h_im[n]);
       }
     }

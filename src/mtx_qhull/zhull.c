@@ -236,9 +236,9 @@ static void dividePointsBetweenNewFacets (
   const list_t new_facets)
 {
   index_t i,j;
-  facet_t *f;
+  facet_t *f = 0;
   list_t point_inside_facet_list=emptyList();
-  float d;
+  float d = 0;
   entry_t e;
   for (i=0; i<getLength(assoc); i++) {
     e=getEntry(assoc,i);

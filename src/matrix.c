@@ -55,7 +55,7 @@ static void matrix_size(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 
   switch(argc) {
   case 0: /* size */
-    if (x->row*x->col) {
+    if (x->row && x->col) {
       outlet_list(x->x_obj.ob_outlet, gensym("size"), 2, x->atombuffer);
     }
     break;
@@ -157,7 +157,7 @@ static void matrix_list(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 {
   /* like matrix, but without col/row information, so the previous size is kept */
   int row=x->row, col=x->col;
-  if(!row*col) {
+  if(!(row && col)) {
     pd_error(x, "[matrix]: unknown matrix dimensions");
     return;
   }
@@ -198,7 +198,7 @@ static void *matrix_new(t_symbol *s, int argc, t_atom *argv)
     col = atom_getfloat(argv++);
   }
 
-  if(row*col) {
+  if(row && col) {
     adjustsize(x, row, col);
     matrix_set(x, 0);
   }

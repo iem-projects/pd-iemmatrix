@@ -47,7 +47,7 @@ static void mtx_element_float(t_matrix *x, t_floatarg f)
     matrix_bang(x);
     return;
   }
-  if(x->current_row*x->current_col) {
+  if(x->current_row && x->current_col) {
     SETFLOAT(x->atombuffer+1+(x->current_row-1)*x->col+x->current_col, f);
   } else {
     t_atom *ap=x->atombuffer+2;
@@ -98,7 +98,7 @@ static void *mtx_element_new(t_symbol *s, int argc, t_atom *argv)
     if(j<0) {
       j=0;
     }
-    if(i*j) {
+    if(i && j) {
       adjustsize(x, i, j);
     }
     matrix_set(x, 0);
@@ -112,7 +112,7 @@ static void *mtx_element_new(t_symbol *s, int argc, t_atom *argv)
     if(j<0) {
       j=0;
     }
-    if(i*j) {
+    if(i && j) {
       adjustsize(x, i, j);
     }
     matrix_set(x, 0);

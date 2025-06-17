@@ -102,7 +102,7 @@ static void *mtx_row_new(t_symbol *s, int argc, t_atom *argv)
     if(j<0) {
       j=0;
     }
-    if(i*j) {
+    if(i && j) {
       adjustsize(x, i, j);
     }
     matrix_set(x, 0);
@@ -120,7 +120,7 @@ static void *mtx_row_new(t_symbol *s, int argc, t_atom *argv)
     if(q<0) {
       q=0;
     }
-    if(i*j) {
+    if(i && j) {
       adjustsize(x, i, j);
     }
     matrix_set(x, 0);

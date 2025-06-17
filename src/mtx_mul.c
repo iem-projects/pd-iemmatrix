@@ -115,7 +115,7 @@ static void mtx_mulelement_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   row=atom_getfloat(argv++);
   col=atom_getfloat(argv++);
 
-  if (!(x->m2.col*x->m2.row)) {
+  if (!(x->m2.col && x->m2.row)) {
     adjustsize(&x->m, row, col);
     matrix_set(&x->m, 0);
     outlet_anything(x->x_obj.ob_outlet, gensym("matrix"), argc,
@@ -258,7 +258,7 @@ static void mtx_divelement_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   row=atom_getfloat(argv++);
   col=atom_getfloat(argv++);
 
-  if (!(x->m2.col*x->m2.row)) {
+  if (!(x->m2.col && x->m2.row)) {
     adjustsize(&x->m, row, col);
     matrix_set(&x->m, 0);
     outlet_anything(x->x_obj.ob_outlet, gensym("matrix"), argc,

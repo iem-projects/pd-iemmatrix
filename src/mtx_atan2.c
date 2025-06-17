@@ -70,7 +70,7 @@ static void mtx_atan2_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   int n = argc-2;
   if(iemmatrix_check(x, argc, argv, 0))return;
 
-  if (!(x->m2.col*x->m2.row)) {
+  if (!(x->m2.col && x->m2.row)) {
     outlet_anything(x->x_obj.ob_outlet, gensym("matrix"), argc, argv);
     return;
   }

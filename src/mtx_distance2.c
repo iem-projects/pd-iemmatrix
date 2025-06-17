@@ -38,7 +38,7 @@ static void mtx_distance2_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   row2=x->m2.row;
   col2=x->m2.col;
 
-  if (!(col2*row2)) {
+  if (!(col2 && row2)) {
     /* 2nd matrix is NULL; take the 1st matrix instead (distance between it's own vectors) */
     m2=argv+2;
     row2=row;

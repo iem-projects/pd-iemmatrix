@@ -70,7 +70,7 @@ static void mtx_max2_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   t_atom *m2 = x->m2.atombuffer+2;
   int n = argc-2;
   if(iemmatrix_check(x, argc, argv, 0))return;
-  if (!(x->m2.col*x->m2.row)) {
+  if (!(x->m2.col && x->m2.row)) {
     outlet_anything(x->x_obj.ob_outlet, gensym("matrix"), argc, argv);
     return;
   }

@@ -38,7 +38,7 @@ static void *mtx_zeros_new(t_symbol *s, int argc, t_atom *argv)
   if(row<0) {
     row=0;
   }
-  if (col*row) {
+  if (col && row) {
     x->atombuffer = (t_atom *)getbytes((col*row+2)*sizeof(t_atom));
     setdimen(x, row, col);
     matrix_set(x, 0);

@@ -120,7 +120,7 @@ static void mtxbin_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
     return;
   }
 
-  if (!(x->m2.col*x->m2.row)) {
+  if (!(x->m2.col && x->m2.row)) {
     outlet_anything(x->x_obj.ob_outlet, gensym("matrix"), argc, argv);
     return;
   }

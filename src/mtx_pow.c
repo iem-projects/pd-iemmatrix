@@ -29,7 +29,7 @@ static void mtx_powelement_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   col=atom_getint(argv++);
   n = row*col;
 
-  if (!(x->m2.col*x->m2.row)) {
+  if (!(x->m2.col && x->m2.row)) {
     adjustsize(&x->m, row, col);
     matrix_set(&x->m, 0);
     outlet_anything(x->x_obj.ob_outlet, gensym("matrix"), argc,

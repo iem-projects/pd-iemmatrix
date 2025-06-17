@@ -233,7 +233,7 @@ size_t getNumPoints(const points_t points)
 vector_t getPoint(const points_t points,
                   const index_t index)
 {
-  if ((index>=0)&&(index<getNumPoints(points))) {
+  if (index<getNumPoints(points)) {
     return points.v[index];
   }
   return initVector(0.0f,0.0f,0.0f);

@@ -78,7 +78,7 @@ size_t getLength(const list_t list)
 
 entry_t getEntry(const list_t list, const index_t index)
 {
-  if ((index>=0)&&(index<getLength(list))) {
+  if (index<getLength(list)) {
     return list.entries[index];
   } else {
     entry_t result= {0};
@@ -89,7 +89,7 @@ entry_t getEntry(const list_t list, const index_t index)
 void setEntry(const list_t list, const index_t index,
               const entry_t entry)
 {
-  if ((index>=0)&&(index<getLength(list))) {
+  if (index<getLength(list)) {
     list.entries[index]=entry;
   }
 }

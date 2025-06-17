@@ -127,7 +127,7 @@ static void mTXSphBang (MTXSph *x)
 static void mTXSphMatrix (MTXSph *x, t_symbol *s,
                           int argc, t_atom *argv)
 {
-  int rows, columns;
+  unsigned int rows, columns;
   unsigned int n,ofs;
 
   /* size check */

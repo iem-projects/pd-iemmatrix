@@ -34,8 +34,8 @@ typedef struct _mtx_unpack_tilde {
   t_object x_obj;
   t_proxy *x_proxy;
   int x_dsp; /* whether DSP is currently running */
-  int rows, cols;
-  int block_size;
+  unsigned int rows, cols;
+  unsigned int block_size;
   unsigned int num_chan, num_ports;
   t_float **sig_out;
   t_atom *list_in;
@@ -63,8 +63,8 @@ static t_int *mtx_unpack_PerformInactive (t_int *arg)
 static t_int *mtx_unpack_PerformSetInactive (t_int *arg)
 {
   mtx_unpack_tilde *x = (mtx_unpack_tilde *) (arg[1]);
-  int chan;
-  int samp;
+  unsigned int chan;
+  unsigned int samp;
   t_atom *lptr=x->list_in;
 
   for (chan=0; chan<x->num_chan; chan++) {
@@ -80,10 +80,10 @@ static t_int *mtx_unpack_PerformSetInactive (t_int *arg)
 static t_int *mtx_unpack_PerformActive (t_int *arg)
 {
   mtx_unpack_tilde *x = (mtx_unpack_tilde *) (arg[1]);
-  int chan;
-  int samp;
-  const int maxchan = (x->rows < x->num_chan)   ? x->rows : x->num_chan;
-  const int maxsamp = (x->cols < x->block_size) ? x->cols : x->block_size;
+  unsigned int chan;
+  unsigned int samp;
+  const unsigned int maxchan = (x->rows < x->num_chan)   ? x->rows : x->num_chan;
+  const unsigned int maxsamp = (x->cols < x->block_size) ? x->cols : x->block_size;
   t_atom *lptr=x->list_in;
 
   for (chan=0; chan<maxchan; chan++) {
@@ -233,7 +233,7 @@ static void mtx_unpack_matrix (mtx_unpack_tilde *x, t_symbol *s,
 
 static void mtx_unpack_dsp (mtx_unpack_tilde *x, t_signal **sp)
 {
-  int chan;
+  unsigned int chan;
   x->x_dsp = 1;
   x->block_size=sp[0]->s_n;
 

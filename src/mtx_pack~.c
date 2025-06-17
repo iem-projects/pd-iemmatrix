@@ -12,7 +12,7 @@ static t_class *mtx_pack_tilde_class;
 
 typedef struct _mtx_pack_tilde {
   t_object x_obj;
-  int block_size;
+  unsigned int block_size;
   size_t num_ports; /* number of inlet~s (0 for 1 multichannel signal) */
   size_t num_channels; /* number of input signals */
   t_sample **sig_in;
@@ -63,8 +63,8 @@ void deleteMtxPackTilde (mtx_pack_tilde *x)
 static t_int *mTxPackTildePerform (t_int *arg)
 {
   mtx_pack_tilde *x = (mtx_pack_tilde *) (arg[1]);
-  int chan;
-  int samp;
+  unsigned int chan;
+  unsigned int samp;
   t_atom *lptr=x->list_out+2;
 
   for (chan=0; chan<x->num_channels; chan++) {
@@ -85,7 +85,7 @@ static t_int *mTxPackTildePerform (t_int *arg)
 static void mTxPackTildeDsp (mtx_pack_tilde *x, t_signal **sp)
 {
   size_t i, chan = x->num_ports;
-  int block_size=sp[0]->s_n;
+  int block_size=(sp[0]->s_n>0)?sp[0]->s_n:0;
 
   if(x->sig_in)
     freebytes(x->sig_in, sizeof(*x->sig_in) * x->num_channels);

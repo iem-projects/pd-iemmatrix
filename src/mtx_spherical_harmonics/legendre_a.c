@@ -19,7 +19,7 @@
 static void legendre_first_recurrence (double *sintheta,
                                        LegendreWorkSpace *wl)
 {
-  int n;
+  unsigned int n;
   unsigned int l,l0;
   int nmo0=0;
   int n0=1;

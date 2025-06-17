@@ -69,9 +69,9 @@ static void *newMTXQhull(t_symbol *s, int argc, t_atom *argv)
 static void mTXQhullMatrix(MTXQhull *xo, t_symbol *s,
                            int argc, t_atom *argv)
 {
-  int rows, columns;
+  unsigned int rows, columns;
 
-  int i;
+  unsigned int i;
   float *x;
   float *y;
   float *z;

@@ -127,7 +127,7 @@ static void mTXShBang (MTXSh *x)
 static void mTXShMatrix (MTXSh *x, t_symbol *s,
                          int argc, t_atom *argv)
 {
-  int rows, columns, size;
+  unsigned int rows, columns, size;
 
   /* size check */
   if(iemmatrix_check(x, argc, argv, 0))return;
@@ -165,7 +165,7 @@ static void mTXShMatrix (MTXSh *x, t_symbol *s,
   }
 
   if (x->ws!=0) {
-    int n;
+    unsigned int n;
     sharmonics(x->phi, x->theta, x->ws);
     size=x->l*(x->nmax+1)*(x->nmax+1);
     SETFLOAT(x->list_sh,(t_float)x->l);
@@ -247,7 +247,7 @@ static void mTXChBang (MTXCh *x)
 static void mTXChMatrix (MTXCh *x, t_symbol *s,
                          int argc, t_atom *argv)
 {
-  int rows, columns, size;
+  unsigned int rows, columns, size;
 
   /* size check */
   if(iemmatrix_check(x, argc, argv, 0))return;
@@ -271,7 +271,7 @@ static void mTXChMatrix (MTXCh *x, t_symbol *s,
     }
 
     if (x->wc!=0) {
-      int n;
+      unsigned int n;
       chebyshev12(x->phi, x->wc);
       size=x->l*(2*x->nmax+1);
       SETFLOAT(x->list_ch,(t_float)x->l);

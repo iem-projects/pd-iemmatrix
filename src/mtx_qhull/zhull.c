@@ -173,7 +173,7 @@ static void removeFacetByIndexList(zhull_t * const zh,
 
 static void freeFacets(zhull_t * const zh)
 {
-  int i;
+  unsigned int i;
   facet_t *f;
   if (getLength(zh->facets)>0) {
     for (i=0; i<getLength(zh->facets); i++) {

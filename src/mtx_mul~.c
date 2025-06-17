@@ -97,7 +97,7 @@ typedef struct matrix_multilde {
 
   /* buffer for matrix multiplication */
   t_sample	*x_outsumbuf; /* N samples for summing up */
-  int		x_outsumbufsize;
+  size_t	x_outsumbufsize;
 } t_matrix_multilde;
 
 static void proxy_dspstopped(t_proxy*p) {
@@ -161,7 +161,7 @@ static void matrix_multilde_time(t_matrix_multilde *x, t_floatarg time_ms)
 static void matrix_multilde_matrix_set(t_matrix_multilde *x, int argc,
                                        t_atom *argv, int transpose)
 {
-  int col, row, length;
+  unsigned int col, row, length;
   t_float *matcur, *matend;
 
   if(argc<2) {
@@ -213,22 +213,22 @@ static void matrix_multilde_matrix_set(t_matrix_multilde *x, int argc,
 
   if(transpose) {
     /* we need to transpose the matrix */
-    int i;
+    unsigned int i;
     for(i=0; i<row; i++) {
-      int j;
+      unsigned int j;
       for(j=0; j<col; j++) {
         *matend++=atom_getfloat(argv+i+j*row);
       }
     }
   } else {
-    int i;
+    unsigned int i;
     for(i=0; i<length; i++) {
       *matend++=atom_getfloat(argv++);
     }
   }
 
   if(x->x_time_ms <= 0.0f) {
-    int i;
+    unsigned int i;
     matend = x->x_matend;
     for(i=0; i<length; i++) {
       *matcur++=*matend++;
@@ -252,7 +252,7 @@ static void matrix_multilde_matrixT(t_matrix_multilde *x, t_symbol *s,
 static void matrix_multilde_element(t_matrix_multilde *x, t_symbol *s,
                                     int argc, t_atom *argv)
 {
-  int col, row, n_in_cols=x->x_cols;
+  unsigned int col, row, n_in_cols=x->x_cols;
   t_float element;
   t_float *matcur = x->x_matcur;
   t_float *matend = x->x_matend;
@@ -262,15 +262,18 @@ static void matrix_multilde_element(t_matrix_multilde *x, t_symbol *s,
     return;
   }
 
-  row = atom_getint(argv) - 1;
-  col = atom_getint(argv+1) - 1;
+  int r = (int)atom_getfloat(argv+0) - 1;
+  int c = (int)atom_getfloat(argv+1) - 1;
+  row = (r >= 0)?r:0;
+  col = (c >= 0)?c:0;
+
   element = atom_getfloat(argv+2);
 
-  if((row >= x->x_rows) || (row < 0)) {
+  if((row >= x->x_rows) || (r < 0)) {
     pd_error(x, "[%s]: out of bound row!!", x->x_name->s_name);
     return;
   }
-  if((col >= n_in_cols) || (col < 0)) {
+  if((col >= n_in_cols) || (c < 0)) {
     pd_error(x, "[%s]: out of bound column!!", x->x_name->s_name);
     return;
   }
@@ -290,7 +293,7 @@ static void matrix_multilde_element(t_matrix_multilde *x, t_symbol *s,
 static void matrix_multilde_row(t_matrix_multilde *x, t_symbol *s,
                                 int argc, t_atom *argv)
 {
-  int col, nth_row, i;
+  unsigned int col, nth_row, i;
   t_float *matcur = x->x_matcur;
   t_float *matend = x->x_matend;
 
@@ -299,16 +302,17 @@ static void matrix_multilde_row(t_matrix_multilde *x, t_symbol *s,
     return;
   }
 
-  nth_row = atom_getint(argv) - 1;
+  int _nth_row = (int)atom_getfloat(argv) -1;
+  nth_row = (_nth_row>0)?_nth_row:0;
   argv++;
   argc--;
 
-  if((nth_row >= x->x_rows) || (nth_row < 0)) {
+  if((nth_row >= x->x_rows) || (_nth_row < 0)) {
     pd_error(x, "[%s]: out of bound row!!", x->x_name->s_name);
     return;
   }
   col = x->x_cols;
-  if(argc < col) {
+  if(argc < 0 || ((unsigned int)argc < col)) {
     pd_error(x,"[%s]: col dimensions do not match !!", x->x_name->s_name);
     return;
   }
@@ -823,8 +827,8 @@ static t_int *matrix_multilde_perform(t_int *w)
 
 static void matrix_multilde_dsp(t_matrix_multilde *x, t_signal **sp)
 {
-  const int length = sp[0]->s_n;
-  int i, n=length * x->x_rows;
+  const unsigned int length = (sp[0]->s_n > 0)?sp[0]->s_n:0;
+  unsigned int i, n=length * x->x_rows;
   /* [mtx_*~] ignores the signal on the very 1st inlet */
   int compat_offset=(x->x_compat)?0:1;
   size_t ichannels = x->x_inports?x->x_inports:0;

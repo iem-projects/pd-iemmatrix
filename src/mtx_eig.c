@@ -76,10 +76,10 @@ static void allocMTXqlw (MTXEig *x)
     x->w=(gsl_eigen_nonsymm_workspace*)my_eigen_nonsymm_alloc(x->size);
   }
 
-  x->list_q_re=(t_atom*)calloc(sizeof(t_atom),x->size*x->size+2);
-  x->list_q_im=(t_atom*)calloc(sizeof(t_atom),x->size*x->size+2);
-  x->list_l_re=(t_atom*)calloc(sizeof(t_atom),x->size);
-  x->list_l_im=(t_atom*)calloc(sizeof(t_atom),x->size);
+  x->list_q_re=(t_atom*)calloc(x->size*x->size+2, sizeof(t_atom));
+  x->list_q_im=(t_atom*)calloc(x->size*x->size+2, sizeof(t_atom));
+  x->list_l_re=(t_atom*)calloc(x->size, sizeof(t_atom));
+  x->list_l_im=(t_atom*)calloc(x->size, sizeof(t_atom));
 }
 
 static void deleteMTXqlw (MTXEig *x)

@@ -60,8 +60,8 @@ static void allocMTXqr (MTXQr *x)
            ((x->columns<x->rows)?x->columns:x->rows));
   x->q=(gsl_matrix*)my_matrix_alloc(x->rows,x->rows);
   x->r=(gsl_matrix*)my_matrix_alloc(x->rows,x->columns);
-  x->list_q=(t_atom*)calloc(sizeof(t_atom),x->rows*x->rows+2);
-  x->list_r=(t_atom*)calloc(sizeof(t_atom),x->rows*x->columns+2);
+  x->list_q=(t_atom*)calloc(x->rows*x->rows+2, sizeof(t_atom));
+  x->list_r=(t_atom*)calloc(x->rows*x->columns+2, sizeof(t_atom));
 }
 
 static void deleteMTXqr (MTXQr *x)

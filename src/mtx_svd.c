@@ -60,9 +60,9 @@ static void allocMTXusvw (MTXSvd *x)
     x->v=(gsl_matrix*)my_matrix_alloc(x->columns,x->columns);
     x->w=(gsl_vector*)my_vector_alloc(x->columns);
 
-    x->list_u=(t_atom*)calloc(sizeof(t_atom),x->rows*x->columns+2);
-    x->list_s=(t_atom*)calloc(sizeof(t_atom),x->columns);
-    x->list_v=(t_atom*)calloc(sizeof(t_atom),x->columns*x->columns+2);
+    x->list_u=(t_atom*)calloc(x->rows*x->columns+2, sizeof(t_atom));
+    x->list_s=(t_atom*)calloc(x->columns, sizeof(t_atom));
+    x->list_v=(t_atom*)calloc(x->columns*x->columns+2, sizeof(t_atom));
   }
 }
 

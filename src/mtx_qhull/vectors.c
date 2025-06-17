@@ -12,7 +12,7 @@
 
 vector_t initVector (const float x, const float y, const float z)
 {
-  vector_t vec= {x, y, z};
+  vector_t vec= {.c = {x, y, z} };
   return vec;
 }
 

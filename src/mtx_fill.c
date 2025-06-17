@@ -55,12 +55,6 @@ static void deleteMTXFill (MTXfill *mtx_fill_obj)
   }
 }
 
-static void setListConstFloat (int size, t_float f, t_atom *y)
-{
-  for(; size--; y++) {
-    SETFLOAT(y,f);
-  }
-}
 static void copyList (int size, t_atom *x, t_atom *y)
 {
   while(size--) {

@@ -67,13 +67,6 @@ static void mtxIFFTBang (MtxIFFT *x)
   }
 }
 
-static void zeroFloatArray (int n, t_float *f)
-{
-  while (n--) {
-    *f++ = 0.0f;
-  }
-}
-
 static void writeFloatIntoList (int n, t_atom *l, t_float *f)
 {
   for (; n--; f++, l++) {

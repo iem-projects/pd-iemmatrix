@@ -78,21 +78,6 @@ static void mTXConcatBang (MTXconcat *mtx_concat_obj)
                   mtx_concat_obj->mtx_out.atombuffer);
 }
 
-static void copyList (int n, t_atom *x, t_atom *y)
-{
-  while (n--) {
-    *y++=*x++;
-  }
-}
-
-static void writeFillMatrixIntoList (int fillrows, const int fillcols,
-                                     int columns, t_atom *x, t_atom *y)
-{
-  for (; fillrows--; x+=fillcols,y+=columns) {
-    copyList(fillcols, x, y);
-  }
-}
-
 static void mTXConcatMatrix2 (MTXconcat *mtx_concat_obj, t_symbol *s,
                               int argc, t_atom *argv)
 {

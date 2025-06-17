@@ -34,7 +34,7 @@ void mtx_bin_matrix2(t_mtx_binmtx *x, t_symbol *s, int argc, t_atom *argv)
 
 void mtx_binmtx_bang(t_mtx_binmtx *x)
 {
-  if((&x->m)&&(x->m.atombuffer)) {
+  if(x->m.atombuffer) {
     outlet_anything(x->x_obj.ob_outlet, gensym("matrix"), x->m.col*x->m.row+2,
                     x->m.atombuffer);
   }
@@ -48,7 +48,7 @@ void mtx_binmtx_free(t_mtx_binmtx *x)
 }
 void mtx_binscalar_bang(t_mtx_binscalar *x)
 {
-  if((&x->m)&&(x->m.atombuffer)) {
+  if(x->m.atombuffer) {
     outlet_anything(x->x_obj.ob_outlet, gensym("matrix"), x->m.col*x->m.row+2,
                     x->m.atombuffer);
   }

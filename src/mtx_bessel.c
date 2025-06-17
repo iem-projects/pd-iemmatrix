@@ -131,7 +131,7 @@ static void mTXBesselMatrix (MTXBessel *x, t_symbol *s,
                              int argc, t_atom *argv)
 {
   size_t columns;
-  int n,m,ofs;
+  size_t n, m;
 
   /* size check */
   if(iemmatrix_check(x, argc, argv, 0))return;

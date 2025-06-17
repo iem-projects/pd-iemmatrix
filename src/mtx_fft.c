@@ -70,19 +70,6 @@ static void mtxFFTBang (MtxFFT *x)
   }
 }
 
-static void writeFloatIntoList (int n, t_atom *l, t_float *f)
-{
-  for (; n--; f++, l++) {
-    SETFLOAT (l, *f);
-  }
-}
-static void readFloatFromList (int n, t_atom *l, t_float *f)
-{
-  while (n--) {
-    *f++ = atom_getfloat (l++);
-  }
-}
-
 static void mtxFFTMatrixCold (MtxFFT *x, t_symbol *s,
                               int argc, t_atom *argv)
 {

@@ -104,41 +104,6 @@ static void mTXCumprodBang (MTXCumprod *mtx_cumprod_obj)
                     mtx_cumprod_obj->size+2, mtx_cumprod_obj->list_out);
 }
 
-static void writeFloatIntoList (int n, t_atom *l, t_float *f)
-{
-  for (; n--; f++, l++) {
-    SETFLOAT (l, *f);
-  }
-}
-static void readFloatFromList (int n, t_atom *l, t_float *f)
-{
-  while (n--) {
-    *f++ = atom_getfloat (l++);
-  }
-}
-static void readFloatFromListModulo (int n, int m, t_atom *l, t_float *f)
-{
-  t_atom *ptr = l;
-  int count1, count2;
-  n /= m;
-  count1 = m;
-  while (count1--)
-    for (count2 = n, ptr = l++; count2--; ptr += m, f++) {
-      *f = atom_getfloat (ptr);
-    }
-}
-static void writeFloatIntoListModulo (int n, int m, t_atom *l, t_float *f)
-{
-  t_atom *ptr = l;
-  int count1, count2;
-  n /= m;
-  count1 = m;
-  while (count1--)
-    for (count2 = n, ptr = l++; count2--; ptr += m, f++) {
-      SETFLOAT(ptr,*f);
-    }
-}
-
 static void cumProd (int n, t_float *x, t_float *y)
 {
   t_float accu = 1.0f;

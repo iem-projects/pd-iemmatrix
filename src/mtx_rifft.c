@@ -66,22 +66,6 @@ typedef struct _MTXRifft_ {
 } MTXRifft;
 
 
-/* helper functions: these should really go into a separate file! */
-
-
-static void writeFloatIntoList (int n, t_atom *l, t_float *f)
-{
-  for (; n--; f++, l++) {
-    SETFLOAT (l, *f);
-  }
-}
-static void readFloatFromList (int n, t_atom *l, t_float *f)
-{
-  while (n--) {
-    *f++ = atom_getfloat (l++);
-  }
-}
-
 /*--------------inverse real fft */
 
 static void multiplyVector (int n, t_float *f, t_float fac)

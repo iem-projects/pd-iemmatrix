@@ -141,20 +141,6 @@ static void fftRestoreImag (int n, t_float *re, t_float *im)
   }
 }
 
-static void writeFloatIntoList (int n, t_atom *l, t_float *f)
-{
-  for (; n--; f++, l++) {
-    SETFLOAT (l, *f);
-  }
-}
-
-static void readFloatFromList (int n, t_atom *l, t_float *f)
-{
-  while (n--) {
-    *f++ = atom_getfloat (l++);
-  }
-}
-
 static void writeFFTWComplexPartIntoList (int n, t_atom *l,
     fftw_complex *c, enum ComplexPart p)
 {

@@ -32,14 +32,9 @@
 #define INCLUDE_IEMMATRIX_H__
 
 
-#ifdef __WIN32__
-/* MinGW automatically defines __WIN32__
- * other windows compilers might have to define it by hand
- */
-
+#ifdef _MSC_VER
 # pragma warning( disable : 4244 )
 # pragma warning( disable : 4305 )
-
 #endif /* __WIN32__ */
 
 #ifdef HAVE_CONFIG_H

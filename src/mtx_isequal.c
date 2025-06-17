@@ -24,10 +24,7 @@ static void mtx_isequalscalar_matrix(t_mtx_binscalar *x, t_symbol *s,
                                      int argc, t_atom *argv)
 {
   int n=argc-2;
-  int row=atom_getfloat(argv), col=atom_getfloat(argv+1);
-
   t_float offset=x->f;
-  t_atom *buf;
   t_atom *ap=argv+2;
 
   (void)s; /* unused */
@@ -65,7 +62,6 @@ static void mtx_isequal_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
 {
   int row=atom_getfloat(argv);
   int col=atom_getfloat(argv+1);
-  t_atom *m;
   t_atom *m1 = argv+2;
   t_atom *m2 = x->m2.atombuffer+2;
   int n = argc-2;
@@ -88,7 +84,7 @@ static void mtx_isequal_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
 }
 static void mtx_isequal_float(t_mtx_binmtx *x, t_float f)
 {
-  t_matrix *m=&x->m, *m2=&x->m2;
+  t_matrix *m2=&x->m2;
   t_atom *ap=m2->atombuffer+2;
   int row2, col2, n;
 

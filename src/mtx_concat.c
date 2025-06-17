@@ -152,8 +152,6 @@ static void mTXConcatMatrix (MTXconcat *mtx_concat_obj, t_symbol *s,
 {
   int rows = atom_getint (argv);
   int columns = atom_getint (argv+1);
-  int size = rows * columns;
-  int list_size = argc-2;
   t_matrix *mtx_in1 = &mtx_concat_obj->mtx_in1;
   t_matrix *mtx_in2 = &mtx_concat_obj->mtx_in2;
   t_matrix *mtx_out = &mtx_concat_obj->mtx_out;

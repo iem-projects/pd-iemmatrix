@@ -270,9 +270,8 @@ vector_t normalOfListedPoints(const points_t points, const list_t list)
 
 vector_t directionOfListedPoints(const points_t points, const list_t list)
 {
-  vector_t m = averageListedPoints(points,list);
   vector_t dir = initVector(0.0f, 0.0f, 0.0f);
-  vector_t d,c;
+  vector_t d;
   index_t i;
   for (i=1; i<getLength(list); i++) {
     entry_t e1=getEntry(list,i-1);

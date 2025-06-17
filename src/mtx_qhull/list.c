@@ -40,7 +40,6 @@ list_t allocateList(const size_t length)
 void reallocateList(list_t *list,
                     const size_t length)
 {
-  entry_t *old_entries = list->entries;
   if (length>0) {
     if (getLength(*list)==0) {
       *list = allocateList(length);
@@ -351,7 +350,7 @@ list_t findValueListInList(const list_t value_list,
                            const list_t list)
 {
   list_t l=emptyList();
-  index_t i,j;
+  index_t i;
   for (i=0; i<getLength(value_list); i++) {
     index_t idx=findValueInList(getEntry(value_list,i),list);
     entry_t e;

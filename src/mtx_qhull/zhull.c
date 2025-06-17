@@ -349,8 +349,6 @@ static void printHorizonEdges(list_t *horizon_fcts,
 {
   index_t i;
   index_t c1[2];
-  list_t list_for_printing=emptyList();
-
   printf("horizon : ");
   printList(*horizon_fcts);
   printList(*horizon_fcts_edges);
@@ -370,7 +368,6 @@ static void sortHorizonEdges(list_t *horizon_fcts,
                              list_t *other_horizon_edges)
 {
   index_t i,j;
-  facet_t *fi;
   entry_t ei;
   index_t c1[2];
   index_t c2[2];
@@ -594,7 +591,6 @@ static void initNewFacets(zhull_t *zh, index_t point_index,
         }
       }
       entry_array[0]=getEntry(new_facets,j);
-      facet_t*fp= getFacetByIndex(new_facets, j);
       list_t neighbors =getFacetByIndex(new_facets,j)->neighbors;
       setEntry(neighbors,
                0, getEntry(new_facets,i));
@@ -668,7 +664,6 @@ int calculateZHull(zhull_t *zh)
   index_t fli=0;
   index_t pi;
   facet_t *f;
-  list_t outsideset;
   int cnt=0;
   int maxit=getNumPoints(zh->pts);
   list_t horizon_fcts=emptyList();
@@ -721,17 +716,18 @@ int calculateZHull(zhull_t *zh)
 void printZhull(const zhull_t * const zh)
 {
   index_t fi;
+#if 0
   list_t indices = emptyList();
-  /*     printf("zhull from %d points\n", getNumPoints(zh->pts));
-      printf("facets with outsidepoints: ");
-      indices=findValueListInList(zh->facets_with_outsidepoints,zh->facets);
-      printList(indices);
-      freeList(&indices);
-      printf("facets with insidepoints: ");
-      indices=findValueListInList(zh->facets_with_insidepoints,zh->facets);
-      printList(indices);
-      freeList(&indices);
-      */
+  printf("zhull from %d points\n", getNumPoints(zh->pts));
+  printf("facets with outsidepoints: ");
+  indices=findValueListInList(zh->facets_with_outsidepoints,zh->facets);
+  printList(indices);
+  freeList(&indices);
+  printf("facets with insidepoints: ");
+  indices=findValueListInList(zh->facets_with_insidepoints,zh->facets);
+  printList(indices);
+  freeList(&indices);
+#endif
   printf("zhull has %lu facets\n", (unsigned long)getLength(zh->facets));
   for (fi=0; fi<getLength(zh->facets); fi++) {
     printf("facet %lu<%p>: ",(unsigned long)fi,getFacetByIndex(zh->facets,fi));

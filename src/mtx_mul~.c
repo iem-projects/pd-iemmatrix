@@ -187,19 +187,19 @@ static void matrix_multilde_matrix_set(t_matrix_multilde *x, int argc,
     if ((col != x->x_cols) || (row != x->x_rows)) {
       pd_error(x, "[%s]: matrix dimensions must not change (%dx%d != %dx%d) while DSP is running!!",
 	       x->x_name->s_name,
-	       row, col, x->x_rows, x->x_cols);
+	       row, col, (int)x->x_rows, (int)x->x_cols);
       return;
     }
   } else {
     /* DSP is not running, check if we have a fixed number of iolets */
     if(x->x_inports && x->x_inports != col) {
       pd_error(x, "[%s]: cannot change fixed number of input channels (%d) to %d",
-	       x->x_name->s_name, x->x_inports, col);
+	       x->x_name->s_name, (int)x->x_inports, col);
       return;
     }
     if(x->x_outports && x->x_outports != row) {
       pd_error(x, "[%s]: cannot change fixed number of output channels (%d) to %d",
-	       x->x_name->s_name, x->x_outports, row);
+	       x->x_name->s_name, (int)x->x_outports, row);
       return;
     }
 

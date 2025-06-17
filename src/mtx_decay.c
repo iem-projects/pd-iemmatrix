@@ -101,12 +101,14 @@ static void *newMTXDecay (t_symbol *s, int argc, t_atom *argv)
     if (first_sym < 2) {
       mTXSetDecayDirection (mtx_decay_obj, atom_getfloat (argv+2));
     }
+    /* fall through */
   case 2:
     if (first_sym < 1) {
       mTXSetDecayParameter (mtx_decay_obj, atom_getfloat (argv+1));
     } else if (first_sym > 1) {
       mTXSetDecayDirection (mtx_decay_obj, atom_getfloat(argv+1));
     }
+    /* fall through */
   case 1:
     if (first_sym != 0) {
       mTXSetDecayParameter (mtx_decay_obj, atom_getfloat (argv));

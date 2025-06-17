@@ -97,7 +97,8 @@ static void *newMTXSph (t_symbol *s, int argc, t_atom *argv)
   case 'H':
   case 'h':
     x->list_h_re_out = outlet_new (&x->x_obj, gensym("matrix"));
-  /* coverity[unterminated_case]: H has both real&imag outlet */
+    /* coverity[unterminated_case]: H has both real&imag outlet */
+    /* fall through */
   case 'Y':
   case 'y':
     x->list_h_im_out = outlet_new (&x->x_obj, gensym("matrix"));

@@ -215,6 +215,7 @@ static void *mtx_dispersive_dline_new(t_symbol *s, int argc, t_atom *argv)
   switch ((argc>2)?2:argc) {
   case 2:
     lambda=atom_getfloat(argv+1);
+    /* fall through */
   case 1:
     length=atom_getfloat(argv);
   }

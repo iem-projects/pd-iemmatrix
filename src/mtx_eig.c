@@ -167,6 +167,7 @@ static void mTXEigBang (MTXEig *x)
                       x->list_q_im);
       outlet_anything(x->list_q_out_re, gensym("matrix"), x->size*x->size+2,
                       x->list_q_re);
+    /* fall through */
     case WITHOUTEVS:
       outlet_anything(x->list_l_out_im, gensym("list"), x->size, x->list_l_im);
       outlet_anything(x->list_l_out_re, gensym("list"), x->size, x->list_l_re);

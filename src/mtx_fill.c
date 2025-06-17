@@ -245,6 +245,7 @@ static void mTXFillScalar (MTXfill *mtx_fill_obj, t_float f)
     /* main part */
     writeFloatIndexedIntoMatrix (mtx_fill_obj->num_idcs_used,
                                  mtx_fill_obj->index, f,list_out+2);
+    /* fall through */
   default:
     mTXFillBang(mtx_fill_obj);
   }

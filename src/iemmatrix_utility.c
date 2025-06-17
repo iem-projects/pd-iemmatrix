@@ -701,3 +701,53 @@ int iemmatrix_check(void*object, t_symbol*s, int argc, t_atom*argv, unsigned int
   }
   return 0;
 }
+
+
+void iemmatrix_floats2list(t_atom* dest, const t_float* src, size_t n)
+{
+  for (; n--; src++, dest++) {
+    SETFLOAT (dest, *src);
+  }
+}
+void iemmatrix_floats2list_modulo(t_atom* dest, const t_float* src, size_t n, size_t m)
+{
+  t_atom *ptr = dest;
+  int count1, count2;
+  n /= m;
+  count1 = m;
+  while (count1--)
+    for (count2 = n, ptr = dest++; count2--; ptr += m, src++) {
+      SETFLOAT(ptr, *src);
+    }
+}
+
+void iemmatrix_list2floats(t_float* dest, const t_atom* src, size_t n)
+{
+  while (n--) {
+    *dest++ = atom_getfloat (src++);
+  }
+}
+
+void iemmatrix_list2floats_modulo(t_float* dest, const t_atom* src, size_t n, size_t m)
+{
+  const t_atom *ptr = src;
+  size_t count1, count2;
+  n /= m;
+  count1 = m;
+  while (count1--)
+    for (count2 = n, ptr = src++; count2--; ptr += m, dest++) {
+      *dest = atom_getfloat (ptr);
+    }
+}
+
+unsigned int iemmatrix_atom_getuint(const t_atom*a)
+{
+  t_float f = atom_getfloat(a);
+  return (f>0)?(unsigned int)f:0;
+}
+
+int iemmatrix_atom_getint(const t_atom*a)
+{
+  t_float f = atom_getfloat(a);
+  return (int)f;
+}

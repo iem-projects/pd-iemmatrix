@@ -200,6 +200,11 @@ void matrix_row(t_matrix *x, t_symbol *s, int argc, t_atom *argv);
 void matrix_col(t_matrix *x, t_symbol *s, int argc, t_atom *argv);
 void matrix_element(t_matrix *x, t_symbol *s, int argc, t_atom *argv);
 
+void iemmatrix_floats2list(t_atom* dest, const t_float* src, size_t n);
+void iemmatrix_floats2list_modulo(t_atom* dest, const t_float* src, size_t n, size_t m);
+void iemmatrix_list2floats(t_float* dest, const t_atom* src, size_t n);
+void iemmatrix_list2floats_modulo(t_float* dest, const t_atom* src, size_t n, size_t m);
+
 
 /*
   in iemmatrix_binops.c
@@ -227,6 +232,12 @@ t_matrixfloat*mtx_doMultiply(int rowA, t_matrixfloat*A, int colArowB,
 
 /* for debugging purposes */
 #define MARK	startpost("MARK[%s:%d@%s]", __FILE__, __LINE__, __FUNCTION__), post
+
+
+
+/* helpers */
+unsigned int iemmatrix_atom_getuint(const t_atom*a);
+int iemmatrix_atom_getint(const t_atom*a);
 
 
 #endif

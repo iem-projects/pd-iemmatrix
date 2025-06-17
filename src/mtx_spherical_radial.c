@@ -127,7 +127,7 @@ static void mTXSphBang (MTXSph *x)
 static void mTXSphMatrix (MTXSph *x, t_symbol *s,
                           int argc, t_atom *argv)
 {
-  int rows, columns, size;
+  int rows, columns;
   unsigned int n,ofs;
 
   /* size check */
@@ -135,7 +135,6 @@ static void mTXSphMatrix (MTXSph *x, t_symbol *s,
 
   rows=atom_getint(argv++);
   columns=atom_getint(argv++);
-  size = rows * columns;
 
   if ((rows!=1)||(columns<1)) {
     pd_error(x, "[mtx_spherical_radial]: 1*L matrix expected with kr and h vector, but got more rows/no entries");

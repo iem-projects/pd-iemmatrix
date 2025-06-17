@@ -130,14 +130,13 @@ static void mTXBesselBang (MTXBessel *x)
 static void mTXBesselMatrix (MTXBessel *x, t_symbol *s,
                              int argc, t_atom *argv)
 {
-  int rows, columns, size;
+  size_t columns;
   int n,m,ofs;
 
   /* size check */
   if(iemmatrix_check(x, argc, argv, 0))return;
-  rows = atom_getint (argv++);
+  argv++; /* rows */
   columns = atom_getint (argv++);
-  size = rows * columns;
 
   if(my_jn && my_yn) {
     if (x->l!=columns) {

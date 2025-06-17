@@ -128,7 +128,6 @@ static void mTXShMatrix (MTXSh *x, t_symbol *s,
                          int argc, t_atom *argv)
 {
   int rows, columns, size;
-  unsigned int n;
 
   /* size check */
   if(iemmatrix_check(x, argc, argv, 0))return;
@@ -146,19 +145,23 @@ static void mTXShMatrix (MTXSh *x, t_symbol *s,
     x->l=columns;
     allocMTXShdata(x);
   }
-  switch (x->legacy_azi_reverse) {
-     case 0:
-       	for (n=0; n<x->l; n++) {
-		x->phi[n]=(double) atom_getfloat(argv+n);
-		x->theta[n]=(double) atom_getfloat(argv+columns+n);
-	}
-	break;
-     default:
-	for (n=0; n<x->l; n++) {
-		x->phi[n]=-(double) atom_getfloat(argv+n);
-		x->theta[n]=(double) atom_getfloat(argv+columns+n);
-	}
-	break;
+  if (1) {
+    unsigned int n;
+
+    switch (x->legacy_azi_reverse) {
+    case 0:
+      for (n=0; n<x->l; n++) {
+        x->phi[n]=(double) atom_getfloat(argv+n);
+        x->theta[n]=(double) atom_getfloat(argv+columns+n);
+      }
+      break;
+    default:
+      for (n=0; n<x->l; n++) {
+        x->phi[n]=-(double) atom_getfloat(argv+n);
+        x->theta[n]=(double) atom_getfloat(argv+columns+n);
+      }
+      break;
+    }
   }
 
   if (x->ws!=0) {
@@ -245,7 +248,6 @@ static void mTXChMatrix (MTXCh *x, t_symbol *s,
                          int argc, t_atom *argv)
 {
   int rows, columns, size;
-  unsigned int n;
 
   /* size check */
   if(iemmatrix_check(x, argc, argv, 0))return;
@@ -261,8 +263,11 @@ static void mTXChMatrix (MTXCh *x, t_symbol *s,
       x->l=columns;
       allocMTXChdata(x);
     }
-    for (n=0; n<x->l; n++) {
-      x->phi[n]=(double) atom_getfloat(argv+n);
+    if (1) {
+      unsigned int n;
+      for (n=0; n<x->l; n++) {
+        x->phi[n]=(double) atom_getfloat(argv+n);
+      }
     }
 
     if (x->wc!=0) {

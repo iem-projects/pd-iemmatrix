@@ -61,6 +61,7 @@ static void mTXSetdiffMode (MTXdiff *mtx_diff_obj, t_symbol *c_mode)
 static void *newMTXdiff (t_symbol *s, int argc, t_atom *argv)
 {
   MTXdiff *mtx_diff_obj = (MTXdiff *) pd_new (mtx_diff_class);
+  (void)s; /* unused */
   mTXSetdiffMode (mtx_diff_obj, gensym(":"));
   mTXSetdiffDirection (mtx_diff_obj, 1.0f);
   if (argc>=1) {
@@ -158,9 +159,10 @@ static void mTXdiffMatrix (MTXdiff *mtx_diff_obj, t_symbol *s,
   t_float *x = mtx_diff_obj->x;
   t_float *y = mtx_diff_obj->y;
   int count;
+  (void)s; /* unused */
 
   /* size check */
-  if(iemmatrix_check(mtx_diff_obj, argc, argv, 0))return;
+  if(iemmatrix_check(mtx_diff_obj, s, argc, argv, 0))return;
 
   if ((!x)||(!list_out)||(!y)) {
     if (!x) {

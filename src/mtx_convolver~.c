@@ -315,7 +315,8 @@ void mtx_convolver_tilde_array3(t_mtx_convolver_tilde *x, t_symbol *s, int argc,
   int h_len;
   int resized_outs=0;
   if (argc < 3) {
-    logpost(x, PD_NORMAL, "[%s] array3 message must have at least 3 arguments: num_inputs, num_outputs, ir_len",objname);
+    logpost(x, PD_NORMAL, "[%s] %s message must have at least 3 arguments: num_inputs, num_outputs, ir_len",
+            objname, s->s_name);
     return;
   }
   if (mtx_convolver_check(x, argc, argv, 0)) return;

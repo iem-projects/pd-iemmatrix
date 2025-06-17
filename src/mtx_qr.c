@@ -110,6 +110,7 @@ static void *newMTXQr (t_symbol *s, int argc, t_atom *argv)
   MTXQr *x = (MTXQr *) pd_new (mtx_qr_class);
   x->list_q_out = outlet_new (&x->x_obj, gensym("matrix"));
   x->list_r_out = outlet_new (&x->x_obj, gensym("matrix"));
+  (void)argc; (void)argv; /* unused */
 
   if (!have_gsl) {
     static int warn_gsl = 1;
@@ -141,7 +142,7 @@ static void mTXQrMatrix (MTXQr *x, t_symbol *s,
   if(!have_gsl)
     return;
 
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
   rows = atom_getint (argv++);
   columns = atom_getint (argv++);
   size = rows * columns;

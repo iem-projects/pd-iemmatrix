@@ -24,7 +24,7 @@ static void mtx_powelement_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   int row, col, n;
   t_atom *m;
   t_atom *m2 = x->m2.atombuffer+2;
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
   row=atom_getint(argv++);
   col=atom_getint(argv++);
   n = row*col;
@@ -86,7 +86,7 @@ static void mtx_powscalar_matrix(t_mtx_binscalar *x, t_symbol *s, int argc,
   int n=argc-2;
   t_atom *m;
   t_float factor = x->f;
-  if(iemmatrix_check(x, argc, argv, IEMMATRIX_CHECK_CRIPPLED))return;
+  if(iemmatrix_check(x, s, argc, argv, IEMMATRIX_CHECK_CRIPPLED))return;
   row=atom_getfloat(argv++);
   col=atom_getfloat(argv++);
 
@@ -107,6 +107,7 @@ static void mtx_powscalar_list(t_mtx_binscalar *x, t_symbol *s, int argc,
   int n=argc;
   t_atom *m;
   t_float factor = x->f;
+  (void)s; /* unused */
 
   adjustsize(&x->m, 1, argc);
   m = x->m.atombuffer;
@@ -121,6 +122,7 @@ static void mtx_powscalar_list(t_mtx_binscalar *x, t_symbol *s, int argc,
 
 static void *mtx_pow_new(t_symbol *s, int argc, t_atom *argv)
 {
+  (void)s; /* unused */
   if (argc) {
     /* scalar power */
     t_mtx_binscalar *x = (t_mtx_binscalar *)pd_new(mtx_powscalar_class);

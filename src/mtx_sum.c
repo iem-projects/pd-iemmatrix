@@ -23,7 +23,7 @@ static void mtx_sum_matrix(t_matrix *x, t_symbol *s, int argc,
   int row, col;
   int n;
   t_atom *ap = 0, *dummy=0;
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
   row=atom_getint(argv++);
   col=atom_getint(argv++);
 
@@ -46,6 +46,7 @@ static void mtx_sum_matrix(t_matrix *x, t_symbol *s, int argc,
 static void mtx_sum_list(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 {
   t_float f=0.f;
+  (void)s; /* unused */
   while(argc--) {
     f+=atom_getfloat(argv++);
   }

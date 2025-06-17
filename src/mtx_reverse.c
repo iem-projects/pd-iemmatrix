@@ -64,6 +64,7 @@ static void mTXSetReverseMode (MTXreverse *mtx_reverse_obj,
 static void *newMTXreverse (t_symbol *s, int argc, t_atom *argv)
 {
   MTXreverse *mtx_reverse_obj = (MTXreverse *) pd_new (mtx_reverse_class);
+  (void)s; /* unused */
   if(argc&&(A_SYMBOL==argv->a_type)) {
     mTXSetReverseMode (mtx_reverse_obj, atom_getsymbol (argv));
   } else {
@@ -122,6 +123,7 @@ static void mTXreverseMatrix (MTXreverse *mtx_reverse_obj, t_symbol *s,
   int list_size = argc - 2;
   t_atom *list_out = mtx_reverse_obj->list_out;
   int count;
+  (void)s; /* unused */
 
   /* size check */
   if (!size) {

@@ -163,6 +163,7 @@ static void mtx_sndfileread_open (t_mtx_sndfileread *x, t_symbol *s,
                                   t_symbol*type)
 {
   static fdclose_fun_t myclose = 0;
+  (void)type; /* unused */
   if(!myclose)
     myclose = (fdclose_fun_t)iemmatrix_getpdfun("sys_close");
   if(!myclose)

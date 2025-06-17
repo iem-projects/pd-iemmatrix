@@ -81,12 +81,8 @@ static void *newMTXSh (t_symbol *s, int argc, t_atom *argv)
 {
   int nmax;
   MTXSh *x = (MTXSh *) pd_new (mtx_spherical_harmonics_class);
+  (void)s; /* unused */
   x->list_sh_out = outlet_new (&x->x_obj, gensym("matrix"));
-  x->list_sh = 0;
-  x->phi = 0;
-  x->theta = 0;
-  x->ws = 0;
-  x->l=0;
   x->ntype=N3D;
   x->legacy_azi_reverse=1;
   t_symbol *nt;
@@ -130,7 +126,7 @@ static void mTXShMatrix (MTXSh *x, t_symbol *s,
   unsigned int rows, columns, size;
 
   /* size check */
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
 
   rows = atom_getint (argv++);
   columns = atom_getint (argv++);
@@ -204,6 +200,7 @@ static void *newMTXCh (t_symbol *s, int argc, t_atom *argv)
 {
   int nmax;
   MTXCh *x = (MTXCh *) pd_new (mtx_circular_harmonics_class);
+  (void)s; /* unused */
   x->list_ch_out = outlet_new (&x->x_obj, gensym("matrix"));
   x->list_ch = 0;
   x->phi = 0;
@@ -250,7 +247,7 @@ static void mTXChMatrix (MTXCh *x, t_symbol *s,
   unsigned int rows, columns, size;
 
   /* size check */
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
   rows = atom_getint (argv++);
   columns = atom_getint (argv++);
   size = rows * columns;

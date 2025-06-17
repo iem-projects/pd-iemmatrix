@@ -23,7 +23,7 @@ static void mtx_roll_matrix(t_matrix *x, t_symbol *s, int argc,
   int row, col, colroll;
   t_atom *ap;
   int c;
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
   row=atom_getint(argv++);
   col=atom_getint(argv++);
   colroll = ((int)x->f%col+col)%col;
@@ -47,21 +47,19 @@ static void mtx_roll_matrix(t_matrix *x, t_symbol *s, int argc,
   matrix_bang(x);
 }
 
-static void *mtx_roll_new(t_symbol *s, int argc, t_atom *argv)
+static void *mtx_roll_new(t_floatarg f)
 {
   t_matrix *x = (t_matrix *)pd_new(mtx_roll_class);
   floatinlet_new(&x->x_obj, &(x->f));
   outlet_new(&x->x_obj, 0);
 
-  x->f=argc?atom_getfloat(argv):0;
-  x->col=x->row=0;
-  x->atombuffer=0;
+  x->f=f;
   return (x);
 }
 void mtx_roll_setup(void)
 {
   mtx_roll_class = class_new(gensym("mtx_roll"), (t_newmethod)mtx_roll_new,
-                             (t_method)matrix_free, sizeof(t_matrix), 0, A_GIMME, 0);
+                             (t_method)matrix_free, sizeof(t_matrix), 0, A_DEFFLOAT, 0);
   class_addbang  (mtx_roll_class, matrix_bang);
   class_addmethod(mtx_roll_class, (t_method)mtx_roll_matrix,
                   gensym("matrix"), A_GIMME, 0);

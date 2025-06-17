@@ -78,8 +78,9 @@ static void *newMTXBessel (t_symbol *s, int argc, t_atom *argv)
 {
   int nmax;
   char whichfunction = 'j';
-  t_symbol *fsym;
+  t_symbol *fsym = 0;
   MTXBessel *x = (MTXBessel *) pd_new (mtx_bessel_class);
+  (void)s; /* unused */
   x->list_h_re = 0;
   x->list_h_im = 0;
   x->list_h_im_out = 0;
@@ -88,8 +89,9 @@ static void *newMTXBessel (t_symbol *s, int argc, t_atom *argv)
   x->h_re = 0;
   x->h_im = 0;
   x->l=0;
-  fsym=atom_getsymbol(argv);
-  if (fsym->s_name!=0) {
+  if(argc)
+    fsym=atom_getsymbol(argv);
+  if (fsym && fsym->s_name!=0) {
     whichfunction=fsym->s_name[0];
   }
   switch (whichfunction) {
@@ -132,9 +134,10 @@ static void mTXBesselMatrix (MTXBessel *x, t_symbol *s,
 {
   size_t columns;
   size_t n, m;
+  (void)s; /* unused */
 
   /* size check */
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
   argv++; /* rows */
   columns = atom_getint (argv++);
 

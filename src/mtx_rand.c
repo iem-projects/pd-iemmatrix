@@ -45,6 +45,7 @@ static void mtx_rand_random(t_matrix *x)
 static void mtx_rand_list(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 {
   int row, col;
+  (void)s; /* unused */
 
   switch(argc) {
   case 0:
@@ -81,6 +82,7 @@ static void *mtx_rand_new(t_symbol *s, int argc, t_atom *argv)
 {
   t_matrix *x = (t_matrix *)pd_new(mtx_rand_class);
   int row, col;
+  (void)s; /* unused */
   outlet_new(&x->x_obj, 0);
   x->col=x->row=0;
   x->atombuffer=0;

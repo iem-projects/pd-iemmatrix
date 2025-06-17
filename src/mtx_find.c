@@ -78,7 +78,7 @@ static void *newMTXFind (t_symbol *s, int argc, t_atom *argv)
         if (argv[1].a_type != A_SYMBOL) {
           mTXSetFindDirection (mtx_find_obj, atom_getfloat (argv+1));
         } else {
-          pd_error(mtx_find_obj, "[mtx_find]: 2nd arg ignored. supposed to be float");
+          pd_error(mtx_find_obj, "[%s]: 2nd arg ignored. supposed to be float", s->s_name);
         }
       }
     } else {
@@ -87,7 +87,7 @@ static void *newMTXFind (t_symbol *s, int argc, t_atom *argv)
         if (argv[1].a_type == A_SYMBOL) {
           mTXSetFindMode (mtx_find_obj, atom_getsymbol (argv+1));
         } else {
-          pd_error(mtx_find_obj, "[mtx_find]: 2nd arg ignored. supposed to be symbolic, e.g. \"row\", \"col\", \":\", \"mtx\"");
+          pd_error(mtx_find_obj, "[%s]: 2nd arg ignored. supposed to be symbolic, e.g. \"row\", \"col\", \":\", \"mtx\"", s->s_name);
         }
       }
     }
@@ -245,9 +245,10 @@ static void mTXFindMatrix (MTXfind *mtx_find_obj, t_symbol *s,
   t_atom *list_out = mtx_find_obj->list_out;
   int rows_out;
   int columns_out;
+  (void)s; /* unused */
 
   /* size check */
-  if(iemmatrix_check(mtx_find_obj, argc, argv, 0))return;
+  if(iemmatrix_check(mtx_find_obj, s, argc, argv, 0))return;
 
   if (size != mtx_find_obj->size) {
     if (!list_out) {

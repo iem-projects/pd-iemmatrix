@@ -20,6 +20,7 @@ static void mtx_resize_list2(t_matrix *x, t_symbol *s, int argc,
                              t_atom *argv)
 {
   int r, c;
+  (void)s; /* unused */
   if (argc<1) {
     return;
   }
@@ -52,7 +53,7 @@ static void mtx_resize_matrix(t_matrix *x, t_symbol *s, int argc,
   int col=atom_getfloat(argv+1);
   int r = x->current_row, c = x->current_col;
   int R=0, ROW, COL;
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
 
   if (!r) {
     r=row;
@@ -87,6 +88,7 @@ static void *mtx_resize_new(t_symbol *s, int argc, t_atom *argv)
 {
   t_matrix *x = (t_matrix *)pd_new(mtx_resize_class);
   int c=0, r=0;
+  (void)s; /* unused */
 
   if(argc) {
     if(argc-1) {

@@ -20,12 +20,14 @@ static t_class *mtx_mean_class;
 static void mtx_mean_matrix(t_matrix *x, t_symbol *s, int argc,
                             t_atom *argv)
 {
+  if(argc<2)return;
   int row=atom_getfloat(argv++);
   int col=atom_getfloat(argv++);
   t_atom *ip, *op;
   int c=col, r;
   t_float sum;
   t_float factor=1./row;
+  (void)s; /* unused */
   adjustsize(x, 1, col);
   op=x->atombuffer;
 
@@ -46,8 +48,6 @@ static void *mtx_mean_new(void)
 {
   t_matrix *x = (t_matrix *)pd_new(mtx_mean_class);
   outlet_new(&x->x_obj, 0);
-  x->col=x->row=0;
-  x->atombuffer=0;
   return (x);
 }
 void mtx_mean_setup(void)

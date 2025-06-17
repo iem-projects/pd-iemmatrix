@@ -18,7 +18,9 @@ static void mtx_diegg_matrix(t_matrix *x, t_symbol *s, int argc,
 {
   int row, col, length, n;
   t_atom *ap = 0, *dummy=0;
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  (void)s; /* unused */
+
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
   row=atom_getfloat(argv++);
   col=atom_getfloat(argv++);
   length=(col<row)?col:row;

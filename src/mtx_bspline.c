@@ -118,7 +118,8 @@ static void mtx_bspline_matrix2(t_mtx_spline *X, t_symbol *s, int argc,
   t_matrixfloat*dummy;
   int i,j;
   int N;
-  if(iemmatrix_check(X, argc, argv, 0))return;
+  (void)s; /* unused */
+  if(iemmatrix_check(X, s, argc, argv, 0))return;
 
   row=atom_getfloat(argv);
   col=atom_getfloat(argv+1);
@@ -184,11 +185,13 @@ static void mtx_bspline_matrix2(t_mtx_spline *X, t_symbol *s, int argc,
   }
 }
 
+#if 0
 static void mtx_bspline_list(t_mtx_spline *x, t_symbol *s, int argc,
                              t_atom *argv)
 {
   /* this should output a matrix, one row for each element of this list */
 }
+#endif
 static void mtx_bspline_float(t_mtx_spline *X, t_float f)
 {
   int i=0, j=0;

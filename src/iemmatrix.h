@@ -159,7 +159,7 @@ enum {
   IEMMATRIX_CHECK_SPARSE     = 1<<2,
   IEMMATRIX_CHECK_ALL        = 0
 };
-int iemmatrix_check(void*object, int argc, t_atom*argv, unsigned int tests);
+int iemmatrix_check(void*object, t_symbol*s, int argc, t_atom*argv, unsigned int tests);
 
 /* get a (decorated) objname: returns either "[<foo>]: " or ""
  * the returned string MUST NOT be freed by the caller

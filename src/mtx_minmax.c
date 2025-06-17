@@ -151,7 +151,8 @@ static void mTXMinMaxMatrix (MTXminmax *mtx_minmax_obj, t_symbol *s,
   int elements_out;
 
   /* size check */
-  if(iemmatrix_check(mtx_minmax_obj, argc, argv, 0))return;
+  (void)s; /* unused */
+  if(iemmatrix_check(mtx_minmax_obj, s, argc, argv, 0))return;
   rows = atom_getint(argv++);
   columns = atom_getint(argv++);
   size = rows * columns;

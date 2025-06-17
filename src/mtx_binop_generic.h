@@ -51,6 +51,7 @@ static void mtxbin_scalar_matrix (t_mtx_binscalar *x, t_symbol *s,
 #endif
   t_atom *buf;
   t_atom *ap=argv+2;
+  (void)s; /* unused */
 
   if(argc<2) {
     post( MTXBIN_SHORTNAME ": crippled matrix");
@@ -82,6 +83,9 @@ static void mtxbin_scalar_list(t_mtx_binscalar *x, t_symbol *s, int argc,
 #else
   t_float offset=x->f;
 #endif
+
+  (void)s; /* unused */
+
   adjustsize(&x->m, 1, argc);
   m = x->m.atombuffer;
 
@@ -105,6 +109,7 @@ static void mtxbin_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   t_atom *m1 = argv+2;
   t_atom *m2 = x->m2.atombuffer+2;
   int n = argc-2;
+  (void)s; /* unused */
 
   if (argc<2) {
     post( MTXBIN_SHORTNAME ": crippled matrix");
@@ -267,7 +272,7 @@ static void mtxbin_float(t_mtx_binmtx *x, t_float fval)
 static void *mtxbin_new(t_symbol *s, int argc, t_atom *argv)
 {
   if (argc>1) {
-    post( MTXBIN_SHORTNAME " : extra arguments ignored");
+    post("%s : extra arguments ignored", (s && s->s_name) ? s->s_name : MTXBIN_SHORTNAME);
   }
   if (argc) {
     t_mtx_binscalar *x = (t_mtx_binscalar *)pd_new(MTXBIN_APPEND(

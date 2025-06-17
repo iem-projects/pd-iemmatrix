@@ -179,15 +179,14 @@ static void mTXEigMatrix (MTXEig *x, t_symbol *s,
                           int argc, t_atom *argv)
 {
   int rows, columns, size;
-  int n,m;
+  int n;
   float f;
-
-  gsl_complex c;
+  (void)s; /* unused */
   if (!have_gsl) {
     return;
   }
   /* size check */
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
   rows = atom_getint (argv++);
   columns = atom_getint (argv++);
   size=rows*columns;

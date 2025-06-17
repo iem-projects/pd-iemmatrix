@@ -21,7 +21,7 @@ void mtx_bin_matrix2(t_mtx_binmtx *x, t_symbol *s, int argc, t_atom *argv)
 {
   int row = atom_getfloat(argv);
   int col = atom_getfloat(argv+1);
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
 
   if (row*col!=x->m2.row*x->m2.col) {
     freebytes(x->m2.atombuffer, (x->m2.row*x->m2.col+2)*sizeof(t_atom));

@@ -29,7 +29,8 @@ static void mtx_max2scalar_matrix(t_mtx_binscalar *x, t_symbol *s,
   t_float offset=x->f;
   t_atom *buf;
   t_atom *ap=argv+2;
-  if(iemmatrix_check(x, argc, argv, IEMMATRIX_CHECK_CRIPPLED))return;
+  (void)s; /* unused */
+  if(iemmatrix_check(x, s, argc, argv, IEMMATRIX_CHECK_CRIPPLED))return;
   adjustsize(&x->m, row, col);
 
   buf=x->m.atombuffer+2;
@@ -48,6 +49,7 @@ static void mtx_max2scalar_list(t_mtx_binscalar *x, t_symbol *s, int argc,
   int n=argc;
   t_atom *m;
   t_float offset = x->f;
+  (void)s; /* unused */
   adjustsize(&x->m, 1, argc);
   m = x->m.atombuffer;
 
@@ -69,7 +71,8 @@ static void mtx_max2_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   t_atom *m1 = argv+2;
   t_atom *m2 = x->m2.atombuffer+2;
   int n = argc-2;
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  (void)s; /* unused */
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
   if (!(x->m2.col && x->m2.row)) {
     outlet_anything(x->x_obj.ob_outlet, gensym("matrix"), argc, argv);
     return;
@@ -125,7 +128,7 @@ static void *mtx_max2_new(t_symbol *s, int argc, t_atom *argv)
   if (argc) {
     t_mtx_binscalar *x = (t_mtx_binscalar *)pd_new(mtx_max2scalar_class);
     if (argc>1) {
-      pd_error(x, "[mtx_max2]: extra arguments ignored");
+      pd_error(x, "[%s]: extra arguments ignored", s->s_name);
     }
     floatinlet_new(&x->x_obj, &x->f);
     x->f = atom_getfloatarg(0, argc, argv);

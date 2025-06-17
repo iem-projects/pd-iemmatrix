@@ -113,6 +113,7 @@ static void mtx_dispersive_dline_resize(t_mtx_dispersive_dline *x,
   int length=(int)atom_getfloat(argv);
   int channels=x->channels;
   int size=length*channels;
+  (void)s; /* unused */
 
   if (argc>1) {
     channels=(int)atom_getfloat(argv+1);
@@ -172,8 +173,9 @@ static void mtx_dispersive_dline_matrix(t_mtx_dispersive_dline *x,
   int samples=(int)atom_getfloat(argv+1);
   int c,n,n2;
   t_atom resize_msg[2];
+  (void)s; /* unused */
 
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
 
   logpost(x, 4, "%d samples, %d channels",samples,channels);
 
@@ -209,6 +211,7 @@ static void *mtx_dispersive_dline_new(t_symbol *s, int argc, t_atom *argv)
   t_float length=1;
   t_float lambda=0;
   t_atom resize_msg[2];
+  (void)s; /* unused */
 
   x->list_outlet = outlet_new(&x->x_obj, &s_list);
 

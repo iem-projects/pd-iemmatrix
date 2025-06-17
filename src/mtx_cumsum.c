@@ -75,7 +75,7 @@ static void *newMTXCumsum (t_symbol *s, int argc, t_atom *argv)
         if (argv[1].a_type != A_SYMBOL) {
           mTXSetCumsumDirection (mtx_cumsum_obj, atom_getfloat (argv+1));
         } else {
-          pd_error(mtx_cumsum_obj, "[mtx_cumsum]: 2nd arg ignored. supposed to be float");
+          pd_error(mtx_cumsum_obj, "[%s]: 2nd arg ignored. supposed to be float", s->s_name);
         }
       }
     } else {
@@ -84,7 +84,8 @@ static void *newMTXCumsum (t_symbol *s, int argc, t_atom *argv)
         if (argv[1].a_type == A_SYMBOL) {
           mTXSetCumsumMode (mtx_cumsum_obj, atom_getsymbol (argv+1));
         } else {
-          pd_error(mtx_cumsum_obj, "[mtx_cumsum]: 2nd arg ignored. supposed to be symbolic, e.g. \"row\", \"col\", \":\"");
+          pd_error(mtx_cumsum_obj, "[%s]: 2nd arg ignored. supposed to be symbolic, e.g. \"row\", \"col\", \":\"",
+                   s->s_name);
         }
       }
     }
@@ -163,9 +164,10 @@ static void mTXCumsumMatrix (MTXCumsum *mtx_cumsum_obj, t_symbol *s,
   t_float *x = mtx_cumsum_obj->x;
   t_float *y = mtx_cumsum_obj->y;
   int count;
+  (void)s; /* unused */
 
   /* size check */
-  if(iemmatrix_check(mtx_cumsum_obj, argc, argv, 0))return;
+  if(iemmatrix_check(mtx_cumsum_obj, s, argc, argv, 0))return;
   rows = atom_getint (argv+0);
   columns = atom_getint (argv+1);
   size = rows * columns;

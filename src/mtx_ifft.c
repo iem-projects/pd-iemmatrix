@@ -49,16 +49,12 @@ static void deleteMtxIFFT (MtxIFFT *x)
   }
 }
 
-static void *newMtxIFFT (t_symbol *s, int argc, t_atom *argv)
+static void *newMtxIFFT ()
 {
   MtxIFFT *x = (MtxIFFT *) pd_new (mtx_ifft_class);
   inlet_new(&x->x_obj, &x->x_obj.ob_pd, gensym("matrix"),gensym(""));
   x->list_re_out = outlet_new (&x->x_obj, gensym("matrix"));
   x->list_im_out = outlet_new (&x->x_obj, gensym("matrix"));
-
-  x->size=0;
-  x->f_re=x->f_im=0;
-  x->list_re=x->list_im=0;
 
   return ((void *) x);
 }
@@ -106,9 +102,10 @@ static void mtxIFFTMatrixCold (MtxIFFT *x, t_symbol *s,
   t_atom *list_im = x->list_im;
   t_float *f_re = x->f_re;
   t_float *f_im = x->f_im;
+  (void)s; /* unused */
 
   /* fftsize check */
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
   rows = atom_getint (argv++);
   columns = atom_getint (argv++);
   size = rows * columns;
@@ -155,6 +152,7 @@ static void mtxIFFTMatrixHot (MtxIFFT *x, t_symbol *s,
   t_atom *list_im = x->list_im;
   t_float *f_re = x->f_re;
   t_float *f_im = x->f_im;
+  (void)s; /* unused */
 
   /* fftsize check */
   if (!size) {
@@ -212,7 +210,7 @@ void mtx_ifft_setup (void)
                     (t_newmethod) newMtxIFFT,
                     (t_method) deleteMtxIFFT,
                     sizeof (MtxIFFT),
-                    CLASS_DEFAULT, A_GIMME, 0);
+                    CLASS_DEFAULT, 0);
   class_addbang (mtx_ifft_class, (t_method) mtxIFFTBang);
   class_addmethod (mtx_ifft_class, (t_method) mtxIFFTMatrixHot,
                    gensym("matrix"), A_GIMME,0);

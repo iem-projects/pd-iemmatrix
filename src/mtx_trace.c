@@ -28,7 +28,7 @@ static void mtx_trace_matrix(t_mtx_trace *x, t_symbol *s, int argc,
 {
   int row, col, length;
   t_float trace = 0;
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
   row=atom_getint(argv+0);
   col=atom_getint(argv+1);
   length=(col<row)?col:row;
@@ -38,18 +38,17 @@ static void mtx_trace_matrix(t_mtx_trace *x, t_symbol *s, int argc,
   x->trace=trace;
   mtx_trace_bang(x);
 }
-static void *mtx_trace_new(t_symbol *s, int argc, t_atom *argv)
+static void *mtx_trace_new()
 {
   t_mtx_trace *x = (t_mtx_trace *)pd_new(mtx_trace_class);
   outlet_new(&x->x_obj, 0);
-  x->trace=0;
   return (x);
 }
 void mtx_trace_setup(void)
 {
   mtx_trace_class = class_new(gensym("mtx_trace"),
                               (t_newmethod)mtx_trace_new,
-                              0, sizeof(t_mtx_trace), 0, A_GIMME, 0);
+                              0, sizeof(t_mtx_trace), 0, 0);
   class_addbang  (mtx_trace_class, mtx_trace_bang);
   class_addmethod(mtx_trace_class, (t_method)mtx_trace_matrix,
                   gensym("matrix"), A_GIMME, 0);

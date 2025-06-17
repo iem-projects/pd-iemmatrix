@@ -133,7 +133,7 @@ static void multiplyDoubleVector (int n, double *f, t_float fac)
   }
 }
 
-static void *newMTXRifft (t_symbol *s, int argc, t_atom *argv)
+static void *newMTXRifft ()
 {
   MTXRifft *x = (MTXRifft *) pd_new (mtx_rifft_class);
   inlet_new(&x->x_obj, &x->x_obj.ob_pd, gensym("matrix"),gensym(""));
@@ -163,6 +163,7 @@ static void mTXRifftMatrixCold (MTXRifft *x, t_symbol *s,
   t_float *f_im = x->f_im;
 
   const int use_fftw = have_fftw;
+  (void)s; /* unused */
 
   /* ifftsize check */
   if (columns_re < 3) {
@@ -248,6 +249,7 @@ static void mTXRifftMatrixHot (MTXRifft *x, t_symbol *s,
 
   t_float renorm_fac = x->renorm_fac;
   const int use_fftw = have_fftw;
+  (void)s; /* unused */
 
   /* ifftsize check */
   if ((rows != x->rows) ||
@@ -337,7 +339,7 @@ void mtx_rifft_setup (void)
                      (t_newmethod) newMTXRifft,
                      (t_method) deleteMTXRifft,
                      sizeof (MTXRifft),
-                     CLASS_DEFAULT, A_GIMME, 0);
+                     CLASS_DEFAULT, 0);
   class_addbang (mtx_rifft_class, (t_method) mTXRifftBang);
   class_addmethod (mtx_rifft_class, (t_method) mTXRifftMatrixHot,
                    gensym("matrix"), A_GIMME,0);

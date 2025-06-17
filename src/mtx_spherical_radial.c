@@ -74,8 +74,9 @@ static void *newMTXSph (t_symbol *s, int argc, t_atom *argv)
 {
   int nmax;
   char whichfunction = 'j';
-  t_symbol *fsym;
+  t_symbol *fsym = 0;
   MTXSph *x = (MTXSph *) pd_new (mtx_spherical_radial_class);
+  (void)s; /* unused */
   x->list_h_re = 0;
   x->list_h_im = 0;
   x->list_h_im_out = 0;
@@ -84,8 +85,9 @@ static void *newMTXSph (t_symbol *s, int argc, t_atom *argv)
   x->h_re = 0;
   x->h_im = 0;
   x->l=0;
-  fsym=atom_getsymbol(argv);
-  if (fsym->s_name!=0) {
+  if(argc)
+    fsym=atom_getsymbol(argv);
+  if (fsym && fsym->s_name!=0) {
     whichfunction=fsym->s_name[0];
   }
   switch (whichfunction) {
@@ -131,7 +133,7 @@ static void mTXSphMatrix (MTXSph *x, t_symbol *s,
   unsigned int n,ofs;
 
   /* size check */
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
 
   rows=atom_getint(argv++);
   columns=atom_getint(argv++);

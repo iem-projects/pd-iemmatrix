@@ -109,6 +109,7 @@ static void deleteMTXSvd (MTXSvd *x)
 static void *newMTXSvd (t_symbol *s, int argc, t_atom *argv)
 {
   MTXSvd *x = (MTXSvd *) pd_new (mtx_svd_class);
+  (void)argc; (void)argv; /* unused */
   x->list_u_out = outlet_new (&x->x_obj, gensym("matrix"));
   x->list_s_out = outlet_new (&x->x_obj, gensym("list"));
   x->list_v_out = outlet_new (&x->x_obj, gensym("matrix"));
@@ -141,7 +142,7 @@ static void mTXSvdMatrix (MTXSvd *x, t_symbol *s,
 {
   int rows, columns, size;
   int n;
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
   rows = atom_getint (argv++);
   columns = atom_getint (argv++);
   size=rows*columns;

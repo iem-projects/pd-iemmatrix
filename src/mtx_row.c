@@ -27,12 +27,13 @@ static void mtx_row_float(t_matrix *x, t_floatarg f)
 static void mtx_row_matrix(t_matrix *x, t_symbol *s, int argc,
                            t_atom *argv)
 {
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
   matrix_matrix2(x, s, argc, argv);
   matrix_bang(x);
 }
 static void mtx_row_list(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 {
+  (void)s; /* unused */
   if (argc==1) {
     t_float f=atom_getfloat(argv);
     t_atom *ap=x->atombuffer+2+(x->current_row-1)*x->col;
@@ -74,6 +75,7 @@ static void *mtx_row_new(t_symbol *s, int argc, t_atom *argv)
 {
   t_matrix *x = (t_matrix *)pd_new(mtx_row_class);
   int i, j, q;
+  (void)s; /* unused */
 
   outlet_new(&x->x_obj, 0);
   inlet_new(&x->x_obj, &x->x_obj.ob_pd, gensym("float"), gensym(""));

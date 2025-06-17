@@ -24,7 +24,7 @@ static t_class *mtx_print_class;
 static void mtx_print(t_mtxprint *x, t_symbol *s, int argc, t_atom *argv)
 {
   int col, row;
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
   row = atom_getfloat(argv++);
   col = atom_getfloat(argv++);
   post("%s:", x->x_s->s_name);

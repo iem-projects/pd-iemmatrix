@@ -22,7 +22,8 @@ static void mtx_log_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
 {
   int row, col, n;
   t_atom *m;
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  (void)s; /* unused */
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
   row=atom_getint(argv++);
   col=atom_getint(argv++);
   n=row*col;
@@ -45,6 +46,7 @@ static void mtx_log_list(t_mtx_binscalar *x, t_symbol *s, int argc,
 {
   int n=argc;
   t_atom *m;
+  (void)s; /* unused */
 
   adjustsize(&x->m, 1, argc);
   m = x->m.atombuffer;
@@ -57,13 +59,11 @@ static void mtx_log_list(t_mtx_binscalar *x, t_symbol *s, int argc,
   outlet_list(x->x_obj.ob_outlet, gensym("list"), argc, x->m.atombuffer);
 }
 
-static void *mtx_log_new(t_symbol *s)
+static void *mtx_log_new()
 {
   /* element log */
   t_matrix *x = (t_matrix *)pd_new(mtx_log_class);
   outlet_new(&x->x_obj, 0);
-  x->col = x->row = 0;
-  x->atombuffer = 0;
   return(x);
 }
 
@@ -71,7 +71,7 @@ void mtx_log_setup(void)
 {
   mtx_log_class = class_new(gensym("mtx_log"), (t_newmethod)mtx_log_new,
                             (t_method)mtx_binmtx_free,
-                            sizeof(t_mtx_binmtx), 0, A_GIMME, 0);
+                            sizeof(t_mtx_binmtx), 0, 0);
   class_addmethod(mtx_log_class, (t_method)mtx_log_matrix, gensym("matrix"),
                   A_GIMME, 0);
   class_addlist  (mtx_log_class, mtx_log_list);

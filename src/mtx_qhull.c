@@ -50,16 +50,11 @@ static void deleteMTXQhull(MTXQhull *xo)
         xo->iter=0;
 }*/
 
-static void *newMTXQhull(t_symbol *s, int argc, t_atom *argv)
+static void *newMTXQhull()
 {
-  int nmax;
   MTXQhull *xo = (MTXQhull *) pd_new (mtx_qhull_class);
   xo->outl = outlet_new (&xo->x_obj, gensym("matrix"));
   xo->outl_fl = outlet_new (&xo->x_obj, gensym("float"));
-  xo->zh=0;
-  xo->list=0;
-  xo->size=0;
-//    xo->iter=0;
 //    if (argc>0)
 //        mTXQhullSetIterations(xo,atom_getfloat(argv));
   return ((void *) xo);
@@ -77,7 +72,7 @@ static void mTXQhullMatrix(MTXQhull *xo, t_symbol *s,
   float *z;
 
   /* size check */
-  if(iemmatrix_check(xo, argc, argv, 0))return;
+  if(iemmatrix_check(xo, s, argc, argv, 0))return;
   rows=atom_getint(argv++);
   columns=atom_getint(argv++);
 
@@ -153,7 +148,7 @@ void mtx_qhull_setup (void)
                       (t_newmethod) newMTXQhull,
                       (t_method) deleteMTXQhull,
                       sizeof(MTXQhull),
-                      CLASS_DEFAULT, A_GIMME, 0);
+                      CLASS_DEFAULT, 0);
   class_addmethod(mtx_qhull_class, (t_method) mTXQhullMatrix,
                   gensym("matrix"), A_GIMME, 0);
 //    class_addfloat(mtx_qhull_class, (t_method) mTXQhullSetIterations);

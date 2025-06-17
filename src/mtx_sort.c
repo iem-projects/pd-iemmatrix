@@ -74,6 +74,7 @@ static void mTXSetSortMode (MTXSort *mtx_sort_obj, t_symbol *m_sym)
 static void *newMTXSort (t_symbol *s, int argc, t_atom *argv)
 {
   MTXSort *mtx_sort_obj = (MTXSort *) pd_new (mtx_sort_class);
+  (void)s; /* unused */
 
   /* defaults: */
   mTXSetSortMode (mtx_sort_obj, gensym(":"));
@@ -250,7 +251,6 @@ static void mTXSortMatrix (MTXSort *mtx_sort_obj, t_symbol *s,
                            int argc, t_atom *argv)
 {
   int rows, columns, size;
-  int list_size = argc - 2;
   t_atom *list_ptr = argv + 2;
   t_atom *list_out1 = mtx_sort_obj->list_out1;
   t_atom *list_out2 = mtx_sort_obj->list_out2;
@@ -259,7 +259,7 @@ static void mTXSortMatrix (MTXSort *mtx_sort_obj, t_symbol *s,
   int count;
 
   /* size check */
-  if(iemmatrix_check(mtx_sort_obj, argc, argv, 0))return;
+  if(iemmatrix_check(mtx_sort_obj, s, argc, argv, 0))return;
 
   rows = atom_getint (argv++);
   columns = atom_getint (argv++);

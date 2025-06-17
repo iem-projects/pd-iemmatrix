@@ -74,6 +74,7 @@ static void *newMTXDecay (t_symbol *s, int argc, t_atom *argv)
   int sym_count=0;
   int first_sym=argc;
   int n=0;
+  (void)s; /* unused */
 
   mTXSetDecayMode (mtx_decay_obj, gensym(":"));
   mTXSetDecayDirection (mtx_decay_obj, 1);
@@ -192,9 +193,10 @@ static void mTXDecayMatrix (MTXDecay *mtx_decay_obj, t_symbol *s,
   t_float *x = mtx_decay_obj->x;
   t_float *y = mtx_decay_obj->y;
   int count;
+  (void)s; /* unused */
 
   /* size check */
-  if(iemmatrix_check(mtx_decay_obj, argc, argv, 0))return;
+  if(iemmatrix_check(mtx_decay_obj, s, argc, argv, 0))return;
   if ((!x)||(!list_out)||(!y)) {
     if (!x) {
       x = (t_float *) getbytes (sizeof (t_float) * (size));

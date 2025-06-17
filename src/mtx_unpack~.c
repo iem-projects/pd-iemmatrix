@@ -221,7 +221,7 @@ static void mtx_unpack_matrix (mtx_unpack_tilde *x, t_symbol *s,
                                   int argc, t_atom *argv)
 {
   int rows, cols;
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
   rows=(int) atom_getfloat (argv++);
   cols=(int) atom_getfloat (argv++);
   argc-=2;

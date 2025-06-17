@@ -69,7 +69,7 @@ static void getTFloatMatrix (int rows, int columns, t_float ***mtx,
 static void deleteTFloatMatrix (int rows, int columns, t_float ***mtx,
                                 t_float **myarray)
 {
-  int size = rows*columns;
+  (void)rows; (void)columns;
   if (*mtx) {
     free (*mtx);
   }
@@ -97,7 +97,7 @@ static void deleteMTXConv (MTXConv *mtx_conv_obj)
   mtx_conv_obj->list = 0;
 }
 
-static void *newMTXConv (t_symbol *s, int argc, t_atom *argv)
+static void *newMTXConv ()
 {
   MTXConv *mtx_conv_obj = (MTXConv *) pd_new (mtx_conv_class);
   mtx_conv_obj->list_outlet = outlet_new (&mtx_conv_obj->x_obj,
@@ -173,7 +173,8 @@ static void mTXConvKernelMatrix (MTXConv *mtx_conv_obj, t_symbol *s,
                                  t_atom *argv)
 {
   int rows_k, columns_k, size_k;
-  if(iemmatrix_check(mtx_conv_obj, argc, argv, 0))return;
+  (void)s; /* unused */
+  if(iemmatrix_check(mtx_conv_obj, s, argc, argv, 0))return;
   rows_k = atom_getint (argv++);
   columns_k = atom_getint (argv++);
   size_k = rows_k * columns_k;
@@ -235,6 +236,7 @@ static void mTXConvMatrix (MTXConv *mtx_conv_obj, t_symbol *s,
   int columns_y;
   int size_y = mtx_conv_obj->size_y;
   t_atom *list_ptr = mtx_conv_obj->list;
+  (void)s; /* unused */
 
   /* fftsize check */
   if (!size) {
@@ -312,7 +314,7 @@ void mtx_conv_setup (void)
                     (t_newmethod) newMTXConv,
                     (t_method) deleteMTXConv,
                     sizeof (MTXConv),
-                    CLASS_DEFAULT, A_GIMME, 0);
+                    CLASS_DEFAULT, 0);
   class_addbang (mtx_conv_class, (t_method) mTXConvBang);
   class_addmethod (mtx_conv_class, (t_method) mTXConvMatrix,
                    gensym("matrix"), A_GIMME,0);

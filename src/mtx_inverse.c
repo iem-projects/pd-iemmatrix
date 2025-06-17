@@ -26,7 +26,9 @@ static void mtx_inverse_matrix(t_matrix *x, t_symbol *s, int argc,
   int err=0;
 
   t_matrixfloat *original, *inverted;
-  if(iemmatrix_check(x, argc, argv, 0))return;
+
+  (void)s; /* unused */
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
   /* reserve memory for outputting afterwards */
   adjustsize(x, col, row);
 
@@ -76,12 +78,10 @@ static void mtx_inverse_matrix(t_matrix *x, t_symbol *s, int argc,
   matrix_bang(x);
 }
 
-static void *mtx_inverse_new(t_symbol *s, int argc, t_atom *argv)
+static void *mtx_inverse_new()
 {
   t_matrix *x = (t_matrix *)pd_new(mtx_inverse_class);
   outlet_new(&x->x_obj, 0);
-  x->col=x->row=0;
-  x->atombuffer=0;
   x->x_outlet=outlet_new(&x->x_obj, 0);
 
   return (x);
@@ -90,7 +90,7 @@ void mtx_inverse_setup(void)
 {
   mtx_inverse_class = class_new(gensym("mtx_inverse"),
                                 (t_newmethod)mtx_inverse_new,
-                                (t_method)matrix_free, sizeof(t_matrix), 0, A_GIMME, 0);
+                                (t_method)matrix_free, sizeof(t_matrix), 0, 0);
   class_addbang  (mtx_inverse_class, matrix_bang);
   class_addmethod(mtx_inverse_class, (t_method)mtx_inverse_matrix,
                   gensym("matrix"), A_GIMME, 0);

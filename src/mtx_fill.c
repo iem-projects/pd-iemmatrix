@@ -109,6 +109,7 @@ static void mTXFillIndexMatrix (MTXfill *mtx_fill_obj, t_symbol *s,
   int size = rows * columns;
   int list_size = argc - 2;
   int *idx = mtx_fill_obj->index;
+  (void)s; /* unused */
 
   /* size check */
   if (!size) {
@@ -158,13 +159,13 @@ static void *newMTXFill (t_symbol *s, int argc, t_atom *argv)
   mtx_fill_obj->fill_startrow = 1;
   mtx_fill_obj->fill_startcol = 1;
   mtx_fill_obj->fill_type = DONT_FILL_JUST_PASS;
-  pd_error(mtx_fill_obj, "[mtx_fill]: this object _might_ change in the future!");
+  pd_error(mtx_fill_obj, "[%s]: this object _might_ change in the future!", s->s_name);
   if (argc) {
     if (atom_getsymbol(argv)==gensym("matrix")) {
       mTXFillIndexMatrix (mtx_fill_obj, s, argc-1, argv+1);
     } else {
       pd_error(mtx_fill_obj,
-               "mtx_fill: creation argument must be 'matrix <startrow> <startcol>' for submatrix filling or 'matrix rows columns [...]' for indexed filling with scalar/matrices");
+               "%s: creation argument must be 'matrix <startrow> <startcol>' for submatrix filling or 'matrix rows columns [...]' for indexed filling with scalar/matrices", s->s_name);
     }
   }
 
@@ -184,9 +185,10 @@ static void mTXBigMatrix (MTXfill *mtx_fill_obj, t_symbol *s,
   int columns = atom_getint (argv+1);
   int size = rows * columns;
   t_atom *list_out = mtx_fill_obj->list_out;
+  (void)s; /* unused */
 
   /* size check */
-  if(iemmatrix_check(mtx_fill_obj, argc, argv, 0))return;
+  if(iemmatrix_check(mtx_fill_obj, s, argc, argv, 0))return;
 
   if (size != mtx_fill_obj->size) {
     if (!list_out) {
@@ -224,8 +226,6 @@ static void writeFillMatrixIntoList (int fillrows, const int fillcols,
 static void mTXFillScalar (MTXfill *mtx_fill_obj, t_float f)
 {
   t_atom *list_out = mtx_fill_obj->list_out;
-  int rows = mtx_fill_obj->rows;
-  int columns = mtx_fill_obj->columns;
 
   switch (mtx_fill_obj->fill_type) {
   case FILL_SUBMATRIX:
@@ -265,6 +265,7 @@ static void mTXFillMatrix (MTXfill *mtx_fill_obj, t_symbol *s,
   t_atom *list_out = mtx_fill_obj->list_out;
   int stopcol = mtx_fill_obj->fill_startcol+fill_columns-1;
   int stoprow = mtx_fill_obj->fill_startrow+fill_rows-1;
+  (void)s; /* unused */
 
   if (mtx_fill_obj->fill_type == DONT_FILL_JUST_PASS) {
     mTXFillBang(mtx_fill_obj);

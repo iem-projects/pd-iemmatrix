@@ -23,6 +23,8 @@ static void mtx_check_matrix(t_matrix *x, t_symbol *s, int argc,
   int col=atom_getfloat(argv+1);
   t_atom *ap;
   int length=row*col, n;
+  (void)s; /* unused */
+
   argc-=2;
 
   if(length>argc) {
@@ -52,12 +54,10 @@ static void mtx_check_matrix(t_matrix *x, t_symbol *s, int argc,
   }
 }
 
-static void *mtx_check_new(t_symbol *s, int argc, t_atom *argv)
+static void *mtx_check_new()
 {
   t_matrix *x = (t_matrix *)pd_new(mtx_check_class);
   outlet_new(&x->x_obj, 0);
-  x->col=x->row=0;
-  x->atombuffer=0;
   return (x);
 }
 
@@ -65,7 +65,7 @@ void mtx_check_setup(void)
 {
   mtx_check_class = class_new(gensym("mtx_check"),
                               (t_newmethod)mtx_check_new,
-                              (t_method)matrix_free, sizeof(t_matrix), 0, A_GIMME, 0);
+                              (t_method)matrix_free, sizeof(t_matrix), 0, 0);
   class_addbang  (mtx_check_class, matrix_bang);
   class_addmethod(mtx_check_class, (t_method)mtx_check_matrix,
                   gensym("matrix"), A_GIMME, 0);

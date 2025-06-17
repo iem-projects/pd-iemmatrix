@@ -46,6 +46,7 @@ static void mTXSliceIndexList (MTXslice *mtx_slice_obj, t_symbol *s,
   int stopcol;
   int stoprow;
   t_symbol *endsym = gensym("end");
+  (void)s; /* unused */
 
   if (argc<4) {
     pd_error(mtx_slice_obj, "[mtx_slice]: invalid index vector: <startrow><startcol><stoprow><stopcol>");
@@ -89,6 +90,7 @@ static void mTXSliceIndexList (MTXslice *mtx_slice_obj, t_symbol *s,
 static void *newMTXSlice (t_symbol *s, int argc, t_atom *argv)
 {
   MTXslice *mtx_slice_obj = (MTXslice *) pd_new (mtx_slice_class);
+  (void)s; /* unused */
   if (argc==4) {
     mTXSliceIndexList (mtx_slice_obj, gensym("list"),argc,argv);
   } else {
@@ -138,7 +140,6 @@ static void mTXSliceMatrix (MTXslice *mtx_slice_obj, t_symbol *s,
 {
   int rows = atom_getint (argv+0);
   int columns = atom_getint (argv+1);
-  int size = rows * columns;
   t_atom *list_in = argv+2;
   t_atom *list_out = mtx_slice_obj->list_out;
   int stopcol = mtx_slice_obj->slice_stopcol;
@@ -148,7 +149,7 @@ static void mTXSliceMatrix (MTXslice *mtx_slice_obj, t_symbol *s,
   int slicecols, slicerows, slicesize;
 
   /* size check */
-  if(iemmatrix_check(mtx_slice_obj, argc, argv, 0))return;
+  if(iemmatrix_check(mtx_slice_obj, s, argc, argv, 0))return;
 
   startrow = (startrow==-1)?rows:startrow;
   startcol = (startcol==-1)?columns:startcol;

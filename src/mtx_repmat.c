@@ -38,6 +38,7 @@ static void deleteMTXRepmat (MTXrepmat *mtx_repmat_obj)
 static void mTXRepmatList (MTXrepmat *mtx_repmat_obj, t_symbol *s,
                            int argc, t_atom *argv)
 {
+  (void)s; /* unused */
   if (argc!=2) {
     pd_error(mtx_repmat_obj, "[mtx_repmat]: there have to be exactly 2 arguments");
     return;
@@ -50,6 +51,7 @@ static void mTXRepmatList (MTXrepmat *mtx_repmat_obj, t_symbol *s,
 static void *newMTXRepmat (t_symbol *s, int argc, t_atom *argv)
 {
   MTXrepmat *mtx_repmat_obj = (MTXrepmat *) pd_new (mtx_repmat_class);
+  (void)s; /* unused */
   mtx_repmat_obj->repeat_cols = 1;
   mtx_repmat_obj->repeat_rows = 1;
 
@@ -114,7 +116,7 @@ static void mTXRepmatMatrix (MTXrepmat *mtx_repmat_obj, t_symbol *s,
   t_atom *list_out = mtx_repmat_obj->list_out;
 
   /* size check */
-  if(iemmatrix_check(mtx_repmat_obj, argc, argv, 0))return;
+  if(iemmatrix_check(mtx_repmat_obj, s, argc, argv, 0))return;
 
   mrows = rows * rep_rows;
   mcolumns = columns * rep_cols;

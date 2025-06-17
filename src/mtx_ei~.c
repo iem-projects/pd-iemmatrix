@@ -23,6 +23,8 @@ void *newMtxEITilde(t_symbol *s, int argc, t_atom *argv)
   int sd=1;
   int sg=1;
   mtx_ei_tilde *x = (mtx_ei_tilde*) pd_new(mtx_ei_tilde_class);
+  (void)s; /* unused */
+
   x->sig_in_left=0;
   x->sig_in_right=0;
   x->ei=0;
@@ -188,7 +190,6 @@ static t_int *mTxEITildePerform (t_int *arg)
 
 static void mTxEITildeDsp (mtx_ei_tilde *x, t_signal **sp)
 {
-  int chan;
   x->sig_in_left=sp[0]->s_vec;
   x->sig_in_right=sp[1]->s_vec;
 

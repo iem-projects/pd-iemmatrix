@@ -44,7 +44,7 @@ static void mtx_pivot_matrix(t_mtx_pivot *x, t_symbol *s, int argc,
   int pivot_row, pivot_col;
 
   int ascending=(x->ascending);
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
 
   adjustsize(&x->m, row, col);
   adjustsize(&x->m_pre, row, row);

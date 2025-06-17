@@ -35,7 +35,7 @@ static t_class *matrix_class;
 
 static void matrix_matrix(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 {
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
   matrix_matrix2(x, s, argc, argv);
   matrix_bang(x);
 }
@@ -49,6 +49,7 @@ static void matrix_float(t_matrix *x, t_float f)
 static void matrix_size(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 {
   int col, row;
+  (void)s; /* unused */
 
   switch(argc) {
   case 0: /* size */
@@ -154,6 +155,8 @@ static void matrix_list(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 {
   /* like matrix, but without col/row information, so the previous size is kept */
   int row=x->row, col=x->col;
+  (void)s; /* unused */
+
   if(!(row && col)) {
     pd_error(x, "[matrix]: unknown matrix dimensions");
     return;
@@ -171,7 +174,7 @@ static void *matrix_new(t_symbol *s, int argc, t_atom *argv)
 {
   t_matrix *x = (t_matrix *)pd_new(matrix_class);
   int row, col;
-
+  (void)s; /* unused */
 
   inlet_new(&x->x_obj, &x->x_obj.ob_pd, gensym("matrix"), gensym(""));
   outlet_new(&x->x_obj, 0);

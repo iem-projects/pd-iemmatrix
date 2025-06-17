@@ -19,9 +19,8 @@ static void *mtx_egg_new(t_symbol *s, int argc, t_atom *argv)
 {
   t_matrix *x = (t_matrix *)pd_new(mtx_egg_class);
   int col=0, row=0;
+  (void)s; /* unused */
   outlet_new(&x->x_obj, 0);
-  x->row = x->col = 0;
-  x->atombuffer   = 0;
   switch(argc) {
   case 0:
     break;

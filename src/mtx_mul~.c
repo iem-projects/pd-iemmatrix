@@ -168,7 +168,7 @@ static void matrix_multilde_matrix_set(t_matrix_multilde *x, int argc,
     pd_error(x, "[%s]: bad matrix: <int:out_rows> <int:in_cols> !", x->x_name->s_name);
     return;
   }
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(x, 0, argc, argv, 0))return;
 
   row = atom_getint(argv);
   argv++;
@@ -241,13 +241,15 @@ static void matrix_multilde_matrix_set(t_matrix_multilde *x, int argc,
 static void matrix_multilde_matrix(t_matrix_multilde *x, t_symbol *s,
                                    int argc, t_atom *argv)
 {
-  matrix_multilde_matrix_set(x,argc, argv, 0);
+  (void)s; /* unused */
+  matrix_multilde_matrix_set(x, argc, argv, 0);
 }
 static void matrix_multilde_matrixT(t_matrix_multilde *x, t_symbol *s,
                                     int argc, t_atom *argv)
 {
   /* transpose the matrix before setting it */
-  matrix_multilde_matrix_set(x,argc, argv, 1);
+  (void)s; /* unused */
+  matrix_multilde_matrix_set(x, argc, argv, 1);
 }
 static void matrix_multilde_element(t_matrix_multilde *x, t_symbol *s,
                                     int argc, t_atom *argv)
@@ -256,6 +258,7 @@ static void matrix_multilde_element(t_matrix_multilde *x, t_symbol *s,
   t_float element;
   t_float *matcur = x->x_matcur;
   t_float *matend = x->x_matend;
+  (void)s; /* unused */
 
   if(argc != 3) {
     pd_error(x, "[%s]: bad arguments, expected <int:row> <int:column> <float:value>!", x->x_name->s_name);
@@ -296,6 +299,7 @@ static void matrix_multilde_row(t_matrix_multilde *x, t_symbol *s,
   unsigned int col, nth_row, i;
   t_float *matcur = x->x_matcur;
   t_float *matend = x->x_matend;
+  (void)s; /* unused */
 
   if(argc<1) {
     pd_error(x,"[%s]: bad row!", x->x_name->s_name);
@@ -340,6 +344,7 @@ static void matrix_multilde_col(t_matrix_multilde *x, t_symbol *s,
   int row, col, nth_col, i;
   t_float *matcur = x->x_matcur;
   t_float *matend = x->x_matend;
+  (void)s; /* unused */
 
   if(argc<1) {
     pd_error(x,"[%s]: bad column!", x->x_name->s_name);
@@ -992,7 +997,7 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
   int nin, nout;
   t_float interpoltime = 0.;
   int compat = IEMMATRIX;
-  int i, n;
+  int i;
 
   t_atom*ap_in, *ap_out, *ap_time;
 

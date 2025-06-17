@@ -48,7 +48,7 @@ static void deleteMtxFFT (MtxFFT *x)
   }
 }
 
-static void *newMtxFFT (t_symbol *s, int argc, t_atom *argv)
+static void *newMtxFFT ()
 {
   MtxFFT *x = (MtxFFT *) pd_new (mtx_fft_class);
   inlet_new(&x->x_obj, &x->x_obj.ob_pd, gensym("matrix"),gensym(""));
@@ -98,9 +98,10 @@ static void mtxFFTMatrixCold (MtxFFT *x, t_symbol *s,
   t_atom *list_im = x->list_im;
   t_float *f_re = x->f_re;
   t_float *f_im = x->f_im;
+  (void)s; /* unused */
 
   /* fftsize check */
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
   rows = atom_getint (argv++);
   columns = atom_getint (argv++);
   size = rows * columns;
@@ -140,9 +141,10 @@ static void mtxFFTMatrixHot (MtxFFT *x, t_symbol *s,
   t_atom *list_im = x->list_im;
   t_float *f_re = x->f_re;
   t_float *f_im = x->f_im;
+  (void)s; /* unused */
 
   /* fftsize check */
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
   rows = atom_getint (argv++);
   columns = atom_getint (argv++);
   size = rows * columns;
@@ -196,7 +198,7 @@ void mtx_fft_setup (void)
                    (t_newmethod) newMtxFFT,
                    (t_method) deleteMtxFFT,
                    sizeof (MtxFFT),
-                   CLASS_DEFAULT, A_GIMME, 0);
+                   CLASS_DEFAULT, 0);
   class_addbang (mtx_fft_class, (t_method) mtxFFTBang);
   class_addmethod (mtx_fft_class, (t_method) mtxFFTMatrixHot,
                    gensym("matrix"), A_GIMME,0);

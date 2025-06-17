@@ -31,7 +31,9 @@ static void mtx_cholesky_matrix(t_matrix *x, t_symbol *s, int argc,
   int i, j, k, row2=row*row;
 
   t_matrixfloat *original, *cholesky;
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  (void)s; /* unused */
+
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
   if (row!=col) {
     pd_error(x, "[mtx_cholesky]: only symmetric and positive definite matrices can be cholesky-decomposed");
     return;
@@ -90,20 +92,17 @@ static void mtx_cholesky_matrix(t_matrix *x, t_symbol *s, int argc,
   matrix_bang(x);
 }
 
-static void *mtx_cholesky_new(t_symbol *s, int argc, t_atom *argv)
+static void *mtx_cholesky_new()
 {
   t_matrix *x = (t_matrix *)pd_new(mtx_cholesky_class);
   outlet_new(&x->x_obj, 0);
-  x->col=x->row=0;
-  x->atombuffer=0;
-
   return (x);
 }
 void mtx_cholesky_setup(void)
 {
   mtx_cholesky_class = class_new(gensym("mtx_cholesky"),
                                  (t_newmethod)mtx_cholesky_new,
-                                 (t_method)matrix_free, sizeof(t_matrix), 0, A_GIMME, 0);
+                                 (t_method)matrix_free, sizeof(t_matrix), 0, 0);
   class_addbang  (mtx_cholesky_class, matrix_bang);
   class_addmethod(mtx_cholesky_class, (t_method)mtx_cholesky_matrix,
                   gensym("matrix"), A_GIMME, 0);

@@ -100,6 +100,8 @@ static void deleteMTXRfft (MTXRfft *x)
 static void *newMTXRfft (t_symbol *s, int argc, t_atom *argv)
 {
   MTXRfft *x = (MTXRfft *) pd_new (mtx_rfft_class);
+  (void)argc; (void)argv; /* unused */
+
   x->list_re_out = outlet_new (&x->x_obj, gensym("matrix"));
   x->list_im_out = outlet_new (&x->x_obj, gensym("matrix"));
   if (!have_fftw) {
@@ -198,6 +200,7 @@ static void mTXRfftMatrix (MTXRfft *x, t_symbol *s,
   t_float *f_im = x->f_im;
 
   const int use_fftw = have_fftw;
+  (void)s; /* unused */
 
 
 

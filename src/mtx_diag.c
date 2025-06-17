@@ -20,7 +20,8 @@ static void mtx_diag_matrix(t_matrix *x, t_symbol *s, int argc,
 {
   int row, col, length, n;
   t_atom *ap = 0, *dummy=0;
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  (void)s; /* unused */
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
 
   row=atom_getfloat(argv++);
   col=atom_getfloat(argv++);
@@ -39,6 +40,7 @@ static void mtx_diag_matrix(t_matrix *x, t_symbol *s, int argc,
 static void *mtx_diag_new(t_symbol *s, int argc, t_atom *argv)
 {
   t_matrix *x = (t_matrix *)pd_new(mtx_diag_class);
+  (void)s; /* unused */
   outlet_new(&x->x_obj, 0);
   x->row = x->col = 0;
   x->atombuffer   = 0;

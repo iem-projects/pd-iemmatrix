@@ -30,7 +30,8 @@ static void mtx_isequalscalar_matrix(t_mtx_binscalar *x, t_symbol *s,
   t_atom *buf;
   t_atom *ap=argv+2;
 
-  if(iemmatrix_check(x, argc, argv, IEMMATRIX_CHECK_CRIPPLED))return;
+  (void)s; /* unused */
+  if(iemmatrix_check(x, s, argc, argv, IEMMATRIX_CHECK_CRIPPLED))return;
 
   while(n--) {
     if(atom_getfloat(ap)!=offset) {
@@ -47,6 +48,7 @@ static void mtx_isequalscalar_list(t_mtx_binscalar *x, t_symbol *s,
   int n=argc;
   t_atom *ap=argv;
   t_float offset = x->f;
+  (void)s; /* unused */
 
   while(n--) {
     if(atom_getfloat(ap)!=offset) {
@@ -67,7 +69,8 @@ static void mtx_isequal_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   t_atom *m1 = argv+2;
   t_atom *m2 = x->m2.atombuffer+2;
   int n = argc-2;
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  (void)s; /* unused */
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
 
   if ((col!=x->m2.col)||(row!=x->m2.row)) {
     outlet_float(x->x_obj.ob_outlet, (t_float)0);
@@ -114,7 +117,7 @@ static void *mtx_isequal_new(t_symbol *s, int argc, t_atom *argv)
   if (argc) {
     t_mtx_binscalar *x = (t_mtx_binscalar *)pd_new(mtx_isequalscalar_class);
     if (argc>1) {
-      pd_error(x, "[mtx_isequal]: extra arguments ignored");
+      pd_error(x, "[%s]: extra arguments ignored", s->s_name);
     }
     floatinlet_new(&x->x_obj, &x->f);
     x->f = atom_getfloatarg(0, argc, argv);
@@ -149,9 +152,6 @@ void mtx_isequal_setup(void)
                   (t_method)mtx_isequalscalar_matrix, gensym("matrix"), A_GIMME, 0);
   class_addlist  (mtx_isequalscalar_class, mtx_isequalscalar_list);
   class_addbang  (mtx_isequalscalar_class, mtx_binscalar_bang);
-
-
-
 }
 
 void iemtx_isequal_setup(void)

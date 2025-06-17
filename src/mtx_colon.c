@@ -34,7 +34,7 @@ static void deleteMTXColon (MTXColon *mtx_colon_obj)
   }
 }
 
-static void *newMTXColon (t_symbol *s, int argc, t_atom *argv)
+static void *newMTXColon ()
 {
   MTXColon *mtx_colon_obj = (MTXColon *) pd_new (mtx_colon_class);
 
@@ -58,6 +58,7 @@ static void mTXColonList (MTXColon *mtx_colon_obj, t_symbol *s,
   t_float stopval;
   t_float step;
   t_atom *list_out = mtx_colon_obj->list_out;
+  (void)s; /* unused */
   if (argc == 3) {
     startval = atom_getfloat(argv++);
     step = atom_getfloat(argv++);
@@ -103,7 +104,8 @@ static void mTXColonMtx (MTXColon *mtx_colon_obj, t_symbol *s,
 
   t_atom *list_ptr = argv+2;
   t_atom *list_out = mtx_colon_obj->list_out;
-  if(iemmatrix_check(mtx_colon_obj, argc, argv, 0))return;
+  (void)s; /* unused */
+  if(iemmatrix_check(mtx_colon_obj, s, argc, argv, 0))return;
   rows = atom_getint (argv+0);
   columns = atom_getint (argv+1);
   size = rows * columns;
@@ -139,7 +141,7 @@ void mtx_colon_setup (void)
                      (t_newmethod) newMTXColon,
                      (t_method) deleteMTXColon,
                      sizeof (MTXColon),
-                     CLASS_DEFAULT, A_GIMME, 0);
+                     CLASS_DEFAULT, 0);
   class_addbang (mtx_colon_class, (t_method) mTXColonBang);
   class_addmethod (mtx_colon_class, (t_method) mTXColonMtx, gensym("matrix"),
                    A_GIMME, 0);

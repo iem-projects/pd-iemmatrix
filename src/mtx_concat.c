@@ -57,6 +57,7 @@ static void mTXSetConcatMode (MTXconcat *mtx_concat_obj, t_symbol *c_mode)
 static void *newMTXConcat (t_symbol *s, int argc, t_atom *argv)
 {
   MTXconcat *mtx_concat_obj = (MTXconcat *) pd_new (mtx_concat_class);
+  (void)s; /* unused */
   if(argc&&(A_SYMBOL==argv->a_type)) {
     mTXSetConcatMode (mtx_concat_obj, atom_getsymbol (argv));
   } else {
@@ -156,9 +157,10 @@ static void mTXConcatMatrix (MTXconcat *mtx_concat_obj, t_symbol *s,
   t_matrix *mtx_in1 = &mtx_concat_obj->mtx_in1;
   t_matrix *mtx_in2 = &mtx_concat_obj->mtx_in2;
   t_matrix *mtx_out = &mtx_concat_obj->mtx_out;
+  (void)s; /* unused */
 
   /* size check */
-  if(iemmatrix_check(mtx_concat_obj, argc, argv, 0))return;
+  if(iemmatrix_check(mtx_concat_obj, s, argc, argv, 0))return;
 
   mtx_in1->row = rows;
   mtx_in1->col = columns;

@@ -119,7 +119,8 @@ void matrix_bang(t_matrix *x)
 void matrix_matrix2(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 {
   int row, col;
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  (void)s; /* unused */
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
   row = atom_getfloat(argv);
   col = atom_getfloat(argv+1);
 
@@ -150,6 +151,7 @@ void matrix_set(t_matrix *x, t_float f)
 void matrix_zeros(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 {
   int col, row;
+  (void)s; /* unused */
 
   switch(argc) {
   case 0: /* zero out the actual matrix */
@@ -174,6 +176,7 @@ void matrix_zeros(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 void matrix_ones(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 {
   int col, row;
+  (void)s; /* unused */
 
   switch(argc) {
   case 0: /* zero out the actual matrix */
@@ -199,6 +202,7 @@ void matrix_eye(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 {
   int col, row;
   int n;
+  (void)s; /* unused */
 
   switch(argc) {
   case 0: /* zero out the actual matrix */
@@ -230,6 +234,7 @@ void matrix_egg(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 {
   int col, row;
   int n;
+  (void)s; /* unused */
 
   switch(argc) {
   case 0: /* zero out the actual matrix */
@@ -260,6 +265,8 @@ void matrix_egg(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 void matrix_diag(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 {
   int col=argc;
+  (void)s; /* unused */
+
   argv+=argc-1;
   if (argc<1) {
     pd_error(x, "matrix: no diagonal present");
@@ -278,6 +285,8 @@ void matrix_diag(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 void matrix_diegg(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 {
   int col=argc;
+  (void)s; /* unused */
+
   argv+=argc-1;
   if (argc<1) {
     pd_error(x, "matrix: no dieggonal present");
@@ -303,6 +312,7 @@ void matrix_row(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
   int row=x->row, col=x->col;
   int r, c;
   t_float f;
+  (void)s; /* unused */
 
   switch (argc) {
   case 0:
@@ -356,6 +366,7 @@ void matrix_col(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
   int row=x->row, col=x->col;
   int c, r;
   t_float f;
+  (void)s; /* unused */
 
   switch (argc) {
   case 0:
@@ -422,6 +433,7 @@ void matrix_element(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
   t_atom *ap=x->atombuffer+2;
   int row=x->row, col=x->col;
   int r, c, i=row*col;
+  (void)s; /* unused */
 
   switch (argc) {
   case 0:
@@ -652,17 +664,20 @@ const char*iemmatrix_parentabstractionname(const t_glist*ccurrent) {
   if(canvas && canvas->gl_name) {
     return canvas->gl_name->s_name;
   }
+#else
+  (void)ccurrent; /* unused */
 #endif /* IEMMATRIX_HAVE_G_CANVAS */
   return 0;
 }
 
 
-int iemmatrix_check(void*object, int argc, t_atom*argv, unsigned int tests) {
+int iemmatrix_check(void*object, t_symbol*s, int argc, t_atom*argv, unsigned int tests) {
   t_object*x = (t_object*)object;
   const char*objname=iemmatrix_objname(x);
 
   int row=(argc>1)?atom_getfloat(argv+0):0;
   int col=(argc>1)?atom_getfloat(argv+1):0;
+  (void)s; /* unused */
 
   if (!tests)
     tests =

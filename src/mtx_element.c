@@ -32,7 +32,7 @@ static void mtx_element_list2(t_matrix *x, t_floatarg f1, t_floatarg f2)
 static void mtx_element_matrix(t_matrix *x, t_symbol *s, int argc,
                                t_atom *argv)
 {
-  if(iemmatrix_check(x, argc, argv, 0))return;
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
   matrix_matrix2(x, s, argc, argv);
   matrix_bang(x);
 }
@@ -73,6 +73,7 @@ static void *mtx_element_new(t_symbol *s, int argc, t_atom *argv)
 {
   t_matrix *x = (t_matrix *)pd_new(mtx_element_class);
   int i, j, q;
+  (void)s; /* unused */
   outlet_new(&x->x_obj, 0);
   inlet_new(&x->x_obj, &x->x_obj.ob_pd, gensym("float"), gensym(""));
   x->current_row=x->current_col=0;

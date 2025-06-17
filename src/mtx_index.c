@@ -70,7 +70,7 @@ static void *newMTXIndex (t_symbol *s, int argc, t_atom *argv)
   inlet_new(&mtx_index_obj->x_obj, &mtx_index_obj->x_obj.ob_pd,
             gensym("matrix"),gensym(""));
 
-  pd_error(mtx_index_obj, "[mtx_index]: this object is likely to change! not really for use yet");
+  pd_error(mtx_index_obj, "[%s]: this object is likely to change! not really for use yet", s->s_name);
 
   return ((void *) mtx_index_obj);
 }
@@ -125,9 +125,10 @@ static void mTXIndexRightMatrix (MTXindex *mtx_index_obj, t_symbol *s,
   t_atom *list_out = mtx_index_obj->list_out;
   int *index_in = mtx_index_obj->index_in;
   int max;
+  (void)s; /* unused */
 
   /* size check */
-  if(iemmatrix_check(mtx_index_obj, argc, argv, 0))return;
+  if(iemmatrix_check(mtx_index_obj, s, argc, argv, 0))return;
 
   if (size != mtx_index_obj->index_size) {
     if (!index_in) {
@@ -166,9 +167,10 @@ static void mTXIndexMatrix (MTXindex *mtx_index_obj, t_symbol *s,
   int index_rows = mtx_index_obj->index_rows;
   int index_columns = mtx_index_obj->index_columns;
   int *indx = mtx_index_obj->index_in;
+  (void)s; /* unused */
 
   /* size check */
-  if(iemmatrix_check(mtx_index_obj, argc, argv, 0))return;
+  if(iemmatrix_check(mtx_index_obj, s, argc, argv, 0))return;
 
   if (size < mtx_index_obj->max_index) {
     pd_error(mtx_index_obj, "[mtx_index]: index exceeds matrix dimensions");

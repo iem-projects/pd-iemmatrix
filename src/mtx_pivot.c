@@ -72,7 +72,7 @@ static void mtx_pivot_matrix(t_mtx_pivot *x, t_symbol *s, int argc,
 
   for (k=0; k<min_rowcol; k++) {
     /* 1. find max_element */
-    t_float tmp = fabsf(buffer[k*(1+col)]);
+    t_matrixfloat tmp = fabs(buffer[k*(1+col)]);
     pivot_row = pivot_col = k;
 
     for(i=k; i<row; i++) {
@@ -80,7 +80,7 @@ static void mtx_pivot_matrix(t_mtx_pivot *x, t_symbol *s, int argc,
 
       j=col-k;
       while(j--) {
-        t_float f = fabsf(*buf++);
+        t_matrixfloat f = fabs(*buf++);
         if ((ascending && f>tmp) || (!ascending && f<tmp)) {
           tmp=f;
           pivot_row = i;

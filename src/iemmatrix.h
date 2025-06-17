@@ -37,6 +37,12 @@
 # pragma warning( disable : 4305 )
 #endif /* __WIN32__ */
 
+#if defined __GNUC__ && __GNUC__ >= 8
+/* this is actually a useful warning; but we get it for registering any callback... */
+# pragma GCC diagnostic ignored "-Wcast-function-type"
+#endif
+
+
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif /* HAVE_CONFIG_H */
@@ -160,7 +166,6 @@ enum {
   IEMMATRIX_CHECK_ALL        = 0
 };
 int iemmatrix_check(void*object, t_symbol*s, int argc, t_atom*argv, unsigned int tests);
-
 /* get a (decorated) objname: returns either "[<foo>]: " or ""
  * the returned string MUST NOT be freed by the caller
  * 'object' must be of type 't_object*' (or derived)

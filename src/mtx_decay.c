@@ -230,11 +230,11 @@ static void mTXDecayMatrix (MTXDecay *mtx_decay_obj, t_symbol *s,
 
   if ((mtx_decay_obj->decay_mode == col_sym) ||
       (mtx_decay_obj->decay_mode == col_sym2)) {
-    readFloatFromListModulo (size, columns, list_ptr, x);
+    iemmatrix_list2floats_modulo(x, list_ptr, size, columns);
     columns = mtx_decay_obj->rows;
     rows = mtx_decay_obj->columns;
   } else {
-    readFloatFromList (size, list_ptr, x);
+    iemmatrix_list2floats(x, list_ptr, size);
   }
 
   /* calculating decay */
@@ -271,9 +271,9 @@ static void mTXDecayMatrix (MTXDecay *mtx_decay_obj, t_symbol *s,
       (mtx_decay_obj->decay_mode == col_sym2)) {
     columns = mtx_decay_obj->columns;
     rows = mtx_decay_obj->rows;
-    writeFloatIntoListModulo (size, columns, list_out+2, y);
+    iemmatrix_floats2list_modulo(list_out+2, y, size, columns);
   } else {
-    writeFloatIntoList (size, list_out+2, y);
+    iemmatrix_floats2list(list_out+2, y, size);
   }
 
   SETSYMBOL(list_out, gensym("matrix"));

@@ -196,11 +196,11 @@ static void mTXdiffMatrix (MTXdiff *mtx_diff_obj, t_symbol *s,
   /* reading matrix from inlet */
   if ((mtx_diff_obj->diff_mode == col_sym) ||
       (mtx_diff_obj->diff_mode == col_sym2)) {
-    readFloatFromListModulo (size, columns, list_ptr, x);
+    iemmatrix_list2floats_modulo(x, list_ptr, size, columns);
     columns = mtx_diff_obj->rows;
     rows = mtx_diff_obj->columns;
   } else {
-    readFloatFromList (size, list_ptr, x);
+    iemmatrix_list2floats(x, list_ptr, size);
   }
 
   /* calculating diff */
@@ -235,9 +235,9 @@ static void mTXdiffMatrix (MTXdiff *mtx_diff_obj, t_symbol *s,
       (mtx_diff_obj->diff_mode == col_sym2)) {
     columns = mtx_diff_obj->columns;
     rows = mtx_diff_obj->rows;
-    writeFloatIntoListModulo (size, columns, list_out+2, y);
+    iemmatrix_floats2list_modulo(list_out+2, y, size, columns);
   } else {
-    writeFloatIntoList (size, list_out+2, y);
+    iemmatrix_floats2list(list_out+2, y, size);
   }
 
   SETSYMBOL(list_out, gensym("matrix"));

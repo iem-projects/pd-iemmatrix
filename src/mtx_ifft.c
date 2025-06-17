@@ -125,7 +125,7 @@ static void mtxIFFTMatrixCold (MtxIFFT *x, t_symbol *s,
     x->f_im = f_im;
 
     /* main part */
-    readFloatFromList (size, argv, f_im);
+    iemmatrix_list2floats(f_im, argv, size);
 
   } else {
     post("mtx_ifft: rowvector size no power of 2!");
@@ -160,7 +160,7 @@ static void mtxIFFTMatrixHot (MtxIFFT *x, t_symbol *s,
     /* ok, do the FFT! */
 
     /* main part */
-    readFloatFromList (size, argv, f_re);
+    iemmatrix_list2floats(f_re, argv, size);
 
     fft_count = rows;
     list_re += 2;
@@ -169,8 +169,8 @@ static void mtxIFFTMatrixHot (MtxIFFT *x, t_symbol *s,
       mayer_ifft (columns, f_re, f_im);
       multiplyVector (columns, f_re, x->renorm_fac);
       multiplyVector (columns, f_im, x->renorm_fac);
-      writeFloatIntoList (columns, list_re, f_re);
-      writeFloatIntoList (columns, list_im, f_im);
+      iemmatrix_floats2list(list_re, f_re, columns);
+      iemmatrix_floats2list(list_im, f_im, columns);
       f_im += columns;
       f_re += columns;
       list_re += columns;

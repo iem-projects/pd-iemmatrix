@@ -205,11 +205,11 @@ static void mTXCumprodMatrix (MTXCumprod *mtx_cumprod_obj, t_symbol *s,
   /* reading matrix from inlet */
   if ((mtx_cumprod_obj->cumprod_mode == col_sym) ||
       (mtx_cumprod_obj->cumprod_mode == col_sym2)) {
-    readFloatFromListModulo (size, columns, list_ptr, x);
+    iemmatrix_list2floats_modulo(x, list_ptr, size, columns);
     columns = mtx_cumprod_obj->rows;
     rows = mtx_cumprod_obj->columns;
   } else {
-    readFloatFromList (size, list_ptr, x);
+    iemmatrix_list2floats(x, list_ptr, size);
   }
 
   /* calculating cumprod */
@@ -246,9 +246,9 @@ static void mTXCumprodMatrix (MTXCumprod *mtx_cumprod_obj, t_symbol *s,
       (mtx_cumprod_obj->cumprod_mode == col_sym2)) {
     columns = mtx_cumprod_obj->columns;
     rows = mtx_cumprod_obj->rows;
-    writeFloatIntoListModulo (size, columns, list_out+2, y);
+    iemmatrix_floats2list_modulo(list_out+2, y, size, columns);
   } else {
-    writeFloatIntoList (size, list_out+2, y);
+    iemmatrix_floats2list(list_out+2, y, size);
   }
 
   SETSYMBOL(list_out, gensym("matrix"));

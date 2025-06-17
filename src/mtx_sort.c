@@ -310,11 +310,11 @@ static void mTXSortMatrix (MTXSort *mtx_sort_obj, t_symbol *s,
   /* reading matrix from inlet */
   if ((mtx_sort_obj->sort_mode == col_sym)||
       (mtx_sort_obj->sort_mode == col_sym2)) {
-    readFloatFromListModulo (size, columns, list_ptr, x);
+    iemmatrix_list2floats_modulo(x, list_ptr, size, columns);
     columns = mtx_sort_obj->rows;
     rows = mtx_sort_obj->columns;
   } else {
-    readFloatFromList (size, list_ptr, x);
+    iemmatrix_list2floats(x, list_ptr, size);
   }
 
   /* calculating sort */
@@ -334,11 +334,11 @@ static void mTXSortMatrix (MTXSort *mtx_sort_obj, t_symbol *s,
       (mtx_sort_obj->sort_mode == col_sym2)) {
     columns = mtx_sort_obj->columns;
     rows = mtx_sort_obj->rows;
-    writeFloatIntoListModulo (size, columns, list_out1+2, x);
-    writeFloatIntoListModulo (size, columns, list_out2+2, i);
+    iemmatrix_floats2list_modulo(list_out1+2, x, size, columns);
+    iemmatrix_floats2list_modulo(list_out2+2, i, size, columns);
   } else {
-    writeFloatIntoList (size, list_out1+2, x);
-    writeFloatIntoList (size, list_out2+2, i);
+    iemmatrix_floats2list(list_out1+2, x, size);
+    iemmatrix_floats2list(list_out2+2, i, size);
   }
 
   /* writing indices */

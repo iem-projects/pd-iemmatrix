@@ -246,7 +246,7 @@ static void mTXRfftMatrix (MTXRfft *x, t_symbol *s,
     if(use_fftw) {
       readDoubleFromList (size, argv, f_in);
     } else {
-      readFloatFromList (size, argv, f_re);
+      iemmatrix_list2floats(f_re, argv, size);
     }
 
     list_re += 2;
@@ -260,8 +260,8 @@ static void mTXRfftMatrix (MTXRfft *x, t_symbol *s,
       } else {
         mayer_realfft (columns, f_re);
         fftRestoreImag (columns, f_re, f_im);
-        writeFloatIntoList (columns_re, list_re, f_re);
-        writeFloatIntoList (columns_re, list_im, f_im);
+        iemmatrix_floats2list(list_re, f_re, columns_re);
+        iemmatrix_floats2list(list_im, f_im, columns_re);
         f_im += columns;
         f_re += columns;
       }

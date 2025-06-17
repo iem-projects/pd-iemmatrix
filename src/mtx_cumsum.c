@@ -204,11 +204,11 @@ static void mTXCumsumMatrix (MTXCumsum *mtx_cumsum_obj, t_symbol *s,
   /* reading matrix from inlet */
   if ((mtx_cumsum_obj->cumsum_mode == col_sym) ||
       (mtx_cumsum_obj->cumsum_mode == col_sym2)) {
-    readFloatFromListModulo (size, columns, list_ptr, x);
+    iemmatrix_list2floats_modulo(x, list_ptr, size, columns);
     columns = mtx_cumsum_obj->rows;
     rows = mtx_cumsum_obj->columns;
   } else {
-    readFloatFromList (size, list_ptr, x);
+    iemmatrix_list2floats(x, list_ptr, size);
   }
 
   /* calculating cumsum */
@@ -245,9 +245,9 @@ static void mTXCumsumMatrix (MTXCumsum *mtx_cumsum_obj, t_symbol *s,
       (mtx_cumsum_obj->cumsum_mode == col_sym2)) {
     columns = mtx_cumsum_obj->columns;
     rows = mtx_cumsum_obj->rows;
-    writeFloatIntoListModulo (size, columns, list_out+2, y);
+    iemmatrix_floats2list_modulo(list_out+2, y, size, columns);
   } else {
-    writeFloatIntoList (size, list_out+2, y);
+    iemmatrix_floats2list(list_out+2, y, size);
   }
 
   SETSYMBOL(list_out, gensym("matrix"));

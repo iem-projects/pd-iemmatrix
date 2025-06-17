@@ -213,7 +213,7 @@ static void mTXRifftMatrixCold (MTXRifft *x, t_symbol *s,
         readFFTWComplexPartFromList(columns_re, argv, f_in, IMAGPART);
         f_in += columns_re;
       } else {
-        readFloatFromList (columns_re, argv, f_im);
+        iemmatrix_list2floats(f_im, argv, columns_re);
         f_im += columns;
       }
       argv += columns_re;
@@ -259,7 +259,7 @@ static void mTXRifftMatrixHot (MTXRifft *x, t_symbol *s,
         my_execute(x->fftplan[ifft_count]);
         f_in+=columns_re;
       } else {
-        readFloatFromList (columns_re, argv, f_re);
+        iemmatrix_list2floats(f_re, argv, columns_re);
         ifftPrepareReal (columns, f_re, f_im);
         mayer_realifft (columns, f_re);
         f_im += columns;
@@ -279,7 +279,7 @@ static void mTXRifftMatrixHot (MTXRifft *x, t_symbol *s,
       writeDoubleIntoList (size, x->list_re+2, x->f_out);
     } else {
       multiplyVector (size, f_re, renorm_fac);
-      writeFloatIntoList  (size, x->list_re+2, f_re);
+      iemmatrix_floats2list(x->list_re+2, f_re, size);
     }
     outlet_anything(x->list_re_out, gensym("matrix"), size+2, x->list_re);
   }

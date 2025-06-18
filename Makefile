@@ -300,5 +300,10 @@ iemmatrix_sources.h:
 	sed -e 's|@PACKAGE_NAME@|$(lib.name)|g' -e 's|@PACKAGE_VERSION@|$(lib.version)|g' $< > $@
 
 
+.PHONY: check
+check:
+	make -C tests
+
+
 # build stub libraries
 -include Make.stublibs

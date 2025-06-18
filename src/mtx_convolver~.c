@@ -63,6 +63,8 @@ static void _noppost(const void *object, int level, const char *fmt, ...) {
 # define PD_NORMAL 2
 #endif
 
+typedef void (*setmultiout_f)(t_signal **sig, int nchans);
+
 t_fftwf_functions my_functions;
 
 static int warn_fftwf = 1;
@@ -74,6 +76,8 @@ static t_class *mtx_convolver_tilde_mclass;
 typedef struct _mtx_convolver_tilde {
   t_object x_obj;
   t_symbol *x_objname;
+  setmultiout_f x_setmultiout; /* when doing multichannel, this is Pd>=0.54's signal_setmultiout(); otherwise NULL */
+
   int ins; // given/instantiated/mc number of inputs
   int outs; // given/instantiated number of inputs
   t_sample **inout_buffers;
@@ -89,7 +93,6 @@ typedef struct _mtx_convolver_tilde {
   t_inlet **x_inlet; // object's input ports
   t_outlet **x_outlet; // object's output ports
   int blocksize;
-  int multichannel_mode;
   int set_ir_at_dsp_start; // retarded updated of input IR on dsp start
 } t_mtx_convolver_tilde;
 
@@ -205,7 +208,7 @@ void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
   int outs = x->outs;
   const char*objname=x->x_objname->s_name;
 #if CLASS_MULTICHANNEL
-  if (x->multichannel_mode) {
+  if (x->x_setmultiout) {
     // override with num input signals in MC mode
     ins = sp[0]->s_nchans;
     logpost(x, PD_NORMAL, "[%s] multichannel mode, in=%d",objname,ins);
@@ -213,7 +216,7 @@ void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
     if (x->h_num_outs) {
         outs = x->h_num_outs;
         logpost(x, PD_NORMAL, "[%s] multichannel mode, outs=%d",objname,outs);
-        signal_setmultiout(&sp[1], outs);
+        x->x_setmultiout(&sp[1], outs);
     }
     if ((ins+outs != x->ins+x->outs)){
       if (x->inout_buffers) {
@@ -236,7 +239,7 @@ void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
   resized = mtx_convolver_resize(x); // check if renewed convolver is required
   if (0) {
 #if CLASS_MULTICHANNEL
-  } else if (x->multichannel_mode) {
+  } else if (x->x_setmultiout) {
     for (int i = 0; i < x->ins; i++) {
       x->inout_buffers[i] = sp[0]->s_vec + i * x->blocksize;
     }
@@ -383,12 +386,24 @@ void mtx_convolver_tilde_read(t_mtx_convolver_tilde *x, t_symbol *filename)
 }
 
 void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
-  t_mtx_convolver_tilde *x;
+  setmultiout_f setmultiout = (CLASS_MULTICHANNEL)?iemmatrix_getpdfun("signal_setmultiout"):0;
+  t_mtx_convolver_tilde *x = 0;
   t_class *selected_class = mtx_convolver_tilde_class;
+
   if (argc > 0 && argv[0].a_type == A_SYMBOL &&
       strcmp(argv[0].a_w.w_symbol->s_name, "-m") == 0) {
+    /* want multichannel! */
 #if CLASS_MULTICHANNEL
-    selected_class = mtx_convolver_tilde_mclass;
+    if(setmultiout)
+      selected_class = mtx_convolver_tilde_mclass;
+    else {
+      int major, minor, bugfix;
+      sys_getversion(&major, &minor, &bugfix);
+      pd_error(x, "[%s] multichannel requested, but iemmatrix is running in Pd-%d.%d-%d, which doesn't support it",
+	       s->s_name, major, minor, bugfix);
+      return 0;
+    }
+
 #else
     pd_error(x, "[%s] has been compiled without multichannel support", s->s_name);
     return 0;
@@ -406,10 +421,9 @@ void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
     warn_fftwf = 0;
   }
 
-#if CLASS_MULTICHANNEL
-  x->multichannel_mode = (selected_class == mtx_convolver_tilde_mclass);
-#endif
-  if (!x->multichannel_mode) {
+
+  x->x_setmultiout = (mtx_convolver_tilde_class == selected_class)?0:setmultiout;
+  if (!x->x_setmultiout) {
     if (argc < 1) {
       x->ins = x->outs = 1;
     } else if (argc < 2) {

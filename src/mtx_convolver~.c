@@ -213,11 +213,9 @@ void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
     ins = sp[0]->s_nchans;
     logpost(x, PD_NORMAL, "[%s] multichannel mode, in=%d",objname,ins);
     // set number of outs in MC mode
-    if (x->h_num_outs) {
-        outs = x->h_num_outs;
-        logpost(x, PD_NORMAL, "[%s] multichannel mode, outs=%d",objname,outs);
-        x->x_setmultiout(&sp[1], outs);
-    }
+    outs = x->h_num_outs;
+    logpost(x, PD_NORMAL, "[%s] multichannel mode, outs=%d",objname,outs);
+    x->x_setmultiout(&sp[1], outs);
     if ((ins+outs != x->ins+x->outs)){
       if (x->inout_buffers) {
         free(x->inout_buffers);

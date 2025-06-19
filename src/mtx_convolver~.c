@@ -389,6 +389,7 @@ void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
 
   if (argc > 0 && argv[0].a_type == A_SYMBOL &&
       strcmp(argv[0].a_w.w_symbol->s_name, "-m") == 0) {
+    argv++; argc--;
     /* want multichannel! */
 #if CLASS_MULTICHANNEL
     if(setmultiout)

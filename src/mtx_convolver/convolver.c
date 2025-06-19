@@ -103,8 +103,8 @@ int IEMCONVOLVE(convolver_set_fftwf_functions) (const t_fftwf_functions*funs) {
 
 /* crossfade functions */
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void IEMCONVOLVE(crossFade) (float *y, float *y_new, float *w_old, float *w_new, int len) {
-  for (int n = 0; n < len; n++)
+void IEMCONVOLVE(crossFade) (float *y, float *y_new, float *w_old, float *w_new, unsigned int len) {
+  for (unsigned int n = 0; n < len; n++)
     y[n] = y[n] * w_old[n] + y_new[n] * w_new[n];
 }
 /*-----------------------------------------------------------------------------------------------------------------------------*/
@@ -123,7 +123,7 @@ _Bool IEMCONVOLVE(wasCrossFadeRegistered)(conv_data *conv) {
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void IEMCONVOLVE(convProcess) (conv_data *conv, float **in, float **out) {
   if(have_fftwf) {
-  for (int in_ch = 0; in_ch < conv->num_inputs; in_ch++) {
+  for (unsigned int in_ch = 0; in_ch < conv->num_inputs; in_ch++) {
     IEMCONVOLVE(copyArray) (conv->x_old[in_ch], conv->xtemp, conv->blocksize); // copy old signal block
     IEMCONVOLVE(copyArray) (in[in_ch], &conv->xtemp[conv->blocksize],conv->blocksize);// append new signal block
     my_execute(conv->fftplan_xtemp); // perform 2L FFT to xftemp
@@ -131,10 +131,10 @@ void IEMCONVOLVE(convProcess) (conv_data *conv, float **in, float **out) {
                      conv->blocksize + 1); // write FFT into ring buffer
     IEMCONVOLVE(copyArray) (in[in_ch], conv->x_old[in_ch],conv->blocksize); // store current signal block
   }
-  for (int out_ch = 0; out_ch < conv->num_outputs; out_ch++) {
+  for (unsigned int out_ch = 0; out_ch < conv->num_outputs; out_ch++) {
     IEMCONVOLVE(resetComplexArray) (conv->yftemp,conv->blocksize + 1); // zero output's partition accumulator
-    for (int in_ch = 0; in_ch < conv->num_inputs; in_ch++) { // MIMO convolutions (main)
-      for (int p = 0, px = conv->current_rb; p < conv->num_partitions; p++, px++) {
+    for (unsigned int in_ch = 0; in_ch < conv->num_inputs; in_ch++) { // MIMO convolutions (main)
+      for (unsigned int p = 0, px = conv->current_rb; p < conv->num_partitions; p++, px++) {
         IEMCONVOLVE(freq_mul_acc) (conv->xf[in_ch][px % conv->num_partitions],
                      conv->hf[conv->current_cf][out_ch][in_ch][p], conv->yftemp,
                      conv->blocksize + 1);
@@ -143,10 +143,10 @@ void IEMCONVOLVE(convProcess) (conv_data *conv, float **in, float **out) {
     my_execute(conv->ifftplan_y); // perform iFFT of the main-IR output partition
     /* IF IR WAS UPDATED: ALSO COMPUTE NEW OUTPUT FOR CROSSFADE AT THE OUT CHANNEL */
     if (IEMCONVOLVE(wasCrossFadeRegistered(conv))) {
-      int current_cf = (conv->current_cf + 1) % NUM_CF;
+      unsigned int current_cf = (conv->current_cf + 1) % NUM_CF;
       IEMCONVOLVE(resetComplexArray) (conv->yftemp, conv->blocksize + 1); // zero output's partitions accumulator
-      for (int in_ch = 0; in_ch < conv->num_inputs; in_ch++) { // MIMO convolutions (update)
-        for (int p = 0, px = conv->current_rb; p < conv->num_partitions; p++) {
+      for (unsigned int in_ch = 0; in_ch < conv->num_inputs; in_ch++) { // MIMO convolutions (update)
+        for (unsigned int p = 0, px = conv->current_rb; p < conv->num_partitions; p++) {
           IEMCONVOLVE(freq_mul_acc) (conv->xf[in_ch][px % conv->num_partitions],
                        conv->hf[current_cf][out_ch][in_ch][p], conv->yftemp,
                        conv->blocksize + 1);
@@ -170,7 +170,7 @@ void IEMCONVOLVE(convProcess) (conv_data *conv, float **in, float **out) {
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-conv_data *IEMCONVOLVE(initConvolution) (int blocksize, int num_partitions, int xfade_length, int num_inputs, int num_outputs, _Bool coherent_xfade) {
+conv_data *IEMCONVOLVE(initConvolution) (unsigned int blocksize, unsigned int num_partitions, unsigned int xfade_length, unsigned int num_inputs, unsigned int num_outputs, _Bool coherent_xfade) {
   if (have_fftwf) {
   conv_data *conv = (conv_data *)malloc(sizeof(conv_data));
   conv->blocksize = blocksize; // block length (2L=FFT length)
@@ -262,9 +262,9 @@ void IEMCONVOLVE(freeConvolution) (conv_data *conv) {
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void IEMCONVOLVE(setImpulseResponseZeroPad) (conv_data *conv, float ***inh, int num_samples, _Bool no_xfade_init) {
-  int offset;
-  int copy_length;
+void IEMCONVOLVE(setImpulseResponseZeroPad) (conv_data *conv, float ***inh, unsigned int num_samples, _Bool no_xfade_init) {
+  unsigned int offset;
+  unsigned int copy_length;
   int hot_or_cold_stream;
   if(!have_fftwf)
     return;
@@ -277,10 +277,10 @@ void IEMCONVOLVE(setImpulseResponseZeroPad) (conv_data *conv, float ***inh, int 
     hot_or_cold_stream = (conv->current_cf + 1) % NUM_CF;
     IEMCONVOLVE(registerCrossFade) (conv);
   }
-  for (int out_ch = 0; out_ch < conv->num_outputs; out_ch++) {
-    for (int in_ch = 0; in_ch < conv->num_inputs; in_ch++) {
+  for (unsigned int out_ch = 0; out_ch < conv->num_outputs; out_ch++) {
+    for (unsigned int in_ch = 0; in_ch < conv->num_inputs; in_ch++) {
       offset = 0;
-      for (int partition = 0; partition < conv->num_partitions; partition++) {
+      for (unsigned int partition = 0; partition < conv->num_partitions; partition++) {
         copy_length = (offset+conv->blocksize > num_samples) ? num_samples-offset : conv->blocksize;
         IEMCONVOLVE(copyArray) (&inh[out_ch][in_ch][offset], conv->htemp,
                   copy_length);

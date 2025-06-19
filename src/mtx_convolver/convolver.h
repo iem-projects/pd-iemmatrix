@@ -49,11 +49,11 @@ int IEMCONVOLVE(convolver_set_fftwf_functions) (const t_fftwf_functions*funs);
 
 #define NUM_CF 2 // there are 2 crossfase buffers (re-occurring array dimension)
 typedef struct Conv_data {
-  int blocksize;          // signal block length (fft length = 2L)
-  int num_partitions;          // number of convolution partitions (length of h)
-  int num_inputs; // number of input channels
-  int num_outputs;
-  int xfade_length;
+  unsigned int blocksize;          // signal block length (fft length = 2L)
+  unsigned int num_partitions;          // number of convolution partitions (length of h)
+  unsigned int num_inputs; // number of input channels
+  unsigned int num_outputs;
+  unsigned int xfade_length;
   _Bool register_crossfade; // parameter for swiching bitween different buffers
 
   float *xtemp;   // 2L fft-input time-domain signal x=[xprev, xcurr]
@@ -63,8 +63,8 @@ typedef struct Conv_data {
   float **x_old;  // previous input data
   float *w_old;   // fade-out window
   float *w_new;   // fade-in window
-  int current_rb; // current_rb ring buffer position
-  int current_cf;
+  unsigned int current_rb; // current_rb ring buffer position
+  unsigned int current_cf;
 
   fftwf_complex ***xf;   // L+1 positive-half DFT, partition input ring buffer
   fftwf_complex *****hf; // L+1 positive-half DFT, partition stack of h
@@ -78,7 +78,7 @@ typedef struct Conv_data {
 } conv_data;
 /* crossfade functions */
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void IEMCONVOLVE(crossFade) (float *y, float *y_new, float *w_old, float *w_new, int len);
+void IEMCONVOLVE(crossFade) (float *y, float *y_new, float *w_old, float *w_new, unsigned int len);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void IEMCONVOLVE(registerCrossFade) (conv_data *conv);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
@@ -88,10 +88,10 @@ _Bool IEMCONVOLVE(wasCrossFadeRegistered)(conv_data *conv);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void IEMCONVOLVE(convProcess) (conv_data *conv, float **in, float **out);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-conv_data *IEMCONVOLVE(initConvolution) (int blocksize, int num_partitions, int xfade_length, int num_inputs, int num_outputs, _Bool coherent_xfade);
+conv_data *IEMCONVOLVE(initConvolution) (unsigned int blocksize, unsigned int num_partitions, unsigned int xfade_length, unsigned int num_inputs, unsigned int num_outputs, _Bool coherent_xfade);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void IEMCONVOLVE(freeConvolution) (conv_data *conv);
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-void IEMCONVOLVE(setImpulseResponseZeroPad) (conv_data *conv, float ***inh, int num_samples, _Bool no_xfade_init);
+void IEMCONVOLVE(setImpulseResponseZeroPad) (conv_data *conv, float ***inh, unsigned int num_samples, _Bool no_xfade_init);
 
 #endif /* _mtx_convolver_convolver_h */

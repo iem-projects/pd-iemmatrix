@@ -78,13 +78,13 @@ typedef struct _mtx_convolver_tilde {
   t_symbol *x_objname;
   setmultiout_f x_setmultiout; /* when doing multichannel, this is Pd>=0.54's signal_setmultiout(); otherwise NULL */
 
-  int ins; // given/instantiated/mc number of inputs
-  int outs; // given/instantiated number of inputs
+  unsigned int ins; // given/instantiated/mc number of inputs
+  unsigned int outs; // given/instantiated number of inputs
   t_sample **inout_buffers;
   float ***h; // 3D impulse response array h, h_num_ins x h_num_outs x h_len from array.h
-  int h_num_ins;
-  int h_num_outs;
-  int h_len;
+  unsigned int h_num_ins;
+  unsigned int h_num_outs;
+  unsigned int h_len;
   _Bool coherent_xfade;
   t_canvas *x_canvas; // to open array3 file
   conv_data *conv; // convolver structure from convolver.h
@@ -92,14 +92,14 @@ typedef struct _mtx_convolver_tilde {
   float **conv_output_buffer; // output buffers to call convolver
   t_inlet **x_inlet; // object's input ports
   t_outlet **x_outlet; // object's output ports
-  int blocksize;
+  unsigned int blocksize;
   int set_ir_at_dsp_start; // retarded updated of input IR on dsp start
 } t_mtx_convolver_tilde;
 
-int ceildiv(int a, int b) {
+unsigned int ceildiv(unsigned int a, unsigned int b) {
   if (b == 0)
     return 0;
-  int c = a / b;
+  unsigned int c = a / b;
   if (c * b < a)
     return c + 1;
   return c;
@@ -109,22 +109,22 @@ int ceildiv(int a, int b) {
 t_int *mtx_convolver_tilde_perform(t_int *w) {
   t_mtx_convolver_tilde *x = (t_mtx_convolver_tilde *)w[1];
   const char*objname=x->x_objname->s_name;
-  int available_inputs = (x->h_num_ins < x->ins) ? x->h_num_ins : x->ins;
-  int available_outputs = (x->h_num_outs < x->outs) ? x->h_num_outs : x->outs;
+  unsigned int available_inputs = (x->h_num_ins < x->ins) ? x->h_num_ins : x->ins;
+  unsigned int available_outputs = (x->h_num_outs < x->outs) ? x->h_num_outs : x->outs;
   _debug_logpost(x, PD_NORMAL, "[%s] available ins=%d, outs=%d", objname,available_inputs,available_outputs);
   if (x->conv) {
     _debug_logpost(x, PD_NORMAL, "[%s] processing with existing convolver",objname);
     // Operation: copy input signals, convolve, copy output signals
-    for (int i = 0; i < available_inputs; i++) { // copy from inout pd buffers
+    for (unsigned int i = 0; i < available_inputs; i++) { // copy from inout pd buffers
       float *in = x->conv_input_buffer[i];
       t_sample *pd_in = x->inout_buffers[i];
-      for (int n = 0; n < x->blocksize; n++) {
+      for (unsigned int n = 0; n < x->blocksize; n++) {
         in[n] = (float)pd_in[n];
       }
     }
-    for (int i=available_inputs; i < x->h_num_ins; i++) { // zeropad of unavailable convolver inputs
+    for (unsigned int i=available_inputs; i < x->h_num_ins; i++) { // zeropad of unavailable convolver inputs
       float *in = x->conv_input_buffer[i];
-      for (int n = 0; n < x->blocksize; n++) {
+      for (unsigned int n = 0; n < x->blocksize; n++) {
         in[n] = (float)0;
       }
     }
@@ -133,18 +133,18 @@ t_int *mtx_convolver_tilde_perform(t_int *w) {
     _debug_logpost(x, PD_NORMAL, "[%s] L=%d, P=%d, ins=%d, outs=%d",objname,x->conv->blocksize,x->conv->num_partitions,x->conv->num_inputs,x->conv->num_outputs);
     _debug_logpost(x, PD_NORMAL, "[%s] conv=%d, inbuf=%d, outpuf=%d",objname,x->conv,x->conv_input_buffer, x->conv_output_buffer);
     IEMCONVOLVE(convProcess) (x->conv, x->conv_input_buffer, x->conv_output_buffer);
-    for (int i = 0; i <available_outputs; i++) {
+    for (unsigned int i = 0; i < available_outputs; i++) {
       float *out = x->conv_output_buffer[i];
       t_sample *pd_out = x->inout_buffers[i + x->ins];
-      for (int n = 0; n < x->blocksize; n++) {
+      for (unsigned int n = 0; n < x->blocksize; n++) {
         pd_out[n] = (t_sample)out[n];
       }
     }
   } else { // DEFAULT: No convolver, deliver zero output signals.
     _debug_logpost(x, PD_NORMAL, "[%s] NOP with convolver inexistent, zeroing %d outs with blocksize %d",objname,x->outs,x->blocksize);
-    for (int i = 0; i < x->outs; i++) {
+    for (unsigned int i = 0; i < x->outs; i++) {
       t_sample *pd_out = x->inout_buffers[i + x->ins];
-      for (int n = 0; n < x->blocksize; n++) {
+      for (unsigned int n = 0; n < x->blocksize; n++) {
         pd_out[n] = (t_sample)0;
       }
     }
@@ -157,7 +157,7 @@ void mtx_convolver_init(t_mtx_convolver_tilde *x) {
     IEMCONVOLVE(freeConvolution) (x->conv);
   x->conv = 0;
   if ((x->blocksize > 0) && (x->h_num_ins > 0) && (x->h_num_outs > 0) && (x->h_len >0)) {
-    int num_partitions = ceildiv(x->h_len, x->blocksize);
+    unsigned int num_partitions = ceildiv(x->h_len, x->blocksize);
     x->conv = IEMCONVOLVE(initConvolution) (x->blocksize, num_partitions, x->blocksize, x->h_num_ins, x->h_num_outs, x->coherent_xfade);
   }
 }
@@ -165,7 +165,7 @@ void mtx_convolver_init(t_mtx_convolver_tilde *x) {
 int mtx_convolver_resize(t_mtx_convolver_tilde *x) {
   const char*objname=x->x_objname->s_name;
   if (x->conv) {
-    int num_partitions = ceildiv(x->h_len,x->blocksize);
+    unsigned int num_partitions = ceildiv(x->h_len,x->blocksize);
     if ((x->conv->blocksize==x->blocksize)&&(x->conv->num_partitions==num_partitions)&&
         (x->conv->num_inputs==x->h_num_ins)&&
         (x->conv->num_outputs==x->h_num_outs)) {
@@ -204,18 +204,18 @@ int mtx_convolver_resize(t_mtx_convolver_tilde *x) {
 }
 
 void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
-  int ins = x->ins;
-  int outs = x->outs;
+  unsigned int ins = x->ins;
+  unsigned int outs = x->outs;
   const char*objname=x->x_objname->s_name;
 #if CLASS_MULTICHANNEL
   if (x->x_setmultiout) {
     // override with num input signals in MC mode
-    ins = sp[0]->s_nchans;
-    logpost(x, PD_NORMAL, "[%s] multichannel mode, in=%d",objname,ins);
+    ins = sp[0]->s_nchans>0?sp[0]->s_nchans:0;
+    logpost(x, PD_NORMAL, "[%s] multichannel mode, in=%u",objname,ins);
     // set number of outs in MC mode
     outs = x->h_num_outs;
     outs = (outs>0)?outs:1;
-    logpost(x, PD_NORMAL, "[%s] multichannel mode, outs=%d",objname,outs);
+    logpost(x, PD_NORMAL, "[%s] multichannel mode, outs=%u",objname,outs);
     x->x_setmultiout(&sp[1], outs);
     if ((ins+outs != x->ins+x->outs)){
       if (x->inout_buffers) {
@@ -232,22 +232,22 @@ void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
   if (!x->inout_buffers) {
       x->inout_buffers = (t_float **)malloc(sizeof(float *) * (x->ins + x->outs));
   }
-  x->blocksize = sp[0]->s_n;
-  _debug_logpost(x, PD_NORMAL, "[%s] outs=%d, ins=%d, blocksize=%d",objname,outs,ins,x->blocksize);
+  x->blocksize = sp[0]->s_n>0?sp[0]->s_n:0;
+  _debug_logpost(x, PD_NORMAL, "[%s] outs=%u, ins=%u, blocksize=%u",objname,outs,ins,x->blocksize);
   int resized;
   resized = mtx_convolver_resize(x); // check if renewed convolver is required
   if (0) {
 #if CLASS_MULTICHANNEL
   } else if (x->x_setmultiout) {
-    for (int i = 0; i < x->ins; i++) {
+    for (unsigned int i = 0; i < x->ins; i++) {
       x->inout_buffers[i] = sp[0]->s_vec + i * x->blocksize;
     }
-    for (int i = 0; i < x->outs; i++) {
+    for (unsigned int i = 0; i < x->outs; i++) {
       x->inout_buffers[x->ins + i] = sp[1]->s_vec + i * x->blocksize;
     }
 #endif
   } else {
-    for (int i = 0; i < x->ins + x->outs; i++) {
+    for (unsigned int i = 0; i < x->ins + x->outs; i++) {
       x->inout_buffers[i] = sp[i]->s_vec;
     }
   }
@@ -303,9 +303,7 @@ int mtx_convolver_check(t_mtx_convolver_tilde*x, int argc, t_atom*argv, unsigned
 void mtx_convolver_tilde_array3(t_mtx_convolver_tilde *x, t_symbol *s, int argc,
                       t_atom *argv) {
   const char*objname=x->x_objname->s_name;
-  int h_num_ins;
-  int h_num_outs;
-  int h_len;
+  unsigned int h_num_ins, h_num_outs, h_len;
   int resized_outs=0;
   if (argc < 3) {
     logpost(x, PD_NORMAL, "[%s] %s message must have at least 3 arguments: num_inputs, num_outputs, ir_len",
@@ -313,14 +311,14 @@ void mtx_convolver_tilde_array3(t_mtx_convolver_tilde *x, t_symbol *s, int argc,
     return;
   }
   if (mtx_convolver_check(x, argc, argv, 0)) return;
-  h_num_ins = (int)atom_getfloat(argv);
-  h_num_outs = (int)atom_getfloat(argv + 1);
-  h_len = (int)atom_getfloat(argv + 2);
+  h_num_ins = (unsigned int)atom_getfloat(argv);
+  h_num_outs = (unsigned int)atom_getfloat(argv + 1);
+  h_len = (unsigned int)atom_getfloat(argv + 2);
   argv += 3;
   _debug_logpost(x, PD_NORMAL, "[%s] inputs=%d, outputs=%d, ir_len=%d, x->blocksize=%d", objname,h_num_ins, h_num_outs, h_len, x->blocksize);
 
   if ((h_num_ins != x->h_num_ins) || (h_num_outs != x->h_num_outs) || (h_len != x->h_len)) {
-    _debug_logpost(x, PD_NORMAL, "[%s] input array3: re-sizing/setting x->h_num_ins=%d, x->h_num_outs=%d, x->h_len=%d", objname,h_num_ins,
+    _debug_logpost(x, PD_NORMAL, "[%s] input array3: re-sizing/setting x->h_num_ins=%u, x->h_num_outs=%u, x->h_len=%u", objname, h_num_ins,
 		       h_num_outs, h_len);
     if (x->h)
       IEMCONVOLVE(free3DArray) (x->h, x->h_num_outs, x->h_num_ins);
@@ -332,9 +330,9 @@ void mtx_convolver_tilde_array3(t_mtx_convolver_tilde *x, t_symbol *s, int argc,
     x->h_num_outs = h_num_outs;
     x->h_len = h_len;
   }
-  for (int in = 0; in < x->h_num_ins; in++) { // store input array
-    for (int out = 0; out < x->h_num_outs; out++) {
-      for (int i = 0; i < x->h_len; i++) {
+  for (unsigned int in = 0; in < x->h_num_ins; in++) { // store input array
+    for (unsigned int out = 0; out < x->h_num_outs; out++) {
+      for (unsigned int i = 0; i < x->h_len; i++) {
         x->h[out][in][i] = (float)atom_getfloat(argv++);
       }
     }
@@ -426,33 +424,26 @@ void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
     if (argc < 1) {
       x->ins = x->outs = 1;
     } else if (argc < 2) {
-      x->ins = x->outs = (int)atom_getfloat(argv);
+      int chan = (int)atom_getfloat(argv);
+      x->ins = x->outs = (chan>1)?chan:1;
     } else {
-      x->ins = (int)atom_getfloat(argv);
-      x->outs = (int)atom_getfloat(argv + 1);
+      int i = (int)atom_getfloat(argv + 0);
+      int o = (int)atom_getfloat(argv + 1);
+      x->ins = (i>1)?i:1;
+      x->outs = (o>1)?o:1;
     }
-    x->ins = (x->ins < 1)?1:x->ins;
-    x->outs = (x->outs < 1)?1:x->outs;
-    for (int i = 0; i < x->ins; i++) {
+    for (unsigned int i = 0; i < x->ins; i++) {
       inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal);
     }
-    for (int i = 0; i < x->outs; i++) {
+    for (unsigned int i = 0; i < x->outs; i++) {
       outlet_new(&x->x_obj, &s_signal);
     }
   }
   else {
-    x->ins = x->outs = 0;
     inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal);
     outlet_new(&x->x_obj, &s_signal);
   }
   x->x_canvas = canvas_getcurrent();
-  x->conv_input_buffer = 0;
-  x->conv_output_buffer = 0;
-  x->inout_buffers = 0;
-  x->h = 0;
-  x->conv = 0;
-  x->blocksize = 0;
-  x->set_ir_at_dsp_start = 0;
   x->coherent_xfade = 1;
 
   for (int i=1; i<argc; i++) { // use first symbol after argv[0] as init file name

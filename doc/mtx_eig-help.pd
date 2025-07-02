@@ -18,7 +18,6 @@
 #X text 61 17 [mtx_eig] computes (complex valued) eigenvalues \, and if desired eigenvectors of a matrix.;
 #X text 425 71 requires GSL;
 #X text 212 326 Franz Zotter \, 2009;
-#X text 98 288 Attention: eigenvectors seem to be wrong. Don't know why!;
 #N canvas 460 154 494 171 META 0;
 #X text 12 85 OUTLET_0 matrix;
 #X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;

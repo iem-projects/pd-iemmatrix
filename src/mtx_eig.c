@@ -196,11 +196,12 @@ static void mTXEigMatrix (MTXEig *x, t_symbol *s,
   }
   size=rows;
   x->size=size;
+  int size2 = size*size;
 
   deleteMTXqlw(x);
   allocMTXqlw(x);
 
-  for (n=0; n<size; n++) {
+  for (n=0; n<size2; n++) {
     x->a->data[n]=(double) atom_getfloat(argv++);
   }
 
@@ -209,14 +210,15 @@ static void mTXEigMatrix (MTXEig *x, t_symbol *s,
     my_eigen_nonsymm(x->a,x->l,x->w);
     break;
   case WITHEVS:
-    my_eigen_nonsymmv(x->a,x->l,x->q,x->wv);
-    SETFLOAT((x->list_q_re),(float) x->size);
-    SETFLOAT((x->list_q_im),(float) x->size);
-    SETFLOAT((x->list_q_re+1),(float) x->size);
-    SETFLOAT((x->list_q_im+1),(float) x->size);
-    for (n=0; n<size; n++) {
-      SETFLOAT((x->list_q_im+2+n), (float) x->q->data[2*n+1]);
-      SETFLOAT((x->list_q_re+2+n), (float) x->q->data[2*n]);
+    my_eigen_nonsymmv(x->a, x->l, x->q, x->wv);
+    SETFLOAT((x->list_q_re+0),(t_float) x->size);
+    SETFLOAT((x->list_q_re+1),(t_float) x->size);
+    SETFLOAT((x->list_q_im+1),(t_float) x->size);
+    SETFLOAT((x->list_q_im+0),(t_float) x->size);
+
+    for (n=0; n<(size2); n++) {
+      SETFLOAT((x->list_q_re+2+n), (t_float) x->q->data[2*n+0]);
+      SETFLOAT((x->list_q_im+2+n), (t_float) x->q->data[2*n+1]);
     }
     break;
   }

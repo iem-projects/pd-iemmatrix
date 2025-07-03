@@ -29,11 +29,7 @@ run_nogui() {
  FAILEDTESTS=$(cat ${RUNTESTS_LOG} \
                    | grep -E "^regression-test: .*: failed$" \
                    | sed -e 's|^regression-test: ||' -e 's|: failed$||')
- echo -n "failed tests: "
- for ft in ${FAILEDTESTS}; do
-   echo -n "${ft} "
- done
- echo
+ echo "failed tests: ${FAILEDTESTS}"
  if [ "x${FAILEDTESTS}" != "x" ]; then
    XITCODE=1
  fi

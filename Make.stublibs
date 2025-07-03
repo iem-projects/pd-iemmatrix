@@ -68,9 +68,9 @@ executables += $(stub.libs)
 stubs: $(stub.libs)
 post: $(stub.libs)
 
-.PHONY: clean.local
-clean: clean.local
-clean.local:
+.PHONY: clean.stublibs
+clean: clean.stublibs
+clean.stublibs:
 	rm -f $(stub.libs)
 	rm -f $(stub.libs:%.$(shared.fullextension)=%.$(object.extension))
 	rm -f $(stub.libs:lib$(lib.name)Stub_%.$(shared.fullextension)=stub/%.$(object.extension))

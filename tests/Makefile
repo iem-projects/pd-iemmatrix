@@ -6,3 +6,6 @@ nogui:
 
 gui:
 	sh runtests.sh -gui
+
+clean:
+	-rm runtests.log*

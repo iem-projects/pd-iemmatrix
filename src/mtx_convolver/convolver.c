@@ -73,7 +73,7 @@ static int have_fftwf = 0;
 #include "m_pd.h"
 int IEMCONVOLVE(convolver_set_fftwf_functions) (const t_fftwf_functions*funs) {
 #ifndef USE_FFTWF
-  #warning overwrrite fftwf functions
+  #warning overwrite fftwf functions
   if(funs && funs->malloc)
     my_malloc = funs->malloc;
   if(funs && funs->free)
@@ -202,10 +202,10 @@ conv_data *IEMCONVOLVE(initConvolution) (unsigned int blocksize, unsigned int nu
 
   conv->x_old = IEMCONVOLVE(new2DArray) (conv->num_inputs, conv->blocksize); // old input signal buffer
   IEMCONVOLVE(reset2DArray) (conv->x_old, conv->num_inputs, conv->blocksize);
-  // frequency-domain buffers holding all input-signal paritions
+  // frequency-domain buffers holding all input-signal partitions
   conv->xf = IEMCONVOLVE(new3DComplexArray) (conv->num_inputs, conv->num_partitions, conv->blocksize + 1);
   IEMCONVOLVE(reset3DComplexArray) (conv->xf, conv->num_inputs, conv->num_partitions, conv->blocksize + 1);
-  // frequency-domain buffers holding all MIMO ir paritions
+  // frequency-domain buffers holding all MIMO ir partitions
   conv->hf = IEMCONVOLVE(new5DComplexArray) (NUM_CF, conv->num_outputs, conv->num_inputs,
                                conv->num_partitions, conv->blocksize + 1);
   IEMCONVOLVE(reset5DComplexArray) (conv->hf, NUM_CF, conv->num_outputs, conv->num_inputs,

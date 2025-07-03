@@ -54,7 +54,7 @@ typedef struct Conv_data {
   unsigned int num_inputs; // number of input channels
   unsigned int num_outputs;
   unsigned int xfade_length;
-  _Bool register_crossfade; // parameter for swiching bitween different buffers
+  _Bool register_crossfade; // parameter for switching between different buffers
 
   float *xtemp;   // 2L fft-input time-domain signal x=[xprev, xcurr]
   float *htemp;   // 2L time-domain impulse response input h=[h, 0]

@@ -282,7 +282,7 @@ datafiles = \
 
 datafiles += \
 	$(wildcard abs/*.pd) \
-	$(wildcard reference/*.pd) \
+	$(wildcard doc/*.pd) \
 	$(empty)
 
 

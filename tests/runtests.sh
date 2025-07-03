@@ -4,8 +4,9 @@
 : "${PD:=pd}"
 : "${PDARGS:=-noprefs -nosound -nrt}"
 
-: "${libdir:=..}"
-: "${absdir:=../abs}"
+builddir="$(cd ..; pwd)"
+: "${libdir:=${builddir}}"
+: "${absdir:=${builddir}/abs}"
 
 : "${IEMMATRIX:=-lib "${libdir}/iemmatrix" -path "${absdir}"}"
 

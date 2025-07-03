@@ -285,6 +285,7 @@ datafiles += \
 	$(wildcard doc/*.pd) \
 	$(empty)
 
+in.files = $(wildcard *.in)
 
 # include Makefile.pdlibbuilder from submodule directory 'pd-lib-builder'
 PDLIBBUILDER_DIR=pd-lib-builder/
@@ -304,6 +305,11 @@ iemmatrix_sources.h:
 check:
 	-make -C tests
 
+.PHONY: clean.local
+clean: clean.local
+clean.local:
+	-rm iemmatrix_sources.h
+	-rm $(in.files:%.in=%)
 
 # build stub libraries
 -include Make.stublibs

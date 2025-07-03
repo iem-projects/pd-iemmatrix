@@ -22,6 +22,16 @@ typedef struct _mtx_pack_tilde {
   t_clock*clock;
 } mtx_pack_tilde;
 
+static int should_defer(mtx_pack_tilde*x) {
+  int major, minor, bugfix;
+  sys_getversion(&major, &minor, &bugfix);
+  if(KERNEL_VERSION(major, minor, bugfix) >= KERNEL_VERSION(0, 56, 0))
+    return 1;
+  pd_error(x, "starting with Pd-0.56, [mtx_pack~] will stop sending messages in the DSP-tick!");
+  pd_error(x, "adjust your patches accordingly");
+  return 0;
+}
+
 static void mTxPackTildeOut(mtx_pack_tilde*x) {
   if(x->block_size && x->num_channels) {
     outlet_anything(x->message_outlet,gensym("matrix"),
@@ -31,9 +41,13 @@ static void mTxPackTildeOut(mtx_pack_tilde*x) {
 }
 void *newMtxPackTilde (t_floatarg f)
 {
-  int deferred = 0;
+  static int deferred = -1;
   mtx_pack_tilde *x = (mtx_pack_tilde*) pd_new(mtx_pack_tilde_class);
   int num_ports = (int)f;
+
+  if(deferred < 0)
+    deferred = should_defer(x);
+
   if ((num_ports < 1) || (num_ports>MTX_PACK_MAXCHANNELS)) {
     num_ports=1;
   }

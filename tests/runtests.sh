@@ -39,7 +39,7 @@ run_withgui() {
  ${PD} ${PDARGS} $IEMMATRIX -stderr runtests.pd 2>&1 | tee ${RUNTESTS_LOG}
 }
 
-if test "x$1" = "x-gui"; then
+if test "$1" = "-gui"; then
  run_withgui
 else
  RUNTESTS_LOG=${RUNTESTS_LOG}.$(date +%Y%m%d-%H%M).$$

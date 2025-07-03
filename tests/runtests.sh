@@ -10,7 +10,7 @@
 : ${IEMMATRIX:=-lib "${libdir}/iemmatrix" -path "${absdir}"}
 
 RUNTESTS_TXT=runtests.txt
-RUNTESTS_LOG=runtests.log
+runtests_log=runtests.log
 XITCODE=0
 
 for f in */*.pd; do
@@ -40,9 +40,10 @@ run_withgui() {
 }
 
 if test "$1" = "-gui"; then
+ : "${RUNTESTS_LOG:=${runtests_log}}"
  run_withgui
 else
- RUNTESTS_LOG=${RUNTESTS_LOG}.$(date +%Y%m%d-%H%M).$$
+ : "${RUNTESTS_LOG:=${runtests_log}.$(date +%Y%m%d-%H%M).$$}"
  run_nogui
 fi
 

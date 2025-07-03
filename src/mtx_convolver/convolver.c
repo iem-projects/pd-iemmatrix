@@ -48,12 +48,16 @@ University of Music and Performing Arts Graz
 #if HAVE_FFTWF
 //# define USE_FFTWF 1
 #else
-# warning "Building without FFTW3"
+# if defined(__GNUC__)
+#  warning "Building without FFTW3"
+# endif
 #endif
 
 
 #ifdef USE_FFTWF
-#warning USE_FFTWF
+# if defined(__GNUC__)
+#  warning USE_FFTWF
+# endif
 static const t_fftwf_malloc my_malloc = fftwf_malloc;
 static const t_fftwf_free my_free = fftwf_free;
 static const t_fftwf_execute my_execute = fftwf_execute;
@@ -73,7 +77,9 @@ static int have_fftwf = 0;
 #include "m_pd.h"
 int IEMCONVOLVE(convolver_set_fftwf_functions) (const t_fftwf_functions*funs) {
 #ifndef USE_FFTWF
-  #warning overwrite fftwf functions
+# if defined(__GNUC__)
+#  warning overwrite fftwf functions
+#endif
   if(funs && funs->malloc)
     my_malloc = funs->malloc;
   if(funs && funs->free)

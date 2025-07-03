@@ -1,5 +1,3 @@
-#N struct mtx_vis-plot float x float y array mtx_vis-array mtx_vis-element;
-#N struct mtx_vis-element float x float y float c float dx float dy;
 #N canvas 347 191 514 431 12;
 #X declare -lib iemmatrix;
 #X obj 107 120 mtx_pack~ 3;
@@ -12,7 +10,7 @@
 #X obj 68 290 mtx_print;
 #X text 43 29 packing signal vectors (usually 64 samples);
 #X text 42 52 of multiple inputs into a matrix;
-#X obj 396 374 mtx_unpack~;
+#X obj 396 404 mtx_unpack~;
 #N canvas 460 154 494 184 META 0;
 #X text 12 85 OUTLET_0 matrix;
 #X text 12 125 HELP_PATCH_AUTHORS IOhannes m zmölnig;
@@ -25,7 +23,7 @@
 #X restore 381 6 pd META;
 #X msg 390 84 \; pd dsp \$1;
 #X obj 390 56 tgl 20 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
-#X text 323 374 see also;
+#X text 323 404 see also;
 #N canvas 391 376 717 517 multichannel 0;
 #X text 38 22 With Pd>=0.54 \, [mtx_pack~] has multichannel support.;
 #X obj 545 114 tgl 20 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
@@ -71,7 +69,7 @@
 #X connect 25 0 23 0;
 #X connect 25 1 24 0;
 #X connect 28 0 13 1;
-#X restore 69 362 pd multichannel;
+#X restore 69 392 pd multichannel;
 #X obj 251 175 route dimen channels blocksize;
 #X obj 251 200 unpack;
 #X floatatom 251 225 5 0 0 0 - - - 0;
@@ -82,7 +80,15 @@
 #X obj 107 165 t a a;
 #X obj 68 235 bng 20 250 50 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000;
 #X obj 68 267 matrix;
-#X text 336 346 part of iemmatrix;
+#X text 336 376 part of iemmatrix;
+#N canvas 0 0 450 376 compatibility 0;
+#X text 107 14 COMPAT NOTE;
+#X text 16 75 Older versions of iemmatrix (up to v0.4.2) output the matrices within the DSP-tick.;
+#X text 15 117 While this allowed for zero-latency matrix processing of signals \, it broke all kinds of assumptions that Pd makes about how messages and signals get along.;
+#X text 19 185 Starting with iemmatrix >= v0.4.3 \, the object will now only output data in the message phase of the next cycle.;
+#X text 19 240 As an additional service to our legacy users \, Pd << v0.56 will not be affected by this change.;
+#X text 12 296 If you rely on this behaviour \, you should change your patches. Most likely \, Pd's recent multichannel addition makes the old behaviour obsolete anyhow.;
+#X restore 69 352 pd compatibility note;
 #X connect 0 0 23 0;
 #X connect 0 1 16 0;
 #X connect 1 0 0 0;

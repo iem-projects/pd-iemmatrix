@@ -17,6 +17,8 @@ University of Music and Performing Arts Graz
 #ifndef _mtx_convolver_array_h
 #define _mtx_convolver_array_h
 
+#include <stddef.h>
+
 #if HAVE_FFTWF
 # include <fftw3.h>
 #else

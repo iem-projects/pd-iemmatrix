@@ -17,6 +17,8 @@
 typedef struct _matrix_unop {
   t_matrix m;
   iemmatrix_unopfun_t*fun;
+  t_symbol*x_selector;
+  int x_argc;
 } t_matrix_unop;
 
 typedef struct _unop_ {
@@ -26,6 +28,14 @@ typedef struct _unop_ {
 
 
 static struct _iemmatrix_map*s_map;
+
+static void mtx_unop_bang(t_matrix_unop *x) {
+  if(!x->x_argc)
+    outlet_bang(x->m.x_obj.ob_outlet);
+  else
+    outlet_anything(x->m.x_obj.ob_outlet, x->x_selector, x->x_argc, x->m.atombuffer);
+}
+
 
 static void mtx_unop_matrix(t_matrix_unop *x,
                             t_symbol *s, int argc, t_atom *argv)
@@ -46,8 +56,9 @@ static void mtx_unop_matrix(t_matrix_unop *x,
     m++;
   }
 
-  outlet_anything(x->m.x_obj.ob_outlet, gensym("matrix"), argc,
-                  x->m.atombuffer);
+  x->x_selector = s;
+  x->x_argc = argc;
+  mtx_unop_bang(x);
 }
 
 static void mtx_unop_list(t_matrix_unop *x, t_symbol *s, int argc,
@@ -67,9 +78,15 @@ static void mtx_unop_list(t_matrix_unop *x, t_symbol *s, int argc,
     m++;
   }
 
-  outlet_list(x->m.x_obj.ob_outlet, gensym("list"), argc, x->m.atombuffer);
+  if(s)
+    x->x_selector = s;
+  else if (1 == argc)
+    x->x_selector = gensym("float");
+  else
+    x->x_selector = gensym("list");
+  x->x_argc = argc;
+  mtx_unop_bang(x);
 }
-
 
 static void *mtx_unop_new(t_symbol*s, int argc, t_atom*argv)
 {
@@ -111,6 +128,7 @@ void iemmatrix_unop_setup(const char*classname, iemmatrix_unopfun_t*fun, ...) {
                   0,
                   A_GIMME, A_NULL);
 
+  class_addbang(cls, (t_method)mtx_unop_bang);
   class_addlist(cls, (t_method)mtx_unop_list);
   class_addmethod(cls, (t_method)mtx_unop_matrix, gensym("matrix"), A_GIMME, A_NULL);
 

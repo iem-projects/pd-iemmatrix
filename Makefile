@@ -107,6 +107,7 @@ lib.setup.sources = \
 
 common.sources = \
 	src/iemmatrix_binops.c \
+	src/iemmatrix_unop.c \
 	src/iemmatrix_utility.c \
 	src/iemmatrix_stub.c \
 	$(empty)

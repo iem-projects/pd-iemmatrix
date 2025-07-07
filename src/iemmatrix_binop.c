@@ -234,11 +234,11 @@ static void mtx_binopscalar_list(t_matrix_binop *x, t_symbol *s, int argc,
   x->x_argc = argc;
 
   adjustsize(x, &x->m1, 1, argc);
-  t_atom *m = x->m.atombuffer + 2;
+  t_atom *m1 = x->m1.atombuffer + 2;
   while(argc--) {
     t_float f = atom_getfloat(argv++);
-    SETFLOAT(m, f);
-    m++;
+    SETFLOAT(m1, f);
+    m1++;
   }
   mtx_binopscalar_bang(x);
 }

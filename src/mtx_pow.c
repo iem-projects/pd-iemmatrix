@@ -13,159 +13,18 @@
  */
 #include "iemmatrix.h"
 
-/* mtx_.^ */
-/* LATER: do a mtx_pow, mtx_^ */
-
-static t_class *mtx_powelement_class, *mtx_powscalar_class;
-
-static void mtx_powelement_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
-                                  t_atom *argv)
-{
-  int row, col, n;
-  t_atom *m;
-  t_atom *m2 = x->m2.atombuffer+2;
-  if(iemmatrix_check(x, s, argc, argv, 0))return;
-  row=atom_getint(argv++);
-  col=atom_getint(argv++);
-  n = row*col;
-
-  if (!(x->m2.col && x->m2.row)) {
-    adjustsize(x, &x->m, row, col);
-    matrix_set(&x->m, 0);
-    outlet_anything(x->x_obj.ob_outlet, gensym("matrix"), argc,
-                    x->m.atombuffer);
-    return;
-  }
-  if ((col!=x->m2.col)||(row!=x->m2.row)) {
-    pd_error(x, "[mtx_.^]: matrix dimension do not match");    /* LATER SOLVE THIS */
-    return;
-  }
-
-  adjustsize(x, &x->m, row, col);
-  m =  x->m.atombuffer+2;
-
-  while(n--) {
-    t_float f = powf(atom_getfloat(argv++),atom_getfloat(m2++));
-    SETFLOAT(m, f);
-    m++;
-  }
-
-  outlet_anything(x->x_obj.ob_outlet, gensym("matrix"), argc,
-                  x->m.atombuffer);
-}
-static void mtx_powelement_float(t_mtx_binmtx *x, t_float f)
-{
-  t_matrix *m=&x->m, *m2=&x->m2;
-  t_atom *ap, *ap2=m2->atombuffer+2;
-  int row2, col2, n;
-
-  if (!m2->atombuffer) {
-    pd_error(x, "[mtx_.^]: power by what ?");
-    return;
-  }
-
-  row2=atom_getfloat(m2->atombuffer);
-  col2=atom_getfloat(m2->atombuffer+1);
-  adjustsize(x, m, row2, col2);
-  ap=m->atombuffer+2;
-
-  n=row2*col2;
-
-  while(n--) {
-    SETFLOAT(ap, powf(f,atom_getfloat(ap2++)));
-    ap++;
-  }
-
-  outlet_anything(x->x_obj.ob_outlet, gensym("matrix"), m->row*m->col+2,
-                  m->atombuffer);
-}
-static void mtx_powscalar_matrix(t_mtx_binscalar *x, t_symbol *s, int argc,
-                                 t_atom *argv)
-{
-  int row, col;
-  int n=argc-2;
-  t_atom *m;
-  t_float factor = x->f;
-  if(iemmatrix_check(x, s, argc, argv, IEMMATRIX_CHECK_CRIPPLED))return;
-  row=atom_getfloat(argv++);
-  col=atom_getfloat(argv++);
-
-  adjustsize(x, &x->m, row, col);
-  m = x->m.atombuffer+2;
-
-  while(n--) {
-    m->a_type = A_FLOAT;
-    (m++)->a_w.w_float = powf(atom_getfloat(argv++),factor);
-  }
-
-  outlet_anything(x->x_obj.ob_outlet, gensym("matrix"), argc,
-                  x->m.atombuffer);
-}
-static void mtx_powscalar_list(t_mtx_binscalar *x, t_symbol *s, int argc,
-                               t_atom *argv)
-{
-  int n=argc;
-  t_atom *m;
-  t_float factor = x->f;
-  (void)s; /* unused */
-
-  adjustsize(x, &x->m, 1, argc);
-  m = x->m.atombuffer;
-
-  while(n--) {
-    m->a_type = A_FLOAT;
-    (m++)->a_w.w_float = powf(atom_getfloat(argv++),factor);
-  }
-
-  outlet_list(x->x_obj.ob_outlet, gensym("list"), argc, x->m.atombuffer);
+static t_float binop(t_float f1, t_float f2) {
+#if PD_FLOATSIZE == 32
+  return powf(f1, f2);
+#else
+  return pow(f1, f2);
+#endif
 }
 
-static void *mtx_pow_new(t_symbol *s, int argc, t_atom *argv)
-{
-  (void)s; /* unused */
-  if (argc) {
-    /* scalar power */
-    t_mtx_binscalar *x = (t_mtx_binscalar *)pd_new(mtx_powscalar_class);
-    if (argc>1) {
-      pd_error(x, "[mtx_pow]: extra arguments ignored");
-    }
-    floatinlet_new(&x->x_obj, &x->f);
-    x->f = atom_getfloatarg(0, argc, argv);
-    outlet_new(&x->x_obj, 0);
-    return(x);
-  } else {
-    /* element power */
-    t_matrixobj *x = (t_matrixobj *)pd_new(mtx_powelement_class);
-    inlet_new(&x->x_obj, &x->x_obj.ob_pd, gensym("matrix"), gensym(""));
-    outlet_new(&x->x_obj, 0);
-    x->m.col = x->m.row = 0;
-    x->m.atombuffer = 0;
-    return(x);
-  }
-}
 
 void mtx_pow_setup(void)
 {
-  mtx_powelement_class = class_new(gensym("mtx_.^"),
-                                   (t_newmethod)mtx_pow_new, (t_method)mtx_binmtx_free,
-                                   sizeof(t_mtx_binmtx), 0, A_GIMME, 0);
-  class_addmethod(mtx_powelement_class, (t_method)mtx_powelement_matrix,
-                  gensym("matrix"), A_GIMME, 0);
-  class_addmethod(mtx_powelement_class, (t_method)mtx_bin_matrix2,
-                  gensym(""), A_GIMME, 0);
-  class_addfloat (mtx_powelement_class, mtx_powelement_float);
-  class_addbang  (mtx_powelement_class, mtx_binmtx_bang);
-
-  mtx_powscalar_class = class_new(gensym("mtx_.^"), 0,
-                                  (t_method)mtx_binscalar_free,
-                                  sizeof(t_mtx_binscalar), 0, 0);
-  class_addmethod(mtx_powscalar_class, (t_method)mtx_powscalar_matrix,
-                  gensym("matrix"), A_GIMME, 0);
-  class_addlist  (mtx_powscalar_class, mtx_powscalar_list);
-  class_addbang  (mtx_powscalar_class, mtx_binscalar_bang);
-
-  class_sethelpsymbol(mtx_powelement_class, gensym("mtx_pow-help"));
-  class_sethelpsymbol(mtx_powscalar_class, gensym("mtx_pow-help"));
+  iemmatrix_binop_setup("mtx_.^", "mtx_pow", binop, 0);
 }
 
 void iemtx_pow_setup(void)

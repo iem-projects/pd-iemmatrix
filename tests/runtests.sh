@@ -33,7 +33,7 @@ run_nogui() {
                    | tr '\n' ' ' \
             )
  echo "failed tests: ${FAILEDTESTS}"
- if [ "x${FAILEDTESTS}" != "x" ]; then
+ if [ -n "${FAILEDTESTS}" ]; then
    XITCODE=1
  fi
 }

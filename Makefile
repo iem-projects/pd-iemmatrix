@@ -144,6 +144,7 @@ class.sources = \
 	src/mtx_diff.c \
 	src/mtx_dispersive_dline.c \
 	src/mtx_distance2.c \
+	src/mtx_div.c \
 	src/mtx_egg.c \
 	src/mtx_eig.c \
 	src/mtx_ei~.c \

@@ -17,71 +17,13 @@
 
 #define MTX_ALMOSTZERO 1e-19
 
-static t_class *mtx_not_class;
-
-static void mtx_not_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
-                           t_atom *argv)
-{
-  int row, col, n;
-  t_atom *m;
-  (void)s; /* unused */
-  if(iemmatrix_check(x, s, argc, argv, 0))return;
-  row=atom_getint(argv++);
-  col=atom_getint(argv++);
-  n = row*col;
-
-  adjustsize(&x->m, row, col);
-  m =  x->m.atombuffer+2;
-
-  while(n--) {
-    t_float f = atom_getfloat(argv++);
-    SETFLOAT(m, (t_float)(f<MTX_ALMOSTZERO&&f>-MTX_ALMOSTZERO));
-    m++;
-  }
-
-  outlet_anything(x->x_obj.ob_outlet, gensym("matrix"), argc,
-                  x->m.atombuffer);
-}
-
-static void mtx_not_list(t_mtx_binscalar *x, t_symbol *s, int argc,
-                         t_atom *argv)
-{
-  int n=argc;
-  t_atom *m;
-  (void)s; /* unused */
-
-  adjustsize(&x->m, 1, argc);
-  m = x->m.atombuffer;
-
-  while(n--) {
-    t_float f = atom_getfloat(argv++);
-    m->a_type = A_FLOAT;
-    (m++)->a_w.w_float = (t_float)(f<MTX_ALMOSTZERO&&f>-MTX_ALMOSTZERO);
-  }
-
-  outlet_list(x->x_obj.ob_outlet, gensym("list"), argc, x->m.atombuffer);
-}
-
-static void *mtx_not_new()
-{
-  /* element not */
-  t_matrix *x = (t_matrix *)pd_new(mtx_not_class);
-  outlet_new(&x->x_obj, 0);
-  return(x);
+static t_float unop(t_float f) {
+  return (t_float)(f<MTX_ALMOSTZERO&&f>-MTX_ALMOSTZERO);
 }
 
 void mtx_not_setup(void)
 {
-  mtx_not_class = class_new(gensym("mtx_not"), (t_newmethod)mtx_not_new,
-                            (t_method)mtx_binmtx_free,
-                            sizeof(t_mtx_binmtx), 0, 0);
-  class_addcreator((t_newmethod)mtx_not_new, gensym("mtx_!"), A_GIMME,0);
-  class_addmethod(mtx_not_class, (t_method)mtx_not_matrix, gensym("matrix"),
-                  A_GIMME, 0);
-  class_addlist  (mtx_not_class, mtx_not_list);
-  class_addbang  (mtx_not_class, mtx_binmtx_bang);
-
-
+  iemmatrix_unop_setup("mtx_not", unop, "mtx_!", 0);
 }
 
 void iemtx_not_setup(void)

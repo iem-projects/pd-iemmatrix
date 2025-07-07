@@ -11,13 +11,19 @@
  * WARRANTIES, see the file, "LICENSE.txt," in this distribution.
  *
  */
+#include "iemmatrix.h"
 
-/* name of the object and the classes */
-#define MTXBIN_GENERIC__NAME mtx_ge
-/* operator; also used for abbreviation of object */
-#define MTXBIN_GENERIC__OPERATOR >=
+static t_float binop(t_float f1, t_float f2) {
+  return f1>=f2;
+}
 
-/* the operator operates on integers instead of floats */
-/* #define MTXBIN_GENERIC__INTEGEROP */
 
-#include "mtx_binop_generic.h"
+void mtx_ge_setup(void)
+{
+  iemmatrix_binop_setup("mtx_ge", binop, "mtx_>=", 0);
+}
+
+void iemtx_ge_setup(void)
+{
+  mtx_ge_setup();
+}

@@ -114,7 +114,7 @@ static void *mtx_unop_new(t_symbol*s, int argc, t_atom*argv)
 }
 
 
-void iemmatrix_unop_setup(const char*classname, iemmatrix_unopfun_t*fun, ...) {
+void iemmatrix_unop_setup(const char*classname, const char*helpname, iemmatrix_unopfun_t*fun, ...) {
   if(!classname || !fun)
     return;
   t_class*cls;
@@ -133,6 +133,12 @@ void iemmatrix_unop_setup(const char*classname, iemmatrix_unopfun_t*fun, ...) {
   class_addbang(cls, (t_method)mtx_unop_bang);
   class_addlist(cls, (t_method)mtx_unop_list);
   class_addmethod(cls, (t_method)mtx_unop_matrix, gensym("matrix"), A_GIMME, A_NULL);
+
+  if(helpname) {
+    t_symbol*help = gensym(helpname);
+    if (help != s)
+      class_sethelpsymbol(cls, help);
+  }
 
   unop->class = cls;
   unop->fun = fun;

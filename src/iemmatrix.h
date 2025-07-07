@@ -226,11 +226,11 @@ void iemmatrix_list2floats_modulo(t_float* dest, const t_atom* src, size_t n, si
 */
 typedef t_float(iemmatrix_unopfun_t)(t_float);
 /* the varargs are a 0-terminated list of alias names (const char*) */
-void iemmatrix_unop_setup(const char*classname, iemmatrix_unopfun_t*, ...);
+void iemmatrix_unop_setup(const char*classname, const char* helpname, iemmatrix_unopfun_t*, ...);
 
 typedef t_float(iemmatrix_binopfun_t)(t_float, t_float);
 /* the varargs are a 0-terminated list of alias names (const char*) */
-void iemmatrix_binop_setup(const char*classname, iemmatrix_binopfun_t*, ...);
+void iemmatrix_binop_setup(const char*classname, const char*helpname, iemmatrix_binopfun_t*, ...);
 
 
 

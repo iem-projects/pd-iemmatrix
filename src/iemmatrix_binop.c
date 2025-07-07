@@ -287,12 +287,15 @@ static void mtx_binop_free(t_matrix_binop*x) {
 }
 
 
-void iemmatrix_binop_setup(const char*classname, iemmatrix_binopfun_t*fun, ...) {
+void iemmatrix_binop_setup(const char*classname, const char*helpname, iemmatrix_binopfun_t*fun, ...) {
   if(!classname || !fun)
     return;
   t_class*cls, *scalarcls;
   t_symbol*s = gensym(classname);
+  t_symbol*help = helpname?gensym(helpname):0;
   va_list ap;
+  if(s == help)
+    help = 0;
 
   cls = class_new(s,
                   (t_newmethod)mtx_binop_new,
@@ -300,16 +303,15 @@ void iemmatrix_binop_setup(const char*classname, iemmatrix_binopfun_t*fun, ...) 
                   sizeof(t_matrix_binop),
                   0,
                   A_GIMME, A_NULL);
-#if 1
   class_addmethod(cls, (t_method)mtx_binop_matrix, gensym("matrix"), A_GIMME, A_NULL);
   class_addmethod(cls, (t_method)mtx_binop_matrix2, gensym(""), A_GIMME, A_NULL);
   class_addfloat(cls, (t_method)mtx_binop_float);
   class_addbang(cls, (t_method)mtx_binop_bang);
 
-  class_sethelpsymbol(cls, s);
+  if(help)
+    class_sethelpsymbol(cls, help);
 
   //class_addlist(cls, (t_method)mtx_binop_list);
-#endif
 
   scalarcls = class_new(s,
                         0, /* no constructor */
@@ -319,7 +321,8 @@ void iemmatrix_binop_setup(const char*classname, iemmatrix_binopfun_t*fun, ...) 
   class_addmethod(scalarcls, (t_method)mtx_binopscalar_matrix, gensym("matrix"), A_GIMME, A_NULL);
   class_addlist(scalarcls, (t_method)mtx_binopscalar_list);
   class_addbang(scalarcls, (t_method)mtx_binopscalar_bang);
-  class_sethelpsymbol(scalarcls, s);
+  if(help)
+    class_sethelpsymbol(scalarcls, help);
 
   _binop_t*binop = (_binop_t*)getbytes(sizeof(*binop));
   binop->class = cls;

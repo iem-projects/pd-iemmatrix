@@ -66,6 +66,18 @@ void adjustsize(void*x, t_matrix *m, int desiredRow, int desiredCol)
   return;
 }
 
+void printmatrix(void*x, const t_matrix*m) {
+  logpost(x, PD_NORMAL, "matrix@%p [%dx%d] :: %p", m, m?m->row:0, m?m->col:0, m?(m->atombuffer+2):0);
+  if(!m)return;
+  const t_atom*a = m->atombuffer+2;
+  for(int r=0; r<m->row; r++) {
+    for(int c=0; c<m->col; c++) {
+      startpost("   %+g", atom_getfloat(a++));
+    }
+    endpost();
+  }
+}
+
 void debugmtx(int argc, t_float *buf, int id)
 {
   int i=argc;

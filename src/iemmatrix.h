@@ -153,6 +153,7 @@ void matrix_free(t_matrix*x);
 void setdimen(t_matrix *x, int row, int col);
 void matrix_set(t_matrix *m, t_float f); /* set the entire matrix to "f" */
 void adjustsize(void*x, t_matrix *m, int desiredRow, int desiredCol);
+void printmatrix(void*x, const t_matrix*m);
 void debugmtx(int argc, t_float *buf, int id);
 t_matrixfloat *matrix2float(t_atom *ap);
 void float2matrix(t_atom *ap, t_matrixfloat *buffer);

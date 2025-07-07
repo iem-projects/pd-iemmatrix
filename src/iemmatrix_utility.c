@@ -751,3 +751,54 @@ int iemmatrix_atom_getint(const t_atom*a)
   t_float f = atom_getfloat(a);
   return (int)f;
 }
+
+
+struct _iemmatrix_map {
+  t_symbol*key;
+  void*value;
+  struct _iemmatrix_map*next;
+};
+
+/* add a new element to the map (pass 'NULL' as <map> to create a new one */
+struct _iemmatrix_map*iemmatrix_map_add(struct _iemmatrix_map*map, t_symbol*key, void*value) {
+  struct _iemmatrix_map*m = 0;
+  for(m=map; m; m=m->next) {
+    if(m->key == key) {
+      /* m->value = value */
+      return map;
+    }
+  }
+  m = getbytes(sizeof(*m));
+  m->key = key;
+  m->value = value;
+  m->next = map;
+
+  return m;
+}
+void*iemmatrix_map_get(struct _iemmatrix_map*map, t_symbol*key) {
+  while(map) {
+    if (key == map->key)
+      return map->value;
+    map = map->next;
+  }
+  return 0;
+}
+/* free the map: free_callback() is called for each <value> in the map */
+void iemmatrix_map_free(struct _iemmatrix_map*map, void(*free_callback)(void*)) {
+  struct _iemmatrix_map*m = 0;
+  if(free_callback) {
+    for(m = map; m; m=m->next) {
+      free_callback(m->value);
+    }
+  }
+  while(map) {
+    m = map;
+    map = map->next;
+
+    m->key = 0;
+    m->value = 0;
+    m->next = 0;
+    freebytes(m, sizeof(*m));
+  }
+
+}

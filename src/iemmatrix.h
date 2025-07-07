@@ -180,6 +180,15 @@ const char*iemmatrix_parentabstractionname(const t_glist*current);
 /* get a Pd function by name */
 void*iemmatrix_getpdfun(const char*name);
 
+/* an associative array */
+EXTERN_STRUCT _iemmatrix_map;
+/* add a new element to the map (pass 'NULL' as <map> to create a new one */
+struct _iemmatrix_map*iemmatrix_map_add(struct _iemmatrix_map*map, t_symbol*key, void*value);
+void*iemmatrix_map_get(struct _iemmatrix_map*map, t_symbol*key);
+/* free the map: free_callback() is called for each <value> in the map */
+void iemmatrix_map_free(struct _iemmatrix_map*map, void(*free_callback)(void*));
+
+
 
 /* basic I/O functions */
 void matrix_bang(t_matrix *x); /* output the matrix stored in atombuffer */

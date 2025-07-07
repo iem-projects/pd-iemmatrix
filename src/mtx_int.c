@@ -24,7 +24,7 @@ static t_float unop(t_float f) {
 
 void mtx_int_setup(void)
 {
-  iemmatrix_unop_setup("mtx_int", unop, 0);
+  iemmatrix_unop_setup("mtx_int", 0, unop, 0);
 }
 
 void iemtx_int_setup(void)

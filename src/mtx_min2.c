@@ -20,7 +20,7 @@ static t_float binop(t_float f1, t_float f2) {
 
 void mtx_min2_setup(void)
 {
-  iemmatrix_binop_setup("mtx_min2", binop, 0);
+  iemmatrix_binop_setup("mtx_min2", 0, binop, 0);
 }
 
 void iemtx_min2_setup(void)

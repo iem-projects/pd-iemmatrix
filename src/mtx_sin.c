@@ -26,7 +26,7 @@ static t_float unop(t_float f) {
 
 void mtx_sin_setup(void)
 {
-  iemmatrix_unop_setup("mtx_sin", unop, 0);
+  iemmatrix_unop_setup("mtx_sin", 0, unop, 0);
 }
 
 void iemtx_sin_setup(void)

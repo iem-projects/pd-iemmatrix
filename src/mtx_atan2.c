@@ -24,7 +24,7 @@ static t_float binop(t_float f1, t_float f2) {
 
 void mtx_atan2_setup(void)
 {
-  iemmatrix_binop_setup("mtx_atan2", binop, 0);
+  iemmatrix_binop_setup("mtx_atan2", 0, binop, 0);
 }
 
 void iemtx_atan2_setup(void)

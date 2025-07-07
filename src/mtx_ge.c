@@ -20,7 +20,7 @@ static t_float binop(t_float f1, t_float f2) {
 
 void mtx_ge_setup(void)
 {
-  iemmatrix_binop_setup("mtx_ge", binop, "mtx_>=", 0);
+  iemmatrix_binop_setup("mtx_ge", 0, binop, "mtx_>=", 0);
 }
 
 void iemtx_ge_setup(void)

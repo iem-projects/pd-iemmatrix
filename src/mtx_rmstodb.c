@@ -17,7 +17,7 @@
 
 void mtx_rmstodb_setup(void)
 {
-  iemmatrix_unop_setup("mtx_rmstodb", rmstodb, 0);
+  iemmatrix_unop_setup("mtx_rmstodb", 0, rmstodb, 0);
 }
 
 void iemtx_rmstodb_setup(void)

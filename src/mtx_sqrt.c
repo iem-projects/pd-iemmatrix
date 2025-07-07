@@ -26,7 +26,7 @@ static t_float unop(t_float f) {
 
 void mtx_sqrt_setup(void)
 {
-  iemmatrix_unop_setup("mtx_sqrt", unop, 0);
+  iemmatrix_unop_setup("mtx_sqrt", 0, unop, 0);
 }
 
 void iemtx_sqrt_setup(void)

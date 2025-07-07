@@ -18,7 +18,7 @@
 
 void mtx_dbtorms_setup(void)
 {
-  iemmatrix_unop_setup("mtx_dbtorms", dbtorms, 0);
+  iemmatrix_unop_setup("mtx_dbtorms", 0, dbtorms, 0);
 }
 
 void iemtx_dbtorms_setup(void)

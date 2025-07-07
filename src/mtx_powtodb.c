@@ -17,7 +17,7 @@
 
 void mtx_powtodb_setup(void)
 {
-  iemmatrix_unop_setup("mtx_powtodb", powtodb, 0);
+  iemmatrix_unop_setup("mtx_powtodb", 0, powtodb, 0);
 }
 
 void iemtx_powtodb_setup(void)

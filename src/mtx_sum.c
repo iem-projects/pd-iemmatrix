@@ -17,7 +17,7 @@
 /* column-wise sum
  */
 static t_class *mtx_sum_class;
-static void mtx_sum_matrix(t_matrix *x, t_symbol *s, int argc,
+static void mtx_sum_matrix(t_matrixobj *x, t_symbol *s, int argc,
                            t_atom *argv)
 {
   int row, col;
@@ -43,7 +43,7 @@ static void mtx_sum_matrix(t_matrix *x, t_symbol *s, int argc,
 
   freebytes(ap, (col * sizeof(t_atom)));
 }
-static void mtx_sum_list(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
+static void mtx_sum_list(t_matrixobj *x, t_symbol *s, int argc, t_atom *argv)
 {
   t_float f=0.f;
   (void)s; /* unused */
@@ -56,17 +56,17 @@ static void mtx_sum_list(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 
 static void *mtx_sum_new(void)
 {
-  t_matrix *x = (t_matrix *)pd_new(mtx_sum_class);
+  t_matrixobj *x = (t_matrixobj *)pd_new(mtx_sum_class);
   outlet_new(&x->x_obj, 0);
-  x->row = x->col = 0;
-  x->atombuffer   = 0;
+  x->m.row = x->m.col = 0;
+  x->m.atombuffer   = 0;
 
   return (x);
 }
 void mtx_sum_setup(void)
 {
   mtx_sum_class = class_new(gensym("mtx_sum"), (t_newmethod)mtx_sum_new,
-                            (t_method)matrix_free, sizeof(t_matrix), 0, A_GIMME, 0);
+                            (t_method)matrixobj_free, sizeof(t_matrixobj), 0, A_GIMME, 0);
   class_addlist  (mtx_sum_class, mtx_sum_list);
   class_addmethod(mtx_sum_class, (t_method)mtx_sum_matrix, gensym("matrix"),
                   A_GIMME, 0);

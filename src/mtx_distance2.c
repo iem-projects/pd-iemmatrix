@@ -49,7 +49,7 @@ static void mtx_distance2_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
     return;
   }
 
-  adjustsize(&x->m, row, row2);
+  adjustsize(x, &x->m, row, row2);
   m = x->m.atombuffer+2;
 
   for(i=0; i<row; i++)

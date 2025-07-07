@@ -17,7 +17,7 @@
 /* column-wise product
  */
 static t_class *mtx_prod_class;
-static void mtx_prod_matrix(t_matrix *x, t_symbol *s, int argc,
+static void mtx_prod_matrix(t_matrixobj *x, t_symbol *s, int argc,
                             t_atom *argv)
 {
   int row=atom_getfloat(argv++);
@@ -45,7 +45,7 @@ static void mtx_prod_matrix(t_matrix *x, t_symbol *s, int argc,
     freebytes(ap, (col * sizeof(t_atom)));
   }
 }
-static void mtx_prod_list(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
+static void mtx_prod_list(t_matrixobj *x, t_symbol *s, int argc, t_atom *argv)
 {
   t_float f=1.f;
   (void)s; /* unused */
@@ -58,7 +58,7 @@ static void mtx_prod_list(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
 
 static void *mtx_prod_new(void)
 {
-  t_matrix *x = (t_matrix *)pd_new(mtx_prod_class);
+  t_matrixobj *x = (t_matrixobj *)pd_new(mtx_prod_class);
   outlet_new(&x->x_obj, 0);
 
   return (x);
@@ -66,7 +66,7 @@ static void *mtx_prod_new(void)
 void mtx_prod_setup(void)
 {
   mtx_prod_class = class_new(gensym("mtx_prod"), (t_newmethod)mtx_prod_new,
-                             (t_method)matrix_free, sizeof(t_matrix), 0, 0);
+                             (t_method)matrixobj_free, sizeof(t_matrixobj), 0, 0);
   class_addlist  (mtx_prod_class, mtx_prod_list);
   class_addmethod(mtx_prod_class, (t_method)mtx_prod_matrix,
                   gensym("matrix"), A_GIMME, 0);

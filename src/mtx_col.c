@@ -16,7 +16,7 @@
 /* mtx_col */
 static t_class *mtx_col_class;
 
-static void mtx_col_float(t_matrix *x, t_floatarg f)
+static void mtx_col_float(t_matrixobj *x, t_floatarg f)
 {
   int i = f;
   if(i<0) {
@@ -24,73 +24,73 @@ static void mtx_col_float(t_matrix *x, t_floatarg f)
   }
   x->current_col = i;
 }
-static void mtx_col_matrix(t_matrix *x, t_symbol *s, int argc,
+static void mtx_col_matrix(t_matrixobj *x, t_symbol *s, int argc,
                            t_atom *argv)
 {
   if(iemmatrix_check(x, s, argc, argv, 0))return;
-  matrix_matrix2(x, s, argc, argv);
-  matrix_bang(x);
+  matrix_matrix2(x, &x->m, argc, argv);
+  matrixobj_bang(x);
 }
-static void mtx_col_list(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
+static void mtx_col_list(t_matrixobj *x, t_symbol *s, int argc, t_atom *argv)
 {
   (void)s; /* unused */
   if (argc==1) {
     t_float f=atom_getfloat(argv);
-    t_atom *ap=x->atombuffer+1+x->current_col;
-    if (x->current_col>x->col) {
+    t_atom *ap=x->m.atombuffer+1+x->current_col;
+    if (x->current_col>x->m.col) {
       pd_error(x, "[mtx_col]: too high a column is to be set");
       return;
     }
     if (x->current_col) {
-      int n=x->row;
+      int n=x->m.row;
       while(n--) {
         SETFLOAT(ap, f);
-        ap+=x->row+1;
+        ap+=x->m.row+1;
       }
     }
-    matrix_bang(x);
+    matrixobj_bang(x);
     return;
   }
 
-  if (argc<x->row) {
-    pd_error(x, "[mtx_col]: column length is too small for %dx%d-matrix", x->row,
-         x->col);
+  if (argc<x->m.row) {
+    pd_error(x, "[mtx_col]: column length is too small for %dx%d-matrix", x->m.row,
+         x->m.col);
     return;
   }
-  if (x->current_col>x->col) {
+  if (x->current_col>x->m.col) {
     pd_error(x, "[mtx_col]: too high a column is to be set");
     return;
   }
   if(x->current_col) {
-    int r=x->row;
-    t_atom *ap=x->atombuffer+1+x->current_col;
+    int r=x->m.row;
+    t_atom *ap=x->m.atombuffer+1+x->current_col;
     while(r--) {
-      SETFLOAT(&ap[(x->row-r-1)*x->col], atom_getfloat(argv++));
+      SETFLOAT(&ap[(x->m.row-r-1)*x->m.col], atom_getfloat(argv++));
     }
   }  else {
-    int r=x->row;
-    t_atom *ap=x->atombuffer+2;
+    int r=x->m.row;
+    t_atom *ap=x->m.atombuffer+2;
     while (r--) {
       t_float f=atom_getfloat(argv++);
-      int c=x->col;
+      int c=x->m.col;
       while(c--) {
         SETFLOAT(ap, f);
         ap++;
       }
     }
   }
-  matrix_bang(x);
+  matrixobj_bang(x);
 }
 static void *mtx_col_new(t_symbol *s, int argc, t_atom *argv)
 {
-  t_matrix *x = (t_matrix *)pd_new(mtx_col_class);
+  t_matrixobj *x = (t_matrixobj *)pd_new(mtx_col_class);
   int i, j, q;
   (void)s; /* unused */
   outlet_new(&x->x_obj, 0);
   inlet_new(&x->x_obj, &x->x_obj.ob_pd, gensym("float"), gensym(""));
   x->current_col=0;
-  x->col=x->row=0;
-  x->atombuffer=0;
+  x->m.col=x->m.row=0;
+  x->m.atombuffer=0;
   switch (argc) {
   case 0:
     break;
@@ -100,9 +100,9 @@ static void *mtx_col_new(t_symbol *s, int argc, t_atom *argv)
       i=0;
     }
     if(i) {
-      adjustsize(x, i, i);
+      adjustsize(x, &x->m, i, i);
     }
-    matrix_set(x, 0);
+    matrix_set(&x->m, 0);
     break;
   case 2:
     i = atom_getfloat(argv++);
@@ -114,9 +114,9 @@ static void *mtx_col_new(t_symbol *s, int argc, t_atom *argv)
       j=0;
     }
     if(i && j) {
-      adjustsize(x, i, j);
+      adjustsize(x, &x->m, i, j);
     }
-    matrix_set(x, 0);
+    matrix_set(&x->m, 0);
     break;
   default:
     i = atom_getfloat(argv++);
@@ -132,9 +132,9 @@ static void *mtx_col_new(t_symbol *s, int argc, t_atom *argv)
       q=0;
     }
     if(i && j) {
-      adjustsize(x, i, j);
+      adjustsize(x, &x->m, i, j);
     }
-    matrix_set(x, 0);
+    matrix_set(&x->m, 0);
     x->current_col=q;
   }
   return (x);
@@ -142,8 +142,8 @@ static void *mtx_col_new(t_symbol *s, int argc, t_atom *argv)
 void mtx_col_setup(void)
 {
   mtx_col_class = class_new(gensym("mtx_col"), (t_newmethod)mtx_col_new,
-                            (t_method)matrix_free, sizeof(t_matrix), 0, A_GIMME, 0);
-  class_addbang  (mtx_col_class, matrix_bang);
+                            (t_method)matrixobj_free, sizeof(t_matrixobj), 0, A_GIMME, 0);
+  class_addbang  (mtx_col_class, matrixobj_bang);
   class_addlist  (mtx_col_class, mtx_col_list);
   class_addmethod(mtx_col_class, (t_method)mtx_col_matrix, gensym("matrix"),
                   A_GIMME, 0);

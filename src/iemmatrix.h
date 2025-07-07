@@ -113,20 +113,19 @@ typedef double t_matrixfloat;
 
 /* the main class...*/
 typedef struct _matrix {
-  t_object x_obj;
-
-  int      row;
-  int      col;
-
+  int      row, col;
   t_atom *atombuffer;
+} t_matrix;
 
-  int     current_row,
-          current_col;  /* this makes things easy for the mtx_row & mtx_col...*/
-  t_float f;
+
+typedef struct _matrixobj {
+  t_object x_obj;
+  t_matrix m;
+  int     current_row, current_col;  /* this makes things easy for the mtx_row & mtx_col...*/
 
   t_canvas *x_canvas; /* needed for file-reading */
   t_outlet *x_outlet; /* just in case somebody wants an outlet */
-} t_matrix;
+} t_matrixobj;
 
 typedef struct _mtx_binscalar {
   t_object x_obj;
@@ -152,7 +151,8 @@ void matrix_free(t_matrix*x);
 
 /* utility function */
 void setdimen(t_matrix *x, int row, int col);
-void adjustsize(t_matrix *x, int desiredRow, int desiredCol);
+void matrix_set(t_matrix *m, t_float f); /* set the entire matrix to "f" */
+void adjustsize(void*x, t_matrix *m, int desiredRow, int desiredCol);
 void debugmtx(int argc, t_float *buf, int id);
 t_matrixfloat *matrix2float(t_atom *ap);
 void float2matrix(t_atom *ap, t_matrixfloat *buffer);
@@ -191,24 +191,29 @@ void iemmatrix_map_free(struct _iemmatrix_map*map, void(*free_callback)(void*));
 
 
 /* basic I/O functions */
-void matrix_bang(t_matrix *x); /* output the matrix stored in atombuffer */
-void matrix_matrix2(t_matrix *x, t_symbol *s, int argc,
-                    t_atom *argv); /* store the matrix in atombuffer */
-
+void matrix_bang(t_object *x, t_matrix* m); /* output the matrix stored in atombuffer */
+void matrix_matrix2(void *x, t_matrix *m, int argc, t_atom *argv); /* store the matrix in atombuffer */
 /* set data */
-void matrix_set(t_matrix *x, t_float f); /* set the entire matrix to "f" */
-void matrix_zeros(t_matrix *x, t_symbol *s, int argc, t_atom *argv);
-void matrix_ones(t_matrix *x, t_symbol *s, int argc, t_atom *argv);
-void matrix_eye(t_matrix *x, t_symbol *s, int argc, t_atom *argv);
-void matrix_egg(t_matrix *x, t_symbol *s, int argc, t_atom *argv);
-void matrix_diag(t_matrix *x, t_symbol *s, int argc, t_atom *argv);
-void matrix_diegg(t_matrix *x, t_symbol *s, int argc, t_atom *argv);
+void matrix_zeros(t_object *x, t_matrix *m, int argc, t_atom *argv);
+void matrix_ones(t_object *x, t_matrix *m, int argc, t_atom *argv);
+void matrix_eye(t_object *x, t_matrix *m, int argc, t_atom *argv);
+void matrix_egg(t_object *x, t_matrix *m, int argc, t_atom *argv);
+void matrix_diag(t_object *x, t_matrix *m, int argc, t_atom *argv);
+void matrix_diegg(t_object *x, t_matrix *m, int argc, t_atom *argv);
+
+
+/* matrixobj shortcuts */
+void matrixobj_free(t_matrixobj*x);
+void matrixobj_bang(t_matrixobj*x);
+void matrixobj_matrix2(t_matrixobj*x, t_symbol *s, int argc, t_atom *argv);
+void matrixobj_zeros(t_matrixobj *x, t_symbol *s, int argc, t_atom *argv);
+void matrixobj_ones(t_matrixobj *x, t_symbol *s, int argc, t_atom *argv);
+void matrixobj_eye(t_matrixobj *x, t_symbol *s, int argc, t_atom *argv);
+void matrixobj_egg(t_matrixobj *x, t_symbol *s, int argc, t_atom *argv);
+void matrixobj_diag(t_matrixobj *x, t_symbol *s, int argc, t_atom *argv);
+void matrixobj_diegg(t_matrixobj *x, t_symbol *s, int argc, t_atom *argv);
 
 /* get/set data */
-void matrix_row(t_matrix *x, t_symbol *s, int argc, t_atom *argv);
-void matrix_col(t_matrix *x, t_symbol *s, int argc, t_atom *argv);
-void matrix_element(t_matrix *x, t_symbol *s, int argc, t_atom *argv);
-
 void iemmatrix_floats2list(t_atom* dest, const t_float* src, size_t n);
 void iemmatrix_floats2list_modulo(t_atom* dest, const t_float* src, size_t n, size_t m);
 void iemmatrix_list2floats(t_float* dest, const t_atom* src, size_t n);

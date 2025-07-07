@@ -16,7 +16,7 @@
 /* mtx_rand */
 static t_class *mtx_rand_class;
 
-static void mtx_rand_seed(t_matrix *x, t_float f)
+static void mtx_rand_seed(t_matrixobj *x, t_float f)
 {
   x->current_row=f;
 }
@@ -33,16 +33,16 @@ static inline t_float getrand(int *val)
   return f;
 
 }
-static void mtx_rand_random(t_matrix *x)
+static void mtx_rand_random(t_matrixobj *x)
 {
-  long size = x->row * x->col;
-  t_atom *ap=x->atombuffer+2;
+  long size = x->m.row * x->m.col;
+  t_atom *ap=x->m.atombuffer+2;
   while(size--) {
     SETFLOAT(ap+size, getrand(&x->current_row));
   }
 }
 
-static void mtx_rand_list(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
+static void mtx_rand_list(t_matrixobj *x, t_symbol *s, int argc, t_atom *argv)
 {
   int row, col;
   (void)s; /* unused */
@@ -58,40 +58,40 @@ static void mtx_rand_list(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
     col = atom_getfloat(argv+1);
   }
 
-  adjustsize(x, row, col);
+  adjustsize(x, &x->m, row, col);
   mtx_rand_random(x);
-  matrix_bang(x);
+  matrixobj_bang(x);
 }
-static void mtx_rand_matrix(t_matrix *x, t_symbol *s, int argc,
+static void mtx_rand_matrix(t_matrixobj *x, t_symbol *s, int argc,
                             t_atom *argv)
 {
-  matrix_matrix2(x, s, argc, argv);
+  matrix_matrix2(x, &x->m, argc, argv);
   mtx_rand_random(x);
-  matrix_bang(x);
+  matrixobj_bang(x);
 }
-static void mtx_rand_bang(t_matrix *x)
+static void mtx_rand_bang(t_matrixobj *x)
 {
-  if(0==x->col || 0==x->row) {
+  if(0==x->m.col || 0==x->m.row) {
     outlet_float(x->x_obj.ob_outlet, getrand(&x->current_row));
   } else {
     mtx_rand_random(x);
-    matrix_bang(x);
+    matrixobj_bang(x);
   }
 }
 static void *mtx_rand_new(t_symbol *s, int argc, t_atom *argv)
 {
-  t_matrix *x = (t_matrix *)pd_new(mtx_rand_class);
+  t_matrixobj *x = (t_matrixobj *)pd_new(mtx_rand_class);
   int row, col;
   (void)s; /* unused */
   outlet_new(&x->x_obj, 0);
-  x->col=x->row=0;
-  x->atombuffer=0;
+  x->m.col=x->m.row=0;
+  x->m.atombuffer=0;
   x->current_row=makeseed();
 
   if (argc) {
     row=atom_getfloat(argv);
     col=(argc>1)?atom_getfloat(argv+1):row;
-    adjustsize(x, row, col);
+    adjustsize(x, &x->m, row, col);
     mtx_rand_random(x);
   }
   return (x);
@@ -99,7 +99,7 @@ static void *mtx_rand_new(t_symbol *s, int argc, t_atom *argv)
 void mtx_rand_setup(void)
 {
   mtx_rand_class = class_new(gensym("mtx_rand"), (t_newmethod)mtx_rand_new,
-                             (t_method)matrix_free, sizeof(t_matrix), 0, A_GIMME, 0);
+                             (t_method)matrixobj_free, sizeof(t_matrixobj), 0, A_GIMME, 0);
   class_addmethod(mtx_rand_class, (t_method)mtx_rand_matrix,
                   gensym("matrix"), A_GIMME, 0);
   class_addlist  (mtx_rand_class, mtx_rand_list);

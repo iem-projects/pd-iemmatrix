@@ -22,7 +22,7 @@
 
 static t_class *mtx_cholesky_class;
 
-static void mtx_cholesky_matrix(t_matrix *x, t_symbol *s, int argc,
+static void mtx_cholesky_matrix(t_matrixobj *x, t_symbol *s, int argc,
                                 t_atom *argv)
 {
   /* maybe we should do this in double or long double ? */
@@ -40,7 +40,7 @@ static void mtx_cholesky_matrix(t_matrix *x, t_symbol *s, int argc,
   }
 
   /* reserve memory for outputting afterwards */
-  adjustsize(x, row, row);
+  adjustsize(x, &x->m, row, row);
   /* 1. get the 2 matrices : orig; invert (create as eye, but will be orig^(-1)) */
   cholesky = (t_matrixfloat *)getbytes(sizeof(t_matrixfloat)*row2);
   /* 1a extract values of A to float-buf */
@@ -84,17 +84,17 @@ static void mtx_cholesky_matrix(t_matrix *x, t_symbol *s, int argc,
 
   /* 4. output the matrix */
   /* 4a convert the floatbuf to an atombuf; */
-  float2matrix(x->atombuffer, cholesky);
+  float2matrix(x->m.atombuffer, cholesky);
   /* 4b destroy the buffers */
   freebytes(original, sizeof(t_matrixfloat)*row2);
 
   /* 4c output the atombuf; */
-  matrix_bang(x);
+  matrixobj_bang(x);
 }
 
 static void *mtx_cholesky_new()
 {
-  t_matrix *x = (t_matrix *)pd_new(mtx_cholesky_class);
+  t_matrixobj *x = (t_matrixobj *)pd_new(mtx_cholesky_class);
   outlet_new(&x->x_obj, 0);
   return (x);
 }
@@ -102,8 +102,8 @@ void mtx_cholesky_setup(void)
 {
   mtx_cholesky_class = class_new(gensym("mtx_cholesky"),
                                  (t_newmethod)mtx_cholesky_new,
-                                 (t_method)matrix_free, sizeof(t_matrix), 0, 0);
-  class_addbang  (mtx_cholesky_class, matrix_bang);
+                                 (t_method)matrixobj_free, sizeof(t_matrixobj), 0, 0);
+  class_addbang  (mtx_cholesky_class, matrixobj_bang);
   class_addmethod(mtx_cholesky_class, (t_method)mtx_cholesky_matrix,
                   gensym("matrix"), A_GIMME, 0);
 

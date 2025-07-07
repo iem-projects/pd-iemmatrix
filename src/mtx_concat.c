@@ -64,7 +64,7 @@ static void *newMTXConcat (t_symbol *s, int argc, t_atom *argv)
     mTXSetConcatMode (mtx_concat_obj, gensym(":"));
   }
 
-  mtx_concat_obj->outl = mtx_concat_obj->mtx_out.x_outlet = outlet_new (
+  mtx_concat_obj->outl = outlet_new (
                            &mtx_concat_obj->x_obj, gensym("matrix"));
   inlet_new(&mtx_concat_obj->x_obj, &mtx_concat_obj->x_obj.ob_pd,
             gensym("matrix"),gensym(""));
@@ -81,7 +81,7 @@ static void mTXConcatBang (MTXconcat *mtx_concat_obj)
 static void mTXConcatMatrix2 (MTXconcat *mtx_concat_obj, t_symbol *s,
                               int argc, t_atom *argv)
 {
-  matrix_matrix2 (&mtx_concat_obj->mtx_in2, s, argc, argv);
+  matrix_matrix2 (mtx_concat_obj, &mtx_concat_obj->mtx_in2, argc, argv);
 }
 
 static void mTXConcatDoRowConcatenation (MTXconcat *mtx_concat_obj,
@@ -97,7 +97,7 @@ static void mTXConcatDoRowConcatenation (MTXconcat *mtx_concat_obj,
     pd_error(mtx_concat_obj, "[mtx_concat]: row-mode: matrices must have same number of rows!");
     return;
   }
-  adjustsize (mtx_out, mtx1->row, mcols);
+  adjustsize (mtx_concat_obj, mtx_out, mtx1->row, mcols);
   ptr_out = mtx_out->atombuffer+2;
   for (cnt=mtx1->row; cnt--; ptr_in1 += mtx1->col,
        ptr_in2 += mtx2->col, ptr_out += mtx_out->col) {
@@ -119,7 +119,7 @@ static void mTXConcatDoColConcatenation (MTXconcat *mtx_concat_obj,
     pd_error(mtx_concat_obj, "[mtx_concat]: col-mode: matrices must have same number of columns!");
     return;
   }
-  adjustsize (mtx_out, mrows, mtx1->col);
+  adjustsize (mtx_concat_obj, mtx_out, mrows, mtx1->col);
   ptr_out = mtx_out->atombuffer+2;
   for (cnt=mtx1->row; cnt--; ptr_in1 += mtx1->col,
        ptr_out += mtx_out->col) {

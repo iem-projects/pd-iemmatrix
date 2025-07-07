@@ -57,7 +57,7 @@ static void mtxbin_scalar_matrix (t_mtx_binscalar *x, t_symbol *s,
     post( MTXBIN_SHORTNAME ": crippled matrix");
     return;
   }
-  adjustsize(&x->m, row, col);
+  adjustsize(x, &x->m, row, col);
 
   buf=x->m.atombuffer+2;
   while(n--) {
@@ -86,7 +86,7 @@ static void mtxbin_scalar_list(t_mtx_binscalar *x, t_symbol *s, int argc,
 
   (void)s; /* unused */
 
-  adjustsize(&x->m, 1, argc);
+  adjustsize(x, &x->m, 1, argc);
   m = x->m.atombuffer;
 
   while(n--) {
@@ -136,7 +136,7 @@ static void mtxbin_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
 #else
     t_float offset=atom_getfloat(m2);
 #endif
-    adjustsize(&x->m, row, col);
+    adjustsize(x, &x->m, row, col);
     m = x->m.atombuffer+2;
 
     while(n--) {
@@ -155,7 +155,7 @@ static void mtxbin_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   }
   if(x->m2.row==1) {
     int c, r;
-    adjustsize(&x->m, row, col);
+    adjustsize(x, &x->m, row, col);
     m = x->m.atombuffer+2;
     for(r=0; r<row; r++) {
       m2 = x->m2.atombuffer+2;
@@ -178,7 +178,7 @@ static void mtxbin_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   }
   if(x->m2.col==1) {
     int c, r;
-    adjustsize(&x->m, row, col);
+    adjustsize(x, &x->m, row, col);
     m = x->m.atombuffer+2;
 
     for(r=0; r<row; r++) {
@@ -212,7 +212,7 @@ static void mtxbin_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
     /* LATER SOLVE THIS */
     return;
   }
-  adjustsize(&x->m, row, col);
+  adjustsize(x, &x->m, row, col);
   m = x->m.atombuffer+2;
 
   while(n--) {
@@ -251,7 +251,7 @@ static void mtxbin_float(t_mtx_binmtx *x, t_float fval)
 
   row2=atom_getint(m2->atombuffer);
   col2=atom_getint(m2->atombuffer+1);
-  adjustsize(m, row2, col2);
+  adjustsize(x, m, row2, col2);
   ap=m->atombuffer+2;
 
   n=row2*col2;

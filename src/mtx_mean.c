@@ -17,7 +17,7 @@
 /* mtx_mean */
 static t_class *mtx_mean_class;
 
-static void mtx_mean_matrix(t_matrix *x, t_symbol *s, int argc,
+static void mtx_mean_matrix(t_matrixobj *x, t_symbol *s, int argc,
                             t_atom *argv)
 {
   if(argc<2)return;
@@ -28,8 +28,8 @@ static void mtx_mean_matrix(t_matrix *x, t_symbol *s, int argc,
   t_float sum;
   t_float factor=1./row;
   (void)s; /* unused */
-  adjustsize(x, 1, col);
-  op=x->atombuffer;
+  adjustsize(x, &x->m, 1, col);
+  op=x->m.atombuffer;
 
   while(c--) {
     sum=0;
@@ -41,19 +41,19 @@ static void mtx_mean_matrix(t_matrix *x, t_symbol *s, int argc,
     SETFLOAT(op, sum*factor);
     op++;
   }
-  outlet_list(x->x_obj.ob_outlet, gensym("row"), col, x->atombuffer);
+  outlet_list(x->x_obj.ob_outlet, gensym("row"), col, x->m.atombuffer);
 }
 
 static void *mtx_mean_new(void)
 {
-  t_matrix *x = (t_matrix *)pd_new(mtx_mean_class);
+  t_matrixobj *x = (t_matrixobj *)pd_new(mtx_mean_class);
   outlet_new(&x->x_obj, 0);
   return (x);
 }
 void mtx_mean_setup(void)
 {
   mtx_mean_class = class_new(gensym("mtx_mean"), (t_newmethod)mtx_mean_new,
-                             (t_method)matrix_free, sizeof(t_matrix), 0, 0, 0);
+                             (t_method)matrixobj_free, sizeof(t_matrixobj), 0, 0, 0);
   class_addmethod(mtx_mean_class, (t_method)mtx_mean_matrix,
                   gensym("matrix"), A_GIMME, 0);
 

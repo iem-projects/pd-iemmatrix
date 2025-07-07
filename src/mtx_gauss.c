@@ -39,7 +39,7 @@ static void mtx_gauss_mulsub(t_matrixfloat*a, t_matrixfloat*b, int count,
   }
 }
 
-static void mtx_gauss_matrix(t_matrix *x, t_symbol *s, int argc,
+static void mtx_gauss_matrix(t_matrixobj *x, t_symbol *s, int argc,
                              t_atom *argv)
 {
   /* maybe we should do this in double or long double ? */
@@ -59,7 +59,7 @@ static void mtx_gauss_matrix(t_matrix *x, t_symbol *s, int argc,
   }
 
   /* reserve memory for outputting afterwards */
-  adjustsize(x, row, row);
+  adjustsize(x, &x->m, row, row);
   original=matrix2float(argv);
 
   /* Gauss elimination */
@@ -95,15 +95,15 @@ static void mtx_gauss_matrix(t_matrix *x, t_symbol *s, int argc,
 
   /* 3. output the matrix */
   /* 3a convert the floatbuf to an atombuf; */
-  float2matrix(x->atombuffer, original);
+  float2matrix(x->m.atombuffer, original);
 
   /* 3c output the atombuf; */
-  matrix_bang(x);
+  matrixobj_bang(x);
 }
 
 static void *mtx_gauss_new()
 {
-  t_matrix *x = (t_matrix *)pd_new(mtx_gauss_class);
+  t_matrixobj *x = (t_matrixobj *)pd_new(mtx_gauss_class);
   outlet_new(&x->x_obj, 0);
   return (x);
 }
@@ -111,8 +111,8 @@ void mtx_gauss_setup(void)
 {
   mtx_gauss_class = class_new(gensym("mtx_gauss"),
                               (t_newmethod)mtx_gauss_new,
-                              (t_method)matrix_free, sizeof(t_matrix), 0, 0);
-  class_addbang  (mtx_gauss_class, matrix_bang);
+                              (t_method)matrixobj_free, sizeof(t_matrixobj), 0, 0);
+  class_addbang  (mtx_gauss_class, matrixobj_bang);
   class_addmethod(mtx_gauss_class, (t_method)mtx_gauss_matrix,
                   gensym("matrix"), A_GIMME, 0);
 

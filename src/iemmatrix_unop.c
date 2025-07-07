@@ -15,6 +15,7 @@
 #include <stdarg.h>
 
 typedef struct _matrix_unop {
+  t_object x_obj;
   t_matrix m;
   iemmatrix_unopfun_t*fun;
   t_symbol*x_selector;
@@ -31,9 +32,9 @@ static struct _iemmatrix_map*s_map;
 
 static void mtx_unop_bang(t_matrix_unop *x) {
   if(!x->x_argc)
-    outlet_bang(x->m.x_obj.ob_outlet);
+    outlet_bang(x->x_obj.ob_outlet);
   else
-    outlet_anything(x->m.x_obj.ob_outlet, x->x_selector, x->x_argc, x->m.atombuffer);
+    outlet_anything(x->x_obj.ob_outlet, x->x_selector, x->x_argc, x->m.atombuffer);
 }
 
 
@@ -46,9 +47,9 @@ static void mtx_unop_matrix(t_matrix_unop *x,
   int n = argc-2;
 
 
-  adjustsize(&x->m, row, col);
+  adjustsize(x, &x->m, row, col);
   t_atom *m =  x->m.atombuffer+2;
-  const iemmatrix_unopfun_t*fun = x->fun;
+  iemmatrix_unopfun_t*fun = x->fun;
 
   while(n--) {
     t_float f = fun(atom_getfloat(argv++));
@@ -67,9 +68,9 @@ static void mtx_unop_list(t_matrix_unop *x, t_symbol *s, int argc,
   int n=argc;
   t_atom *m;
   (void)s; /* unused */
-  const iemmatrix_unopfun_t*fun = x->fun;
+  iemmatrix_unopfun_t*fun = x->fun;
 
-  adjustsize(&x->m, 1, argc);
+  adjustsize(x, &x->m, 1, argc);
   m = x->m.atombuffer;
 
   while(n--) {
@@ -94,6 +95,7 @@ static void *mtx_unop_new(t_symbol*s, int argc, t_atom*argv)
   _unop_t *unop=iemmatrix_map_get(s_map, s);
   if(!unop)
     return 0;
+  (void)argc;(void)argv; /* unused */
   t_class*cls = unop->class;
   iemmatrix_unopfun_t *fun = unop->fun;
   if(!cls) {
@@ -107,7 +109,7 @@ static void *mtx_unop_new(t_symbol*s, int argc, t_atom*argv)
 
   t_matrix_unop *x = (t_matrix_unop *)pd_new(cls);
   x->fun = fun;
-  outlet_new(&x->m.x_obj, 0);
+  outlet_new(&x->x_obj, 0);
   return(x);
 }
 

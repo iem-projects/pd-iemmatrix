@@ -13,7 +13,7 @@
  */
 #include "iemmatrix.h"
 static t_class *mtx_diegg_class;
-static void mtx_diegg_matrix(t_matrix *x, t_symbol *s, int argc,
+static void mtx_diegg_matrix(t_matrixobj *x, t_symbol *s, int argc,
                              t_atom *argv)
 {
   int row, col, length, n;
@@ -39,16 +39,17 @@ static void mtx_diegg_matrix(t_matrix *x, t_symbol *s, int argc,
 }
 static void *mtx_diegg_new(t_symbol *s, int argc, t_atom *argv)
 {
-  t_matrix *x = (t_matrix *)pd_new(mtx_diegg_class);
+  t_matrixobj *x = (t_matrixobj *)pd_new(mtx_diegg_class);
   outlet_new(&x->x_obj, 0);
-  x->row = x->col = 0;
-  x->atombuffer   = 0;
+  x->m.row = x->m.col = 0;
+  x->m.atombuffer   = 0;
 
   if(!argc) {
+    (void)s;
     return(x);
   }
 
-  matrix_diegg(x, s, argc, argv);
+  matrix_diegg(&x->x_obj, &x->m, argc, argv);
 
   return (x);
 }
@@ -56,9 +57,9 @@ void mtx_diegg_setup(void)
 {
   mtx_diegg_class = class_new(gensym("mtx_diegg"),
                               (t_newmethod)mtx_diegg_new,
-                              (t_method)matrix_free, sizeof(t_matrix), 0, A_GIMME, 0);
-  class_addlist  (mtx_diegg_class, matrix_diegg);
-  class_addbang  (mtx_diegg_class, matrix_bang);
+                              (t_method)matrixobj_free, sizeof(t_matrixobj), 0, A_GIMME, 0);
+  class_addlist  (mtx_diegg_class, matrixobj_diegg);
+  class_addbang  (mtx_diegg_class, matrixobj_bang);
   class_addmethod(mtx_diegg_class, (t_method)mtx_diegg_matrix,
                   gensym("matrix"), A_GIMME, 0);
 

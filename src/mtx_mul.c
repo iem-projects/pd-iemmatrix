@@ -59,7 +59,7 @@ static void mtx_mul_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
     return;
   }
 
-  adjustsize(m, row, col2);
+  adjustsize(x, m, row, col2);
   ap=m->atombuffer+2;
 
   for(r=0; r<row; r++)
@@ -88,7 +88,7 @@ static void mtx_mul_float(t_mtx_binmtx *x, t_float f)
 
   row2=atom_getfloat(m2->atombuffer);
   col2=atom_getfloat(m2->atombuffer+1);
-  adjustsize(m, row2, col2);
+  adjustsize(x, m, row2, col2);
   ap=m->atombuffer+2;
 
   n=row2*col2;
@@ -116,7 +116,7 @@ static void mtx_mulelement_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   col=atom_getfloat(argv++);
 
   if (!(x->m2.col && x->m2.row)) {
-    adjustsize(&x->m, row, col);
+    adjustsize(x, &x->m, row, col);
     matrix_set(&x->m, 0);
     outlet_anything(x->x_obj.ob_outlet, gensym("matrix"), argc,
                     x->m.atombuffer);
@@ -125,7 +125,7 @@ static void mtx_mulelement_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   if(!matchingdimension(x, col, row, &x->m2))
     return;
 
-  adjustsize(&x->m, row, col);
+  adjustsize(x, &x->m, row, col);
   m =  x->m.atombuffer+2;
 
   while(n--) {
@@ -150,7 +150,7 @@ static void mtx_mulscalar_matrix(t_mtx_binscalar *x, t_symbol *s, int argc,
   row=atom_getfloat(argv++);
   col=atom_getfloat(argv++);
 
-  adjustsize(&x->m, row, col);
+  adjustsize(x, &x->m, row, col);
   m = x->m.atombuffer+2;
 
   while(n--) {
@@ -168,7 +168,7 @@ static void mtx_mulscalar_list(t_mtx_binscalar *x, t_symbol *s, int argc,
   t_atom *m;
   t_float factor = x->f;
   (void)s; /* unused */
-  adjustsize(&x->m, 1, argc);
+  adjustsize(x, &x->m, 1, argc);
   m = x->m.atombuffer;
 
   while(n--) {
@@ -193,11 +193,11 @@ static void *mtx_mul_new(t_symbol *s, int argc, t_atom *argv)
     if (s->s_name[4]=='.') {
       /* element mul */
 
-      t_matrix *x = (t_matrix *)pd_new(mtx_mulelement_class);
+      t_matrixobj *x = (t_matrixobj *)pd_new(mtx_mulelement_class);
       inlet_new(&x->x_obj, &x->x_obj.ob_pd, gensym("matrix"), gensym(""));
       outlet_new(&x->x_obj, 0);
-      x->col = x->row = 0;
-      x->atombuffer = 0;
+      x->m.col = x->m.row = 0;
+      x->m.atombuffer = 0;
       return(x);
     } else {
       t_mtx_binmtx *x = (t_mtx_binmtx *)pd_new(mtx_mul_class);
@@ -260,7 +260,7 @@ static void mtx_divelement_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   col=atom_getfloat(argv++);
 
   if (!(x->m2.col && x->m2.row)) {
-    adjustsize(&x->m, row, col);
+    adjustsize(x, &x->m, row, col);
     matrix_set(&x->m, 0);
     outlet_anything(x->x_obj.ob_outlet, gensym("matrix"), argc,
                     x->m.atombuffer);
@@ -269,7 +269,7 @@ static void mtx_divelement_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   if(!matchingdimension(x, col, row, &x->m2))
     return;
 
-  adjustsize(&x->m, row, col);
+  adjustsize(x, &x->m, row, col);
   m =  x->m.atombuffer+2;
 
   while(n--) {
@@ -294,7 +294,7 @@ static void mtx_divelement_float(t_mtx_binmtx *x, t_float f)
 
   row2=atom_getfloat(m2->atombuffer);
   col2=atom_getfloat(m2->atombuffer+1);
-  adjustsize(m, row2, col2);
+  adjustsize(x, m, row2, col2);
   ap=m->atombuffer+2;
 
   n=row2*col2;
@@ -317,7 +317,7 @@ static void mtx_divscalar_matrix(t_mtx_binscalar *x, t_symbol *s, int argc,
   if(iemmatrix_check(x, s, argc, argv, IEMMATRIX_CHECK_CRIPPLED))return;
   row=atom_getfloat(argv++);
   col=atom_getfloat(argv++);
-  adjustsize(&x->m, row, col);
+  adjustsize(x, &x->m, row, col);
   m = x->m.atombuffer+2;
 
   while(n--) {
@@ -336,7 +336,7 @@ static void mtx_divscalar_list(t_mtx_binscalar *x, t_symbol *s, int argc,
   t_float factor = 1.0/x->f;
   (void)s; /* unused */
 
-  adjustsize(&x->m, 1, argc);
+  adjustsize(x, &x->m, 1, argc);
   m = x->m.atombuffer;
 
   while(n--) {
@@ -361,11 +361,11 @@ static void *mtx_div_new(t_symbol *s, int argc, t_atom *argv)
     return(x);
   } else {
     /* element division */
-    t_matrix *x = (t_matrix *)pd_new(mtx_divelement_class);
+    t_matrixobj *x = (t_matrixobj *)pd_new(mtx_divelement_class);
     inlet_new(&x->x_obj, &x->x_obj.ob_pd, gensym("matrix"), gensym(""));
     outlet_new(&x->x_obj, 0);
-    x->col = x->row = 0;
-    x->atombuffer = 0;
+    x->m.col = x->m.row = 0;
+    x->m.atombuffer = 0;
     return(x);
   }
 }

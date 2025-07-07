@@ -31,7 +31,7 @@ static void mtx_min2scalar_matrix(t_mtx_binscalar *x, t_symbol *s,
   t_atom *ap=argv+2;
   (void)s; /* unused */
   if(iemmatrix_check(x, s, argc, argv, IEMMATRIX_CHECK_CRIPPLED))return;
-  adjustsize(&x->m, row, col);
+  adjustsize(x, &x->m, row, col);
 
   buf=x->m.atombuffer+2;
 
@@ -50,7 +50,7 @@ static void mtx_min2scalar_list(t_mtx_binscalar *x, t_symbol *s, int argc,
   t_atom *m;
   t_float offset = x->f;
   (void)s; /* unused */
-  adjustsize(&x->m, 1, argc);
+  adjustsize(x, &x->m, 1, argc);
   m = x->m.atombuffer;
 
   while(n--) {
@@ -84,7 +84,7 @@ static void mtx_min2_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
     /* LATER SOLVE THIS */
     return;
   }
-  adjustsize(&x->m, row, col);
+  adjustsize(x, &x->m, row, col);
   m = x->m.atombuffer+2;
 
   while(n--) {
@@ -111,7 +111,7 @@ static void mtx_min2_float(t_mtx_binmtx *x, t_float f)
 
   row2=atom_getfloat(m2->atombuffer);
   col2=atom_getfloat(m2->atombuffer+1);
-  adjustsize(m, row2, col2);
+  adjustsize(x, m, row2, col2);
   ap=m->atombuffer+2;
 
   n=row2*col2;

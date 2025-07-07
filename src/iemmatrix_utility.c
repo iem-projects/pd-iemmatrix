@@ -31,20 +31,20 @@
 
 /* utility functions */
 
-void setdimen(t_matrix *x, int row, int col)
+void setdimen(t_matrix *m, int row, int col)
 {
-  x->col = col;
-  x->row = row;
-  if(!x->atombuffer) {
+  m->col = col;
+  m->row = row;
+  if(!m->atombuffer) {
     return;
   }
-  SETFLOAT(x->atombuffer,   row);
-  SETFLOAT(x->atombuffer+1, col);
+  SETFLOAT(m->atombuffer,   row);
+  SETFLOAT(m->atombuffer+1, col);
 }
 
-void adjustsize(t_matrix *x, int desiredRow, int desiredCol)
+void adjustsize(void*x, t_matrix *m, int desiredRow, int desiredCol)
 {
-  int col=x->col, row=x->row;
+  int col=m->col, row=m->row;
 
   if (desiredRow<1) {
     pd_error(x, "matrix: cannot make less than 1 rows");
@@ -56,13 +56,13 @@ void adjustsize(t_matrix *x, int desiredRow, int desiredCol)
   }
 
   if (col*row!=desiredRow*desiredCol) {
-    if(x->atombuffer) {
-      freebytes(x->atombuffer, (col*row+2)*sizeof(t_atom));
+    if(m->atombuffer) {
+      freebytes(m->atombuffer, (col*row+2)*sizeof(t_atom));
     }
-    x->atombuffer=(t_atom *)getbytes((desiredCol*desiredRow+2)*sizeof(t_atom));
+    m->atombuffer=(t_atom *)getbytes((desiredCol*desiredRow+2)*sizeof(t_atom));
   }
 
-  setdimen(x, desiredRow, desiredCol);
+  setdimen(m, desiredRow, desiredCol);
   return;
 }
 
@@ -82,8 +82,8 @@ void debugmtx(int argc, t_float *buf, int id)
 t_matrixfloat *matrix2float(t_atom *ap)
 {
   int row = atom_getfloat(ap++);
-  int col=atom_getfloat(ap++);
-  int length   = row * col;
+  int col = atom_getfloat(ap++);
+  int length = row * col;
   t_matrixfloat *buffer = (t_matrixfloat *)getbytes(sizeof(
                             t_matrixfloat)*length);
   t_matrixfloat *buf = buffer;
@@ -107,388 +107,244 @@ void float2matrix(t_atom *ap, t_matrixfloat *buffer)
 }
 
 /* core functions */
-void matrix_bang(t_matrix *x)
+void matrix_bang(t_object *x, t_matrix *m)
 {
   /* output the matrix */
-  if (x->atombuffer) {
-    outlet_anything(x->x_obj.ob_outlet, gensym("matrix"), x->col*x->row+2,
-                    x->atombuffer);
+  if (m->atombuffer) {
+    outlet_anything(x->ob_outlet, gensym("matrix"), m->col*m->row+2,
+                    m->atombuffer);
   }
 }
 
-void matrix_matrix2(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
+void matrix_matrix2(void *x, t_matrix *m, int argc, t_atom *argv)
 {
   int row, col;
-  (void)s; /* unused */
-  if(iemmatrix_check(x, s, argc, argv, 0))return;
+  if(iemmatrix_check(x, 0, argc, argv, 0))return;
   row = atom_getfloat(argv);
   col = atom_getfloat(argv+1);
 
   /* this is fast and dirty, MAYBE make it slow and clean */
   /* or, to clean matrices, use the mtx_check object */
-  if (row*col != x->row*x->col) {
-    freebytes(x->atombuffer, x->row*x->col*sizeof(t_atom));
-    x->atombuffer = copybytes(argv, (row*col+2)*sizeof(t_atom));
+  if (row*col != m->row*m->col) {
+    freebytes(m->atombuffer, m->row*m->col*sizeof(t_atom));
+    m->atombuffer = copybytes(argv, (row*col+2)*sizeof(t_atom));
   } else {
-    memcpy(x->atombuffer, argv, (row*col+2)*sizeof(t_atom));
+    memcpy(m->atombuffer, argv, (row*col+2)*sizeof(t_atom));
   }
 
-  setdimen(x, row, col);
+  setdimen(m, row, col);
 }
 
-
+void matrixobj_bang(t_matrixobj*x) {
+  matrix_bang(&x->x_obj, &x->m);
+}
+void matrixobj_matrix2(t_matrixobj *x, t_symbol *s, int argc, t_atom *argv)
+{
+  (void)s;
+  matrix_matrix2(&x->x_obj, &x->m, argc, argv);
+}
+void matrixobj_zeros(t_matrixobj *x, t_symbol *s, int argc, t_atom *argv)
+{
+  (void)s;
+  matrix_zeros(&x->x_obj, &x->m, argc, argv);
+}
+void matrixobj_ones(t_matrixobj *x, t_symbol *s, int argc, t_atom *argv)
+{
+  (void)s;
+  matrix_ones(&x->x_obj, &x->m, argc, argv);
+}
+void matrixobj_eye(t_matrixobj *x, t_symbol *s, int argc, t_atom *argv)
+{
+  (void)s;
+  matrix_eye(&x->x_obj, &x->m, argc, argv);
+}
+void matrixobj_egg(t_matrixobj *x, t_symbol *s, int argc, t_atom *argv)
+{
+  (void)s;
+  matrix_egg(&x->x_obj, &x->m, argc, argv);
+}
+void matrixobj_diag(t_matrixobj *x, t_symbol *s, int argc, t_atom *argv)
+{
+  (void)s;
+  matrix_diag(&x->x_obj, &x->m, argc, argv);
+}
+void matrixobj_diegg(t_matrixobj *x, t_symbol *s, int argc, t_atom *argv)
+{
+  (void)s;
+  matrix_diegg(&x->x_obj, &x->m, argc, argv);
+}
+void matrixobj_free(t_matrixobj *x)
+{
+  matrix_free(&x->m);
+}
 /* set data */
 
-void matrix_set(t_matrix *x, t_float f)
+void matrix_set(t_matrix *m, t_float f)
 {
-  int size = x->col * x->row;
-  t_atom *buf=x->atombuffer+2;
-  if(x->atombuffer)while(size--) {
+  int size = m->col * m->row;
+  t_atom *buf=m->atombuffer+2;
+  if(m->atombuffer)while(size--) {
       SETFLOAT(&buf[size], f);
     }
 }
 
-void matrix_zeros(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
+void matrix_zeros(t_object *x, t_matrix *m, int argc, t_atom *argv)
 {
   int col, row;
-  (void)s; /* unused */
 
   switch(argc) {
   case 0: /* zero out the actual matrix */
-    matrix_set(x, 0);
+    matrix_set(m, 0);
     break;
   case 1:
     row=atom_getfloat(argv);
-    adjustsize(x, row, row);
-    matrix_set(x, 0);
+    adjustsize(x, m, row, row);
+    matrix_set(m, 0);
     break;
   default:
     row=atom_getfloat(argv++);
     col=atom_getfloat(argv);
-    adjustsize(x, row, col);
+    adjustsize(x, m, row, col);
 
-    matrix_set(x, 0);
+    matrix_set(m, 0);
   }
 
-  matrix_bang(x);
+  matrix_bang(x, m);
 }
 
-void matrix_ones(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
+void matrix_ones(t_object *x, t_matrix *m, int argc, t_atom *argv)
 {
   int col, row;
-  (void)s; /* unused */
 
   switch(argc) {
   case 0: /* zero out the actual matrix */
-    matrix_set(x, 1);
+    matrix_set(m, 1);
     break;
   case 1:
     row=atom_getfloat(argv);
-    adjustsize(x, row, row);
-    matrix_set(x, 1);
+    adjustsize(x, m, row, row);
+    matrix_set(m, 1);
     break;
   default:
     row=atom_getfloat(argv++);
     col=atom_getfloat(argv);
-    adjustsize(x, row, col);
+    adjustsize(x, m, row, col);
 
-    matrix_set(x, 1);
+    matrix_set(m, 1);
   }
 
-  matrix_bang(x);
+  matrix_bang(x, m);
 }
 
-void matrix_eye(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
-{
-  int col, row;
-  int n;
-  (void)s; /* unused */
-
-  switch(argc) {
-  case 0: /* zero out the actual matrix */
-    matrix_set(x, 0);
-    break;
-  case 1:
-    row=atom_getfloat(argv);
-    adjustsize(x, row, row);
-    matrix_set(x, 0);
-    break;
-  default:
-    row=atom_getfloat(argv++);
-    col=atom_getfloat(argv);
-    adjustsize(x, row, col);
-    matrix_set(x, 0);
-  }
-
-  col=x->col;
-  row=x->row;
-  n = (col<row)?col:row;
-  while(n--) {
-    SETFLOAT(x->atombuffer+2+n*(1+col), 1);
-  }
-
-  matrix_bang(x);
-}
-
-void matrix_egg(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
+void matrix_eye(t_object *x, t_matrix *m, int argc, t_atom *argv)
 {
   int col, row;
   int n;
-  (void)s; /* unused */
 
   switch(argc) {
   case 0: /* zero out the actual matrix */
-    matrix_set(x, 0);
+    matrix_set(m, 0);
     break;
   case 1:
     row=atom_getfloat(argv);
-    adjustsize(x, row, row);
-    matrix_set(x, 0);
+    adjustsize(x, m, row, row);
+    matrix_set(m, 0);
     break;
   default:
     row=atom_getfloat(argv++);
     col=atom_getfloat(argv);
-    adjustsize(x, row, col);
-    matrix_set(x, 0);
+    adjustsize(x, m, row, col);
+    matrix_set(m, 0);
   }
 
-  col=x->col;
-  row=x->row;
+  col=m->col;
+  row=m->row;
   n = (col<row)?col:row;
   while(n--) {
-    SETFLOAT(x->atombuffer+2+(n+1)*(col-1), 1);
+    SETFLOAT(m->atombuffer+2+n*(1+col), 1);
   }
 
-  matrix_bang(x);
+  matrix_bang(x, m);
 }
 
-void matrix_diag(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
+void matrix_egg(t_object *x, t_matrix *m, int argc, t_atom *argv)
+{
+  int col, row;
+  int n;
+
+  switch(argc) {
+  case 0: /* zero out the actual matrix */
+    matrix_set(m, 0);
+    break;
+  case 1:
+    row=atom_getfloat(argv);
+    adjustsize(x, m, row, row);
+    matrix_set(m, 0);
+    break;
+  default:
+    row=atom_getfloat(argv++);
+    col=atom_getfloat(argv);
+    adjustsize(x, m, row, col);
+    matrix_set(m, 0);
+  }
+
+  col=m->col;
+  row=m->row;
+  n = (col<row)?col:row;
+  while(n--) {
+    SETFLOAT(m->atombuffer+2+(n+1)*(col-1), 1);
+  }
+
+  matrix_bang(x, m);
+}
+
+void matrix_diag(t_object *x, t_matrix *m, int argc, t_atom *argv)
 {
   int col=argc;
-  (void)s; /* unused */
 
   argv+=argc-1;
   if (argc<1) {
     pd_error(x, "matrix: no diagonal present");
     return;
   }
-  adjustsize(x, argc, argc);
-  matrix_set(x, 0);
+  adjustsize(x, m, argc, argc);
+  matrix_set(m, 0);
 
   while(argc--) {
-    SETFLOAT(x->atombuffer+2+argc*(1+col), atom_getfloat(argv--));
+    SETFLOAT(m->atombuffer+2+argc*(1+col), atom_getfloat(argv--));
   }
 
-  matrix_bang(x);
+  matrix_bang(x, m);
 }
 
-void matrix_diegg(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
+void matrix_diegg(t_object *x, t_matrix*m, int argc, t_atom *argv)
 {
   int col=argc;
-  (void)s; /* unused */
 
   argv+=argc-1;
   if (argc<1) {
     pd_error(x, "matrix: no dieggonal present");
     return;
   }
-  adjustsize(x, argc, argc);
-  matrix_set(x, 0);
+  adjustsize(x, m, argc, argc);
+  matrix_set(m, 0);
 
   while(argc--) {
-    t_atom *ap=x->atombuffer+2+(argc+1)*(col-1);
+    t_atom *ap=m->atombuffer+2+(argc+1)*(col-1);
     SETFLOAT(ap, atom_getfloat(argv--));
   }
 
-  matrix_bang(x);
-}
-
-
-/* the rest */
-
-void matrix_row(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
-{
-  t_atom *ap;
-  int row=x->row, col=x->col;
-  int r, c;
-  t_float f;
-  (void)s; /* unused */
-
-  switch (argc) {
-  case 0:
-    /* row: get all rows as lists */
-    for (r=0; r<row; r++) {
-      outlet_list(x->x_obj.ob_outlet, gensym("row"), col,
-                  x->atombuffer+r*col+2);
-    }
-    break;
-  case 1:
-    /* row <index>: get row<index> as list */
-    r=atom_getfloat(argv)-1;
-    if ((r<0)||(r>=row)) {
-      pd_error(x, "matrix: row index %d is out of range", r+1);
-      return;
-    }
-    outlet_list(x->x_obj.ob_outlet, gensym("row"), col, x->atombuffer+r*col+2);
-    break;
-  case 2:
-    /* row <index> <value>: set all elements of row<index> to <value> */
-    r=atom_getfloat(argv)-1;
-    f=atom_getfloat(argv+1);
-    if ((r<0)||(r>=row)) {
-      pd_error(x, "matrix: row index %d is out of range", r+1);
-      return;
-    }
-    for(c=0; c<col; c++) {
-      SETFLOAT(x->atombuffer+2+c+r*col, f);
-    }
-    break;
-  default:
-    /* row <index> <value>...: set elements of row<index> to <value1> <value2> ... */
-    r=atom_getfloat(argv++)-1;
-    if (argc--<col) {
-      pd_error(x, "matrix: sparse rows not yet supported : use [mtx_check]");
-      return;
-    }
-    if ((r<0)||(r>=row)) {
-      pd_error(x, "matrix: row index %d is out of range", r+1);
-      return;
-    }
-    ap=x->atombuffer+2+col*r;
-    memcpy(ap, argv, col*sizeof(t_atom));
-    break;
-  }
-}
-
-void matrix_col(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
-{
-  t_atom *ap;
-  int row=x->row, col=x->col;
-  int c, r;
-  t_float f;
-  (void)s; /* unused */
-
-  switch (argc) {
-  case 0:
-    /* col: get all cols as lists */
-    ap=(t_atom *)getbytes(row*sizeof(t_atom));
-    for (c=0; c<col; c++) {
-      for (r=0; r<row; r++) {
-        SETFLOAT(&ap[r], atom_getfloat(x->atombuffer+2+c+col*r));
-      }
-      outlet_list(x->x_obj.ob_outlet, gensym("col"), row, ap);
-    }
-    freebytes(ap, row*sizeof(t_atom));
-    break;
-  case 1:
-    /* col <index>: get col<index> as list */
-    ap=(t_atom *)getbytes(row*sizeof(t_atom));
-    c=atom_getfloat(argv)-1;
-    if ((c<0)||(c>=col)) {
-      pd_error(x, "matrix: col index %d is out of range", c+1);
-      return;
-    }
-    for (r=0; r<row; r++) {
-      SETFLOAT(&ap[r], atom_getfloat(x->atombuffer+2+c+col*r));
-    }
-    outlet_list(x->x_obj.ob_outlet, gensym("col"), row, ap);
-    freebytes(ap, row*sizeof(t_atom));
-    break;
-  case 2:
-    /* row <index> <value>: set all elements of row<index> to <value> */
-    c=atom_getint(argv)-1;
-    f=atom_getfloat(argv+1);
-    if ((c<0)||(c>=col)) {
-      pd_error(x, "matrix: col index %d is out of range", c+1);
-      return;
-    }
-    for(r=0; r<row; r++) {
-      SETFLOAT(x->atombuffer+2+c+r*col, f);
-    }
-    break;
-  default:
-    /* row <index> <value>...: set elements of row<index> to <value1> <value2> ... */
-    c=atom_getfloat(argv++)-1;
-    if (argc--<row) {
-      pd_error(x, "matrix: sparse cols not yet supported : use [mtx_check]");
-      return;
-    }
-    if ((c<0)||(c>=col)) {
-      pd_error(x, "matrix: col index %d is out of range", c+1);
-      return;
-    }
-    argv+=argc-1;
-    if (argc>row) {
-      argc=row;
-    }
-    while(argc--) {
-      ap=x->atombuffer+2+c+col*argc;
-      SETFLOAT(ap, atom_getfloat(argv--));
-    }
-  }
-}
-
-void matrix_element(t_matrix *x, t_symbol *s, int argc, t_atom *argv)
-{
-  t_atom *ap=x->atombuffer+2;
-  int row=x->row, col=x->col;
-  int r, c, i=row*col;
-  (void)s; /* unused */
-
-  switch (argc) {
-  case 0:
-    while(i--) {
-      outlet_float(x->x_obj.ob_outlet, atom_getfloat(ap++));
-    }
-    break;
-  case 1:
-    r=c=atom_getfloat(argv)-1;
-    if ((r<0)||(r>=row)) {
-      pd_error(x, "matrix: row index %d is out of range", r+1);
-      return;
-    }
-    if ((c<0)||(c>=col)) {
-      pd_error(x, "matrix: col index %d is out of range", c+1);
-      return;
-    }
-    outlet_float(x->x_obj.ob_outlet, atom_getfloat(x->atombuffer+2+c+r*col));
-    break;
-  case 2:
-    r=atom_getfloat(argv++)-1;
-    c=atom_getfloat(argv++)-1;
-    if ((r<0)||(r>=row)) {
-      pd_error(x, "matrix: row index %d is out of range", r+1);
-      return;
-    }
-    if ((c<0)||(c>=col)) {
-      pd_error(x, "matrix: col index %d is out of range", c+1);
-      return;
-    }
-    outlet_float(x->x_obj.ob_outlet, atom_getfloat(x->atombuffer+2+c+r*col));
-    break;
-  default:
-    r=atom_getfloat(argv++)-1;
-    c=atom_getfloat(argv++)-1;
-    if ((r<0)||(r>=row)) {
-      pd_error(x, "matrix: row index %d is out of range", r+1);
-      return;
-    }
-    if ((c<0)||(c>=col)) {
-      pd_error(x, "matrix: col index %d is out of range", c+1);
-      return;
-    }
-    SETFLOAT(x->atombuffer+2+c+r*col, atom_getfloat(argv));
-  }
+  matrix_bang(x, m);
 }
 
 
 /* destructor */
 
-void matrix_free(t_matrix *x)
+void matrix_free(t_matrix *m)
 {
-  freebytes(x->atombuffer, (x->col*x->row+2)*sizeof(t_atom));
-  x->atombuffer=0;
-  x->col=x->row=0;
+  freebytes(m->atombuffer, (m->col*m->row+2)*sizeof(t_atom));
+  m->atombuffer=0;
+  m->col=m->row=0;
 }
 
 

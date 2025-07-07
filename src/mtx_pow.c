@@ -30,7 +30,7 @@ static void mtx_powelement_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
   n = row*col;
 
   if (!(x->m2.col && x->m2.row)) {
-    adjustsize(&x->m, row, col);
+    adjustsize(x, &x->m, row, col);
     matrix_set(&x->m, 0);
     outlet_anything(x->x_obj.ob_outlet, gensym("matrix"), argc,
                     x->m.atombuffer);
@@ -41,7 +41,7 @@ static void mtx_powelement_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
     return;
   }
 
-  adjustsize(&x->m, row, col);
+  adjustsize(x, &x->m, row, col);
   m =  x->m.atombuffer+2;
 
   while(n--) {
@@ -66,7 +66,7 @@ static void mtx_powelement_float(t_mtx_binmtx *x, t_float f)
 
   row2=atom_getfloat(m2->atombuffer);
   col2=atom_getfloat(m2->atombuffer+1);
-  adjustsize(m, row2, col2);
+  adjustsize(x, m, row2, col2);
   ap=m->atombuffer+2;
 
   n=row2*col2;
@@ -90,7 +90,7 @@ static void mtx_powscalar_matrix(t_mtx_binscalar *x, t_symbol *s, int argc,
   row=atom_getfloat(argv++);
   col=atom_getfloat(argv++);
 
-  adjustsize(&x->m, row, col);
+  adjustsize(x, &x->m, row, col);
   m = x->m.atombuffer+2;
 
   while(n--) {
@@ -109,7 +109,7 @@ static void mtx_powscalar_list(t_mtx_binscalar *x, t_symbol *s, int argc,
   t_float factor = x->f;
   (void)s; /* unused */
 
-  adjustsize(&x->m, 1, argc);
+  adjustsize(x, &x->m, 1, argc);
   m = x->m.atombuffer;
 
   while(n--) {
@@ -135,11 +135,11 @@ static void *mtx_pow_new(t_symbol *s, int argc, t_atom *argv)
     return(x);
   } else {
     /* element power */
-    t_matrix *x = (t_matrix *)pd_new(mtx_powelement_class);
+    t_matrixobj *x = (t_matrixobj *)pd_new(mtx_powelement_class);
     inlet_new(&x->x_obj, &x->x_obj.ob_pd, gensym("matrix"), gensym(""));
     outlet_new(&x->x_obj, 0);
-    x->col = x->row = 0;
-    x->atombuffer = 0;
+    x->m.col = x->m.row = 0;
+    x->m.atombuffer = 0;
     return(x);
   }
 }

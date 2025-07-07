@@ -17,12 +17,12 @@
 static t_class *mtx_ones_class;
 static void *mtx_ones_new(t_symbol *s, int argc, t_atom *argv)
 {
-  t_matrix *x = (t_matrix *)pd_new(mtx_ones_class);
+  t_matrixobj *x = (t_matrixobj *)pd_new(mtx_ones_class);
   int col=0, row=0;
   (void)s; /* unused */
   outlet_new(&x->x_obj, 0);
-  x->row = x->col = 0;
-  x->atombuffer   = 0;
+  x->m.row = x->m.col = 0;
+  x->m.atombuffer   = 0;
   switch(argc) {
   case 0:
     break;
@@ -40,19 +40,19 @@ static void *mtx_ones_new(t_symbol *s, int argc, t_atom *argv)
     row=0;
   }
   if (col && row) {
-    x->atombuffer = (t_atom *)getbytes((col*row+2)*sizeof(t_atom));
-    setdimen(x, row, col);
-    matrix_set(x, 1);
+    x->m.atombuffer = (t_atom *)getbytes((col*row+2)*sizeof(t_atom));
+    setdimen(&x->m, row, col);
+    matrix_set(&x->m, 1);
   }
   return (x);
 }
 void mtx_ones_setup(void)
 {
   mtx_ones_class = class_new(gensym("mtx_ones"), (t_newmethod)mtx_ones_new,
-                             (t_method)matrix_free, sizeof(t_matrix), 0, A_GIMME, 0);
-  class_addlist(mtx_ones_class, matrix_ones);
-  class_addbang(mtx_ones_class, matrix_bang);
-  class_addmethod(mtx_ones_class, (t_method)matrix_ones, gensym("matrix"),
+                             (t_method)matrixobj_free, sizeof(t_matrixobj), 0, A_GIMME, 0);
+  class_addlist(mtx_ones_class, matrixobj_ones);
+  class_addbang(mtx_ones_class, matrixobj_bang);
+  class_addmethod(mtx_ones_class, (t_method)matrixobj_ones, gensym("matrix"),
                   A_GIMME, 0);
 
 

@@ -15,7 +15,7 @@
 
 /* mtx_diag */
 static t_class *mtx_diag_class;
-static void mtx_diag_matrix(t_matrix *x, t_symbol *s, int argc,
+static void mtx_diag_matrix(t_matrixobj *x, t_symbol *s, int argc,
                             t_atom *argv)
 {
   int row, col, length, n;
@@ -36,24 +36,23 @@ static void mtx_diag_matrix(t_matrix *x, t_symbol *s, int argc,
   outlet_list(x->x_obj.ob_outlet, gensym("diag"), length, ap);
   freebytes(ap, (length * sizeof(t_atom)));
 }
-
 static void *mtx_diag_new(t_symbol *s, int argc, t_atom *argv)
 {
-  t_matrix *x = (t_matrix *)pd_new(mtx_diag_class);
+  t_matrixobj *x = (t_matrixobj *)pd_new(mtx_diag_class);
   (void)s; /* unused */
   outlet_new(&x->x_obj, 0);
-  x->row = x->col = 0;
-  x->atombuffer   = 0;
+  x->m.row = x->m.col = 0;
+  x->m.atombuffer   = 0;
 
   if(!argc) {
     return(x);
   }
-  x->atombuffer = (t_atom *)getbytes((argc*argc+2)*sizeof(t_atom));
-  setdimen(x, argc, argc);
-  matrix_set(x, 0);
+  x->m.atombuffer = (t_atom *)getbytes((argc*argc+2)*sizeof(t_atom));
+  setdimen(&x->m, argc, argc);
+  matrix_set(&x->m, 0);
   argv+=argc-1;
   while(argc--) {
-    SETFLOAT(x->atombuffer+2+argc*(1+x->col), atom_getfloat(argv--));
+    SETFLOAT(x->m.atombuffer+2+argc*(1+x->m.col), atom_getfloat(argv--));
   }
 
   return (x);
@@ -61,9 +60,9 @@ static void *mtx_diag_new(t_symbol *s, int argc, t_atom *argv)
 void mtx_diag_setup(void)
 {
   mtx_diag_class = class_new(gensym("mtx_diag"), (t_newmethod)mtx_diag_new,
-                             (t_method)matrix_free, sizeof(t_matrix), 0, A_GIMME, 0);
-  class_addlist  (mtx_diag_class, matrix_diag);
-  class_addbang  (mtx_diag_class, matrix_bang);
+                             (t_method)matrixobj_free, sizeof(t_matrixobj), 0, A_GIMME, 0);
+  class_addlist  (mtx_diag_class, matrixobj_diag);
+  class_addbang  (mtx_diag_class, matrixobj_bang);
   class_addmethod(mtx_diag_class, (t_method)mtx_diag_matrix,
                   gensym("matrix"), A_GIMME, 0);
 

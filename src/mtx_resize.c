@@ -16,7 +16,7 @@
 /* mtx_resize */
 
 static t_class *mtx_resize_class;
-static void mtx_resize_list2(t_matrix *x, t_symbol *s, int argc,
+static void mtx_resize_list2(t_matrixobj *x, t_symbol *s, int argc,
                              t_atom *argv)
 {
   int r, c;
@@ -46,7 +46,7 @@ static void mtx_resize_list2(t_matrix *x, t_symbol *s, int argc,
   x->current_col = c;
 }
 
-static void mtx_resize_matrix(t_matrix *x, t_symbol *s, int argc,
+static void mtx_resize_matrix(t_matrixobj *x, t_symbol *s, int argc,
                               t_atom *argv)
 {
   int row=atom_getfloat(argv);
@@ -67,26 +67,26 @@ static void mtx_resize_matrix(t_matrix *x, t_symbol *s, int argc,
     return;
   }
 
-  x->atombuffer=(t_atom *)getbytes((c*r+2)*sizeof(t_atom));
-  setdimen(x, r, c);
-  matrix_set(x, 0);
+  x->m.atombuffer=(t_atom *)getbytes((c*r+2)*sizeof(t_atom));
+  setdimen(&x->m, r, c);
+  matrix_set(&x->m, 0);
 
   ROW=(r<row)?r:row;
   COL=(c<col)?c:col;
   R=ROW;
   while(R--) {
-    memcpy(x->atombuffer+2+(ROW-R-1)*c, argv+2+(ROW-R-1)*col,
+    memcpy(x->m.atombuffer+2+(ROW-R-1)*c, argv+2+(ROW-R-1)*col,
            COL*sizeof(t_atom));
   }
 
-  matrix_bang(x);
+  matrixobj_bang(x);
 
-  freebytes(x->atombuffer, (c*r+2)*sizeof(t_atom));
+  freebytes(x->m.atombuffer, (c*r+2)*sizeof(t_atom));
 }
 
 static void *mtx_resize_new(t_symbol *s, int argc, t_atom *argv)
 {
-  t_matrix *x = (t_matrix *)pd_new(mtx_resize_class);
+  t_matrixobj *x = (t_matrixobj *)pd_new(mtx_resize_class);
   int c=0, r=0;
   (void)s; /* unused */
 
@@ -108,8 +108,8 @@ static void *mtx_resize_new(t_symbol *s, int argc, t_atom *argv)
   outlet_new(&x->x_obj, 0);
   x->current_row = r;
   x->current_col = c;
-  x->row = x->col= 0;
-  x->atombuffer  = 0;
+  x->m.row = x->m.col= 0;
+  x->m.atombuffer  = 0;
 
   return (x);
 }
@@ -117,7 +117,7 @@ void mtx_resize_setup(void)
 {
   mtx_resize_class = class_new(gensym("mtx_resize"),
                                (t_newmethod)mtx_resize_new,
-                               0, sizeof(t_matrix), 0, A_GIMME, 0);
+                               0, sizeof(t_matrixobj), 0, A_GIMME, 0);
   class_addmethod  (mtx_resize_class, (t_method)mtx_resize_matrix,
                     gensym("matrix"), A_GIMME, 0);
   class_addmethod  (mtx_resize_class, (t_method)mtx_resize_list2,

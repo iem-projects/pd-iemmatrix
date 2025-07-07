@@ -196,9 +196,11 @@ class.sources = \
 	src/mtx_slice.c \
 	src/mtx_sndfileread.c \
 	src/mtx_sort.c \
+	src/mtx_sqrt.c \
 	src/mtx_sub.c \
 	src/mtx_sum.c \
 	src/mtx_svd.c \
+	src/mtx_tan.c \
 	src/mtx_trace.c \
 	src/mtx_transpose.c \
 	src/mtx_unpack~.c \

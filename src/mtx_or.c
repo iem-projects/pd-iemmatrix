@@ -12,12 +12,22 @@
  *
  */
 
-/* name of the object and the classes */
-#define MTXBIN_GENERIC__NAME mtx_or
-/* operator; also used for abbreviation of object */
-#define MTXBIN_GENERIC__OPERATOR ||
+#include "iemmatrix.h"
 
-/* the operator operates on integers instead of floats */
-#define MTXBIN_GENERIC__INTEGEROP
+static t_float binop(t_float f1, t_float f2) {
+  int i1 = (int)f1;
+  int i2 = (int)f2;
+  int i = i1 || i2;
+  return (t_float)i;
+}
 
-#include "mtx_binop_generic.h"
+
+void mtx_or_setup(void)
+{
+  iemmatrix_binop_setup("mtx_or", binop, "mtx_||", 0);
+}
+
+void iemtx_or_setup(void)
+{
+  mtx_or_setup();
+}

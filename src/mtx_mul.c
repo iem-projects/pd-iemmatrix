@@ -25,17 +25,7 @@
 
 
 /* mtx_mul */
-static t_class *mtx_mul_class, *mtx_mulelement_class, *mtx_mulscalar_class;
-
-static int matchingdimension(void*x, int col, int row, t_matrix*m) {
-  if ((col!=m->col)||(row!=m->row)) {
-    pd_error(x, "%smatrix dimension do not match (%dx%d != %dx%d)",
-        iemmatrix_objname(x),
-        col, row, m->col, m->row);
-    return 0;
-  }
-  return 1;
-}
+static t_class *mtx_mul_class, *mtx_mulscalar_class;
 
 static void mtx_mul_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
                            t_atom *argv)
@@ -102,42 +92,6 @@ static void mtx_mul_float(t_mtx_binmtx *x, t_float f)
                   m->atombuffer);
 }
 
-static void mtx_mulelement_matrix(t_mtx_binmtx *x, t_symbol *s, int argc,
-                                  t_atom *argv)
-{
-  int row, col;
-  t_atom *m;
-  t_atom *m2 = x->m2.atombuffer+2;
-  int n = argc-2;
-
-  if(iemmatrix_check(x, s, argc, argv, 0))return;
-
-  row=atom_getfloat(argv++);
-  col=atom_getfloat(argv++);
-
-  if (!(x->m2.col && x->m2.row)) {
-    adjustsize(x, &x->m, row, col);
-    matrix_set(&x->m, 0);
-    outlet_anything(x->x_obj.ob_outlet, gensym("matrix"), argc,
-                    x->m.atombuffer);
-    return;
-  }
-  if(!matchingdimension(x, col, row, &x->m2))
-    return;
-
-  adjustsize(x, &x->m, row, col);
-  m =  x->m.atombuffer+2;
-
-  while(n--) {
-    t_float f = atom_getfloat(argv++)*atom_getfloat(m2++);
-    SETFLOAT(m, f);
-    m++;
-  }
-
-  outlet_anything(x->x_obj.ob_outlet, gensym("matrix"), argc,
-                  x->m.atombuffer);
-}
-
 static void mtx_mulscalar_matrix(t_mtx_binscalar *x, t_symbol *s, int argc,
                                  t_atom *argv)
 {
@@ -190,24 +144,17 @@ static void *mtx_mul_new(t_symbol *s, int argc, t_atom *argv)
     outlet_new(&x->x_obj, 0);
     return(x);
   } else {
-    if (s->s_name[4]=='.') {
-      /* element mul */
-
-      t_matrixobj *x = (t_matrixobj *)pd_new(mtx_mulelement_class);
-      inlet_new(&x->x_obj, &x->x_obj.ob_pd, gensym("matrix"), gensym(""));
-      outlet_new(&x->x_obj, 0);
-      x->m.col = x->m.row = 0;
-      x->m.atombuffer = 0;
-      return(x);
-    } else {
-      t_mtx_binmtx *x = (t_mtx_binmtx *)pd_new(mtx_mul_class);
-      inlet_new(&x->x_obj, &x->x_obj.ob_pd, gensym("matrix"), gensym(""));
-      outlet_new(&x->x_obj, 0);
-      x->m.col = x->m.row = x->m2.col = x->m2.row = 0;
-      x->m.atombuffer = x->m2.atombuffer = 0;
-      return (x);
-    }
+    t_mtx_binmtx *x = (t_mtx_binmtx *)pd_new(mtx_mul_class);
+    inlet_new(&x->x_obj, &x->x_obj.ob_pd, gensym("matrix"), gensym(""));
+    outlet_new(&x->x_obj, 0);
+    x->m.col = x->m.row = x->m2.col = x->m2.row = 0;
+    x->m.atombuffer = x->m2.atombuffer = 0;
+    return (x);
   }
+}
+
+static t_float binop(t_float f1, t_float f2) {
+  return f1 * f2;
 }
 
 void mtx_mul_setup(void)
@@ -223,17 +170,6 @@ void mtx_mul_setup(void)
   class_addfloat (mtx_mul_class, mtx_mul_float);
   class_addbang  (mtx_mul_class, mtx_binmtx_bang);
 
-  mtx_mulelement_class = class_new(gensym("mtx_.*"),
-                                   (t_newmethod)mtx_mul_new, (t_method)mtx_binmtx_free,
-                                   sizeof(t_mtx_binmtx), 0, A_GIMME, 0);
-  class_addmethod(mtx_mulelement_class, (t_method)mtx_mulelement_matrix,
-                  gensym("matrix"), A_GIMME, 0);
-  class_addmethod(mtx_mulelement_class, (t_method)mtx_bin_matrix2,
-                  gensym(""), A_GIMME, 0);
-  class_addfloat (mtx_mulelement_class, mtx_mul_float);
-  class_addbang  (mtx_mulelement_class, mtx_binmtx_bang);
-  class_sethelpsymbol(mtx_mulelement_class, gensym("mtx_mul-help"));
-
   mtx_mulscalar_class = class_new(gensym("mtx_mul"), 0,
                                   (t_method)mtx_binscalar_free,
                                   sizeof(t_mtx_binscalar), 0, 0);
@@ -242,6 +178,8 @@ void mtx_mul_setup(void)
                   gensym("matrix"), A_GIMME, 0);
   class_addlist  (mtx_mulscalar_class, mtx_mulscalar_list);
   class_addbang  (mtx_mulscalar_class, mtx_binscalar_bang);
+
+  iemmatrix_binop_setup("mtx_.*", "mtx_mul", binop, 0);
 }
 
 void iemtx_mul_setup(void)

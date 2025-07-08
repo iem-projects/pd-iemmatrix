@@ -88,6 +88,10 @@ static void mtx_unop_list(t_matrix_unop *x, t_symbol *s, int argc,
   x->x_argc = argc;
   mtx_unop_bang(x);
 }
+static void mtx_unop_free(t_matrix_unop *x)
+{
+  matrix_free(&x->m);
+}
 
 static void *mtx_unop_new(t_symbol*s, int argc, t_atom*argv)
 {
@@ -125,7 +129,7 @@ void iemmatrix_unop_setup(const char*classname, const char*helpname, iemmatrix_u
 
   cls = class_new(s,
                   (t_newmethod)mtx_unop_new,
-                  0,
+                  (t_method)mtx_unop_free,
                   sizeof(t_matrix_unop),
                   0,
                   A_GIMME, A_NULL);

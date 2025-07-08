@@ -17,7 +17,7 @@
 
 void mtx_dbtopow_setup(void)
 {
-  iemmatrix_unop_setup("mtx_dbtopow", 0, dbtopow, 0);
+  iemmatrix_unop_setup("mtx_dbtopow", 0, dbtopow, (char*)0);
 }
 
 void iemtx_dbtopow_setup(void)

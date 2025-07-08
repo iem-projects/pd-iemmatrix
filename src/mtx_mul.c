@@ -179,7 +179,7 @@ void mtx_mul_setup(void)
   class_addlist  (mtx_mulscalar_class, mtx_mulscalar_list);
   class_addbang  (mtx_mulscalar_class, mtx_binscalar_bang);
 
-  iemmatrix_binop_setup("mtx_.*", "mtx_mul", binop, 0);
+  iemmatrix_binop_setup("mtx_.*", "mtx_mul", binop, (char*)0);
 }
 
 void iemtx_mul_setup(void)

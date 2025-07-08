@@ -24,7 +24,7 @@ static t_float binop(t_float f1, t_float f2) {
 
 void mtx_bitright_setup(void)
 {
-  iemmatrix_binop_setup("mtx_bitright", 0, binop, "mtx_>>", 0);
+  iemmatrix_binop_setup("mtx_bitright", 0, binop, "mtx_>>", (char*)0);
 }
 
 void iemtx_bitright_setup(void)

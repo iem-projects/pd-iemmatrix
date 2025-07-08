@@ -26,7 +26,7 @@ static t_float unop(t_float f) {
 
 void mtx_tan_setup(void)
 {
-  iemmatrix_unop_setup("mtx_tan", 0, unop, 0);
+  iemmatrix_unop_setup("mtx_tan", 0, unop, (char*)0);
 }
 
 void iemtx_tan_setup(void)

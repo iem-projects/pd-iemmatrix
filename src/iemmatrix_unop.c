@@ -28,7 +28,7 @@ typedef struct _unop_ {
 } _unop_t;
 
 
-static struct _iemmatrix_map*s_map;
+static struct _iemmatrix_map*s_map = 0;
 
 static void mtx_unop_bang(t_matrix_unop *x) {
   if(!x->x_argc)

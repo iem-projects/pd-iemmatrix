@@ -34,7 +34,7 @@ typedef struct _binop_ {
 } _binop_t;
 
 
-static struct _iemmatrix_map*s_map;
+static struct _iemmatrix_map*s_map = 0;
 
 static void mtx_binop_storematrix(t_matrix_binop*x, t_matrix*m, t_atom*argv) {
   int row = atom_getfloat(argv+0);

@@ -308,7 +308,7 @@ iemmatrix_sources.h:
 
 .PHONY: check
 check:
-	-make -C tests
+	make -C tests
 
 .PHONY: clean.local
 clean: clean.local

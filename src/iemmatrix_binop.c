@@ -282,6 +282,7 @@ static void *mtx_binop_new(t_symbol*s, int argc, t_atom*argv)
   return(x);
 }
 static void mtx_binop_free(t_matrix_binop*x) {
+  matrix_free(&x->m);
   matrix_free(&x->m1);
   matrix_free(&x->m2);
 }

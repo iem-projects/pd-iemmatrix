@@ -119,6 +119,9 @@
 #X text 12 102 OUTLET_1 matrix;
 #X obj 13 170 declare -lib iemmatrix;
 #X restore 513 91 pd META;
+#X obj 377 53 mtx_bessel J;
+#X obj 377 73 mtx_bessel H;
+#X obj 377 93 mtx_bessel Y;
 #X connect 6 0 7 0;
 #X connect 6 1 8 0;
 #X connect 8 0 7 1;

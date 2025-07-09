@@ -12,6 +12,11 @@ builddir="$(cd ..; pwd)"
 
 RUNTESTS_TXT=runtests.txt
 runtests_log=runtests.log
+
+if [ "${RUNTESTS_LOG}" != "${RUNTESTS_LOG%/*}" ]; then
+	mkdir -p "${RUNTESTS_LOG%/*}" || true
+fi
+
 XITCODE=0
 
 for f in */*.pd; do

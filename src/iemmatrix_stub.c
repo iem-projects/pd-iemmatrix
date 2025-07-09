@@ -102,6 +102,7 @@ static getfun_t getfun(module_t module, const char*name)
   do {                                                          \
     if(!iemmatrix_stub_##fun) {                                 \
       getfun_t f = getfun(module, "iemmatrix_" #function);      \
+      if(!f) f = getfun(module, #function);                     \
       if(f)iemmatrix_stub_##fun = f();                          \
     }                                                           \
   } while(0)

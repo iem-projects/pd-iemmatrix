@@ -278,34 +278,22 @@ static void mTXRifftBang (MTXRifft *x)
 
 static void deleteMTXRifft (MTXRifft *x)
 {
-  if(have_fftw) {
+  if (x->fftplan) {
     int n;
-    if (x->fftplan) {
-      for (n=0; n<x->rows; n++) {
-        my_destroy_plan(x->fftplan[n]);
-      }
-      free(x->fftplan);
+    for (n=0; n<x->rows; n++) {
+      my_destroy_plan(x->fftplan[n]);
     }
-    if (x->f_out) {
-      free(x->f_out);
-    }
-    if (x->f_in) {
-      free(x->f_in);
-    }
-  } else {
-    if (x->f_re) {
-      free(x->f_re);
-    }
-    if (x->f_im) {
-      free(x->f_im);
-    }
+    free(x->fftplan);
   }
-  if (x->list_re) {
-    free(x->list_re);
-  }
-  if (x->list_im) {
-    free(x->list_im);
-  }
+
+  free(x->f_out);
+  free(x->f_in);
+
+  free(x->f_re);
+  free(x->f_im);
+
+  free(x->list_re);
+  free(x->list_im);
 }
 
 void mtx_rifft_setup (void)

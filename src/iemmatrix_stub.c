@@ -71,17 +71,25 @@ static module_t getstubmodule(const char*basename, const char*path) {
 typedef void*(*getfun_t)(void);
 static getfun_t getfun(module_t module, const char*name)
 {
-  if (!module)
-    return 0;
+  getfun_t fun = 0;
 #ifdef _WIN32
-    // get a handle to the module containing the Pd API functions.
-    // NB: GetModuleHandle("pd.dll") does not cover all cases.
-  return (void *)GetProcAddress(module, name);
+  static module_t module0 = 0;
+  /* fall back to pd binary */
+  if (!module0)
+    module0 = GetModuleHandle(0);
+  if (!module)
+    module = module0;
+
+  fun = (void *)GetProcAddress(module, name);
 #else
-    // search recursively, starting from the main program
-    return dlsym(module, name);
+  /* fall back to pd binary */
+  if(!module)
+    module = RTLD_DEFAULT;
+
+  fun = dlsym(module, name);
 #endif
-    return 0;
+  //post("%s(%p, %s) -> %p", __FUNCTION__, module, name, fun);
+  return fun;
 }
 
 
@@ -133,7 +141,6 @@ static void setup_gsl(const char*path) {
   static module_t mod = 0;
   if(!mod)
     mod = getstubmodule("gsl", path);
-  if(!mod)return;
 
   MAKE_STUB(jn, mod, gsl_sf_bessel_Jn);
   MAKE_STUB(yn, mod, gsl_sf_bessel_Yn);
@@ -176,7 +183,7 @@ static void setup_sndfile(const char*path) {
   static module_t mod = 0;
   if(!mod)
     mod = getstubmodule("sndfile", path);
-  if(!mod)return;
+
   MAKE_STUB(sf_open, mod, sf_open);
   MAKE_STUB(sf_close, mod, sf_close);
   MAKE_STUB(sf_readf_float, mod, sf_readf_float);
@@ -194,7 +201,6 @@ static void setup_fftw(const char*path) {
   static module_t mod = 0;
   if(!mod)
     mod = getstubmodule("fftw", path);
-  if(!mod)return;
 
   MAKE_STUB(fftw_malloc, mod, fftw_malloc);
   MAKE_STUB(fftw_free, mod, fftw_free);
@@ -216,7 +222,6 @@ static void setup_fftwf(const char*path) {
   static module_t mod = 0;
   if (!mod)
     mod = getstubmodule("fftwf", path);
-  if(!mod)return;
 
   MAKE_STUB(fftwf_malloc, mod, fftwf_malloc);
   MAKE_STUB(fftwf_free, mod, fftwf_free);

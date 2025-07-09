@@ -11,11 +11,6 @@
  *
  */
 
-#include "iemmatrix_stub.h"
-#include "m_pd.h"
-#include <math.h>
-#include <string.h>
-
 #ifdef _WIN32
 # include <windows.h>
 typedef HINSTANCE module_t;
@@ -25,6 +20,11 @@ typedef HINSTANCE module_t;
 # include <dlfcn.h>
 typedef void* module_t;
 #endif
+
+#include "iemmatrix_stub.h"
+#include "m_pd.h"
+#include <math.h>
+#include <string.h>
 
 # if defined(__GNUC__)
 # warning iemmatrix_stub

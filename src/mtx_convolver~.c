@@ -59,10 +59,6 @@ static void _noppost(const void *object, int level, const char *fmt, ...) {
 # define CLASS_MULTICHANNEL 0
 #endif
 
-#if KERNEL_VERSION(PD_VERSION_MAJOR, PD_VERSION_MINOR, PD_VERSION_BUGFIX) < KERNEL_VERSION(0, 53, 0)
-# define PD_NORMAL 2
-#endif
-
 typedef void (*setmultiout_f)(t_signal **sig, int nchans);
 
 t_fftwf_functions my_functions;

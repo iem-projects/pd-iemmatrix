@@ -258,6 +258,12 @@ t_matrixfloat*mtx_doMultiply(int rowA, t_matrixfloat*A, int colArowB,
 /* version comparison */
 #define KERNEL_VERSION(a, b, c)  ((a * 1000) + b) * 1000 + c
 
+
+#if KERNEL_VERSION(PD_VERSION_MAJOR, PD_VERSION_MINOR, PD_VERSION_BUGFIX) < KERNEL_VERSION(0, 53, 0)
+# define PD_NORMAL 2
+#endif
+
+
 /* for debugging purposes */
 #define MARK	startpost("MARK[%s:%d@%s]", __FILE__, __LINE__, __FUNCTION__), post
 

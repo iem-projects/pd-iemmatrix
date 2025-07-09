@@ -71,9 +71,10 @@ static module_t getstubmodule(const char*basename, const char*path) {
 typedef void*(*getfun_t)(void);
 static getfun_t getfun(module_t module, const char*name)
 {
-  getfun_t fun = 0;
-#ifdef _WIN32
   static module_t module0 = 0;
+  getfun_t fun = 0;
+  (void)module0;
+#ifdef _WIN32
   /* fall back to pd binary */
   if (!module0)
     module0 = GetModuleHandle(0);
@@ -83,9 +84,15 @@ static getfun_t getfun(module_t module, const char*name)
   fun = (void *)GetProcAddress(module, name);
 #else
   /* fall back to pd binary */
-  if(!module)
+  if(!module) {
+#ifdef _GNU_SOURCE
     module = RTLD_DEFAULT;
-
+#else
+    if(!module0)
+      module0 = dlopen(0, RTLD_NOW);
+    module = module0;
+#endif
+  }
   fun = dlsym(module, name);
 #endif
   //post("%s(%p, %s) -> %p", __FUNCTION__, module, name, fun);

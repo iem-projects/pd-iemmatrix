@@ -42,6 +42,24 @@ run_nogui() {
  if [ -n "${FAILEDTESTS}" ]; then
    XITCODE=1
  fi
+
+ show_log=no
+ case "${RUNTESTS_SHOW_LOG}" in
+	"always")
+		show_log=yes
+		;;
+	"failure")
+		test "${XITCODE}" = "0"  || show_log=yes
+		;;
+ esac
+
+ if [ "${show_log}" = "yes" ]; then
+	echo
+	echo "output of ${RUNTESTS_LOG}:"
+	cat "${RUNTESTS_LOG}"
+	echo
+ fi
+
  if [ "${pdexit}" != 0 ]; then
      echo "Pd exited with ${pdexit}"
      XITCODE=2

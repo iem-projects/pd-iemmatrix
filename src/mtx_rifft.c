@@ -251,8 +251,7 @@ static void mTXRifftMatrixHot (MTXRifft *x, t_symbol *s,
       }
       argv += columns_re;
     }
-    if (use_fftw)
-      f_re = x->f_re;
+    f_re = x->f_re;
 
     size2 = x->size2;
 

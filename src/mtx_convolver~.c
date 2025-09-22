@@ -443,7 +443,7 @@ void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
   x->x_canvas = canvas_getcurrent();
   x->coherent_xfade = 1;
 
-  for (int i=1; i<argc; i++) { // use first symbol after argv[0] as init file name
+  for (int i=0; i<argc; i++) { // use first symbol after argv[0] as init file name
     if (argv[i].a_type == A_SYMBOL) {
       t_symbol *matrix_file = argv[i].a_w.w_symbol;
       mtx_convolver_tilde_read(x, matrix_file);

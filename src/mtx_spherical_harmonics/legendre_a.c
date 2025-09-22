@@ -19,8 +19,8 @@
 static void legendre_first_recurrence (double *sintheta,
                                        LegendreWorkSpace *wl)
 {
-  unsigned int n;
   unsigned int l,l0;
+  int n;
   int nmo0=0;
   int n0=1;
   const int incr=(wl->nmax+1)*(wl->nmax+2)/2;
@@ -39,7 +39,8 @@ static void legendre_first_recurrence (double *sintheta,
 static void legendre_second_recurrence (double *costheta,
                                         LegendreWorkSpace *wl)
 {
-  unsigned int m,n,l,l0;
+  unsigned int l,l0;
+  int m,n;
   int nmt0=-1;
   int nmo0=0;
   int n0=1;

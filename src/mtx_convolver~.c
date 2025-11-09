@@ -273,8 +273,8 @@ void mtx_convolver_tilde_free(t_mtx_convolver_tilde *x) {
 
 int mtx_convolver_check(t_mtx_convolver_tilde*x, int argc, t_atom*argv, unsigned int tests) {
   const char*objname=x->x_objname->s_name;
-  int inputs=(argc>2)?atom_getfloat(argv+0):0;
-  int outputs=(argc>2)?atom_getfloat(argv+1):0;
+  int outputs=(argc>2)?atom_getfloat(argv+0):0;
+  int inputs=(argc>2)?atom_getfloat(argv+1):0;
   int length=(argc>2)?atom_getfloat(argv+2):0;
   if (!tests)
     tests =
@@ -307,8 +307,8 @@ void mtx_convolver_tilde_array3(t_mtx_convolver_tilde *x, t_symbol *s, int argc,
     return;
   }
   if (mtx_convolver_check(x, argc, argv, 0)) return;
-  h_num_ins = (unsigned int)atom_getfloat(argv);
-  h_num_outs = (unsigned int)atom_getfloat(argv + 1);
+  h_num_outs = (unsigned int)atom_getfloat(argv);
+  h_num_ins = (unsigned int)atom_getfloat(argv + 1);
   h_len = (unsigned int)atom_getfloat(argv + 2);
   argv += 3;
   _debug_logpost(x, PD_NORMAL, "[%s] inputs=%d, outputs=%d, ir_len=%d, x->blocksize=%d", objname,h_num_ins, h_num_outs, h_len, x->blocksize);
@@ -326,8 +326,8 @@ void mtx_convolver_tilde_array3(t_mtx_convolver_tilde *x, t_symbol *s, int argc,
     x->h_num_outs = h_num_outs;
     x->h_len = h_len;
   }
-  for (unsigned int in = 0; in < x->h_num_ins; in++) { // store input array
-    for (unsigned int out = 0; out < x->h_num_outs; out++) {
+  for (unsigned int out = 0; out < x->h_num_outs; out++) {
+    for (unsigned int in = 0; in < x->h_num_ins; in++) { // store input array
       for (unsigned int i = 0; i < x->h_len; i++) {
         x->h[out][in][i] = (float)atom_getfloat(argv++);
       }
@@ -421,11 +421,11 @@ void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
     if (argc < 1) {
       x->ins = x->outs = 1;
     } else if (argc < 2) {
-      int chan = (int)atom_getfloat(argv);
-      x->ins = x->outs = (chan>1)?chan:1;
+      int io = (int)atom_getfloat(argv);
+      x->ins = x->outs = (io>1)?io:1;
     } else {
-      int i = (int)atom_getfloat(argv + 0);
-      int o = (int)atom_getfloat(argv + 1);
+      int o = (int)atom_getfloat(argv + 0);
+      int i = (int)atom_getfloat(argv + 1);
       x->ins = (i>1)?i:1;
       x->outs = (o>1)?o:1;
     }

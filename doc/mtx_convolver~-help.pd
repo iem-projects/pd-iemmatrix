@@ -340,7 +340,7 @@
 #X connect 13 0 3 1;
 #X connect 23 0 8 0;
 #X restore 526 345 pd mtx_convolver~-example2.m: -m version;
-#N canvas 458 201 584 390 mtx_convolver~-example3: 1;
+#N canvas 458 201 584 390 mtx_convolver~-example3: 0;
 #X obj 313 117 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #N canvas 92 129 450 300 blip-blop 0;
 #X obj 65 40 inlet;
@@ -387,7 +387,7 @@
 #X text 512 179 gain;
 #X obj 195 323 *~;
 #X obj 155 346 dac~ 1 2;
-#N canvas 473 292 872 577 cross-reverb 1;
+#N canvas 473 292 872 577 cross-reverb 0;
 #X obj 92 34 inlet;
 #X obj 394 249 mtx_* 2;
 #X obj 394 273 mtx_- 1;

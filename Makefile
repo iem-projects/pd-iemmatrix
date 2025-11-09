@@ -289,6 +289,10 @@ datafiles += \
 	$(wildcard abs/*.pd) \
 	$(wildcard doc/*.pd) \
 	$(empty)
+datafiles += \
+	$(wildcard doc/*.arr3) \
+	$(wildcard doc/*.mtx) \
+	$(empty)
 
 in.files = $(wildcard *.in)
 

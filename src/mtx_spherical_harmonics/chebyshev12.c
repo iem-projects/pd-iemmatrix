@@ -61,6 +61,14 @@ void chebyshev12(double *phi, Cheby12WorkSpace *wc)
   double *sinphi;
   // memory allocation
   if ((wc!=0)&&(phi!=0)) {
+    // constants and initialization
+    for (l=0, l0=wc->nmax; l<wc->l; l++, l0+=incr) {
+      // initial value T_0=1
+      wc->t[l0]=wc->n0;
+    }
+    if (wc->nmax==0) {
+      return;
+    } 
     if ((cosphi=(double*)calloc(wc->l,sizeof(double)))==0) {
       return;
     }
@@ -68,12 +76,10 @@ void chebyshev12(double *phi, Cheby12WorkSpace *wc)
       free(cosphi);
       return;
     }
-    // constants and initialization
     for (l=0, l0=wc->nmax; l<wc->l; l++, l0+=incr) {
+      // initial value T_0=1
       cosphi[l]=cos(phi[l]);
       sinphi[l]=sin(phi[l]);
-      // initial value T_0=1
-      wc->t[l0]=wc->n0;
       wc->t[l0+1]=cosphi[l]*wc->nm;
       wc->t[l0-1]=sinphi[l]*wc->nm;
     }

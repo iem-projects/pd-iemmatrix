@@ -14,7 +14,7 @@
 #include "iemmatrix.h"
 
 static t_float binop(t_float f1, t_float f2) {
-  return (f1>f2)?f1:f2;
+  return (f1<f2)?f1:f2;
 }
 
 

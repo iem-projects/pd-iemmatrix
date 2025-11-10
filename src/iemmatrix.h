@@ -260,7 +260,11 @@ t_matrixfloat*mtx_doMultiply(int rowA, t_matrixfloat*A, int colArowB,
 
 
 #if KERNEL_VERSION(PD_VERSION_MAJOR, PD_VERSION_MINOR, PD_VERSION_BUGFIX) < KERNEL_VERSION(0, 53, 0)
+# define PD_CRITICAL 0
+# define PD_ERROR 1
 # define PD_NORMAL 2
+# define PD_DEBUG 3
+# define PD_VERBOSE 3
 #endif
 
 

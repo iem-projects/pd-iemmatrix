@@ -1,40 +1,40 @@
 /*
-Uniformly Partitioned, Time-Variant,
-Multichannel-Input-Mulichannel-Output Block Convolution
-(and because signal processing folks like incomprehensible
- abbreviations: UPTVMIMOBC, yeah!)
-mtx_convolver~
-for Pure-Data (with cross-faded outputs when updated)
+  Uniformly Partitioned, Time-Variant,
+  Multichannel-Input-Mulichannel-Output Block Convolution
+  (and because signal processing folks like incomprehensible
+  abbreviations: UPTVMIMOBC, yeah!)
+  mtx_convolver~
+  for Pure-Data (with cross-faded outputs when updated)
 
-useful for all kinds of real-time processes
-virtual acoustic reality,
-6dof spatial audio rendering/auralization,
-convolution reverb,
-Ambisonic decoding to headphones (binaural),
-Ambisonic encoding of compact spherical microphone arrays
-Ambisonic decoding to compact spherical loudspeaker arrays
-Wave-Field Synthesis processing,
-dynamic Binaural rendering,
-Beamforming with loudspeaker or micrphone arrays,
-adaptive signal processing,
-frequency response equalization,
-...
+  useful for all kinds of real-time processes
+  virtual acoustic reality,
+  6dof spatial audio rendering/auralization,
+  convolution reverb,
+  Ambisonic decoding to headphones (binaural),
+  Ambisonic encoding of compact spherical microphone arrays
+  Ambisonic decoding to compact spherical loudspeaker arrays
+  Wave-Field Synthesis processing,
+  dynamic Binaural rendering,
+  Beamforming with loudspeaker or micrphone arrays,
+  adaptive signal processing,
+  frequency response equalization,
+  ...
 
-For information on usage and redistribution, and for a DISCLAIMER OF ALL
-WARRANTIES, see the file, "LICENSE.txt," in this distribution.
+  For information on usage and redistribution, and for a DISCLAIMER OF ALL
+  WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 
-Franz Zotter
-Hannes Pescoller
-Sourena Mosleh
+  Franz Zotter
+  Hannes Pescoller
+  Sourena Mosleh
 
-Email-address:
-zotter@iem.at
-h.pescoller@kug.ac.at
-sourena.mosleh@student.kug.ac.at
+  Email-address:
+  zotter@iem.at
+  h.pescoller@kug.ac.at
+  sourena.mosleh@student.kug.ac.at
 
-Institute of Electronic Music and Acoustics (IEM)
-University of Music and Performing Arts Graz
-2024, 2025
+  Institute of Electronic Music and Acoustics (IEM)
+  University of Music and Performing Arts Graz
+  2024, 2025
 */
 
 #include "iemmatrix.h"
@@ -166,7 +166,7 @@ int mtx_convolver_resize(t_mtx_convolver_tilde *x) {
         (x->conv->num_inputs==x->h_num_ins)&&
         (x->conv->num_outputs==x->h_num_outs)) {
       _debug_logpost(x, PD_DEBUG, "[%s] keeping convolver with ins=%d, outs=%d, partitions=%d, blocksize=%d",
-			 objname,x->conv->num_inputs,x->conv->num_outputs,x->conv->num_partitions,x->conv->blocksize);
+		     objname,x->conv->num_inputs,x->conv->num_outputs,x->conv->num_partitions,x->conv->blocksize);
       return 0; // keep convolver, it's size is perfect, exit!
     } else { // resize required, resize buffers and free convolver
       if (x->conv_output_buffer) {
@@ -184,19 +184,19 @@ int mtx_convolver_resize(t_mtx_convolver_tilde *x) {
         x->conv_output_buffer = IEMCONVOLVE(new2DArray) (x->h_num_outs, x->blocksize);
       }
     }
- } // new convolver:
- if ((x->blocksize)&&(x->h_num_ins)&&(x->h_num_outs)&&(x->h_len)) {
-  mtx_convolver_init(x);
-  if (x->conv){
-    logpost(x, PD_DEBUG, "[%s] re-instantiated convolver with ins=%d, outs=%d, partitions=%d, blocksize=%d",
-      objname,x->conv->num_inputs,x->conv->num_outputs,x->conv->num_partitions,x->conv->blocksize);
+  } // new convolver:
+  if ((x->blocksize)&&(x->h_num_ins)&&(x->h_num_outs)&&(x->h_len)) {
+    mtx_convolver_init(x);
+    if (x->conv){
+      logpost(x, PD_DEBUG, "[%s] re-instantiated convolver with ins=%d, outs=%d, partitions=%d, blocksize=%d",
+	      objname,x->conv->num_inputs,x->conv->num_outputs,x->conv->num_partitions,x->conv->blocksize);
+    }
+    if (!x->conv_input_buffer)
+      x->conv_input_buffer = IEMCONVOLVE(new2DArray) (x->h_num_ins, x->blocksize);
+    if (!x->conv_output_buffer)
+      x->conv_output_buffer = IEMCONVOLVE(new2DArray) (x->h_num_outs, x->blocksize);
   }
-  if (!x->conv_input_buffer)
-    x->conv_input_buffer = IEMCONVOLVE(new2DArray) (x->h_num_ins, x->blocksize);
-  if (!x->conv_output_buffer)
-    x->conv_output_buffer = IEMCONVOLVE(new2DArray) (x->h_num_outs, x->blocksize);
- }
- return 1;
+  return 1;
 }
 
 void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
@@ -226,7 +226,7 @@ void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
   }
 #endif
   if (!x->inout_buffers) {
-      x->inout_buffers = (t_float **)malloc(sizeof(float *) * (x->ins + x->outs));
+    x->inout_buffers = (t_float **)malloc(sizeof(float *) * (x->ins + x->outs));
   }
   x->blocksize = sp[0]->s_n>0?sp[0]->s_n:0;
   _debug_logpost(x, PD_DEBUG, "[%s] outs=%u, ins=%u, blocksize=%u",objname,outs,ins,x->blocksize);
@@ -248,12 +248,12 @@ void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
     }
   }
   if ((x->set_ir_at_dsp_start) || (resized)) {
-      if (x->conv) {
-	_debug_logpost(x, PD_DEBUG, "[%s] convolver has ins=%d, outs=%d, partitions=%d, blocksize=%d",
-			   objname,x->conv->num_inputs,x->conv->num_outputs,x->conv->num_partitions,x->conv->blocksize);
-          IEMCONVOLVE(setImpulseResponseZeroPad) (x->conv, x->h, x->h_len, resized); // init with no xfade when conv was resized
-        x->set_ir_at_dsp_start = 0;
-      }
+    if (x->conv) {
+      _debug_logpost(x, PD_DEBUG, "[%s] convolver has ins=%d, outs=%d, partitions=%d, blocksize=%d",
+		     objname,x->conv->num_inputs,x->conv->num_outputs,x->conv->num_partitions,x->conv->blocksize);
+      IEMCONVOLVE(setImpulseResponseZeroPad) (x->conv, x->h, x->h_len, resized); // init with no xfade when conv was resized
+      x->set_ir_at_dsp_start = 0;
+    }
   }
   dsp_add(mtx_convolver_tilde_perform, 1, x);
 }
@@ -297,7 +297,7 @@ int mtx_convolver_check(t_mtx_convolver_tilde*x, int argc, t_atom*argv, unsigned
 }
 
 void mtx_convolver_tilde_array3(t_mtx_convolver_tilde *x, t_symbol *s, int argc,
-                      t_atom *argv) {
+				t_atom *argv) {
   const char*objname=x->x_objname->s_name;
   unsigned int h_num_ins, h_num_outs, h_len;
   int resized_outs=0;
@@ -315,7 +315,7 @@ void mtx_convolver_tilde_array3(t_mtx_convolver_tilde *x, t_symbol *s, int argc,
 
   if ((h_num_ins != x->h_num_ins) || (h_num_outs != x->h_num_outs) || (h_len != x->h_len)) {
     _debug_logpost(x, PD_DEBUG, "[%s] input array3: re-sizing/setting x->h_num_ins=%u, x->h_num_outs=%u, x->h_len=%u", objname, h_num_ins,
-		       h_num_outs, h_len);
+		   h_num_outs, h_len);
     if (x->h)
       IEMCONVOLVE(free3DArray) (x->h, x->h_num_outs, x->h_num_ins);
     x->h = IEMCONVOLVE(new3DArray) (h_num_outs, h_num_ins, h_len);
@@ -463,30 +463,30 @@ void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
 
 void mtx_convolver_tilde_setup(void) {
   mtx_convolver_tilde_class =
-      class_new(gensym("mtx_convolver~"), (t_newmethod)mtx_convolver_tilde_new,
-                (t_method)mtx_convolver_tilde_free,
-                sizeof(t_mtx_convolver_tilde), CLASS_DEFAULT, A_GIMME, 0);
+    class_new(gensym("mtx_convolver~"), (t_newmethod)mtx_convolver_tilde_new,
+	      (t_method)mtx_convolver_tilde_free,
+	      sizeof(t_mtx_convolver_tilde), CLASS_DEFAULT, A_GIMME, 0);
 
   mtx_convolver_tilde_mclass = class_new(
-      gensym("mtx_convolver~ -m"), (t_newmethod)mtx_convolver_tilde_new,
-      (t_method)mtx_convolver_tilde_free, sizeof(t_mtx_convolver_tilde),
-      CLASS_MULTICHANNEL, A_GIMME, 0);
+    gensym("mtx_convolver~ -m"), (t_newmethod)mtx_convolver_tilde_new,
+    (t_method)mtx_convolver_tilde_free, sizeof(t_mtx_convolver_tilde),
+    CLASS_MULTICHANNEL, A_GIMME, 0);
 
   class_addmethod(mtx_convolver_tilde_class, (t_method)mtx_convolver_tilde_dsp,
                   gensym("dsp"), A_CANT, 0);
   class_addmethod(mtx_convolver_tilde_class, (t_method)mtx_convolver_tilde_array3,
                   gensym("array3"), A_GIMME, 0);
   class_addmethod(mtx_convolver_tilde_class, (t_method)mtx_convolver_tilde_array3,
-  gensym("#array3"), A_GIMME, 0);
+		  gensym("#array3"), A_GIMME, 0);
 
   class_addmethod(mtx_convolver_tilde_mclass, (t_method)mtx_convolver_tilde_dsp,
                   gensym("dsp"), A_CANT, 0);
   class_addmethod(mtx_convolver_tilde_mclass, (t_method)mtx_convolver_tilde_array3,
                   gensym("array3"), A_GIMME, 0);
   class_addmethod(mtx_convolver_tilde_mclass, (t_method)mtx_convolver_tilde_read,
-                gensym("read"), A_SYMBOL, 0);
+		  gensym("read"), A_SYMBOL, 0);
   class_addmethod(mtx_convolver_tilde_class, (t_method)mtx_convolver_tilde_read,
-                gensym("read"), A_SYMBOL, 0);
+		  gensym("read"), A_SYMBOL, 0);
 
 #ifdef HAVE_FFTWF
   my_functions.malloc = iemmatrix_get_stub("fftwf_malloc", mtx_convolver_tilde_class);

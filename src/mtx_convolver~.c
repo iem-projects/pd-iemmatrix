@@ -3,22 +3,23 @@
   Multichannel-Input-Mulichannel-Output Block Convolution
   (and because signal processing folks like incomprehensible
   abbreviations: UPTVMIMOBC, yeah!)
-  mtx_convolver~
   for Pure-Data (with cross-faded outputs when updated)
 
-  useful for all kinds of real-time processes
-  virtual acoustic reality,
-  6dof spatial audio rendering/auralization,
-  convolution reverb,
-  Ambisonic decoding to headphones (binaural),
-  Ambisonic encoding of compact spherical microphone arrays
-  Ambisonic decoding to compact spherical loudspeaker arrays
-  Wave-Field Synthesis processing,
-  dynamic Binaural rendering,
-  Beamforming with loudspeaker or micrphone arrays,
-  adaptive signal processing,
-  frequency response equalization,
-  ...
+  mtx_convolver~
+
+  useful for all kinds of real-time processes, like
+  - virtual acoustic reality,
+  - 6dof spatial audio rendering/auralization,
+  - convolution reverb,
+  - Ambisonic decoding to headphones (binaural),
+  - Ambisonic encoding of compact spherical microphone arrays
+  - Ambisonic decoding to compact spherical loudspeaker arrays
+  - Wave-Field Synthesis processing,
+  - dynamic Binaural rendering,
+  - Beamforming with loudspeaker or micrphone arrays,
+  - adaptive signal processing,
+  - frequency response equalization,
+  - ...
 
   For information on usage and redistribution, and for a DISCLAIMER OF ALL
   WARRANTIES, see the file, "LICENSE.txt," in this distribution.

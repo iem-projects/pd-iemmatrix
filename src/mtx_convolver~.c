@@ -451,14 +451,11 @@ void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
         mtx_convolver_tilde_read(x, matrix_file);
         break;
       }
-    }
-  }
-  for (int i=0; i<argc; i++) { // if "pow" shows up: use incoherent crossfade
-    if (strcmp(argv[i].a_w.w_symbol->s_name, "pow") == 0) {
-      const char*objname=x->x_objname->s_name;
-      logpost(x, PD_NORMAL, "[%s] activating power-complementary output crossfade",objname);
-      x->coherent_xfade = 0;
-      break;
+      else {
+        const char*objname=x->x_objname->s_name;
+        logpost(x, PD_NORMAL, "[%s] activating power-complementary output crossfade",objname);
+        x->coherent_xfade = 0;
+      }
     }
   }
   return (void *)x;

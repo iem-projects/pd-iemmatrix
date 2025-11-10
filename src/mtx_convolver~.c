@@ -383,6 +383,7 @@ void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
   t_mtx_convolver_tilde *x = 0;
   t_class *selected_class = mtx_convolver_tilde_class;
 
+
   if (argc > 0 && argv[0].a_type == A_SYMBOL &&
       strcmp(argv[0].a_w.w_symbol->s_name, "-m") == 0) {
     argv++; argc--;
@@ -446,7 +447,17 @@ void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
   for (int i=0; i<argc; i++) { // use first symbol after argv[0] as init file name
     if (argv[i].a_type == A_SYMBOL) {
       t_symbol *matrix_file = argv[i].a_w.w_symbol;
-      mtx_convolver_tilde_read(x, matrix_file);
+      if (strcmp(matrix_file->s_name, "pow") != 0) {
+        mtx_convolver_tilde_read(x, matrix_file);
+        break;
+      }
+    }
+  }
+  for (int i=0; i<argc; i++) { // if "pow" shows up: use incoherent crossfade
+    if (strcmp(argv[i].a_w.w_symbol->s_name, "pow") == 0) {
+      const char*objname=x->x_objname->s_name;
+      logpost(x, PD_NORMAL, "[%s] activating power-complementary output crossfade",objname);
+      x->coherent_xfade = 0;
       break;
     }
   }

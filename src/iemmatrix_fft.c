@@ -14,6 +14,50 @@
 
 /* iemmatrix_mayer: fftw(f) compatible interface to Pd's mayer_fft */
 
+
+/* use cases
+   mtx_convolve~
+   - FFTWF:
+     - IN:  real-valued pd_in->in => convProcess => real-valued out->pd_out
+     - OUT:
+   - mayer
+     - IN: ---
+     - OUT: ---
+
+   mtx_fft
+   - FFTW:
+     - IN: ---
+     - OUT: ---
+   - mayer
+     - IN: separate re/im atomslists are converted to separate re/im floatlists
+     - OUT: re/im floatlists are scaled & then converted into separate re/im atomlists
+
+   mtx_ifft
+   - FFTW:
+     - IN: ---
+     - OUT: ---
+   - mayer
+     - IN: separate re/im atomslists are converted to separate re/im floatlists
+     - OUT: re/im floatlists are scaled & then converted into separate re/im atomlists
+
+   mtx_rifft
+   - FFTW:
+     - IN: re/im atomlists is written directly into interleaved data vector
+     - OUT: scale output vector & convert to atomlist
+   - mayer:
+     - IN: atomlist is converted to t_float & then rearranged for mayer blocked data
+     - OUT: scale output vector & convert to atomlist
+
+   mtx_rfft
+   - FFTW:
+     - IN: atomlist is written directly into real-valued data vector
+     - OUT: interleaved output vector is converted to separate re/im atomlists
+   - mayer:
+     - IN: atomlist is written directly into real-valued data vector
+     - OUT: imag-values are extracted from mayer blocked data & then written to separate re/im atomlists
+
+ */
+
 #include "iemmatrix_fft.h"
 
 #include <stdlib.h>

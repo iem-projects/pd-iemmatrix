@@ -111,6 +111,7 @@ common.sources = \
 	src/iemmatrix_binops.c \
 	src/iemmatrix_unop.c \
 	src/iemmatrix_stub.c \
+	src/iemmatrix_fft.c \
 	$(empty)
 
 # input source file (class name == source file basename)

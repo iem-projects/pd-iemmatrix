@@ -108,7 +108,7 @@ static void *newMTXBessel (t_symbol *s, int argc, t_atom *argv)
   case 'y':
     x->list_h_im_out = outlet_new (&x->x_obj, gensym("matrix"));
   }
-  nmax=(int) atom_getfloat(argv+1);
+  nmax=(int) atom_getfloatarg(1, argc, argv);
   if (nmax<0) {
     nmax=0;
   }

@@ -200,6 +200,7 @@ static void setup_sndfile(const char*path) {
 /* fftw */
 DECLARE_STUB(fftw_malloc);
 DECLARE_STUB(fftw_free);
+DECLARE_STUB(fftw_plan_dft_1d);
 DECLARE_STUB(fftw_plan_dft_c2r_1d);
 DECLARE_STUB(fftw_plan_dft_r2c_1d);
 DECLARE_STUB(fftw_execute);
@@ -212,6 +213,7 @@ static void setup_fftw(const char*path) {
 
   MAKE_STUB(fftw_malloc, mod, fftw_malloc);
   MAKE_STUB(fftw_free, mod, fftw_free);
+  MAKE_STUB(fftw_plan_dft_1d, mod, fftw_plan_dft_1d);
   MAKE_STUB(fftw_plan_dft_c2r_1d, mod, fftw_plan_dft_c2r_1d);
   MAKE_STUB(fftw_plan_dft_r2c_1d, mod, fftw_plan_dft_r2c_1d);
   MAKE_STUB(fftw_execute, mod, fftw_execute);
@@ -221,6 +223,7 @@ static void setup_fftw(const char*path) {
 /* fftwf */
 DECLARE_STUB(fftwf_malloc);
 DECLARE_STUB(fftwf_free);
+DECLARE_STUB(fftwf_plan_dft_1d);
 DECLARE_STUB(fftwf_plan_dft_c2r_1d);
 DECLARE_STUB(fftwf_plan_dft_r2c_1d);
 DECLARE_STUB(fftwf_execute);
@@ -233,6 +236,7 @@ static void setup_fftwf(const char*path) {
 
   MAKE_STUB(fftwf_malloc, mod, fftwf_malloc);
   MAKE_STUB(fftwf_free, mod, fftwf_free);
+  MAKE_STUB(fftwf_plan_dft_1d, mod, fftwf_plan_dft_1d);
   MAKE_STUB(fftwf_plan_dft_c2r_1d, mod, fftwf_plan_dft_c2r_1d);
   MAKE_STUB(fftwf_plan_dft_r2c_1d, mod, fftwf_plan_dft_r2c_1d);
   MAKE_STUB(fftwf_execute, mod, fftwf_execute);
@@ -275,6 +279,7 @@ void*iemmatrix_get_stub(const char*name, struct _class*cls) {
   /* fftw */
   GET_STUB(fftw, fftw_malloc, name, path);
   GET_STUB(fftw, fftw_free, name, path);
+  GET_STUB(fftw, fftw_plan_dft_1d, name, path);
   GET_STUB(fftw, fftw_plan_dft_c2r_1d, name, path);
   GET_STUB(fftw, fftw_plan_dft_r2c_1d, name, path);
   GET_STUB(fftw, fftw_execute, name, path);
@@ -283,6 +288,7 @@ void*iemmatrix_get_stub(const char*name, struct _class*cls) {
   /* fftwf */
   GET_STUB(fftwf, fftwf_malloc, name, path);
   GET_STUB(fftwf, fftwf_free, name, path);
+  GET_STUB(fftwf, fftwf_plan_dft_1d, name, path);
   GET_STUB(fftwf, fftwf_plan_dft_c2r_1d, name, path);
   GET_STUB(fftwf, fftwf_plan_dft_r2c_1d, name, path);
   GET_STUB(fftwf, fftwf_execute, name, path);

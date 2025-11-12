@@ -110,11 +110,19 @@ void complex2mayerfloat(unsigned int N, const t_complex *in, t_float *out) {
     out[n+1+N] = -in[N-n].im;
   }
 }
-void complex2mayercomplex(unsigned int N, const t_complex *in, t_float* re, t_float *im) {
+void complex_deinterleave(unsigned int N, const t_complex *in, t_float* re, t_float *im) {
   /* interleaved complex to separate complex */
+  for(unsigned int n=0; n<N; n++) {
+    re[n] = in[n].re;
+    im[n] = in[n].im;
+  }
 }
-void mayercomplex2complex(unsigned int N, const t_float *im, t_float *re, t_complex* out) {
+void complex_interleave(unsigned int N, const t_float *im, t_float *re, t_complex* out) {
   /* separate complex to interleaved complex */
+  for(unsigned int n=0; n<N; n++) {
+    out[n].re = re[n];
+    out[n].im = im[n];
+  }
 }
 
 struct iemmatrix_fft_plan {
@@ -229,7 +237,7 @@ void mayer_execute(const t_iemmatrix_fft_plan*plan) {
       // complex-valued FFTs
     } else if(plan->c_in && plan->c_out && !plan->inverse) {
       /* native precision FFT */
-      complex2mayercomplex(plan->n0, plan->c_in, plan->_re, plan->_im);
+      complex_deinterleave(plan->n0, plan->c_in, plan->_re, plan->_im);
 	/* inplace FFT
 	   IN.real :  x_re[0..(N-1)]
 	   IN.imag :  x_im[0..(N-1)]
@@ -237,10 +245,10 @@ void mayer_execute(const t_iemmatrix_fft_plan*plan) {
 	   OUT.imag:  x_im[0..(N-1)]
 	*/
       mayer_fft(plan->n0, plan->_re, plan->_im);
-      mayercomplex2complex(plan->n0, plan->_re, plan->_im, plan->c_out);
+      complex_interleave(plan->n0, plan->_re, plan->_im, plan->c_out);
     } else if(plan->c_in && plan->c_out && plan->inverse) {
       /* native precision IFFT */
-      complex2mayercomplex(plan->n0, plan->c_in, plan->_re, plan->_im);
+      complex_deinterleave(plan->n0, plan->c_in, plan->_re, plan->_im);
       /*
 	   IN.real :  x_re[0..(N-1)]
 	   IN.imag :  x_im[0..(N-1)]
@@ -248,7 +256,7 @@ void mayer_execute(const t_iemmatrix_fft_plan*plan) {
 	   OUT.imag:  x_im[0..(N-1)]
       */
       mayer_ifft(plan->n0, plan->_re, plan->_im);
-      mayercomplex2complex(plan->n0, plan->_re, plan->_im, plan->c_out);
+      complex_interleave(plan->n0, plan->_re, plan->_im, plan->c_out);
     } else {
       pd_error(0, "iemmatrix_fft: no valid plan!");
     }

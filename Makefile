@@ -280,7 +280,7 @@ datafiles = \
 	LICENSE.txt \
 	README.txt \
 	$(empty)
-datafiles = \
+datafiles += \
 	VERSION.txt \
 	iemmatrix-meta.pd \
 	$(empty)

@@ -275,7 +275,6 @@ mtx_convolver~.class.sources = \
 # all extra files to be included in binary distribution of the library
 datafiles = \
 	AUTHORS.txt \
-	BUGS.txt \
 	GnuGPL.txt \
 	LICENSE.txt \
 	README.txt \

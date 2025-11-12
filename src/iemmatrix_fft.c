@@ -117,7 +117,7 @@ void mayercomplex2complex(unsigned int N, const t_float *im, t_float *re, t_comp
   /* separate complex to interleaved complex */
 }
 
-typedef struct iemmatrix_fft_plan {
+struct iemmatrix_fft_plan {
   unsigned int n0;
 
   t_complexfloat*cf_in, *cf_out;
@@ -130,7 +130,7 @@ typedef struct iemmatrix_fft_plan {
 
   int inverse;
   void*fftw_plan;
-} t_iemmatrix_fft_plan;
+};
 
 void*iemmatrix_fft_malloc(size_t size) {
   return malloc(size);

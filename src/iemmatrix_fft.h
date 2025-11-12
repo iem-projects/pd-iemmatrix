@@ -30,17 +30,22 @@ typedef struct _complexdouble t_complex;
 #else
 typedef struct _complexfloat t_complex;
 #endif
+
+
+typedef struct iemmatrix_fft_plan t_iemmatrix_fft_plan;
+
+
 void*iemmatrix_fft_malloc(size_t size);
 void iemmatrix_fft_free(void*data);
 
-struct iemmatrix_fft_plan*iemmatrix_fft_plan_1d(int n0, t_complex*in, t_complex* out);
-struct iemmatrix_fft_plan*iemmatrix_ifft_plan_1d(int n0, t_complex*in, t_complex* out);
+t_iemmatrix_fft_plan*iemmatrix_fft_plan_1d(int n0, t_complex*in, t_complex* out);
+t_iemmatrix_fft_plan*iemmatrix_ifft_plan_1d(int n0, t_complex*in, t_complex* out);
 
 /* real-valued FFTs */
-struct iemmatrix_fft_plan*iemmatrix_rfft_plan_1d(int n0, t_float*in, t_complex*out);
-struct iemmatrix_fft_plan*iemmatrix_rifft_plan_1d(int n0, t_complex*in, t_float*out);
+t_iemmatrix_fft_plan*iemmatrix_rfft_plan_1d(int n0, t_float*in, t_complex*out);
+t_iemmatrix_fft_plan*iemmatrix_rifft_plan_1d(int n0, t_complex*in, t_float*out);
 
-void iemmatrix_fft_execute(const struct iemmatrix_fft_plan*plan);
-void iemmatrix_fft_destroy_plan(struct iemmatrix_fft_plan*plan);
+void iemmatrix_fft_execute(const t_iemmatrix_fft_plan*plan);
+void iemmatrix_fft_destroy_plan(t_iemmatrix_fft_plan*plan);
 
 #endif /* _iemmatrix_fft_h_ */

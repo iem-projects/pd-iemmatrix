@@ -125,6 +125,7 @@ static void complex_interleave(unsigned int N, const t_float *re, t_float *im, t
 }
 
 struct iemmatrix_fft_plan {
+  /* data owned by the caller of iemmatrix_..._plan() */
   unsigned int n0;
 
   t_complexfloat*cf_in, *cf_out;
@@ -132,6 +133,9 @@ struct iemmatrix_fft_plan {
 
   float*f_in, *f_out;
   double*d_in, *d_out;
+
+
+  /* the rest is owned by us */
 
   t_float *_re, *_im;
 
@@ -147,6 +151,8 @@ void iemmatrix_fft_free(void*data) {
 }
 
 void iemmatrix_fft_destroy_plan(t_iemmatrix_fft_plan*plan) {
+  iemmatrix_fft_free(plan->_re);
+  iemmatrix_fft_free(plan->_im);
   freebytes(plan, sizeof(*plan));
 }
 
@@ -173,6 +179,9 @@ t_iemmatrix_fft_plan*iemmatrix_fft_plan_1d(int n0, t_complex*in, t_complex* out)
   plan->c_in = in;
   plan->c_out = out;
   plan->inverse = 0;
+
+  plan->_re = iemmatrix_fft_malloc(n0 * sizeof(*plan->_re));
+  plan->_im = iemmatrix_fft_malloc(n0 * sizeof(*plan->_im));
   return plan;
 }
 

@@ -5,7 +5,7 @@
 # library name
 lib.name = iemmatrix
 # use 'lib.version' to set the library version from the cmdline
-#lib.version =
+#lib.version := $(shell git describe || true)
 
 # mtx_*~ and friends make problems...
 make-lib-executable=yes

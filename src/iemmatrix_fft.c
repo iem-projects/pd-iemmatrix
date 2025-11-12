@@ -212,25 +212,15 @@ void mayer_execute(const t_iemmatrix_fft_plan*plan) {
 #endif
   } else {
     if (0) {
+
       // real-valued FFTs
     } else if(plan->x_in && plan->c_out && !plan->inverse) {
       /* native precision rFFT */
-
-      /* inplace rFFT
-	 IN.real :  x_in[    0..(N    -1)]
-	 OUT.real:  x_in[    0..(N>>1   )]
-	 OUT.imag: -x_in[(N-1)..(N>>1 +1)], y[0]=y[N>>1+1]=0
-      */
       mayer_realfft(plan->n0, plan->x_in);
       mayerfloat2complex(plan->n0, plan->x_in, plan->c_out);
     } else if(plan->c_in && plan->x_out && plan->inverse) {
       /* native precision rIFFT */
       complex2mayerfloat(plan->n0, plan->c_in, plan->x_out);
-	/* inplace rIFFT
-	   IN.real :  x_in[    0..(N>>1   )]
-	   IN.imag : -x_in[(N-1)..(N>>1 +1)], y[0]=y[N>>1+1]=0
-	   OUT.real:  x_in[    0..(N    -1)]
-	*/
       mayer_realifft(plan->n0, plan->x_out);
 
       // complex-valued FFTs

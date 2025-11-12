@@ -76,7 +76,7 @@
 
 
 /* helpers */
-void mayerfloat2complex(unsigned int N, const t_float *in, t_complex *out) {
+static void mayerfloat2complex(unsigned int N, const t_float *in, t_complex *out) {
   /* mayer complex to interleaved complex */
 
   /*
@@ -93,7 +93,7 @@ void mayerfloat2complex(unsigned int N, const t_float *in, t_complex *out) {
   }
   out[N].re = in[N];
 }
-void complex2mayerfloat(unsigned int N, const t_complex *in, t_float *out) {
+static void complex2mayerfloat(unsigned int N, const t_complex *in, t_float *out) {
   /* interleaved complex to mayer complex */
 
   /*
@@ -110,14 +110,14 @@ void complex2mayerfloat(unsigned int N, const t_complex *in, t_float *out) {
     out[n+1+N] = -in[N-n].im;
   }
 }
-void complex_deinterleave(unsigned int N, const t_complex *in, t_float* re, t_float *im) {
+static void complex_deinterleave(unsigned int N, const t_complex *in, t_float* re, t_float *im) {
   /* interleaved complex to separate complex */
   for(unsigned int n=0; n<N; n++) {
     re[n] = in[n].re;
     im[n] = in[n].im;
   }
 }
-void complex_interleave(unsigned int N, const t_float *im, t_float *re, t_complex* out) {
+static void complex_interleave(unsigned int N, const t_float *im, t_float *re, t_complex* out) {
   /* separate complex to interleaved complex */
   for(unsigned int n=0; n<N; n++) {
     out[n].re = re[n];

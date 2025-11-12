@@ -262,7 +262,8 @@ void iemmatrix_fft_execute(const t_iemmatrix_fft_plan*plan) {
 }
 
 
-int iemmatrix_fft_init(t_class*c) {
+t_iemmatrix_fft_backend iemmatrix_fft_init(t_class*c) {
+  (void)c;
   /* initialize stubs */
-  return 0;
+  return MAYER;
 }

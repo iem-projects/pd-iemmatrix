@@ -35,6 +35,17 @@ typedef struct _complexfloat t_complex;
 typedef struct iemmatrix_fft_plan t_iemmatrix_fft_plan;
 
 
+typedef enum {
+  NONE = 0,
+  MAYER,
+  FFTW,
+  INVALID
+} t_iemmatrix_fft_backend;
+
+/* initialize FFT backends */
+t_iemmatrix_fft_backend iemmatrix_fft_init(t_class*c);
+
+
 void*iemmatrix_fft_malloc(size_t size);
 void iemmatrix_fft_free(void*data);
 

@@ -76,39 +76,38 @@
 
 
 /* helpers */
-static void mayerfloat2complex(unsigned int N, const t_float *in, t_complex *out) {
-  /* mayer complex to interleaved complex */
+static void mayerfloat2complex(const unsigned int N, const t_float *in, t_complex *out) {
+  /* mayer complex to interleaved complex
 
-  /*
     IN.real :  in[    0..(N>>1   )]
     IN.imag : -in[(N-1)..(N>>1 +1)], y[0]=y[N>>1+1]=0
     OUT.real: out[0..(N>>1 +1)].re
     OUT.imag: out[0..(N>>1 +1)].im
+
+    OUT.re: +in[0], +in[1], ..., +in[(N>>2]
   */
-  N >>= 1;
-  out[0].im = out[N].im = 0.;
-  for(unsigned int n=0; n<N; n++) {
-    out[  n].re =  in[n];
-    out[N-n].im = -in[N+n];
+  const unsigned int N2 = (N>>1);
+
+  for(unsigned int n=0; n<N2; n++) {
+    out[   n].re =  in[n];
+    out[N2-n].im = -in[N2+n];
   }
-  out[N].re = in[N];
+  out[N2].re = in[N2];
+  out[0].im = out[N2].im = 0.;
 }
-static void complex2mayerfloat(unsigned int N, const t_complex *in, t_float *out) {
-  /* interleaved complex to mayer complex */
+static void complex2mayerfloat(const unsigned int N, const t_complex *in, t_float *out) {
+  /* interleaved complex to mayer complex
 
-  /*
-     IN.real :  in[    0..(N>>1 +1)].re
-     IN.imag :  in[    0..(N>>1 +1)].im
-     OUT.real:  x_in[    0..(N>>1   )]
-     OUT.imag: -x_in[(N-1)..(N>>1 +1)], y[0]=y[N>>1+1]=0
+  OUT: +in[0].re, +in[1].re, ..., +in[(N>>1)].re, -in[(N>>1)-1].im, -in[(N>>1)-2].im, ..., -in[0].im
   */
+  const unsigned int N2 = (N>>1) + 1;
 
-  N >>= 1;
-  out[0] = in[0].re;
-  for(unsigned int n=0; n<N; n++) {
-    out[n+1] = in[n+1].re;
-    out[n+1+N] = -in[N-n].im;
+  for(unsigned int n=0; n+2<N2; n++) {
+    out[n] = in[n].re;
+    out[N2+n] = -in[N2-(n+2)].im;
   }
+  out[N2-2] = in[N2-2].re;
+  out[N2-1] = in[N2-1].re;
 }
 static void complex_deinterleave(unsigned int N, const t_complex *in, t_float* re, t_float *im) {
   /* interleaved complex to separate complex */

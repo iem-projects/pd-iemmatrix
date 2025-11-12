@@ -8,6 +8,7 @@
 STUB(fftw_malloc);
 STUB(fftw_free);
 
+STUB(fftw_plan_dft_1d);
 STUB(fftw_plan_dft_c2r_1d);
 STUB(fftw_plan_dft_r2c_1d);
 STUB(fftw_execute);

@@ -8,6 +8,7 @@
 STUB(fftwf_malloc);
 STUB(fftwf_free);
 
+STUB(fftwf_plan_dft_1d);
 STUB(fftwf_plan_dft_c2r_1d);
 STUB(fftwf_plan_dft_r2c_1d);
 STUB(fftwf_execute);

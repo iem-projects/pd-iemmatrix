@@ -116,7 +116,7 @@ static void complex_deinterleave(unsigned int N, const t_complex *in, t_float* r
     im[n] = in[n].im;
   }
 }
-static void complex_interleave(unsigned int N, const t_float *im, t_float *re, t_complex* out) {
+static void complex_interleave(unsigned int N, const t_float *re, t_float *im, t_complex* out) {
   /* separate complex to interleaved complex */
   for(unsigned int n=0; n<N; n++) {
     out[n].re = re[n];

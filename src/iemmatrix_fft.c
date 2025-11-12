@@ -59,6 +59,7 @@
  */
 
 #include "iemmatrix_fft.h"
+#include "iemmatrix_stub.h"
 
 #include <stdlib.h>
 
@@ -73,6 +74,27 @@
 # define c_in cf_in
 # define c_out cf_out
 #endif
+
+
+#ifdef HAVE_FFTW
+# include <fftw3.h>
+#else
+# include "stub/fftwf.h"
+#endif
+
+typedef void(*t_fftwf_destroy_plan)(fftwf_plan);
+typedef void(*t_fftwf_execute)(const fftwf_plan);
+typedef fftwf_plan(*t_fftwf_plan_dft_1d)(int, fftwf_complex*, fftwf_complex*, signed, unsigned);
+typedef fftwf_plan(*t_fftwf_plan_dft_c2r_1d)(int, fftwf_complex*, float*, unsigned);
+typedef fftwf_plan(*t_fftwf_plan_dft_r2c_1d)(int, float*, fftwf_complex*, unsigned);
+
+static t_fftwf_destroy_plan my_fftw_destroy_plan = 0;
+static t_fftwf_execute my_fftw_execute = 0;
+static t_fftwf_plan_dft_1d my_fftw_plan_dft_1d = 0;
+static t_fftwf_plan_dft_c2r_1d my_fftw_plan_dft_c2r_1d = 0;
+static t_fftwf_plan_dft_r2c_1d my_fftw_plan_dft_r2c_1d = 0;
+
+static int have_fftw = 0;
 
 
 /* helpers */
@@ -140,7 +162,7 @@ struct iemmatrix_fft_plan {
   t_float *_re, *_im;
 
   int inverse;
-  void*fftw_plan;
+  fftwf_plan fftw_plan;
 };
 
 void*iemmatrix_fft_malloc(size_t size) {
@@ -151,6 +173,9 @@ void iemmatrix_fft_free(void*data) {
 }
 
 void iemmatrix_fft_destroy_plan(t_iemmatrix_fft_plan*plan) {
+  if(plan->fftw_plan) {
+    my_fftw_destroy_plan(plan->fftw_plan);
+  }
   iemmatrix_fft_free(plan->_re);
   iemmatrix_fft_free(plan->_im);
   freebytes(plan, sizeof(*plan));
@@ -162,6 +187,8 @@ t_iemmatrix_fft_plan*iemmatrix_rifft_plan_1d(int n0, t_complex*in, t_float*out) 
   plan->c_in = in;
   plan->x_out = out;
   plan->inverse = 1;
+  if(have_fftw)
+    plan->fftw_plan = my_fftw_plan_dft_c2r_1d(n0, (fftwf_complex*)in, out, FFTW_ESTIMATE);
   return plan;
 }
 t_iemmatrix_fft_plan*iemmatrix_rfft_plan_1d(int n0, t_float*in, t_complex*out) {
@@ -170,55 +197,40 @@ t_iemmatrix_fft_plan*iemmatrix_rfft_plan_1d(int n0, t_float*in, t_complex*out) {
   plan->x_in = in;
   plan->c_out = out;
   plan->inverse = 0;
+  if(have_fftw)
+    plan->fftw_plan = my_fftw_plan_dft_r2c_1d(n0, in, (fftwf_complex*)out, FFTW_ESTIMATE);
   return plan;
 }
 
-t_iemmatrix_fft_plan*iemmatrix_fft_plan_1d(int n0, t_complex*in, t_complex* out) {
+static t_iemmatrix_fft_plan*_fft_plan_1d(int n0, t_complex*in, t_complex* out, int inverse) {
   t_iemmatrix_fft_plan*plan = calloc(1, sizeof(t_iemmatrix_fft_plan));
   plan->n0 = n0;
   plan->c_in = in;
   plan->c_out = out;
-  plan->inverse = 0;
+  plan->inverse = inverse;
+  if(have_fftw)
+    plan->fftw_plan = my_fftw_plan_dft_1d(n0, (fftwf_complex*)in, (fftwf_complex*)out, inverse?-1:+1, FFTW_ESTIMATE);
 
-  plan->_re = iemmatrix_fft_malloc(n0 * sizeof(*plan->_re));
-  plan->_im = iemmatrix_fft_malloc(n0 * sizeof(*plan->_im));
+  if(!plan->fftw_plan) {
+    plan->_re = iemmatrix_fft_malloc(n0 * sizeof(*plan->_re));
+    plan->_im = iemmatrix_fft_malloc(n0 * sizeof(*plan->_im));
+  }
   return plan;
 }
 
+t_iemmatrix_fft_plan*iemmatrix_fft_plan_1d(int n0, t_complex*in, t_complex* out) {
+  return _fft_plan_1d(n0, in, out, 0);
+}
+
 t_iemmatrix_fft_plan*iemmatrix_ifft_plan_1d(int n0, t_complex*in, t_complex* out) {
-  t_iemmatrix_fft_plan*plan = iemmatrix_fft_plan_1d(n0, in, out);
-  plan->inverse = 1;
-  return plan;
+  return _fft_plan_1d(n0, in, out, 1);
 }
 
 
 
 void iemmatrix_fft_execute(const t_iemmatrix_fft_plan*plan) {
   if(plan->fftw_plan) {
-#if 0
-    /* FFTW */
-    /*
-      IN.real : f_in [0..N]
-      OUT.real: c_out[0..(N>>1 +1)][0]
-      OUT.imag: c_out[0..(N>>1 +1)][1]
-    */
-    my_plan_dft_r2c_1d(N, f_in, c_out);
-
-    /*
-      IN.real : c_in [0..(N>>1 +1)][0] ?
-      IN.imag : c_in [0..(N>>1 +1)][1] ?
-      OUT.real: f_out[0..N]            ?
-    */
-    my_plan_dft_c2r_1d(N, c_in, f_out);
-
-    /*
-      IN.real : c_in [0..N][0] ?
-      IN.imag : c_in [0..N][1] ?
-      OUT.real: c_out[0..N][0] ?
-      OUT.imag: c_out[0..N][1] ?
-    */
-    fftw_plan_dft_1d(N, c_in, c_out, direction);
-#endif
+    my_fftw_execute(plan->fftw_plan);
   } else {
     if (0) {
 
@@ -263,7 +275,36 @@ void iemmatrix_fft_execute(const t_iemmatrix_fft_plan*plan) {
 
 
 t_iemmatrix_fft_backend iemmatrix_fft_init(t_class*c) {
-  (void)c;
+  static int tried_fftw = 0;
+  if(!tried_fftw) {
+    tried_fftw = 1;
+#define show_addr(x) post(#x "\t%p", x)
+
+    my_fftw_destroy_plan = iemmatrix_get_stub("fftwf_destroy_plan", c);
+    //show_addr(my_fftw_destroy_plan);
+    my_fftw_execute = iemmatrix_get_stub("fftwf_execute", c);
+    //show_addr(my_fftw_execute);
+    my_fftw_plan_dft_1d = iemmatrix_get_stub("fftwf_plan_dft_1d", c);
+    //show_addr(my_fftw_plan_dft_1d);
+    my_fftw_plan_dft_c2r_1d = iemmatrix_get_stub("fftwf_plan_dft_c2r_1d", c);
+    //show_addr(my_fftw_plan_dft_c2r_1d);
+    my_fftw_plan_dft_r2c_1d = iemmatrix_get_stub("fftwf_plan_dft_r2c_1d", c);
+    //show_addr(my_fftw_plan_dft_r2c_1d);
+
+    have_fftw = (1
+                 && my_fftw_destroy_plan
+                 && my_fftw_execute
+                 && my_fftw_plan_dft_1d
+                 && my_fftw_plan_dft_c2r_1d
+                 && my_fftw_plan_dft_r2c_1d
+                 );
+
+    if(have_fftw) {
+      post("FFTW detected");
+      return FFTW;
+    }
+  }
   /* initialize stubs */
+  post("MAYER detected");
   return MAYER;
 }

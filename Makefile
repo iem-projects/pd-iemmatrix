@@ -277,7 +277,7 @@ datafiles = \
 	AUTHORS.txt \
 	GnuGPL.txt \
 	LICENSE.txt \
-	README.txt \
+	README.md \
 	$(empty)
 datafiles += \
 	VERSION.txt \

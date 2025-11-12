@@ -3,98 +3,114 @@ iemmatrix - matrix objects for Pure Data
 
 Homepage: https://git.iem.at/pd/iemmatrix
 
+`iemmatrix` is a collection of objects for Pure Data (Pd)
+that allow manipulation of simple matrices.
 
 
-## Installation/Compilation instructions for "iemmatrix"
+## Found a bug? Miss a feature?
 
-iemmatrix uses the *autoconf* build system.
-For generic build instructions, please see INSTALL.txt
+Please use our issue-tracker at
+https://git.iem.at/pd/iemmatrix/-/issues
 
-### Dependencies
+## Installation instructions
+
+### Simple installation
+
+`iemmatrix` is available via deken (Pd's built in package manager):
+
+For Pd>=0.56
+- Open the `Tools` menu
+- Select `Find externals...`
+- Type **`iemmatrix`** and hit `Search`
+- Select the first entry and click on `Install`
+
+For older Pd versions, `Find externals...` can be found in the `Help` menu.
+
+
+### Compiling iemmatrix
+
+If deken does not offer any downloads for your system
+(e.g. because you are stuck on an old OSX system with a PowerPC processor,
+or you want to use a not-yet released version),
+you can locally compile `iemmatrix` instead.
+
+#### Dependencies
 
 in order to compile iemmatrix, you will need some libraries/applications installed.
 Some of these dependencies are optional.
 If they are present during compilation, iemmatrix will have certain functionality
 enabled, which might be missing otherwise.
 
- - puredata
-     http://puredata.info/downloads
+ - Pure Data
+     https://puredata.info/downloads
      make sure you also have the development files (headers)
 
  - GNU scientific library (aka gsl) [optional]
-     http://www.gnu.org/software/gsl
+     https://www.gnu.org/software/gsl/
      needed for higher maths, including eigenvalues and singular-value decomposition
  - FFTW (Fast Fourier Transform) [optional]
-     http://www.fftw.org
+     https://fftw.org
      fast, high-precision FFTs; if not present, iemmatrix will use Pd's internal FFT
  - sndfile (reading/writing audio files) [optional]
-     http://www.mega-nerd.com/libsndfile/
+     https://libsndfile.github.io/libsndfile/
      for reading soundfiles into matrices (many soundfiles are supported)
 
-
- - autotools, libtool, gettext
-     that's the basic build-system
+  - the `pkg-config` tool (to detect) the optional dependencies
 
  - a compiler, linker,...
      tested with
       - GCC (the GNU compiler collection)
       - Clang
 
-### Building
+#### Building
 
-Make sure that each step succeeds, before proceeding to the next one!
+iemmatrix uses the [pd-lib-builder](https://github.com/pure-data/pd-lib-builder) build system.
+
+just run:
 
 ```sh
-./autogen.sh
-./configure
 make
 ```
 
-
-./configure will need to find the Pd-headers (and on some platforms the Pd-library).
-If these files are in a non-standard location (e.g. on W32 and OSX),
-you have to manually tell it where to look for them, using the `--with-pd` flag
-and pointing it to the directory that contains the`'bin/` and `src/` (or `include/`)
-folders of your Pd-distribution.
-
-E.g.
+To get some basic help with the build-system run
 
 ```sh
-./configure --with-pd=/Applications/Pd-0.45-4.app/Contents/Resources
+make help
 ```
 
-Once `make` has succeeded, you will have a `iemmatrix` binary in the (hidden)
-`.libs` folder.
+or read the [online documentation for pd-lib-builder](https://github.com/pure-data/pd-lib-builder).
 
-
-### Installing
-
+#### Installing
 
 The ordinary way to install, is by running the following with the proper privileges
 (e.g. as root):
 
- # make install
+```sh
+make install
+```
 
-This will install the entire iemmatrix into `/usr/local/lib/pd/extra/iemmatrix`.
+This will install the entire iemmatrix into `/usr/local/lib/pd-externals/iemmatrix/`
 
-On systems that have no standard filesystem layout for Pd-externals (e.g. W32 and OSX),
+On systems that have no standard filesystem layout for Pd-externals (e.g. W32 and macOS),
 this is not exactly what you want.
 Instead, you can use the following to collect all installation data into a single directory:
 
 ```sh
-make install DESTDIR=$(pwd)/ pkglibdir=iemmatrix
+make install DESTDIR=$(pwd) pkglibdir=
 ```
 
-This will create a new directory `iemmatrix/` (in your current directory),
+This will create a new directory `iemmatrix` (in your current directory),
 containing all binaries and abstractions needed.
 
 You can then take this directory, and put it into a place, where Pd will look for it:
 
 E.g.
 
- - Linux: `~/pd-externals` (e.g. `/home/frodo/pd-externals`)
- - OSX  : `~/Library/Pd`   (e.g. `/Users/frodo/Pd`)
- - W32  : `%AppData%\Pd`   (e.g. `C:\Documents and Settings\frodo\Application Data\Pd`)
+| OS      | path                   | example
+|---------|------------------------|------------------------------------------------------
+| Linux   |`~/.local/lib/pd/extra` | `/home/frodo/.local/lib/pd/extra/iemmatrix`
+| macOS   | `~/Documents/Pd/extra` | `/Users/frodo/Documents/Pd/extra/iemmatrix`
+| Windows | `%AppData%\Pd`         | `C:\Users\frodo\AppData\Roaming\Pd\iemmatrix`
 
 A full list of default search paths for externals, can be found at
   https://puredata.info/docs/faq/how-do-i-install-externals-and-help-files/
@@ -104,77 +120,73 @@ A full list of default search paths for externals, can be found at
 
 ### Linux (Debian-based)
 
-`iemmatrix` is available as Debian package
+`iemmatrix` is available as a Debian package
 
 ```sh
 apt-get install pd-iemmatrix
 ```
 
-To install all dependencies for compiling iemmatrix yourself, use:
+To get all the build-dependencies, use:
 
 ```sh
 apt-get build-dep pd-iemmatrix
 ```
 
-or
-
+or manually with:
 ```sh
-apt-get install automake1.11 autoconf puredata libfftw3-dev libsndfile1-dev libgsl0-dev
+apt-get install build-essential puredata libfftw3-dev libsndfile1-dev libgsl0-dev
 ```
 
+### macOS
 
-### mac OS-X
 
-Most dependencies are available via `brew`
+The additional dependencies are available via [`brew`](https://brew.sh)
 
-   http://brew.sh
-
-Install them using
-
-```sh
-brew install gsl --universal
-brew install fftw --universal
-brew install libsndfile --universal
+```
+brew install pkgconf gsl fftw libsndfile
 ```
 
-When running iemmatrix' configure, make sure to specify the path to Pd.
-If you want to build universal binaries (e.g. both 32bit (i386) and 64bit (x86_64)),
-you can specify the `--enable-fat-binary` flag.
-E.g.
+Then proceed with the [building instructions](#building)
+
+### Windows
+
+
+You will need the [MSYS2](https://www.msys2.org/) environment with [MinGW](https://www.mingw-w64.org/) installed.
+
+Open an MinGW shell (`MSYS2 MinGW 64-bit`; for older 32bit Windows systems use `MSYS Mingw 32-bit`)
+and install the dependencies with:
 
 ```sh
-./configure  --with-pd=/Applications/Pd-0.45-4.app/Contents/Resources --enable-fat-binary=i386,x86_64
+pacman -Suy \
+  ${MINGW_PACKAGE_PREFIX}-gcc \
+  ${MINGW_PACKAGE_PREFIX}-pkgconf \
+  ${MINGW_PACKAGE_PREFIX}-ntldd \
+  ${MINGW_PACKAGE_PREFIX}-libsndfile \
+  ${MINGW_PACKAGE_PREFIX}-fftw \
+  ${MINGW_PACKAGE_PREFIX}-gsl
 ```
 
-Note: when building fat binaries, all dependencies must be fat too.
-
-### Microsoft W32
-
-The only sane way to build iemmatrix for W32 using autotools,
-is currently by using `MinGW-w64` as a cross-compilation environment on Linux.
-
-Debian (and derivates) provides packages for this:
-
-```sh
-apt-get install mingw-w64 mingw-w64-i686-dev mingw-w64-tools binutils-mingw-w64
-```
-
-Run `./configure` and specify the path to your W32 installation of Pd
-(where you unzipped the W32 package of Pd) using the `--with-pd` flag.
-Make sure that the Pd-sources are in PDPATH/src and the compiled pd-binaries in PDPATH/bin.
-If they are scattered across you filesystem you can alternatively give explicitly the paths
-to your "m_pd.h" (with `--includedir`) and to your "pd.lib" (with `--libdir`).
-Don't forget to override the default extension ("pd_linux" on Linux-systems)
-with the more appropriate "dll".
-On bash this looks like:
-
-```sh
-./configure --with-extension=dll --host=i686-w64-mingw32 --with-pd=/home/frodo/W32/pd-0.46-6
-```
-
-Now run "make" and enjoy.
+Then proceed with the [building instructions](#building)
 
 
-### W32 using VisualStudio
-There are outdated VisualStudio project files in `src/`
-Use them at your own risk.
+## License
+This program is free software; you can redistribute it and/or
+modify it under the terms of the **GNU General Public License**
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+## Authors
+
+`iemmatrix` is being developped at the
+[Institute of Electronic Music and Acoustics](https://iem.at),
+which is part of the [University of Music and Performing Arts, Graz/Austria](https://www.kug.ac.at).
+
+For a list of developers, see the `AUTHORS.txt` file.

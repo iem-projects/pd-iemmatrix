@@ -184,7 +184,7 @@ t_iemmatrix_fft_plan*iemmatrix_ifft_plan_1d(int n0, t_complex*in, t_complex* out
 
 
 
-void mayer_execute(const t_iemmatrix_fft_plan*plan) {
+void iemmatrix_fft_execute(const t_iemmatrix_fft_plan*plan) {
   if(plan->fftw_plan) {
 #if 0
     /* FFTW */

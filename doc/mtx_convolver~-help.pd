@@ -494,7 +494,7 @@
 #X connect 30 2 36 0;
 #X connect 36 0 15 0;
 #X connect 37 0 29 0;
-#X restore 91 157 pd cross-reverb;
+#X restore 91 187 pd cross-reverb;
 #N canvas 208 245 450 300 convolve-long-2x2-ir-efficiently-using-block~ 0;
 #X obj 323 73 block~ 4096;
 #X obj 43 106 mtx_convolver~ 2 2;
@@ -518,6 +518,8 @@
 #X msg 90 93 0.9;
 #X text 124 94 long xreverb;
 #X text 126 117 short xreverb;
+#X floatatom 91 151 5 0 1 0 - - - 0;
+#X obj 90 68 loadbang;
 #X connect 0 0 12 0;
 #X connect 1 0 11 1;
 #X connect 1 1 11 2;
@@ -532,6 +534,8 @@
 #X connect 11 0 2 0;
 #X connect 11 1 8 0;
 #X connect 12 0 1 0;
-#X connect 13 0 10 0;
-#X connect 14 0 10 0;
+#X connect 13 0 17 0;
+#X connect 14 0 17 0;
+#X connect 17 0 10 0;
+#X connect 18 0 14 0;
 #X restore 61 371 pd mtx_convolver~-example3: cross-feed reverb;

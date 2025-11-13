@@ -106,11 +106,11 @@ You can then take this directory, and put it into a place, where Pd will look fo
 
 E.g.
 
-| OS      | path                   | example
-|---------|------------------------|------------------------------------------------------
-| Linux   |`~/.local/lib/pd/extra` | `/home/frodo/.local/lib/pd/extra/iemmatrix`
-| macOS   | `~/Documents/Pd/extra` | `/Users/frodo/Documents/Pd/extra/iemmatrix`
-| Windows | `%AppData%\Pd`         | `C:\Users\frodo\AppData\Roaming\Pd\iemmatrix`
+| OS      | path                       | example path
+|---------|----------------------------|------------------------------------------------------
+| Linux   |`~/.local/lib/pd/extra`     | `/home/frodo/.local/lib/pd/extra/iemmatrix`
+| macOS   | `~/Documents/Pd/externals` | `/Users/frodo/Documents/Pd/externals/iemmatrix`
+| Windows | `%AppData%\Pd`             | `C:\Users\frodo\AppData\Roaming\Pd\iemmatrix`
 
 A full list of default search paths for externals, can be found at
   https://puredata.info/docs/faq/how-do-i-install-externals-and-help-files/

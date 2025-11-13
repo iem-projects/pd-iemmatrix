@@ -25,11 +25,11 @@ typedef struct _MTXRfft_ MTXRfft;
 struct _MTXRfft_ {
   t_object x_obj;
 
-  int cols, rows;
+  int columns, rows;
 
   t_iemmatrix_fft_plan**plan;
   t_float *f_in;
-  t_complex *f_out;
+  t_complex *c_out;
 
   t_outlet *list_re_out;
   t_outlet *list_im_out;
@@ -48,7 +48,7 @@ static void deleteMTXRfft (MTXRfft *x)
     free(x->plan);
   }
   if (x->f_in)   free(x->f_in);
-  if (x->f_out)  free(x->f_out);
+  if (x->c_out)  free(x->c_out);
   if (x->list_re)free(x->list_re);
   if (x->list_im)free(x->list_im);
 }
@@ -95,7 +95,7 @@ static void mTXRfftMatrix (MTXRfft *x, t_symbol *s,
               2; /* +2 since the list also contains matrix row+col */
 
   t_float *f_in = x->f_in;
-  t_complex *f_out = x->f_out;
+  t_complex *c_out = x->c_out;
 
   t_atom *list_re = x->list_re;
   t_atom *list_im = x->list_im;
@@ -122,19 +122,19 @@ static void mTXRfftMatrix (MTXRfft *x, t_symbol *s,
   }
 
   /* memory things */
-  if ((x->rows != rows)||(x->cols != columns)) {
+  if ((x->rows != rows)||(x->columns != columns)) {
     /* size changed, so re-allocate */
     x->f_in = f_in  = (t_float*  )realloc(f_in , sizeof(*f_in ) * size);
-    x->f_out= f_out = (t_complex*)realloc(f_out, sizeof(*f_out) * (list_size-2));
+    x->c_out= c_out = (t_complex*)realloc(c_out, sizeof(*c_out) * (list_size-2));
 
     for (int r=0; r<x->rows; r++) {
       iemmatrix_fft_destroy_plan(x->plan[r]);
     }
     x->rows = rows;
-    x->cols = columns;
+    x->columns = columns;
     x->plan = (t_iemmatrix_fft_plan**)realloc(x->plan, sizeof(*x->plan)*x->rows);
     for (int r=0; r<x->rows; r++) {
-      x->plan[r] = iemmatrix_rfft_plan_1d(columns, f_in + columns*r, f_out + columns_re*r);
+      x->plan[r] = iemmatrix_rfft_plan_1d(columns, f_in + columns*r, c_out + columns_re*r);
     }
   }
 
@@ -150,7 +150,7 @@ static void mTXRfftMatrix (MTXRfft *x, t_symbol *s,
   for(int r=0; r<rows; r++) {
     int offset = columns_re * r;
     iemmatrix_fft_execute(x->plan[r]);
-    complex2list(columns_re, f_out + offset, list_re + offset + 2, list_im + offset + 2);
+    complex2list(columns_re, c_out + offset, list_re + offset + 2, list_im + offset + 2);
   }
 
   SETSYMBOL(list_re, gensym("matrix"));

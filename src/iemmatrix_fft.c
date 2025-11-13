@@ -61,6 +61,10 @@
 #include "iemmatrix_fft.h"
 #include "iemmatrix_stub.h"
 
+#define stringify(s) str(s)
+#define str(s) #s
+
+
 #include <stdlib.h>
 
 #if PD_FLOATSIZE == 64
@@ -83,12 +87,16 @@
 #endif
 
 #if PD_FLOATSIZE == 64
-typedef fftw_complex  t_fftw_complex;
-typedef fftw_plan     t_fftw_plan;
+#define fftwx(a) fftw_##a
 #else
-typedef fftwf_complex t_fftw_complex;
-typedef fftwf_plan    t_fftw_plan;
+#define fftwx(a) fftwf_##a
 #endif
+
+
+
+
+typedef fftwx(complex)  t_fftw_complex;
+typedef fftwx(plan)     t_fftw_plan;
 
 typedef void(*t_fftw_destroy_plan)(t_fftw_plan);
 typedef void(*t_fftw_execute)(const t_fftw_plan);
@@ -287,18 +295,24 @@ t_iemmatrix_fft_backend iemmatrix_fft_init(t_class*c) {
   if(!tried_fftw) {
     /* initialize stubs */
     tried_fftw = 1;
-#define show_addr(x) post(#x "\t%p", x)
 
-    my_fftw_destroy_plan = iemmatrix_get_stub("fftwf_destroy_plan", c);
-    //show_addr(my_fftw_destroy_plan);
-    my_fftw_execute = iemmatrix_get_stub("fftwf_execute", c);
-    //show_addr(my_fftw_execute);
-    my_fftw_plan_dft_1d = iemmatrix_get_stub("fftwf_plan_dft_1d", c);
-    //show_addr(my_fftw_plan_dft_1d);
-    my_fftw_plan_dft_c2r_1d = iemmatrix_get_stub("fftwf_plan_dft_c2r_1d", c);
-    //show_addr(my_fftw_plan_dft_c2r_1d);
-    my_fftw_plan_dft_r2c_1d = iemmatrix_get_stub("fftwf_plan_dft_r2c_1d", c);
-    //show_addr(my_fftw_plan_dft_r2c_1d);
+
+    /*
+#define register_my_fftw(prefix, name)                           \
+    my_fftw_##name = iemmatrix_get_stub(stringify(prefix) "_" #name, c)
+#define show_addr(x) post(#x "\t%p", x)
+    */
+#define register_my_fftw(name)                           \
+    my_fftw_##name = iemmatrix_get_stub(stringify(fftwx(name)), c)
+
+
+    register_my_fftw(destroy_plan);
+
+    register_my_fftw(destroy_plan);
+    register_my_fftw(execute);
+    register_my_fftw(plan_dft_1d);
+    register_my_fftw(plan_dft_c2r_1d);
+    register_my_fftw(plan_dft_r2c_1d);
 
     have_fftw = (1
                  && my_fftw_destroy_plan

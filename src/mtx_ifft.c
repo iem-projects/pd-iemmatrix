@@ -175,8 +175,9 @@ static void mtxIFFTMatrixHot (MtxIFFT *x, t_symbol *s,
     }
     iemmatrix_fft_execute(x->plan);
     c = x->c_out;
+    t_float renorm_fac = 1. / (t_float)columns;
     for(int col=0; col < columns; col++) {
-      t_float re = c->re, im = c->im;
+      t_float re = c->re * renorm_fac, im = c->im * renorm_fac;
       SETFLOAT(msg_re, re);
       SETFLOAT(msg_im, im);
 

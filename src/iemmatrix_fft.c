@@ -209,7 +209,7 @@ static t_iemmatrix_fft_plan*_fft_plan_1d(int n0, t_complex*in, t_complex* out, i
   plan->c_out = out;
   plan->inverse = inverse;
   if(have_fftw)
-    plan->fftw_plan = my_fftw_plan_dft_1d(n0, (fftwf_complex*)in, (fftwf_complex*)out, inverse?-1:+1, FFTW_ESTIMATE);
+    plan->fftw_plan = my_fftw_plan_dft_1d(n0, (fftwf_complex*)in, (fftwf_complex*)out, inverse?+1:-1, FFTW_ESTIMATE);
 
   if(!plan->fftw_plan) {
     plan->_re = iemmatrix_fft_malloc(n0 * sizeof(*plan->_re));

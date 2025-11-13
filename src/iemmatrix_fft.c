@@ -277,6 +277,7 @@ void iemmatrix_fft_execute(const t_iemmatrix_fft_plan*plan) {
 t_iemmatrix_fft_backend iemmatrix_fft_init(t_class*c) {
   static int tried_fftw = 0;
   if(!tried_fftw) {
+    /* initialize stubs */
     tried_fftw = 1;
 #define show_addr(x) post(#x "\t%p", x)
 
@@ -298,13 +299,13 @@ t_iemmatrix_fft_backend iemmatrix_fft_init(t_class*c) {
                  && my_fftw_plan_dft_c2r_1d
                  && my_fftw_plan_dft_r2c_1d
                  );
-
-    if(have_fftw) {
-      post("FFTW detected");
-      return FFTW;
-    }
   }
-  /* initialize stubs */
+
+  if(have_fftw) {
+    post("FFTW detected");
+    return FFTW;
+  }
+
   post("MAYER detected");
   return MAYER;
 }

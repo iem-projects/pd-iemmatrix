@@ -4,7 +4,7 @@
  *  objects for manipulating simple matrices
  *  mostly referring to matlab/octave matrix functions
  *
- * Copyright (c) IOhannes m zmölnig, fandum::für::umläute
+ * Copyright (c) IOhannes m zmölnig, forum::für::umläute
  * IEM, Graz, Austria
  *
  * For information on usage and redistribution, and for a DISCLAIMER OF ALL

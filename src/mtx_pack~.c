@@ -161,7 +161,7 @@ void mtx_pack_tilde_setup (void)
 				   flags,
 				   A_DEFFLOAT, 0);
   class_addmethod (mtx_pack_tilde_class, (t_method) mTxPackTildeDsp,
-                   gensym("dsp"),0);
+                   gensym("dsp"), A_CANT, 0);
 
   can_multiout = (CLASS_MULTICHANNEL && 0!=iemmatrix_getpdfun("signal_setmultiout"));
 }

@@ -220,7 +220,7 @@ void mtx_ei_tilde_setup (void)
                                  (t_newmethod)newMtxEITilde, (t_method) deleteMtxEITilde,
                                  sizeof(mtx_ei_tilde), CLASS_NOINLET, A_GIMME, 0);
   class_addmethod (mtx_ei_tilde_class, (t_method) mTxEITildeDsp,
-                   gensym("dsp"),0);
+                   gensym("dsp"), A_CANT, 0);
 }
 
 void iemtx_ei__setup(void)

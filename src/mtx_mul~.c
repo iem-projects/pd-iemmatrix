@@ -1180,7 +1180,7 @@ usage:
 
 static void mtx_mul_addmethods(t_class*c) {
   class_addmethod(c, (t_method)matrix_multilde_dsp,
-                  gensym("dsp"), 0);
+                  gensym("dsp"), A_CANT, 0);
 
   class_addmethod(c, (t_method)matrix_multilde_matrix,
                   gensym("matrix"), A_GIMME, 0);

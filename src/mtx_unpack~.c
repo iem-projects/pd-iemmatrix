@@ -276,7 +276,7 @@ void mtx_unpack_tilde_setup (void)
   class_addmethod (mtx_unpack_tilde_class, (t_method) mtx_unpack_matrix,
                    gensym("matrix"),A_GIMME,0);
   class_addmethod (mtx_unpack_tilde_class, (t_method) mtx_unpack_dsp,
-                   gensym("dsp"),0);
+                   gensym("dsp"), A_CANT, 0);
 
   mtx_unpack_tilde_proxy = class_new(gensym("mtx_unpack~ proxy"),
                                      0, 0,

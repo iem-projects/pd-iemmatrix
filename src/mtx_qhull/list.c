@@ -261,6 +261,7 @@ void appendListToList(list_t *list1, const list_t list2)
 
 void removeEntryListFromList(list_t *list, const list_t indices)
 {
+  /* JMZ: this seems to be totally broken; thank god we don't need it */
   index_t i,j;
   for (i=j=0; i<getLength(*list); i++) {
     entry_t e = {i};

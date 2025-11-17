@@ -20,14 +20,13 @@ static void legendre_first_recurrence (double *sintheta,
                                        LegendreWorkSpace *wl)
 {
   unsigned int l,l0;
-  int n;
-  int nmo0=0;
-  int n0=1;
-  const int incr=(wl->nmax+1)*(wl->nmax+2)/2;
+  size_t nmo0=0;
+  size_t n0=1;
+  const size_t incr=(wl->nmax+1)*(wl->nmax+2)/2;
 
   // computes the legendre functions P_n^m(costheta) for m=n
   // from P_0^0
-  for (n=1; n<=wl->nmax; n++) {
+  for (size_t n=1; n<=wl->nmax; n++) {
     for (l=0,l0=0; l<wl->l; l++,l0+=incr) {
       wl->p[l0+n0+n] = -(2*n-1) * wl->p[l0+nmo0+n-1] * sintheta[l];
     }
@@ -39,8 +38,6 @@ static void legendre_first_recurrence (double *sintheta,
 static void legendre_second_recurrence (double *costheta,
                                         LegendreWorkSpace *wl)
 {
-  unsigned int l,l0;
-  int m,n;
   int nmt0=-1;
   int nmo0=0;
   int n0=1;
@@ -48,17 +45,17 @@ static void legendre_second_recurrence (double *costheta,
 
   // computes the Legendre functions P_n^m(costheta) from
   // P_n^m with m=n
-  for (n=1; n<=wl->nmax; n++) {
-    for (m=0; m<n; m++) {
+  for (size_t n=1; n<=wl->nmax; n++) {
+    for (size_t m=0; m<n; m++) {
       if (m+2<=n) {
-        for (l=0,l0=0; l<wl->l; l++,l0+=incr) {
+        for (size_t l=0,l0=0; l<wl->l; l++,l0+=incr) {
           wl->p[l0+n0+m] = (
                              (2*n-1) * costheta[l] * wl->p[l0+nmo0+m]
                              - (n+m-1) * wl->p[l0+nmt0+m]
                            ) / (n-m);
         }
       } else {
-        for (l=0,l0=0; l<wl->l; l++,l0+=incr) {
+        for (size_t l=0,l0=0; l<wl->l; l++,l0+=incr) {
           wl->p[l0+n0+m] = (
                              (2*n-1) * costheta[l] * wl->p[l0+nmo0+m]
                            ) / (n-m);

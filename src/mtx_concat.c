@@ -81,6 +81,7 @@ static void mTXConcatBang (MTXconcat *mtx_concat_obj)
 static void mTXConcatMatrix2 (MTXconcat *mtx_concat_obj, t_symbol *s,
                               int argc, t_atom *argv)
 {
+  (void)s;
   matrix_matrix2 (mtx_concat_obj, &mtx_concat_obj->mtx_in2, argc, argv);
 }
 

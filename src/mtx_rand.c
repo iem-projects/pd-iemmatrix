@@ -65,6 +65,7 @@ static void mtx_rand_list(t_matrixobj *x, t_symbol *s, int argc, t_atom *argv)
 static void mtx_rand_matrix(t_matrixobj *x, t_symbol *s, int argc,
                             t_atom *argv)
 {
+  (void)s;
   matrix_matrix2(x, &x->m, argc, argv);
   mtx_rand_random(x);
   matrixobj_bang(x);

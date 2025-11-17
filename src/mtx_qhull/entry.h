@@ -16,8 +16,6 @@
  *
  */
 
-
-
 typedef size_t index_t;
 
 typedef union {

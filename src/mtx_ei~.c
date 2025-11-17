@@ -151,6 +151,7 @@ static t_int *mTxEITildePerform (t_int *arg)
   SETFLOAT(x->list_out+0,(t_float)2*x->sg-1);
   SETFLOAT(x->list_out+1,(t_float)2*x->sd-1);
 
+#warning FIXME memcpy() areas must not overlap!
   memcpy(x->sl, x->sl+x->bs, sizeof(t_float)*x->sd);
   memcpy(x->sr, x->sr+x->bs, sizeof(t_float)*x->sd);
   memcpy(x->sl+x->sd, x->sig_in_left, sizeof(t_float)*x->bs);
@@ -183,6 +184,7 @@ static t_int *mTxEITildePerform (t_int *arg)
     SETFLOAT(x->list_out+eii+2, x->ei[eii]*scale);
   }
 
+#warning FIXME must not output data during perform()
   outlet_anything(x->message_outlet,gensym("matrix"),
                   x->se+2,x->list_out);
 

@@ -1,5 +1,6 @@
 #N canvas 319 185 839 528 12;
-#X text 672 5 part of iemmatrix;
+#X declare -lib iemmatrix;
+#X text 672 35 part of iemmatrix;
 #X text 416 278 n < num_samples;
 #X text 76 224 IR data sequence is indexed by:;
 #X text 215 4 matrix convolver \, uniformly partitioned \, output cross-fading;
@@ -58,7 +59,7 @@
 #X obj 628 319 env~;
 #X floatatom 628 343 4 0 0 0 - - - 0;
 #X text 593 286 <ins> <outs>;
-#N canvas 654 171 534 300 convert2array3 0;
+#N canvas 290 226 534 300 convert2array3 0;
 #X obj 58 46 inlet;
 #X obj 58 72 list split 1;
 #X obj 98 171 list prepend array3;
@@ -539,3 +540,14 @@
 #X connect 17 0 10 0;
 #X connect 18 0 14 0;
 #X restore 61 371 pd mtx_convolver~-example3: cross-feed reverb;
+#N canvas 812 458 494 217 META 0;
+#X text 12 125 AUTHOR IOhannes m zmoelnig;
+#X text 12 25 LICENSE GPL-2+;
+#X obj 16 167 declare -lib iemmatrix;
+#X text 12 5 KEYWORDS signal matrix convolution;
+#X text 12 44 DESCRIPTION signal multiplication with a convolution matrix;
+#X text 12 65 INLET_0 array3;
+#X text 12 145 HELP_PATCH_AUTHORS Franz Zotter;
+#X text 12 105 OUTLET_0..m signal;
+#X text 12 85 INLET_1..n signal;
+#X restore 741 6 pd META;

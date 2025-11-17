@@ -4,18 +4,20 @@ static t_class *mtx_ei_tilde_class;
 
 typedef struct _mtx_ei_tilde {
   t_object x_obj;
-  int bs;
-  int sd;
-  int sg;
-  int se;
-  t_float *g;
-  t_float *sig_in_left;
-  t_float *sig_in_right;
+  t_outlet *message_outlet;
+
+  int bs; /* blocksize */
+  t_sample *sig_in_left, *sig_in_right; /* input/output signals */
+
+  int sd; /* size delay */
+  int sg; /* size gain */
+  int se; /* (2*sd-1)*(2*sg-1) */
+  t_float *g; /* gains (from args) */
+
   t_float *sl;
   t_float *sr;
-  t_float *ei;
-  t_atom *list_out;
-  t_outlet *message_outlet;
+  t_float *ei; /* output matrix */
+  t_atom *list_out; /* buffer for output matrix */
 } mtx_ei_tilde;
 
 void *newMtxEITilde(t_symbol *s, int argc, t_atom *argv)
@@ -44,8 +46,9 @@ void *newMtxEITilde(t_symbol *s, int argc, t_atom *argv)
   x->sd=sd;
   x->sg=sg;
 
+
   x->se=(2*sd-1)*(2*sg-1);
-  logpost(x, 4, "size delay %d, size gain %d",x->sd,x->sg);
+  logpost(x, PD_VERBOSE+1, "size delay %d, size gain %d",x->sd,x->sg);
 
   x->list_out = (t_atom*) getbytes ((x->se + 2) * sizeof(t_atom));
 
@@ -53,7 +56,6 @@ void *newMtxEITilde(t_symbol *s, int argc, t_atom *argv)
     x->g = (t_float*) getbytes (x->sg*sizeof(t_float));
     for (sg=0; sg<x->sg; sg++) {
       x->g[sg] = atom_getfloat (argv++);
-      logpost(x, 4, "g[%d]=%f",sg,x->g[sg]);
     }
   }
 
@@ -146,7 +148,7 @@ static t_int *mTxEITildePerform (t_int *arg)
   mtx_ei_tilde *x = (mtx_ei_tilde *) (arg[1]);
   int gi,zi,eii = 0;
   t_float scale=1.0f/x->bs;
-  SETFLOAT(x->list_out,(t_float)2*x->sg-1);
+  SETFLOAT(x->list_out+0,(t_float)2*x->sg-1);
   SETFLOAT(x->list_out+1,(t_float)2*x->sd-1);
 
   memcpy(x->sl, x->sl+x->bs, sizeof(t_float)*x->sd);

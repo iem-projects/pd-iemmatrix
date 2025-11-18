@@ -312,8 +312,6 @@ void iemmatrix_binop_setup(const char*classname, const char*helpname, iemmatrix_
   if(help)
     class_sethelpsymbol(cls, help);
 
-  //class_addlist(cls, (t_method)mtx_binop_list);
-
   scalarcls = class_new(s,
                         0, /* no constructor */
                         (t_method)mtx_binop_free,

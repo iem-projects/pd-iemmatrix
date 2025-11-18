@@ -122,7 +122,7 @@ void *mtx_unpack_new (t_symbol*s, int argc, t_atom*argv)
   setmultiout_f setmultiout = (CLASS_MULTICHANNEL)?iemmatrix_getpdfun("signal_setmultiout"):0;
   int want_multi = 0;
   int num_chan=(int)1;
-  mtx_unpack_tilde *x = 0;  
+  mtx_unpack_tilde *x = 0;
 
   /* args:
      - (none): single-signal, n=1
@@ -193,7 +193,7 @@ void *mtx_unpack_new (t_symbol*s, int argc, t_atom*argv)
   x->rows = num_chan;
   x->num_chan= ((want_multi && !x->x_setmultiout)?1:num_chan);
   x->num_ports = (want_multi?1:num_chan);
-  
+
   x->sig_out = (t_float**)getbytes(sizeof(t_float*)*x->num_chan);
 
   num_chan = x->num_ports;
@@ -251,7 +251,7 @@ static void mtx_unpack_dsp (mtx_unpack_tilde *x, t_signal **sp)
     /* create multichannel output */
     x->x_setmultiout(&sp[0], x->num_chan);
     for(chan=0; chan<x->num_chan; chan++) {
-	x->sig_out[chan] = sp[0]->s_vec + chan * x->block_size;
+        x->sig_out[chan] = sp[0]->s_vec + chan * x->block_size;
       }
 #else
     pd_error(x, "BUG: multichannel enabled but not compile-time multichannel support");

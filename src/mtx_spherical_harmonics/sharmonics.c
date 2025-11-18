@@ -86,28 +86,28 @@ static void sharmonics_multcheby12(SHWorkSpace *ws)
    p... vector containing Legendre functions evaluated at the vector z=cos(theta)
         structure [P_0^0(z1) P_1^0(z1) P_1^1(z1) P_2^0(z1) .... Pnmax^nmax(z1)
                    P_0^0(z2) P_1^0(z1) P_1^1(z2) P_2^0(z2) .... Pnmax^nmax(z2)
-		   ...
+                   ...
                    P_0^0(zL) P_1^0(zL) P_1^1(zL) P_2^0(zL) .... Pnmax^nmax(zL)]
         with length L X (nmax+1)*(nmax+2)/2
 
    t... vector containing Chebyshev polynomials sin/cos evaluated at the vector phi
         structure [T_-nmax(phi1) ... T_-1(phi1) T_0(phi1) T_1(phi1) ... T_nmax(phi1)
                    T_-nmax(phi2) ... T_-1(phi2) T_0(phi2) T_1(phi2) ... T_nmax(phi2)
-		   ...
+                   ...
                    T_-nmax(phiL) ... T_-1(phiL) T_0(phiL) T_1(phiL) ... T_nmax(phiL)]
         with length L X (2*nmax+1); negative indices are sine, positive ones
-	cosine terms
+        cosine terms
 
    normals ... vector containing normalization terms
         structure [N_0^0 N_1^0 N_1^1 N_2^0 N_2^1 N_2^2 .... N_nmax^nmax]
-	with length (nmax+1)*(nmax+2)/2
+        with length (nmax+1)*(nmax+2)/2
 
 
    y ... THE RESULT: containing the spherical harmonics, with negative m for sine
         positive m for cosine terms; p=(phi,theta)
         structure [Y_0^0(p1) Y_1^-1(p1) Y_1^0(p1) Y_1^1 ... Y_nmax^nmax(p1)
                    Y_0^0(p2) Y_1^-1(p2) Y_1^0(p2) Y_1^1 ... Y_nmax^nmax(p2)
-		   ...
+                   ...
                    Y_0^0(pL) Y_1^-1(pL) Y_1^0(pL) Y_1^1 ... Y_nmax^nmax(pL)]
         with length L X (nmax+1)^2
 
@@ -124,10 +124,10 @@ SHWorkSpace *sharmonics_alloc(size_t nmax, size_t l, SHNormType ntype)
        case N3D4PI:
        case SN3D:
           ctype=N2D2PI;
-	  break;
+          break;
        case N3D:
        default:
-	  ctype=N2D;
+          ctype=N2D;
     }
 
     ws->wl=(LegendreWorkSpace*)legendre_a_alloc(nmax,l);

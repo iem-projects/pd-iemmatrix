@@ -100,14 +100,14 @@ void IEMCONVOLVE(resetArray) (float *in, int len){
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void IEMCONVOLVE(reset2DArray) (float **in, int len1, int len2){
     for (int i=0; i<len1;i++){
-	IEMCONVOLVE(resetArray)(in[i],len2);
+        IEMCONVOLVE(resetArray)(in[i],len2);
     }
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void IEMCONVOLVE(reset3DArray) (float ***in, int len1, int len2, int len3){
     for (int i=0; i<len1;i++){
-	IEMCONVOLVE(reset2DArray)(in[i],len2,len3);
+        IEMCONVOLVE(reset2DArray)(in[i],len2,len3);
     }
 }
 /*-----------------------------------------------------------------------------------------------------------------------------*/
@@ -202,7 +202,7 @@ void IEMCONVOLVE(resetComplexArray) (fftwf_complex *in, int len){
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void IEMCONVOLVE(reset2DComplexArray) (fftwf_complex **in, int len1, int len2){
     for (int i=0; i<len1;i++){
-	  IEMCONVOLVE(resetComplexArray)(in[i],len2);
+          IEMCONVOLVE(resetComplexArray)(in[i],len2);
     }
 }
 
@@ -210,20 +210,20 @@ void IEMCONVOLVE(reset2DComplexArray) (fftwf_complex **in, int len1, int len2){
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void IEMCONVOLVE(reset3DComplexArray) (fftwf_complex ***in, int len1, int len2, int len3){
     for (int i=0; i<len1;i++){
-	  IEMCONVOLVE(reset2DComplexArray)(in[i],len2,len3);
+          IEMCONVOLVE(reset2DComplexArray)(in[i],len2,len3);
     }
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void IEMCONVOLVE(reset4DComplexArray) (fftwf_complex ****in, int len1, int len2, int len3, int len4){
     for (int i=0; i<len1;i++){
-	  IEMCONVOLVE(reset3DComplexArray)(in[i],len2,len3,len4);
+          IEMCONVOLVE(reset3DComplexArray)(in[i],len2,len3,len4);
     }
 }
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 void IEMCONVOLVE(reset5DComplexArray) (fftwf_complex *****in, int len1, int len2, int len3, int len4, int len5){
     for (int i=0; i<len1;i++){
-	  IEMCONVOLVE(reset4DComplexArray)(in[i],len2,len3,len4,len5);
+          IEMCONVOLVE(reset4DComplexArray)(in[i],len2,len3,len4,len5);
     }
 }
 

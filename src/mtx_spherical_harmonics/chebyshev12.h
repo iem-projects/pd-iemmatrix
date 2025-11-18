@@ -19,9 +19,9 @@
 #include <stdlib.h>
 
 typedef enum _CHNormType_ {
-	N2D,
-	N2D2PI,
-	SN2D,
+        N2D,
+        N2D2PI,
+        SN2D,
 } CHNormType;
 
 typedef struct _Cheby12WorkSpace_ {

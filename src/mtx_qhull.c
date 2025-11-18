@@ -107,12 +107,12 @@ static void mTXQhullMatrix(MTXQhull *xo, t_symbol *s,
       SETFLOAT(xo->list,(float)xo->hull_size);
       SETFLOAT(xo->list+1,(float)3);
       for (i=0; i<xo->hull_size; i++) {
-	SETFLOAT(xo->list+2+3*i, (float)getTriangleCorner(xo->zh,i,0)+1);
-	SETFLOAT(xo->list+3+3*i, (float)getTriangleCorner(xo->zh,i,1)+1);
-	SETFLOAT(xo->list+4+3*i, (float)getTriangleCorner(xo->zh,i,2)+1);
+        SETFLOAT(xo->list+2+3*i, (float)getTriangleCorner(xo->zh,i,0)+1);
+        SETFLOAT(xo->list+3+3*i, (float)getTriangleCorner(xo->zh,i,1)+1);
+        SETFLOAT(xo->list+4+3*i, (float)getTriangleCorner(xo->zh,i,2)+1);
       }
       outlet_anything(xo->outl, gensym("matrix"),
-		      xo->size, xo->list);
+                      xo->size, xo->list);
       freeZhull(xo->zh);
       free(xo->zh);
       xo->zh=0;

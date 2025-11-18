@@ -91,17 +91,17 @@ static void *newMTXSh (t_symbol *s, int argc, t_atom *argv)
   } else {
      if (argc>1) {
          nt=atom_getsymbol(argv+1);
-	 x->legacy_azi_reverse=0;
-	 if (nt==gensym("N3D")) {
-	    x->ntype=N3D;
-	 } else if (nt==gensym("N3D4PI")) {
-	    x->ntype=N3D4PI;
-	 } else if (nt==gensym("SN3D")) {
-	    x->ntype=SN3D;
-	 } else {
-	    x->legacy_azi_reverse=1;
-	    x->ntype=N3D;
-	 }
+         x->legacy_azi_reverse=0;
+         if (nt==gensym("N3D")) {
+            x->ntype=N3D;
+         } else if (nt==gensym("N3D4PI")) {
+            x->ntype=N3D4PI;
+         } else if (nt==gensym("SN3D")) {
+            x->ntype=SN3D;
+         } else {
+            x->legacy_azi_reverse=1;
+            x->ntype=N3D;
+         }
      }
      nmax=(int) atom_getfloat(argv);
      if (nmax<0) {
@@ -213,15 +213,15 @@ static void *newMTXCh (t_symbol *s, int argc, t_atom *argv)
   } else {
      if (argc>1) {
          nt=atom_getsymbol(argv+1);
-	 if (nt==gensym("N2D")) {
+         if (nt==gensym("N2D")) {
             x->ntype=N2D;
-	 } else if (nt==gensym("N2D2PI")) {
-	    x->ntype=N2D2PI;
-	 } else if (nt==gensym("SN2D")) {
-	    x->ntype=SN2D;
-	 } else {
-	    x->ntype=N2D;
-	 }
+         } else if (nt==gensym("N2D2PI")) {
+            x->ntype=N2D2PI;
+         } else if (nt==gensym("SN2D")) {
+            x->ntype=SN2D;
+         } else {
+            x->ntype=N2D;
+         }
      }
      nmax=(int) atom_getfloat(argv);
      if (nmax<0) {

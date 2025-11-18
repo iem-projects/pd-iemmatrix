@@ -5,7 +5,7 @@
 #ifdef HAVE_SNDFILE_H
 # include <sndfile.h>
 #else
-typedef	struct sf_private_tag	SNDFILE;
+typedef struct sf_private_tag   SNDFILE;
 typedef int64_t sf_count_t;
 typedef struct
 {    sf_count_t  frames ;     /* Used to be called samples. */

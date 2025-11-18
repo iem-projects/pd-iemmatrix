@@ -64,15 +64,15 @@ enum {
 
 typedef struct matrix_multilde {
   /* private weirdo stuff at the beginning */
-  t_object	x_obj;
+  t_object      x_obj;
   t_symbol      *x_name;
   t_proxy       *x_proxy;
   int           x_compat; /* 0=mtx_*~; 1=matrix_mul_line~; 2=matrix~ */
   setmultiout_f x_setmultiout; /* when doing multichannel, this is Pd>=0.54's signal_setmultiout(); otherwise NULL */
 
   /* DSP meta information */
-  t_sample	**x_io; /* input/output signals (for easier passing to perform()) */
-  t_float	x_msi; /* CLASS_MAINSIGNALIN() */
+  t_sample      **x_io; /* input/output signals (for easier passing to perform()) */
+  t_float       x_msi; /* CLASS_MAINSIGNALIN() */
   int           x_dsp; /* is the DSP running? */
 
    /* number of non-multichannels iolets.
@@ -86,18 +86,18 @@ typedef struct matrix_multilde {
    */
   size_t        x_rows, x_cols;
   t_float       *x_matcur; /* current matrix (being interpolated) */
-  t_float	*x_matend; /* interpolation target */
+  t_float       *x_matend; /* interpolation target */
 
   /* interpolation data */
-  t_float	x_time_ms; /* interpolation time (when new matrix comes through) */
-  int		x_remaining_ticks; /* how long do we still need to interpolate */
-  t_float	*x_inc, *x_biginc; /* matrices incrementation values */
-  int		x_retarget; /* bool: whether we need to start a new interpolation */
-  t_float	x_ms2tick; /* helper to translate time to ticks */
+  t_float       x_time_ms; /* interpolation time (when new matrix comes through) */
+  int           x_remaining_ticks; /* how long do we still need to interpolate */
+  t_float       *x_inc, *x_biginc; /* matrices incrementation values */
+  int           x_retarget; /* bool: whether we need to start a new interpolation */
+  t_float       x_ms2tick; /* helper to translate time to ticks */
 
   /* buffer for matrix multiplication */
-  t_sample	*x_outsumbuf; /* N samples for summing up */
-  size_t	x_outsumbufsize;
+  t_sample      *x_outsumbuf; /* N samples for summing up */
+  size_t        x_outsumbufsize;
 } t_matrix_multilde;
 
 static void proxy_dspstopped(t_proxy*p) {
@@ -105,8 +105,8 @@ static void proxy_dspstopped(t_proxy*p) {
 }
 
 static t_float*get_resized_matrix(const t_float*src,
-				  const unsigned int srcR, const unsigned int srcC,
-				  const unsigned int dstR, const unsigned int dstC) {
+                                  const unsigned int srcR, const unsigned int srcC,
+                                  const unsigned int dstR, const unsigned int dstC) {
   t_float*dst = (t_float*)getbytes(dstR*dstC*sizeof(*dst));
   unsigned int c, r, cols, rows;
   if(!dst)
@@ -121,8 +121,8 @@ static t_float*get_resized_matrix(const t_float*src,
   return dst;
 }
 static t_float*resize_and_free(t_float*src,
-			       const unsigned int srcR, const unsigned int srcC,
-			       const unsigned int dstR, const unsigned int dstC) {
+                               const unsigned int srcR, const unsigned int srcC,
+                               const unsigned int dstR, const unsigned int dstC) {
   t_float*dummy = get_resized_matrix(src, srcR, srcC, dstR, dstC);
   freebytes(src, srcR*srcC*sizeof(*src));
   return dummy;
@@ -186,20 +186,20 @@ static void matrix_multilde_matrix_set(t_matrix_multilde *x, int argc,
     /* matrix dimensions must match while DSP is running */
     if ((col != x->x_cols) || (row != x->x_rows)) {
       pd_error(x, "[%s]: matrix dimensions must not change (%dx%d != %dx%d) while DSP is running!!",
-	       x->x_name->s_name,
-	       row, col, (int)x->x_rows, (int)x->x_cols);
+               x->x_name->s_name,
+               row, col, (int)x->x_rows, (int)x->x_cols);
       return;
     }
   } else {
     /* DSP is not running, check if we have a fixed number of iolets */
     if(x->x_inports && x->x_inports != col) {
       pd_error(x, "[%s]: cannot change fixed number of input channels (%d) to %d",
-	       x->x_name->s_name, (int)x->x_inports, col);
+               x->x_name->s_name, (int)x->x_inports, col);
       return;
     }
     if(x->x_outports && x->x_outports != row) {
       pd_error(x, "[%s]: cannot change fixed number of output channels (%d) to %d",
-	       x->x_name->s_name, (int)x->x_outports, row);
+               x->x_name->s_name, (int)x->x_outports, row);
       return;
     }
 
@@ -855,7 +855,7 @@ static void matrix_multilde_dsp(t_matrix_multilde *x, t_signal **sp)
     if(x->x_outports) {
       /* create singlechannel outputs */
       for(i=0; i<ochannels; i++) {
-	x->x_setmultiout(&sp[compat_offset + inports + i], 1);
+        x->x_setmultiout(&sp[compat_offset + inports + i], 1);
       }
     } else {
       /* create multichannel output */
@@ -899,24 +899,24 @@ static void matrix_multilde_dsp(t_matrix_multilde *x, t_signal **sp)
     /* setup input channels */
     if(x->x_inports) {
       for(i=0; i<ichannels; i++) {
-	x->x_io[i] = sp[offset + i]->s_vec;
+        x->x_io[i] = sp[offset + i]->s_vec;
       }
       offset += ichannels;
     } else {
       for(i=0; i<ichannels; i++) {
-	x->x_io[i] = sp[offset]->s_vec + i * length;
+        x->x_io[i] = sp[offset]->s_vec + i * length;
       }
       offset += 1;
     }
     /* setup output channels */
     if(x->x_outports) {
       for(i=0; i<ochannels; i++) {
-	x->x_io[ichannels + i] = sp[offset + i]->s_vec;
+        x->x_io[ichannels + i] = sp[offset + i]->s_vec;
       }
       offset += ichannels;
     } else {
       for(i=0; i<ochannels; i++) {
-	x->x_io[ichannels + i] = sp[offset]->s_vec + i * length;
+        x->x_io[ichannels + i] = sp[offset]->s_vec + i * length;
       }
       offset += 1;
     }
@@ -1008,11 +1008,11 @@ static void *matrix_multilde_new(t_symbol *s, int argc, t_atom *argv)
   } else {
     if(argc && A_SYMBOL == argv->a_type) {
       if (atom_getsymbol(argv) == gensym("-m")) {
-	force_multi = want_multi = 1;
-	argc--;
-	argv++;
+        force_multi = want_multi = 1;
+        argc--;
+        argv++;
       } else {
-	goto usage;
+        goto usage;
       }
     }
   }
@@ -1208,27 +1208,27 @@ void mtx_mul_tilde_setup(void)
   if (CLASS_MULTICHANNEL && iemmatrix_getpdfun("signal_setmultiout")) {
     /* multichannel variant */
     matrix_multilde_mclass = class_new(gensym("mtx_mul~"),
-				      (t_newmethod)matrix_multilde_new,
-				      (t_method)matrix_multilde_free,
-				      sizeof(t_matrix_multilde),
-				      0 | CLASS_MULTICHANNEL,
-				      A_GIMME, 0);
+                                      (t_newmethod)matrix_multilde_new,
+                                      (t_method)matrix_multilde_free,
+                                      sizeof(t_matrix_multilde),
+                                      0 | CLASS_MULTICHANNEL,
+                                      A_GIMME, 0);
     /* non-multichannel variant */
     /* compatibility with jmz's zexy */
     matrix_multilde_class = class_new(gensym("matrix~"),
-					     (t_newmethod)matrix_multilde_new,
-					     (t_method)matrix_multilde_free,
-					     sizeof(t_matrix_multilde),
-					     0,
-					     A_GIMME, 0);
+                                             (t_newmethod)matrix_multilde_new,
+                                             (t_method)matrix_multilde_free,
+                                             sizeof(t_matrix_multilde),
+                                             0,
+                                             A_GIMME, 0);
     class_sethelpsymbol(matrix_multilde_class, gensym("mtx_mul~"));
   } else {
     matrix_multilde_class = class_new(gensym("mtx_mul~"),
-				      (t_newmethod)matrix_multilde_new,
-				      (t_method)matrix_multilde_free,
-				      sizeof(t_matrix_multilde),
-				      0,
-				      A_GIMME, 0);
+                                      (t_newmethod)matrix_multilde_new,
+                                      (t_method)matrix_multilde_free,
+                                      sizeof(t_matrix_multilde),
+                                      0,
+                                      A_GIMME, 0);
     class_addcreator((t_newmethod)matrix_multilde_new, gensym("matrix~"),
                      A_GIMME, 0);
     matrix_multilde_mclass = matrix_multilde_class;
@@ -1248,10 +1248,10 @@ void mtx_mul_tilde_setup(void)
     mtx_mul_addmethods(matrix_multilde_class);
 
   matrix_multilde_proxy = class_new(gensym("mtx_*~ proxy"),
-				    0, 0,
-				    sizeof(t_proxy),
-				    CLASS_PD,
-				    0);
+                                    0, 0,
+                                    sizeof(t_proxy),
+                                    CLASS_PD,
+                                    0);
   class_addbang(matrix_multilde_proxy, (t_method)proxy_dspstopped);
 }
 

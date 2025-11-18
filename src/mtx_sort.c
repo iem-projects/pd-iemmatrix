@@ -176,17 +176,17 @@ static void indexingVector (int n, int m, int dimension, t_float *i)
    i += n;
    switch (dimension) {
       case 2:
-	 n /= m;
-	 for (count = m; count--;) {
-	    ptr = --i;
-	    for (count2 = n; count2--; ptr -= m)
-	       *ptr = idx--;
-	 }
-	 break;
+         n /= m;
+         for (count = m; count--;) {
+            ptr = --i;
+            for (count2 = n; count2--; ptr -= m)
+               *ptr = idx--;
+         }
+         break;
       default:
       case 1:
-	 for (; idx;)
-	    *--i = idx--;
+         for (; idx;)
+            *--i = idx--;
    }
 }
 */

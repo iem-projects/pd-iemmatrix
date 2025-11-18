@@ -269,7 +269,7 @@ t_matrixfloat*mtx_doMultiply(int rowA, t_matrixfloat*A, int colArowB,
 
 
 /* for debugging purposes */
-#define MARK	startpost("MARK[%s:%d@%s]", __FILE__, __LINE__, __FUNCTION__), post
+#define MARK    startpost("MARK[%s:%d@%s]", __FILE__, __LINE__, __FUNCTION__), post
 
 
 

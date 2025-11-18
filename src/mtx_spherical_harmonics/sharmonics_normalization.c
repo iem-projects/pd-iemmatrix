@@ -29,28 +29,28 @@ SHNorml *sharmonics_normalization_new (const size_t nmax, const SHNormType type)
     } else {
       // computing N_n^m for m=0,
       switch(type) {
-       	 case N3D4PI:
-	 case SN3D:
-	     wn->n[0]=1.0;
-	     break;
-	 case N3D:
-	 default:
-	     wn->n[0]=oneoversqrt2;
+         case N3D4PI:
+         case SN3D:
+             wn->n[0]=1.0;
+             break;
+         case N3D:
+         default:
+             wn->n[0]=oneoversqrt2;
       }
       switch(type) {
-	  case N3D:
-	  case N3D4PI:
+          case N3D:
+          case N3D4PI:
              for (n=1,n0=1; n<=nmax; n++) {
-	        wn->n[n0]=wn->n[0] * sqrt(2*n+1);
-		n0+=n+1;
-	     }
-	     break;
-	  case SN3D:
-	  default:
+                wn->n[n0]=wn->n[0] * sqrt(2*n+1);
+                n0+=n+1;
+             }
+             break;
+          case SN3D:
+          default:
              for (n=1,n0=1; n<=nmax; n++) {
-	        wn->n[n0]=wn->n[0];
-		n0+=n+1;
-	     }
+                wn->n[n0]=wn->n[0];
+                n0+=n+1;
+             }
       }
       // computing N_n^m for 0<m<=n (incl. Condon-Shortley sign)
       for (n=1,n0=1; n<=nmax; n++) {

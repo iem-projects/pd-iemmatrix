@@ -95,9 +95,9 @@ static void *newMTXFind (t_symbol *s, int argc, t_atom *argv)
   /*
      switch ((argc>2)?2:argc) {
         case 2:
-  	 c_dir = atom_getint(argv+1);
+         c_dir = atom_getint(argv+1);
         case 1:
-  	 c_dim = atom_getint(argv);
+         c_dim = atom_getint(argv);
      }
      mTXSetFindDimension (mtx_find_obj, (t_float) c_dim);
      mTXSetFindDirection (mtx_find_obj, (t_float) c_dir);

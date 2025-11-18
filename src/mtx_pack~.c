@@ -158,8 +158,8 @@ void mtx_pack_tilde_setup (void)
   mtx_pack_tilde_class = class_new(gensym("mtx_pack~"),
                                    (t_newmethod)newMtxPackTilde, (t_method)deleteMtxPackTilde,
                                    sizeof(mtx_pack_tilde),
-				   flags,
-				   A_DEFFLOAT, 0);
+                                   flags,
+                                   A_DEFFLOAT, 0);
   class_addmethod (mtx_pack_tilde_class, (t_method) mTxPackTildeDsp,
                    gensym("dsp"), A_CANT, 0);
 

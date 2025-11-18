@@ -147,7 +147,6 @@ class.sources = \
 	src/mtx_div.c \
 	src/mtx_egg.c \
 	src/mtx_eig.c \
-	src/mtx_ei~.c \
 	src/mtx_element.c \
 	src/mtx_eq.c \
 	src/mtx_exp.c \

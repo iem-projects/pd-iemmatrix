@@ -24,8 +24,8 @@ for f in */*.pd; do
 done | LC_ALL=C sort > "${RUNTESTS_TXT}"
 
 run_nogui() {
- echo ${PD} ${PDARGS} ${IEMMATRIX} -nogui runtests_nogui.pd > "${RUNTESTS_LOG}" 2>&1
- ${PD} ${PDARGS} ${IEMMATRIX} -nogui runtests_nogui.pd >> "${RUNTESTS_LOG}" 2>&1
+ echo ${PD} ${PDARGS} ${IEMMATRIX} -batch -nogui runtests_nogui.pd > "${RUNTESTS_LOG}" 2>&1
+ ${PD} ${PDARGS} ${IEMMATRIX} -batch -nogui runtests_nogui.pd >> "${RUNTESTS_LOG}" 2>&1
  pdexit="$?"
  NUMTESTS=$(grep -c . "${RUNTESTS_TXT}")
  echo "regression-test: ${NUMTESTS} tests total" >>  "${RUNTESTS_LOG}"

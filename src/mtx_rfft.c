@@ -100,7 +100,7 @@ static void deleteMTXRfft (MTXRfft *x)
 static void *newMTXRfft (t_symbol *s, int argc, t_atom *argv)
 {
   MTXRfft *x = (MTXRfft *) pd_new (mtx_rfft_class);
-  (void)argc; (void)argv; /* unused */
+  (void)s; (void)argc; (void)argv; /* unused */
 
   x->list_re_out = outlet_new (&x->x_obj, gensym("matrix"));
   x->list_im_out = outlet_new (&x->x_obj, gensym("matrix"));

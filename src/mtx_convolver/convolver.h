@@ -41,8 +41,6 @@ University of Music and Performing Arts Graz
 
 #include <iemmatrix_fft.h>
 
-int IEMCONVOLVE(convolver_set_fftwf_functions) (void);
-
 #define NUM_CF 2 // there are 2 crossfase buffers (re-occurring array dimension)
 typedef struct Conv_data {
   unsigned int blocksize;          // signal block length (fft length = 2L)
@@ -65,11 +63,11 @@ typedef struct Conv_data {
   t_complex ***xf;   // L+1 positive-half DFT, partition input ring buffer
   t_complex *****hf; // L+1 positive-half DFT, partition stack of h
   t_complex *yftemp; // L+1 positive-half DFT output buffer
-  t_complex *xftemp; // L+1 FFTW buffer for previous+current block
-  t_complex *hftemp; // L+1 FFTW buffer for response partition
-  t_iemfft_plan fftplan_xtemp; // FFTW DFT plan for previous+current block
-  t_iemfft_plan fftplan_htemp; // FFTW DFT plan for impulse response
-  t_iemfft_plan ifftplan_y;    // FFTW iDFT plan for current output signal
+  t_complex *xftemp; // L+1 FFT buffer for previous+current block
+  t_complex *hftemp; // L+1 FFT buffer for response partition
+  t_iemfft_plan fftplan_xtemp; // FFT DFT plan for previous+current block
+  t_iemfft_plan fftplan_htemp; // FFT DFT plan for impulse response
+  t_iemfft_plan ifftplan_y;    // FFT iDFT plan for current output signal
   t_iemfft_plan ifftplan_y_cf;
 } conv_data;
 /* crossfade functions */

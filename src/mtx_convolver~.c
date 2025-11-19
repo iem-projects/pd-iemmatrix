@@ -62,9 +62,6 @@ static void _noppost(const void *object, int level, const char *fmt, ...) {
 
 typedef void (*setmultiout_f)(t_signal **sig, int nchans);
 
-static int warn_fftwf = 1;
-
-
 static t_class *mtx_convolver_tilde_class;
 static t_class *mtx_convolver_tilde_mclass;
 
@@ -406,15 +403,6 @@ void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
 
   x = (t_mtx_convolver_tilde *)pd_new(selected_class);
   x->x_objname = s;
-  if(warn_fftwf) {
-#if HAVE_FFTW
-    pd_error(x, "[%s] couldn't find (recent enough) FFTWF. object not operational!", s->s_name);
-#else
-    pd_error(x, "[%s] compiled without FFTWF. object not operational!", s->s_name);
-#endif
-    warn_fftwf = 0;
-  }
-
 
   x->x_setmultiout = (mtx_convolver_tilde_class == selected_class)?0:setmultiout;
   if (!x->x_setmultiout) {
@@ -486,10 +474,6 @@ void mtx_convolver_tilde_setup(void) {
                   gensym("read"), A_SYMBOL, 0);
   class_addmethod(mtx_convolver_tilde_class, (t_method)mtx_convolver_tilde_read,
                   gensym("read"), A_SYMBOL, 0);
-
-#ifdef HAVE_FFTWF
-  warn_fftwf = !(IEMCONVOLVE(convolver_set_fftwf_functions) ());
-#endif
 }
 void iemtx_convolver__setup(void)
 {

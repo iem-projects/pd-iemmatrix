@@ -49,11 +49,6 @@ University of Music and Performing Arts Graz
 
 #include "m_pd.h"
 
-int IEMCONVOLVE(convolver_set_fftwf_functions) () {
-  return 1;
-}
-
-
 
 /* crossfade functions */
 /*-----------------------------------------------------------------------------------------------------------------------------*/

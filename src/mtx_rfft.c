@@ -27,7 +27,7 @@ struct _MTXRfft_ {
 
   int columns, rows;
 
-  t_iemfft_plan*plan;
+  t_iemfft_plan plan;
   t_float *f_in;
   t_complex *c_out;
 
@@ -42,10 +42,7 @@ struct _MTXRfft_ {
 static void deleteMTXRfft (MTXRfft *x)
 {
   if(x->plan) {
-    for (int n=0; n<x->rows; n++) {
-      iemfft_destroy_plan(x->plan[n]);
-    }
-    free(x->plan);
+      iemfft_destroy_plan(x->plan);
   }
   if (x->f_in)   free(x->f_in);
   if (x->c_out)  free(x->c_out);
@@ -124,18 +121,16 @@ static void mTXRfftMatrix (MTXRfft *x, t_symbol *s,
   /* memory things */
   if ((x->rows != rows)||(x->columns != columns)) {
     /* size changed, so re-allocate */
-    x->f_in = f_in  = (t_float*  )realloc(f_in , sizeof(*f_in ) * size);
-    x->c_out= c_out = (t_complex*)realloc(c_out, sizeof(*c_out) * (list_size-2));
+    x->f_in = f_in  = (t_float*  )realloc(f_in , sizeof(*f_in ) * columns);
+    x->c_out= c_out = (t_complex*)realloc(c_out, sizeof(*c_out) * columns_re);
 
-    for (int r=0; r<x->rows; r++) {
-      iemfft_destroy_plan(x->plan[r]);
-    }
+    if(x->plan)
+      iemfft_destroy_plan(x->plan);
+
     x->rows = rows;
     x->columns = columns;
-    x->plan = (t_iemfft_plan*)realloc(x->plan, sizeof(*x->plan)*x->rows);
-    for (int r=0; r<x->rows; r++) {
-      x->plan[r] = iemfft_plan_rfft_1d(columns, f_in + columns*r, c_out + columns_re*r, PREFER_DOUBLE);
-    }
+
+    x->plan = iemfft_plan_rfft_1d(columns, f_in, c_out, PREFER_DOUBLE);
   }
 
   list_re=(t_atom*)realloc(list_re, sizeof(t_atom)*list_size);
@@ -145,12 +140,11 @@ static void mTXRfftMatrix (MTXRfft *x, t_symbol *s,
   x->list_im = list_im;
   x->list_re = list_re;
 
-  iemmatrix_list2floats(f_in, argv, size);
-
   for(int r=0; r<rows; r++) {
     int offset = columns_re * r;
-    iemfft_execute(x->plan[r]);
-    complex2list(columns_re, c_out + offset, list_re + offset + 2, list_im + offset + 2);
+    iemmatrix_list2floats(f_in, argv+r*columns, columns);
+    iemfft_execute(x->plan);
+    complex2list(columns_re, c_out, list_re + offset + 2, list_im + offset + 2);
   }
 
   SETSYMBOL(list_re, gensym("matrix"));

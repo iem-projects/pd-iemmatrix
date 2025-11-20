@@ -1,6 +1,6 @@
 ---
 title: mtx_abs
-description: alculate absolute values of matrix elements
+description: calculate absolute values of matrix elements
 categories:
 - object
 pdcategory: Simple Math

@@ -17,7 +17,7 @@ inlets:
   1st:
   - type: matrix
     description: left-hand operand
-  2ad:
+  2nd:
   - type: matrix
     description: right-hand operand
   - type: float

@@ -12,5 +12,8 @@ pages:
   artifacts:
     paths:
       - public
-  only:
-    - ${CI_DEFAULT_BRANCH}
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - changes:
+        - .hugo/**/*
+        - documentation/**/*

@@ -69,13 +69,13 @@
 #N canvas 468 154 486 187 META 0;
 #X text 12 135 HELP_PATCH_AUTHORS IOhannes m zmölnig;
 #X text 12 25 LICENSE GPL-2+;
-#X text 12 116 AUTHOR Franz Zotter;
 #X text 11 4 KEYWORDS signal matrix;
 #X text 11 43 DESCRIPTION multiply signals with a matrix;
 #X text 12 65 INLET_0 matrix;
 #X text 12 82 INLET_n signal;
 #X text 12 97 OUTLET_m signal;
 #X obj 13 160 declare -lib iemmatrix;
+#X text 12 116 AUTHOR IOhannes m zmölnig;
 #X restore 731 586 pd META;
 #N canvas 112 13 1011 803 multichannel 0;
 #X text 39 17 With recent versions of Pd (>=0.54) \, you can use multichannel connections.;

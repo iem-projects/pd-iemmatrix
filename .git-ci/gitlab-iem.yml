@@ -1,3 +1,15 @@
 ---
 include:
   - https://git.iem.at/pd/iem-ci/raw/main/pd-lib-builder/gitlab-iem.yml
+
+pages:
+  image: registry.gitlab.com/pages/hugo:latest
+  script:
+    - cd .hugo
+    - hugo
+    - mv public ..
+  artifacts:
+    paths:
+      - public
+  only:
+    - ${CI_DEFAULT_BRANCH}

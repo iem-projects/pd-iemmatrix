@@ -286,11 +286,11 @@ datafiles += \
 
 datafiles += \
 	$(wildcard abs/*.pd) \
-	$(wildcard doc/*.pd) \
+	$(wildcard help/*.pd) \
 	$(empty)
 datafiles += \
-	$(wildcard doc/*.arr3) \
-	$(wildcard doc/*.mtx) \
+	$(wildcard help/*.arr3) \
+	$(wildcard help/*.mtx) \
 	$(empty)
 
 in.files = $(wildcard *.in)

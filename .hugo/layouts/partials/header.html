@@ -1,5 +1,5 @@
 <span><a href="{{ .Site.BaseURL }}">home</a> | <a href="../">up </a></span>
-<span style="margin: auto 10px"><a href="{{ .Site.BaseURL }}/objects/">objects</a></span>
+<span style="margin: auto 10px"><a href="{{ absURL "objects" }}">objects</a></span>
 <span style="float:right;"> <button class="btn-toggle-theme">&#9680;</button> </span> <span style="float:right;"> {{ partial "search-form.html" . }} </span>
 <hr style="margin: 1px 0px;">
 <p style="margin: 0px;">

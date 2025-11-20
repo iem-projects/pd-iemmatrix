@@ -1,0 +1,15 @@
+{{- $ok := 0 -}}
+{{- $pdobj := .Get 0 -}}
+{{- range $.Site.Pages -}}
+{{- $aa := index (.Page.Params.aliases) 0 -}}
+{{- if eq $pdobj .Title -}}
+{{- $ok = 1 -}}
+<a href="{{ .Permalink }}" class="pdobj">{{ .Title }}</a>
+{{- else if eq $pdobj $aa -}}
+{{- $ok = 1 -}}
+<a href="{{ .Permalink }}" class="pdobj">{{ .Title }}</a>
+{{- end -}}
+{{- end -}}
+{{- if eq $ok 0 -}}
+<span class="pdobj">{{ $pdobj }}</span>
+{{- end -}}

@@ -1,0 +1,14 @@
+baseURL = '/'
+languageCode = 'en-us'
+title = 'Pure Data'
+
+disableKinds = ["taxonomy", "taxonomyTerm"]
+
+relativeURLs = 'true'
+
+[module]
+  [[module.mounts]]
+    disableWatch = false
+    lang = ''
+    source = '../documentation'
+    target = 'content'

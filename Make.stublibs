@@ -19,7 +19,7 @@ endif
 
 c.flags += -DSHARED_LIBRARY_EXTENSION='"$(shared.fullextension)"'
 
-lib$(lib.name)Stub_%.$(shared.fullextension): stub/%.$(object.extension)
+lib$(lib.name)Stub_%.$(shared.fullextension): src/stub/%.$(object.extension)
 	$(info ++++ info: linking stub library $@: $<, $(c.ldlibs), $(shared.ldlibs), $(stub.ldlibs))
 	$(compile-c) $(shared.ldflags) -o $@ $< $(c.ldlibs) $(shared.ldlibs) $(stub.ldlibs)
 
@@ -33,14 +33,14 @@ lib$(lib.name)Stub_%.$(shared.fullextension): stub/%.$(object.extension)
 # - Linux/.Linux-amd64.32.so
 # however NOT for
 # - Linux/.pd_linux.so
-lib$(lib.name)Stub_fftw.$(extension).$(shared.extension): stub/fftw.$(object.extension)
-lib$(lib.name)Stub_fftwf.$(extension).$(shared.extension): stub/fftwf.$(object.extension)
-lib$(lib.name)Stub_gsl.$(extension).$(shared.extension): stub/gsl.$(object.extension)
-lib$(lib.name)Stub_sndfile.$(extension).$(shared.extension): stub/sndfile.$(object.extension)
-lib$(lib.name)Stub_fftw.$(extension): stub/fftw.$(object.extension)
-lib$(lib.name)Stub_fftwf.$(extension): stub/fftwf.$(object.extension)
-lib$(lib.name)Stub_gsl.$(extension): stub/gsl.$(object.extension)
-lib$(lib.name)Stub_sndfile.$(extension): stub/sndfile.$(object.extension)
+lib$(lib.name)Stub_fftw.$(extension).$(shared.extension): src/stub/fftw.$(object.extension)
+lib$(lib.name)Stub_fftwf.$(extension).$(shared.extension): src/stub/fftwf.$(object.extension)
+lib$(lib.name)Stub_gsl.$(extension).$(shared.extension): src/stub/gsl.$(object.extension)
+lib$(lib.name)Stub_sndfile.$(extension).$(shared.extension): src/stub/sndfile.$(object.extension)
+lib$(lib.name)Stub_fftw.$(extension): src/stub/fftw.$(object.extension)
+lib$(lib.name)Stub_fftwf.$(extension): src/stub/fftwf.$(object.extension)
+lib$(lib.name)Stub_gsl.$(extension): src/stub/gsl.$(object.extension)
+lib$(lib.name)Stub_sndfile.$(extension): src/stub/sndfile.$(object.extension)
 
 
 lib$(lib.name)Stub_fftw.$(shared.fullextension): stub.ldlibs = $(FFTW_LIBS)
@@ -73,4 +73,4 @@ clean: clean.stublibs
 clean.stublibs:
 	rm -f $(stub.libs)
 	rm -f $(stub.libs:%.$(shared.fullextension)=%.$(object.extension))
-	rm -f $(stub.libs:lib$(lib.name)Stub_%.$(shared.fullextension)=stub/%.$(object.extension))
+	rm -f $(stub.libs:lib$(lib.name)Stub_%.$(shared.fullextension)=src/stub/%.$(object.extension))

@@ -8,6 +8,7 @@ aliases:
 - mtx_add
 see_also:
 - matrix
+- mtx_+
 - mtx_-
 - mtx_.*
 - mtx_./

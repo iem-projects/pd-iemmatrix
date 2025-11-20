@@ -3,7 +3,7 @@ title: mtx_diag
 description: create a diagonal matrix
 categories:
 - object
-pdcategory: Generic
+pdcategory: General
 see_also:
 inlets:
   1st:

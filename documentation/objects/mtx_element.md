@@ -3,7 +3,7 @@ title: mtx_element
 description: set elements of a matrix
 categories:
 - object
-pdcategory: Generic
+pdcategory: General
 see_also:
 inlets:
   1st:

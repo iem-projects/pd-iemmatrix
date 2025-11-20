@@ -3,7 +3,7 @@ title: matrix
 description: store/create/manipulate a 2d matrix
 categories:
 - object
-pdcategory: Generic
+pdcategory: General
 aliases:
 - mtx
 see_also:

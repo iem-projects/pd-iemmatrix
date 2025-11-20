@@ -3,7 +3,7 @@ title: mtx_diegg
 description: create a turned diagonal matrix
 categories:
 - object
-pdcategory: Generic
+pdcategory: General
 see_also:
 inlets:
   1st:

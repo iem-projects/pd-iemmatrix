@@ -3,7 +3,7 @@ title: mtx_eye
 description: create an identity matrix
 categories:
 - object
-pdcategory: Generic
+pdcategory: General
 see_also:
 inlets:
   1st:

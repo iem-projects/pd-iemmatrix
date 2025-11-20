@@ -3,7 +3,7 @@ title: mtx_egg
 description: create an exchange matrix
 categories:
 - object
-pdcategory: Generic
+pdcategory: General
 see_also:
 inlets:
   1st:

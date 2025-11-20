@@ -3,7 +3,7 @@ title: matrix~
 description: matrix multiplication of signals (with interpolation)
 categories:
 - object
-pdcategory: Generic
+pdcategory: Obsolete
 see_also:
 inlets:
   0..R-1:

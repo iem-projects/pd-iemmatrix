@@ -458,6 +458,7 @@ void mtx_convolver_tilde_setup(void) {
     gensym("mtx_convolver~ -m"), (t_newmethod)mtx_convolver_tilde_new,
     (t_method)mtx_convolver_tilde_free, sizeof(t_mtx_convolver_tilde),
     CLASS_MULTICHANNEL, A_GIMME, 0);
+  class_sethelpsymbol(mtx_convolver_tilde_mclass, gensym("mtx_convolver~"));
 
   class_addmethod(mtx_convolver_tilde_class, (t_method)mtx_convolver_tilde_dsp,
                   gensym("dsp"), A_CANT, 0);

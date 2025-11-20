@@ -1,23 +1,22 @@
 ---
-title: mtx_-
-description: matrix subtraction
+title: mtx_./
+description: element-wise matrix division
 categories:
 - object
 pdcategory: Simple Math
 aliases:
-- mtx_sub
+- mtx_mul
 see_also:
 - matrix
 - mtx_+
+- mtx_-
 - mtx_.*
-- mtx_./
 - mtx_.^
-- mtx_*
 inlets:
   1st:
   - type: matrix
     description: left-hand operand
-  2ad:
+  2nd:
   - type: matrix
     description: right-hand operand
   - type: float
@@ -29,6 +28,7 @@ outlets:
 ---
 
 
-$$C_{m,n} = A_{m,n} - B_{m,n} \quad \equiv \quad c_{i,j} = a_{i,j} - b_{i,j} $$
 
-$$C_{m,n} = A_{m,n} - b \quad \equiv \quad c_{i,j} = a_{i,j} - b $$
+$$C_{m,n} = A_{m,n} \oslash B_{m,n} \quad \equiv \quad c_{i,j} = a_{i,j} / b_{i,j} $$
+
+$$C_{m,n} = A_{m,n} \oslash b \quad \equiv \quad c_{i,j} = a_{i,j} / b $$

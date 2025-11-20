@@ -1,3 +1,4 @@
 .git*      	export-ignore
 .travis.yml	export-ignore
 .pre-commit-config.yaml	export-ignore
+/.hugo/		export-ignore

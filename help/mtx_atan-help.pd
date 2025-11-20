@@ -3,7 +3,7 @@
 #X obj 595 73 matrix;
 #X text 465 72 see also help for;
 #X obj 48 100 mtx 3 3;
-#X obj 48 192 mtx_print abs;
+#X obj 48 192 mtx_print atan;
 #X obj 48 131 t a a;
 #X obj 91 132 mtx_print org;
 #X msg 48 80 0 1 -2 -3 -4 5 -6 7 8;

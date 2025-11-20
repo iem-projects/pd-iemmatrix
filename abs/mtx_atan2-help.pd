@@ -1,6 +1,6 @@
 #N canvas 426 117 622 300 10;
 #X declare -lib iemmatrix;
-#X obj 164 270 mtx_print;
+#X obj 164 270 mtx_print atan2;
 #X text 368 248 Franz Zotter 2007;
 #X text 133 15 arcus tangent with range from -pi...+pi;
 #X obj 164 108 t a a;

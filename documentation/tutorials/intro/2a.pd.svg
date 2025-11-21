@@ -10,6 +10,19 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
+   <style>
+        polyline { fill: none; stroke: #000000; }
+        rect { fill: #000000;  stroke: #000000; }
+        text { fill: #000000; }
+        polyline.dark-theme { fill: none; stroke: #000000; }
+        rect.dark-theme { fill: #000000;  stroke: #000000; }
+        text.dark-theme { fill: #000000; }
+        @media (prefers-color-scheme: dark) {
+            polyline { fill: none; stroke: #ffffff; }
+            rect { fill: #ffffff;  stroke: #ffffff; }
+            text { fill: #ffffff; }
+        }
+    </style>
   <defs
      id="defs1" />
   <sodipodi:namedview
@@ -33,7 +46,7 @@
   <polyline
      points="159.0 42.0 226.0 42.0 226.0 62.0 159.0 62.0 159.0 42.0"
      id="PD.x563dcc6ab630.t563dcc788420R__obj"
-     style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
+     style="stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
      transform="translate(-62.5,-41.5)" />
   <rect
      x="96.5"
@@ -41,26 +54,26 @@
      width="7"
      height="2"
      id="PD.x563dcc6ab630.t563dcc788420o0__outlet"
-     style="fill:#000000;stroke:#000000;stroke-width:1" />
+     style="stroke-width:1" />
   <rect
      x="96.5"
      y="0.5"
      width="7"
      height="2"
      id="PD.x563dcc6ab630.t563dcc788420i0__inlet"
-     style="fill:#000000;stroke:#000000;stroke-width:1" />
+     style="stroke-width:1" />
   <text
      x="161"
      y="57"
      id="PD.x563dcc6ab630.t563dcc788420__text"
-     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';fill:#000000;stroke-width:0"
+     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';stroke-width:0"
      textLength="63"
      lengthAdjust="spacing"
      transform="translate(-62.5,-41.5)">mtx_zeros</text>
   <polyline
      points="63.0 132.0 123.0 132.0 123.0 152.0 63.0 152.0 63.0 132.0"
      id="PD.x563dcc6ab630.t563dcc7845f0R__obj"
-     style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
+     style="stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
      transform="translate(-62.5,-41.5)" />
   <rect
      x="0.5"
@@ -68,26 +81,26 @@
      width="7"
      height="2"
      id="PD.x563dcc6ab630.t563dcc7845f0o0__outlet"
-     style="fill:#000000;stroke:#000000;stroke-width:1" />
+     style="stroke-width:1" />
   <rect
      x="0.5"
      y="90.5"
      width="7"
      height="2"
      id="PD.x563dcc6ab630.t563dcc7845f0i0__inlet"
-     style="fill:#000000;stroke:#000000;stroke-width:1" />
+     style="stroke-width:1" />
   <text
      x="65"
      y="147"
      id="PD.x563dcc6ab630.t563dcc7845f0__text"
-     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';fill:#000000;stroke-width:0"
+     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';stroke-width:0"
      textLength="56"
      lengthAdjust="spacing"
      transform="translate(-62.5,-41.5)">mtx_rand</text>
   <polyline
      points="63.0 102.0 123.0 102.0 123.0 122.0 63.0 122.0 63.0 102.0"
      id="PD.x563dcc6ab630.t563dcc7844e0R__obj"
-     style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
+     style="stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
      transform="translate(-62.5,-41.5)" />
   <rect
      x="0.5"
@@ -95,26 +108,26 @@
      width="7"
      height="2"
      id="PD.x563dcc6ab630.t563dcc7844e0o0__outlet"
-     style="fill:#000000;stroke:#000000;stroke-width:1" />
+     style="stroke-width:1" />
   <rect
      x="0.5"
      y="60.5"
      width="7"
      height="2"
      id="PD.x563dcc6ab630.t563dcc7844e0i0__inlet"
-     style="fill:#000000;stroke:#000000;stroke-width:1" />
+     style="stroke-width:1" />
   <text
      x="65"
      y="117"
      id="PD.x563dcc6ab630.t563dcc7844e0__text"
-     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';fill:#000000;stroke-width:0"
+     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';stroke-width:0"
      textLength="56"
      lengthAdjust="spacing"
      transform="translate(-62.5,-41.5)">mtx_diag</text>
   <polyline
      points="159.0 102.0 226.0 102.0 226.0 122.0 159.0 122.0 159.0 102.0"
      id="PD.x563dcc6ab630.t563dcc7843d0R__obj"
-     style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
+     style="stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
      transform="translate(-62.5,-41.5)" />
   <rect
      x="96.5"
@@ -122,26 +135,26 @@
      width="7"
      height="2"
      id="PD.x563dcc6ab630.t563dcc7843d0o0__outlet"
-     style="fill:#000000;stroke:#000000;stroke-width:1" />
+     style="stroke-width:1" />
   <rect
      x="96.5"
      y="60.5"
      width="7"
      height="2"
      id="PD.x563dcc6ab630.t563dcc7843d0i0__inlet"
-     style="fill:#000000;stroke:#000000;stroke-width:1" />
+     style="stroke-width:1" />
   <text
      x="161"
      y="117"
      id="PD.x563dcc6ab630.t563dcc7843d0__text"
-     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';fill:#000000;stroke-width:0"
+     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';stroke-width:0"
      textLength="63"
      lengthAdjust="spacing"
      transform="translate(-62.5,-41.5)">mtx_diegg</text>
   <polyline
      points="63.0 42.0 123.0 42.0 123.0 62.0 63.0 62.0 63.0 42.0"
      id="PD.x563dcc6ab630.t563dcc7842c0R__obj"
-     style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
+     style="stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
      transform="translate(-62.5,-41.5)" />
   <rect
      x="0.5"
@@ -149,26 +162,26 @@
      width="7"
      height="2"
      id="PD.x563dcc6ab630.t563dcc7842c0o0__outlet"
-     style="fill:#000000;stroke:#000000;stroke-width:1" />
+     style="stroke-width:1" />
   <rect
      x="0.5"
      y="0.5"
      width="7"
      height="2"
      id="PD.x563dcc6ab630.t563dcc7842c0i0__inlet"
-     style="fill:#000000;stroke:#000000;stroke-width:1" />
+     style="stroke-width:1" />
   <text
      x="65"
      y="57"
      id="PD.x563dcc6ab630.t563dcc7842c0__text"
-     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';fill:#000000;stroke-width:0"
+     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';stroke-width:0"
      textLength="56"
      lengthAdjust="spacing"
      transform="translate(-62.5,-41.5)">mtx_ones</text>
   <polyline
      points="63.0 72.0 116.0 72.0 116.0 92.0 63.0 92.0 63.0 72.0"
      id="PD.x563dcc6ab630.t563dcc7841b0R__obj"
-     style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
+     style="stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
      transform="translate(-62.5,-41.5)" />
   <rect
      x="0.5"
@@ -176,26 +189,26 @@
      width="7"
      height="2"
      id="PD.x563dcc6ab630.t563dcc7841b0o0__outlet"
-     style="fill:#000000;stroke:#000000;stroke-width:1" />
+     style="stroke-width:1" />
   <rect
      x="0.5"
      y="30.5"
      width="7"
      height="2"
      id="PD.x563dcc6ab630.t563dcc7841b0i0__inlet"
-     style="fill:#000000;stroke:#000000;stroke-width:1" />
+     style="stroke-width:1" />
   <text
      x="65"
      y="87"
      id="PD.x563dcc6ab630.t563dcc7841b0__text"
-     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';fill:#000000;stroke-width:0"
+     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';stroke-width:0"
      textLength="49"
      lengthAdjust="spacing"
      transform="translate(-62.5,-41.5)">mtx_eye</text>
   <polyline
      points="159.0 72.0 212.0 72.0 212.0 92.0 159.0 92.0 159.0 72.0"
      id="PD.x563dcc6ab630.t563dcc783fd0R__obj"
-     style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
+     style="stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
      transform="translate(-62.5,-41.5)" />
   <rect
      x="96.5"
@@ -203,19 +216,19 @@
      width="7"
      height="2"
      id="PD.x563dcc6ab630.t563dcc783fd0o0__outlet"
-     style="fill:#000000;stroke:#000000;stroke-width:1" />
+     style="stroke-width:1" />
   <rect
      x="96.5"
      y="30.5"
      width="7"
      height="2"
      id="PD.x563dcc6ab630.t563dcc783fd0i0__inlet"
-     style="fill:#000000;stroke:#000000;stroke-width:1" />
+     style="stroke-width:1" />
   <text
      x="161"
      y="87"
      id="PD.x563dcc6ab630.t563dcc783fd0__text"
-     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';fill:#000000;stroke-width:0"
+     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';stroke-width:0"
      textLength="49"
      lengthAdjust="spacing"
      transform="translate(-62.5,-41.5)">mtx_egg</text>

@@ -1,0 +1,604 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="480"
+   height="51"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="3a.pd.svg"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.87755446"
+     inkscape:cx="83.185721"
+     inkscape:cy="-95.720556"
+     inkscape:window-width="1920"
+     inkscape:window-height="1051"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1" />
+  <polyline
+     points="10.0 17.0 49.0 17.0 49.0 37.0 10.0 37.0 10.0 17.0"
+     id="PD.x563dcc797830.t563dcc797540R__obj"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
+     transform="translate(-9.5,-16.5)" />
+  <rect
+     x="0.5"
+     y="18.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc797540o0__outlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="0.5"
+     y="0.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc797540i0__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="32.5"
+     y="0.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc797540i1__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     x="12"
+     y="32"
+     id="PD.x563dcc797830.t563dcc797540__text"
+     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';fill:#000000;stroke-width:0"
+     textLength="35"
+     lengthAdjust="spacing"
+     transform="translate(-9.5,-16.5)">mtx_+</text>
+  <polyline
+     points="60.0 17.0 99.0 17.0 99.0 37.0 60.0 37.0 60.0 17.0"
+     id="PD.x563dcc797830.t563dcc790ce0R__obj"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
+     transform="translate(-9.5,-16.5)" />
+  <rect
+     x="50.5"
+     y="18.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc790ce0o0__outlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="50.5"
+     y="0.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc790ce0i0__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="82.5"
+     y="0.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc790ce0i1__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     x="62"
+     y="32"
+     id="PD.x563dcc797830.t563dcc790ce0__text"
+     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';fill:#000000;stroke-width:0"
+     textLength="35"
+     lengthAdjust="spacing"
+     transform="translate(-9.5,-16.5)">mtx_-</text>
+  <polyline
+     points="290.0 17.0 329.0 17.0 329.0 37.0 290.0 37.0 290.0 17.0"
+     id="PD.x563dcc797830.t563dcc789050R__obj"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
+     transform="translate(-9.5,-16.5)" />
+  <rect
+     x="280.5"
+     y="18.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc789050o0__outlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="280.5"
+     y="0.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc789050i0__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="312.5"
+     y="0.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc789050i1__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     x="292"
+     y="32"
+     id="PD.x563dcc797830.t563dcc789050__text"
+     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';fill:#000000;stroke-width:0"
+     textLength="35"
+     lengthAdjust="spacing"
+     transform="translate(-9.5,-16.5)">mtx_*</text>
+  <polyline
+     points="160.0 17.0 206.0 17.0 206.0 37.0 160.0 37.0 160.0 17.0"
+     id="PD.x563dcc797830.t563dcc788f00R__obj"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
+     transform="translate(-9.5,-16.5)" />
+  <rect
+     x="150.5"
+     y="18.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc788f00o0__outlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="150.5"
+     y="0.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc788f00i0__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="189.5"
+     y="0.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc788f00i1__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     x="162"
+     y="32"
+     id="PD.x563dcc797830.t563dcc788f00__text"
+     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';fill:#000000;stroke-width:0"
+     textLength="42"
+     lengthAdjust="spacing"
+     transform="translate(-9.5,-16.5)">mtx_./</text>
+  <polyline
+     points="110.0 17.0 156.0 17.0 156.0 37.0 110.0 37.0 110.0 17.0"
+     id="PD.x563dcc797830.t563dcc788df0R__obj"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
+     transform="translate(-9.5,-16.5)" />
+  <rect
+     x="100.5"
+     y="18.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc788df0o0__outlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="100.5"
+     y="0.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc788df0i0__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="139.5"
+     y="0.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc788df0i1__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     x="112"
+     y="32"
+     id="PD.x563dcc797830.t563dcc788df0__text"
+     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';fill:#000000;stroke-width:0"
+     textLength="42"
+     lengthAdjust="spacing"
+     transform="translate(-9.5,-16.5)">mtx_.*</text>
+  <polyline
+     points="210.0 17.0 256.0 17.0 256.0 37.0 210.0 37.0 210.0 17.0"
+     id="PD.x563dcc797830.t563dcc788ce0R__obj"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
+     transform="translate(-9.5,-16.5)" />
+  <rect
+     x="200.5"
+     y="18.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc788ce0o0__outlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="200.5"
+     y="0.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc788ce0i0__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="239.5"
+     y="0.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc788ce0i1__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     x="212"
+     y="32"
+     id="PD.x563dcc797830.t563dcc788ce0__text"
+     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';fill:#000000;stroke-width:0"
+     textLength="42"
+     lengthAdjust="spacing"
+     transform="translate(-9.5,-16.5)">mtx_.^</text>
+  <polyline
+     points="10.0 47.0 49.0 47.0 49.0 67.0 10.0 67.0 10.0 47.0"
+     id="PD.x563dcc797830.t563dcc788bd0R__obj"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
+     transform="translate(-9.5,-16.5)" />
+  <rect
+     x="0.5"
+     y="48.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc788bd0o0__outlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="0.5"
+     y="30.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc788bd0i0__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="32.5"
+     y="30.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc788bd0i1__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     x="12"
+     y="62"
+     id="PD.x563dcc797830.t563dcc788bd0__text"
+     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';fill:#000000;stroke-width:0"
+     textLength="35"
+     lengthAdjust="spacing"
+     transform="translate(-9.5,-16.5)">mtx_&lt;</text>
+  <polyline
+     points="60.0 47.0 99.0 47.0 99.0 67.0 60.0 67.0 60.0 47.0"
+     id="PD.x563dcc797830.t563dcc705ea0R__obj"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
+     transform="translate(-9.5,-16.5)" />
+  <rect
+     x="50.5"
+     y="48.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc705ea0o0__outlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="50.5"
+     y="30.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc705ea0i0__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="82.5"
+     y="30.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc705ea0i1__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     x="62"
+     y="62"
+     id="PD.x563dcc797830.t563dcc705ea0__text"
+     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';fill:#000000;stroke-width:0"
+     textLength="35"
+     lengthAdjust="spacing"
+     transform="translate(-9.5,-16.5)">mtx_&gt;</text>
+  <polyline
+     points="110.0 47.0 156.0 47.0 156.0 67.0 110.0 67.0 110.0 47.0"
+     id="PD.x563dcc797830.t563dcc78fe60R__obj"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
+     transform="translate(-9.5,-16.5)" />
+  <rect
+     x="100.5"
+     y="48.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc78fe60o0__outlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="100.5"
+     y="30.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc78fe60i0__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="139.5"
+     y="30.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc78fe60i1__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     x="112"
+     y="62"
+     id="PD.x563dcc797830.t563dcc78fe60__text"
+     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';fill:#000000;stroke-width:0"
+     textLength="42"
+     lengthAdjust="spacing"
+     transform="translate(-9.5,-16.5)">mtx_&lt;=</text>
+  <polyline
+     points="160.0 47.0 206.0 47.0 206.0 67.0 160.0 67.0 160.0 47.0"
+     id="PD.x563dcc797830.t563dcc78d8d0R__obj"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
+     transform="translate(-9.5,-16.5)" />
+  <rect
+     x="150.5"
+     y="48.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc78d8d0o0__outlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="150.5"
+     y="30.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc78d8d0i0__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="189.5"
+     y="30.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc78d8d0i1__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     x="162"
+     y="62"
+     id="PD.x563dcc797830.t563dcc78d8d0__text"
+     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';fill:#000000;stroke-width:0"
+     textLength="42"
+     lengthAdjust="spacing"
+     transform="translate(-9.5,-16.5)">mtx_&gt;=</text>
+  <polyline
+     points="210.0 47.0 256.0 47.0 256.0 67.0 210.0 67.0 210.0 47.0"
+     id="PD.x563dcc797830.t563dcc78b330R__obj"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
+     transform="translate(-9.5,-16.5)" />
+  <rect
+     x="200.5"
+     y="48.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc78b330o0__outlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="200.5"
+     y="30.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc78b330i0__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="239.5"
+     y="30.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc78b330i1__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     x="212"
+     y="62"
+     id="PD.x563dcc797830.t563dcc78b330__text"
+     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';fill:#000000;stroke-width:0"
+     textLength="42"
+     lengthAdjust="spacing"
+     transform="translate(-9.5,-16.5)">mtx_==</text>
+  <polyline
+     points="260.0 47.0 306.0 47.0 306.0 67.0 260.0 67.0 260.0 47.0"
+     id="PD.x563dcc797830.t563dcc78a530R__obj"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
+     transform="translate(-9.5,-16.5)" />
+  <rect
+     x="250.5"
+     y="48.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc78a530o0__outlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="250.5"
+     y="30.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc78a530i0__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="289.5"
+     y="30.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc78a530i1__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     x="262"
+     y="62"
+     id="PD.x563dcc797830.t563dcc78a530__text"
+     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';fill:#000000;stroke-width:0"
+     textLength="42"
+     lengthAdjust="spacing"
+     transform="translate(-9.5,-16.5)">mtx_!=</text>
+  <polyline
+     points="450.0 47.0 489.0 47.0 489.0 67.0 450.0 67.0 450.0 47.0"
+     id="PD.x563dcc797830.t563dcc782ba0R__obj"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
+     transform="translate(-9.5,-16.5)" />
+  <rect
+     x="440.5"
+     y="48.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc782ba0o0__outlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="440.5"
+     y="30.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc782ba0i0__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     x="452"
+     y="62"
+     id="PD.x563dcc797830.t563dcc782ba0__text"
+     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';fill:#000000;stroke-width:0"
+     textLength="35"
+     lengthAdjust="spacing"
+     transform="translate(-9.5,-16.5)">mtx_!</text>
+  <polyline
+     points="350.0 17.0 396.0 17.0 396.0 37.0 350.0 37.0 350.0 17.0"
+     id="PD.x563dcc797830.t563dcc786960R__obj"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
+     transform="translate(-9.5,-16.5)" />
+  <rect
+     x="340.5"
+     y="18.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc786960o0__outlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="340.5"
+     y="0.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc786960i0__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="379.5"
+     y="0.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc786960i1__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     x="352"
+     y="32"
+     id="PD.x563dcc797830.t563dcc786960__text"
+     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';fill:#000000;stroke-width:0"
+     textLength="42"
+     lengthAdjust="spacing"
+     transform="translate(-9.5,-16.5)">mtx_&amp;&amp;</text>
+  <polyline
+     points="400.0 17.0 446.0 17.0 446.0 37.0 400.0 37.0 400.0 17.0"
+     id="PD.x563dcc797830.t563dcc781b60R__obj"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
+     transform="translate(-9.5,-16.5)" />
+  <rect
+     x="390.5"
+     y="18.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc781b60o0__outlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="390.5"
+     y="0.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc781b60i0__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="429.5"
+     y="0.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc781b60i1__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     x="402"
+     y="32"
+     id="PD.x563dcc797830.t563dcc781b60__text"
+     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';fill:#000000;stroke-width:0"
+     textLength="42"
+     lengthAdjust="spacing"
+     transform="translate(-9.5,-16.5)">mtx_||</text>
+  <polyline
+     points="400.0 47.0 439.0 47.0 439.0 67.0 400.0 67.0 400.0 47.0"
+     id="PD.x563dcc797830.t563dcc7060c0R__obj"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
+     transform="translate(-9.5,-16.5)" />
+  <rect
+     x="390.5"
+     y="48.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc7060c0o0__outlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="390.5"
+     y="30.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc7060c0i0__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="422.5"
+     y="30.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc7060c0i1__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     x="402"
+     y="62"
+     id="PD.x563dcc797830.t563dcc7060c0__text"
+     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';fill:#000000;stroke-width:0"
+     textLength="35"
+     lengthAdjust="spacing"
+     transform="translate(-9.5,-16.5)">mtx_|</text>
+  <polyline
+     points="350.0 47.0 389.0 47.0 389.0 67.0 350.0 67.0 350.0 47.0"
+     id="PD.x563dcc797830.t563dcc7906f0R__obj"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round"
+     transform="translate(-9.5,-16.5)" />
+  <rect
+     x="340.5"
+     y="48.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc7906f0o0__outlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="340.5"
+     y="30.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc7906f0i0__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     x="372.5"
+     y="30.5"
+     width="7"
+     height="2"
+     id="PD.x563dcc797830.t563dcc7906f0i1__inlet"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     x="352"
+     y="62"
+     id="PD.x563dcc797830.t563dcc7906f0__text"
+     style="font-weight:bold;font-size:12px;font-family:'DejaVu Sans Mono';fill:#000000;stroke-width:0"
+     textLength="35"
+     lengthAdjust="spacing"
+     transform="translate(-9.5,-16.5)">mtx_&amp;</text>
+</svg>

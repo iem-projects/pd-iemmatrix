@@ -29,10 +29,13 @@ outlets:
   1st:
   - type: matrix
     description: the stored matrix
+# FIXXME: arguments <symbol> is not a second argument but an alternative
+# we need a better way to express this
 arguments: 
-  1st: number of rows
-  2nd: number of columns
-  alternative: file name to read matrix from
+  - type: <float> <float>
+    description: number of rows & number of columens
+  - type: <symbol>
+    description: file name to read matrix from
   
 ---
 

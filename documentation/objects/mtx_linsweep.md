@@ -3,7 +3,7 @@ title: mtx_linsweep
 description: create a linear sweep matrix using start stop and numsamples
 categories:
 - object
-pdcategory: Generic
+pdcategory: Matrix Creation
 see_also:
 inlets:
   1st:

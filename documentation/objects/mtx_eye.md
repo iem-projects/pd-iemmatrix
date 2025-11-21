@@ -3,7 +3,7 @@ title: mtx_eye
 description: create an identity matrix
 categories:
 - object
-pdcategory: General
+pdcategory: Matrix Creation
 see_also:
 - matrix
 - mtx_egg

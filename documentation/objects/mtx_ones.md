@@ -3,7 +3,7 @@ title: mtx_ones
 description: create a matrix with all elements set to 1
 categories:
 - object
-pdcategory: Generic
+pdcategory: Matrix Creation
 see_also:
 - matrix
 - mtx_zeros

@@ -3,7 +3,7 @@ title: mtx_logspace
 description: create a logarithmically spaced matrix vector using start stop and numsteps
 categories:
 - object
-pdcategory: Generic
+pdcategory: Matrix Creation
 see_also:
 inlets:
   1st:

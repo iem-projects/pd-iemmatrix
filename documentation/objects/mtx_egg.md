@@ -3,7 +3,7 @@ title: mtx_egg
 description: create an exchange matrix
 categories:
 - object
-pdcategory: General
+pdcategory: Matrix Creation
 see_also:
 - matrix
 - mtx_egg

@@ -3,7 +3,7 @@ title: mtx_rand
 description: fill a matrix with random values
 categories:
 - object
-pdcategory: Generic
+pdcategory: Matrix Creation
 see_also:
 inlets:
   1st:

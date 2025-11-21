@@ -3,7 +3,7 @@ title: mtx_logsweep
 description: create a logarithmic sweep matrix using start stop and numsteps
 categories:
 - object
-pdcategory: Generic
+pdcategory: Matrix Creation
 see_also:
 inlets:
   1st:

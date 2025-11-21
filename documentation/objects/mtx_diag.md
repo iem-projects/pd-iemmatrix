@@ -3,7 +3,7 @@ title: mtx_diag
 description: extract diagonal from matrix & create diagonal matrix
 categories:
 - object
-pdcategory: General
+pdcategory: Matrix Creation
 see_also:
 - matrix
 - mtx_eye

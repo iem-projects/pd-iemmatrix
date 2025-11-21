@@ -3,7 +3,7 @@ title: mtx_zeros
 description: create a matrix with all elements set to 0
 categories:
 - object
-pdcategory: Generic
+pdcategory: Matrix Creation
 see_also:
 - matrix
 - mtx_ones

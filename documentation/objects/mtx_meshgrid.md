@@ -3,7 +3,7 @@ title: mtx_meshgrid
 description: create a X/Y grid matrix
 categories:
 - object
-pdcategory: Generic
+pdcategory: Matrix Creation
 see_also:
 inlets:
   1st:

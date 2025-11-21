@@ -3,7 +3,7 @@ title: mtx_diegg
 description: extract anti diagonal from matrix & create anti diagonal matrix
 categories:
 - object
-pdcategory: General
+pdcategory: Matrix Creation
 see_also:
 - matrix
 - mtx_egg

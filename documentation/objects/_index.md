@@ -3,6 +3,7 @@ title: "List of objects"
 
 pdcategories:
 - General
+- Matrix Creation
 - Simple Math
 - Misc
 - Audio Math

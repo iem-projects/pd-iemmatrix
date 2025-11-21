@@ -12,11 +12,13 @@
   {{ with $pages }}
   <div id="components">
     <ul class="row gutters">
-  {{ range . }}
-  <li><a href="{{ .Permalink}}">{{ .Title }}</a></li>
-  {{ end }}
-  </ul>
+      {{ range . }}
+      <li><a href="{{ .Permalink}}">{{ .Title }}</a></li>
+      {{ end }}
+    </ul>
   </div>
+  {{ else }}
+  <p class="hint"><ul><li>No tutorials yet.</li></ul></p>
   {{ end }}
 {{ end }}
 {{ define "footer" }} 

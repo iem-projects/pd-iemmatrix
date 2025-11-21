@@ -29,6 +29,11 @@ outlets:
   1st:
   - type: matrix
     description: the stored matrix
+arguments: 
+  1st: number of rows
+  2nd: number of columns
+  alternative: file name to read matrix from
+  
 ---
 
 ## matrix store

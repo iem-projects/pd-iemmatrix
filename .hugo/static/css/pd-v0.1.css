@@ -89,6 +89,9 @@
 
 
 /* themes variables */
+.dark-theme {
+    color-scheme: dark;
+}
 
    
 BODY {

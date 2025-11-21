@@ -18,7 +18,8 @@ see_also:
 - mtx_row
 inlets:
   1st:
-  - type: message (matrix description)
+  - type: "message [matrix <rows> <columns> <float entries>( defining the matrix 
+           in the sequence i = column + (row-1) x columns"
     description:
   - type: bang
     description: output the stored matrix
@@ -33,7 +34,7 @@ outlets:
 # we need a better way to express this
 arguments: 
   - type: <float> <float>
-    description: number of rows & number of columens
+    description: number of rows & number of columns
   - type: <symbol>
     description: file name to read matrix from
   
@@ -42,7 +43,7 @@ arguments:
 ## matrix store
 {{< pdobj mtx >}} stores a single matrix, just like {{< pdobj float >}} stores a single number.
 
-You can also save the stored matrix to a file, or load a matrix from a file.
+You can also save the stored matrix to a file via the message [write <fname>( to the matrix, or load a matrix via [read <fname>( from a file.
 
 
 ## matrix creation
@@ -55,6 +56,7 @@ It can also be used to create special matrices using the following messages:
 | `egg`   | backward identity matrix | {{< pdobj mtx_egg >}}   |
 | `diag`  | diagonal matrix          | {{< pdobj mtx_diag >}}  |
 | `diegg` | backward diagonal matrix | {{< pdobj mtx_diegg >}} |
+| `size`  | silently resize matrix   |                         |
 
 
 ## matrix manipulation

@@ -2,7 +2,7 @@
 title: "A quick introduction to iemmatrix"
 # the lower the weight, the earlier it is sorted
 weight: 1
-draft: true
+draft: false
 ---
 
 ## hello world

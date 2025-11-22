@@ -1,5 +1,7 @@
 ---
-title: mtx_mul~
+title: mtx_*~
+aliases:
+- mtx_mul~
 description: multiply signals with a matrix
 categories:
 - object

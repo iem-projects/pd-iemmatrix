@@ -10,7 +10,7 @@ see_also:
 inlets:
   1st:
   - type: matrix
-    description: vector or matrix to multiply input signals wit
+    description: vector or matrix to multiply input signals with
   m:
   - type: signal
     description: multiple input signals that are understood as column vector per time sampling instant

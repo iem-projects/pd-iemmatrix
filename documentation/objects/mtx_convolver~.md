@@ -1,6 +1,6 @@
 ---
 title: mtx_convolver~
-description: multiple-input-multiple-output (MIMO) convolvution matrix
+description: multiple-input-multiple-output (MIMO) convolution matrix (uniform partitions, time-varying, fftw3)
 categories:
 - object
 pdcategory: Audio Math

@@ -6,6 +6,7 @@ pdcategories:
 - Matrix Creation
 - Simple Math
 - Trigonometric Functions
+- Digital Fourier Transformation
 - Misc
 - Audio Math
 - Obsolete

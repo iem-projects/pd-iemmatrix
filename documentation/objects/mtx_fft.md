@@ -3,8 +3,11 @@ title: mtx_fft
 description: complex-valued FFT of each matrix row
 categories:
 - object
-pdcategory: Generic
+pdcategory: Digital Fourier Transformation
 see_also:
+- mtx_ifft
+- mtx_rfft
+- mtx_rifft
 inlets:
   1st:
   - type: matrix

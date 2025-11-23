@@ -3,11 +3,11 @@ title: mtx_rfft
 description: real-valued FFT for each matrix row
 categories:
 - object
-pdcategory: Misc
-see_also: 
-- [mtx_fft]
-- [mtx_ifft]
-- [mtx_rifft] 
+pdcategory: Digital Fourier Transformation
+see_also:
+- mtx_fft
+- mtx_ifft
+- mtx_rifft
 inlets:
   1st:
   - type: matrix

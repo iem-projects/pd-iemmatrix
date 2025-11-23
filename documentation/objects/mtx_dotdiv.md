@@ -5,7 +5,7 @@ categories:
 - object
 pdcategory: Simple Math
 aliases:
-- mtx_mul
+- mtx_div
 see_also:
 - matrix
 - mtx_+

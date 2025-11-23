@@ -13,14 +13,14 @@ inlets:
   - type: signal
     description: multiple input signals that are to be convolved using uniformly partitioned overlap save with the FFT size \(2L\), where the partition length \(L\) that subdivides the total impulse response length \(len\) is controlled by the subpatch [block~] setting in Pd. The object permits amplitude-complementary or power-complementary time-varying updates within an L samples output crossfade
 outlets:
-  m:
+  1st, n:
   - type: signal
     description: multiple output signals of which each is obtained by filtering and summing with the m filters for every input of length L, for the respective output
 arguments:
   - type: <symbol>
     description: \(-\mathrm{m}\) option to switch to multichannel input and output connections replacing the individual ins and outs
   - type: <symbol>
-    description: \(\mathrm{pow}\) pow option to switch from amplitude-complementary to power-complementary crossfades during time-varying updates 
+    description: \(\mathrm{pow}\) option to switch from amplitude-complementary to power-complementary crossfades during time-varying updates 
   - type: <symbol>
     description: file name to read array3 impulse response configuration from
 
@@ -32,7 +32,7 @@ The array3 message is shaped as [array3 \<n\> \<m\> \<len\> \<ir-samples\> ( wit
 $$s+i\times len+o\times m\times len, \qquad \text{indices: } s\dots\text{sample, } i\dots\text{input, } o\dots\text{output}$$ to shape the impulse response (ir)  sample sequence.
 
 ## time-varying MIMO convolver 
-The input signal \\(x_i[s]\\) of the input index \\(i\\) and sample index \\(s\\) is divided by Pd into blocks \\(x_b[s]=x[bL+s]\\) of the length \\(L\\) with the local sample index \\(s=0\dots L\\).  Together with the previous block, it is being \\(2L\\) fast Fourier transformed for real-valued signals, at every DSP cycle indexed by \\(b\\):
+The input signal \\(x_i[s]\\) of the input index \\(i\\) and sample index \\(s\\) is divided by Pd (or its local `[block~ <L>]` object's setting) into blocks \\(x_b[s]=x[bL+s]\\) of the length \\(L\\) with the local sample index \\(s=0\dots L\\).  Together with the previous block, it is being \\(2L\\) fast Fourier transformed for real-valued signals, at every DSP cycle indexed by \\(b\\):
 $$
  X_{i,b}[k]=\mathrm{rFFT_{2L}}\\{[x_{b-1}[0]\dots x_{b-1}[L-1]], [x_{b}[0]\dots x_{b}[L-1]] \\}.
 $$
@@ -59,8 +59,8 @@ or with the option \\(\mathrm{pow}\\) for power-complementary output crossfade:
 $$
   y_{o}[s]=\sqrt{w[s]}\thinspace y_{o,c}[s+L]+\sqrt{1-w[s]}\thinspace y_{o,(c+1)\\%2}[s+L],
 $$
-or if there is no update
+or if there is no update and \\(c\\) is the index for the current impulse response set, for \\(s=0\dots L\\),
 $$
-  y_{o}[s]=\thinspace y_{o,0}[s+L].
+  y_{o}[s]=\thinspace y_{o,c}[s+L].
 $$
 The window \\(w[s]\\) is implemented as a Hann window of the length \\(L\\).

@@ -18,14 +18,14 @@ inlets:
   - type: float
     description: interpolation time in ms to ramp from old matrix entries to new ones without crackling
 outlets:
-  n:
+  1st, n:
   - type: signal
     description: output signals that are understood as output colunm vector per sample
 arguments:
   - type: <float> <float> <float>
     description: number of outputs and number of inputs and interpolation time in ms
   - type: <symbol>
-    description: -m option to switch to multichannel input and output connections replacing the individual ins and outs
+    description: \(-\mathrm{m}\) option to switch to multichannel input and output connections replacing the individual ins and outs
 draft: false
 ---
 $$

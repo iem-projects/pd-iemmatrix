@@ -4,9 +4,11 @@
   <div id="main">
     <div id="hero">
       <h1> {{ .Title}} </h1>
+      {{ with .Params.bref }}
       <p class="hero-lead">
-           {{ .Params.bref | safeHTML }}.
+           {{ . | safeHTML }}
       </p>
+      {{ end }}
 
     </div>
     <div id="kube-component" class="content">

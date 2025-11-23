@@ -1,17 +1,21 @@
 ---
 title: mtx_atan
-description: calculate arctangent (atan) of matrix elements
+description: arctangent (atan) of matrix elements
 categories:
 - object
-pdcategory: Generic
+pdcategory: Trigonometric Functions
 see_also:
+- mtx_sin
+- mtx_cos
+- mtx_tan
+- mtx_atan2
 inlets:
   1st:
-  - type: message
-    description: ...
+  - type: matrix
+    description: input
 outlets:
   1st:
   - type: matrix
-    description: ...
-draft: true
+    description: output
 ---
+$$B_{m,n} = \operatorname{atan^\circ} (A_{m,n}) \quad \equiv \quad b_{i,j} = \operatorname{atan}(a_{i,j})$$

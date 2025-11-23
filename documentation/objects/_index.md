@@ -5,6 +5,7 @@ pdcategories:
 - General
 - Matrix Creation
 - Simple Math
+- Trigonometric Functions
 - Misc
 - Audio Math
 - Obsolete

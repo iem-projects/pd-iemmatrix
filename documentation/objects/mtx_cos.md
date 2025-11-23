@@ -1,17 +1,21 @@
 ---
 title: mtx_cos
-description: cosine of matrix elements
+description: cosine (cos) of each element of a matrix
 categories:
 - object
-pdcategory: Generic
+pdcategory: Trigonometric Functions
 see_also:
+- mtx_sin
+- mtx_tan
+- mtx_atan
+- mtx_atan2
 inlets:
   1st:
   - type: matrix
-    description: ...
+    description: iput
 outlets:
   1st:
   - type: matrix
-    description: ...
-draft: true
+    description: input
 ---
+$$B_{m,n} = \cos^\circ (A_{m,n}) \quad \equiv \quad b_{i,j} = \cos(a_{i,j})$$

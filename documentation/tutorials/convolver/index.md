@@ -3,6 +3,7 @@ title: "MIMO convolution"
 # the lower the weight, the earlier it is sorted
 weight: 10
 draft: false
+toc: true
 ---
 
 {{<pdobj "mtx_convolver~">}} provides functionality for MIMO (*M*ultiple *I*nputs *M*ultiple *O*utputs) signal processing,

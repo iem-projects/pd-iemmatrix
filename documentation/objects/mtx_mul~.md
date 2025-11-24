@@ -14,7 +14,7 @@ inlets:
   m:
   - type: signal
     description: multiple input signals that are understood as column vector per time sampling instant
-  last: 
+  last:
   - type: float
     description: interpolation time in ms to ramp from old matrix entries to new ones without crackling
 outlets:

@@ -20,7 +20,7 @@ inlets:
 outlets:
   1st, n:
   - type: signal
-    description: output signals that are understood as output colunm vector per sample
+    description: output signals that are understood as output column vector per sample
 arguments:
   - type: <float> <float> <float>
     description: number of outputs and number of inputs and interpolation time in ms

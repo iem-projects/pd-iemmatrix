@@ -30,4 +30,7 @@ pages:
       changes:
         - "*"
         - "**/*"
+        # Exclude docs
+        - "!.hugo/**/*"
+        - "!documentation/**/*"
     - when: never

@@ -17,3 +17,15 @@ pages:
     - changes:
         - .hugo/**/*
         - documentation/**/*
+
+# only run other jobs if there are changes outside the documentation directories
+.run-selected:
+  rules:
+    - if: '$IEM_CI_JOBS == "" || $CI_JOB_NAME =~ $IEM_CI_JOBS'
+      changes:
+        - "!.hugo/**/*"
+        - "!documentation/**/*"
+    - if: '$IEM_CI_JOBS == "" || $CI_JOB_NAME =~ $IEM_CI_JOBS'
+      changes:
+        - "*"
+    - when: never

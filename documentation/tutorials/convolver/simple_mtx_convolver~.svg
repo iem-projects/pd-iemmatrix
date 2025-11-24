@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8'?>
+ <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width='450' height='412' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
+   <style>
+        :root { --pd-foreground: #000000; }
+        @media (prefers-color-scheme: dark) { :root { --pd-foreground: #BCC0C3; } }
+    </style>
+	<polyline points='261.0 281.0 391.0 281.0 391.0 301.0 261.0 301.0 261.0 281.0' id='PD.x55a897d84710.t55a897e1ad10R__obj' style='stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; stroke-linecap: square; fill: none;'/>
+	<rect x='261.0' y='299.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897e1ad10o0__outlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<rect x='261.0' y='281.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897e1ad10i0__inlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<rect x='384.0' y='281.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897e1ad10i1__inlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<text x='263.0' y='296.0' id='PD.x55a897d84710.t55a897e1ad10__text' style='font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);' textLength='126'>mtx_convolver~ 1 1</text>
+	<polyline points='67.0 231.0 134.0 231.0 134.0 251.0 67.0 251.0 67.0 231.0' id='PD.x55a897d84710.t55a897e1aaf0R__obj' style='stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; stroke-linecap: square; fill: none;'/>
+	<rect x='67.0' y='249.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897e1aaf0o0__outlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<rect x='67.0' y='231.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897e1aaf0i0__inlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<text x='69.0' y='246.0' id='PD.x55a897d84710.t55a897e1aaf0__text' style='font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);' textLength='63'>list trim</text>
+	<polyline points='57.0 319.0 138.0 319.0 138.0 339.0 57.0 339.0 57.0 319.0' id='PD.x55a897d84710.t55a897e29070R__obj' style='stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; stroke-linecap: square; fill: none;'/>
+	<rect x='57.0' y='319.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897e29070i0__inlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<text x='59.0' y='334.0' id='PD.x55a897d84710.t55a897e29070__text' style='font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);' textLength='77'>block~ 2048</text>
+	<polyline points='67.0 60.0 176.0 60.0 176.0 80.0 67.0 80.0 67.0 60.0' id='PD.x55a897d84710.t55a897e39790R__obj' style='stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; stroke-linecap: square; fill: none;'/>
+	<rect x='67.0' y='78.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897e39790o0__outlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<rect x='169.0' y='78.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897e39790o1__outlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<rect x='67.0' y='60.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897e39790i0__inlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<text x='69.0' y='75.0' id='PD.x55a897d84710.t55a897e39790__text' style='font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);' textLength='105'>mtx_sndfileread</text>
+	<polyline points='67.0 34.0 230.0 34.0 225.0 39.0 225.0 49.0 230.0 54.0 67.0 54.0 67.0 34.0' id='PD.x55a897d84710.t55a897f616d0R__msg' style='stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; stroke-linecap: square; fill: none;'/>
+	<rect x='67.0' y='52.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897f616d0o0__outlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<rect x='67.0' y='34.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897f616d0i0__inlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<text x='69.0' y='49.0' id='PD.x55a897d84710.t55a897f616d0__text' style='font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);' textLength='154'>open testIR.wav, 1e+06</text>
+	<polyline points='67.0 175.0 155.0 175.0 155.0 195.0 67.0 195.0 67.0 175.0' id='PD.x55a897d84710.t55a897de4ef0R__obj' style='stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; stroke-linecap: square; fill: none;'/>
+	<rect x='67.0' y='193.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897de4ef0o0__outlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<rect x='107.0' y='193.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897de4ef0o1__outlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<rect x='148.0' y='193.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897de4ef0o2__outlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<rect x='67.0' y='175.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897de4ef0i0__inlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<rect x='148.0' y='175.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897de4ef0i1__inlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<text x='69.0' y='190.0' id='PD.x55a897d84710.t55a897de4ef0__text' style='font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);' textLength='84'>list split 3</text>
+	<polyline points='67.0 88.0 106.0 88.0 106.0 108.0 67.0 108.0 67.0 88.0' id='PD.x55a897d84710.t55a897deb2b0R__obj' style='stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; stroke-linecap: square; fill: none;'/>
+	<rect x='67.0' y='106.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897deb2b0o0__outlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<rect x='99.0' y='106.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897deb2b0o1__outlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<rect x='67.0' y='88.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897deb2b0i0__inlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<text x='69.0' y='103.0' id='PD.x55a897d84710.t55a897deb2b0__text' style='font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);' textLength='35'>t a a</text>
+	<polyline points='122.0 145.0 222.0 145.0 217.0 150.0 217.0 160.0 222.0 165.0 122.0 165.0 122.0 145.0' id='PD.x55a897d84710.t55a897e2ec80R__msg' style='stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; stroke-linecap: square; fill: none;'/>
+	<rect x='122.0' y='163.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897e2ec80o0__outlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<rect x='122.0' y='145.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897e2ec80i0__inlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<text x='124.0' y='160.0' id='PD.x55a897d84710.t55a897e2ec80__text' style='font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);' textLength='91'>array3 1 1 $1</text>
+	<polyline points='122.0 118.0 182.0 118.0 182.0 138.0 122.0 138.0 122.0 118.0' id='PD.x55a897d84710.t55a897de7bc0R__obj' style='stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; stroke-linecap: square; fill: none;'/>
+	<rect x='122.0' y='136.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897de7bc0o0__outlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<rect x='175.0' y='136.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897de7bc0o1__outlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<rect x='122.0' y='118.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897de7bc0i0__inlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<text x='124.0' y='133.0' id='PD.x55a897d84710.t55a897de7bc0__text' style='font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);' textLength='56'>mtx_size</text>
+	<polyline points='67.0 205.0 246.0 205.0 246.0 225.0 67.0 225.0 67.0 205.0' id='PD.x55a897d84710.t55a897e1ae20R__obj' style='stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; stroke-linecap: square; fill: none;'/>
+	<rect x='67.0' y='223.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897e1ae20o0__outlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<rect x='67.0' y='205.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897e1ae20i0__inlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<rect x='239.0' y='205.0' width='7.0' height='2.0' id='PD.x55a897d84710.t55a897e1ae20i1__inlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<text x='69.0' y='220.0' id='PD.x55a897d84710.t55a897e1ae20__text' style='font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);' textLength='175'>list prepend array3 1 1 N</text>
+	<polyline points='386.0 66.0 387.0 281.0' id='l0x55a897d81b90__cord' style='stroke: var(--pd-foreground); stroke-width: 2.0; stroke-linejoin: round; fill: none;'/>
+	<polyline points='264.0 301.0 264.0 376.0' id='l0x55a897d81c70__cord' style='stroke: var(--pd-foreground); stroke-width: 2.0; stroke-linejoin: round; fill: none;'/>
+	<polyline points='70.0 251.0 264.0 281.0' id='l0x55a897de2280__cord' style='stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; fill: none;'/>
+	<polyline points='70.0 80.0 70.0 88.0' id='l0x55a897de1950__cord' style='stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; fill: none;'/>
+	<polyline points='70.0 54.0 70.0 60.0' id='l0x55a897d81d70__cord' style='stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; fill: none;'/>
+	<polyline points='110.0 195.0 70.0 205.0' id='l0x55a897dddff0__cord' style='stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; fill: none;'/>
+	<polyline points='70.0 108.0 70.0 175.0' id='l0x55a897de8bb0__cord' style='stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; fill: none;'/>
+	<polyline points='102.0 108.0 125.0 118.0' id='l0x55a897de1370__cord' style='stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; fill: none;'/>
+	<polyline points='125.0 165.0 242.0 205.0' id='l0x55a897ddcbf0__cord' style='stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; fill: none;'/>
+	<polyline points='178.0 138.0 125.0 145.0' id='l0x55a897de7950__cord' style='stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; fill: none;'/>
+	<polyline points='70.0 225.0 70.0 231.0' id='l0x55a897de1fc0__cord' style='stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; fill: none;'/>
+</svg>

@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+ <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width='450' height='300' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
+   <style>
+        :root { --pd-foreground: #000000; }
+        @media (prefers-color-scheme: dark) { :root { --pd-foreground: #BCC0C3; } }
+    </style>
+	<polyline points='237.0 141.0 297.0 141.0 297.0 161.0 237.0 161.0 237.0 141.0' id='PD.x55a483813e20.t55a4838dc5c0R__obj' style='stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; stroke-linecap: square; fill: none;'/>
+	<text x='239.0' y='156.0' id='PD.x55a483813e20.t55a4838dc5c0__text' style='font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);' textLength='56'>table IR</text>
+	<polyline points='31.0 141.0 154.0 141.0 154.0 161.0 31.0 161.0 31.0 141.0' id='PD.x55a483813e20.t55a4838dc4b0R__obj' style='stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; stroke-linecap: square; fill: none;'/>
+	<rect x='31.0' y='159.0' width='7.0' height='2.0' id='PD.x55a483813e20.t55a4838dc4b0o0__outlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<rect x='31.0' y='141.0' width='7.0' height='2.0' id='PD.x55a483813e20.t55a4838dc4b0i0__inlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<text x='33.0' y='156.0' id='PD.x55a483813e20.t55a4838dc4b0__text' style='font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);' textLength='119'>partconv~ IR 2048</text>
+	<polyline points='237.0 86.0 428.0 86.0 423.0 91.0 423.0 101.0 428.0 106.0 237.0 106.0 237.0 86.0' id='PD.x55a483813e20.t55a4838dc070R__msg' style='stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; stroke-linecap: square; fill: none;'/>
+	<rect x='237.0' y='104.0' width='7.0' height='2.0' id='PD.x55a483813e20.t55a4838dc070o0__outlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<rect x='237.0' y='86.0' width='7.0' height='2.0' id='PD.x55a483813e20.t55a4838dc070i0__inlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<text x='239.0' y='101.0' id='PD.x55a483813e20.t55a4838dc070__text' style='font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);' textLength='182'>read -resize testIR.wav IR</text>
+	<polyline points='237.0 111.0 311.0 111.0 311.0 131.0 237.0 131.0 237.0 111.0' id='PD.x55a483813e20.t55a4838dbf60R__obj' style='stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; stroke-linecap: square; fill: none;'/>
+	<rect x='237.0' y='129.0' width='7.0' height='2.0' id='PD.x55a483813e20.t55a4838dbf60o0__outlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<rect x='304.0' y='129.0' width='7.0' height='2.0' id='PD.x55a483813e20.t55a4838dbf60o1__outlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<rect x='237.0' y='111.0' width='7.0' height='2.0' id='PD.x55a483813e20.t55a4838dbf60i0__inlet' style='stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);'/>
+	<text x='239.0' y='126.0' id='PD.x55a483813e20.t55a4838dbf60__text' style='font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);' textLength='70'>soundfiler</text>
+	<polyline points='34.0 161.0 34.0 216.0' id='l0x55a483872b20__cord' style='stroke: var(--pd-foreground); stroke-width: 2.0; stroke-linejoin: round; fill: none;'/>
+	<polyline points='34.0 66.0 34.0 141.0' id='l0x55a483872bf0__cord' style='stroke: var(--pd-foreground); stroke-width: 2.0; stroke-linejoin: round; fill: none;'/>
+	<polyline points='240.0 106.0 240.0 111.0' id='l0x55a483872c10__cord' style='stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; fill: none;'/>
+</svg>

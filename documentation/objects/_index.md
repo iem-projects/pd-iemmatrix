@@ -1,6 +1,6 @@
 ---
 title: "List of objects"
-shorttitle: objects
+shorttitle: object reference
 pdcategories:
 - General
 - Matrix Creation

@@ -120,22 +120,23 @@ static void mTXShBang (MTXSh *x)
   }
 }
 
-static void mTXShMatrix (MTXSh *x, t_symbol *s,
-                         int argc, t_atom *argv)
+static void _mTXShMatrix (MTXSh *x,
+                          unsigned int rows, unsigned int columns,
+                          t_atom *argv)
 {
-  unsigned int rows, columns, size;
+  unsigned int size = rows * columns;
 
-  /* size check */
-  if(iemmatrix_check(x, s, argc, argv, 0))return;
-
-  rows = atom_getint (argv++);
-  columns = atom_getint (argv++);
-  size = rows * columns;
 
   if ((rows!=2)||(columns<1)) {
     pd_error(x, "[mtx_spherical_harmonics]: 2 X L matrix expected with phi and theta vector, but got more rows/no entries");
     return;
   }
+
+  if ((rows!=2)||(columns<1)) {
+    pd_error(x, "[mtx_spherical_harmonics]: 2 X L matrix expected with phi and theta vector, but got more rows/no entries");
+    return;
+  }
+
   if (x->l!=columns) {
     deleteMTXShdata(x);
     x->l=columns;
@@ -174,6 +175,32 @@ static void mTXShMatrix (MTXSh *x, t_symbol *s,
     pd_error(x, "[mtx_spherical_harmonics]: memory error, no operation");
   }
 }
+
+static void mTXShMatrix (MTXSh *x, t_symbol *s,
+                         int argc, t_atom *argv)
+{
+  unsigned int rows, columns, size;
+
+  /* size check */
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
+
+  rows = atom_getint (argv++);
+  columns = atom_getint (argv++);
+
+  _mTXShMatrix(x, rows, columns, argv);
+}
+
+static void mTXShList (MTXSh *x, t_symbol *s,
+                         int argc, t_atom *argv)
+{
+  (void)s;
+  if(2 != argc) {
+    _mTXShMatrix(x, 2, 0, argv);
+  } else {
+    _mTXShMatrix(x, 2, argc>>1, argv);
+  }
+}
+
 
 static void allocMTXChdata (MTXCh *x)
 {
@@ -241,46 +268,55 @@ static void mTXChBang (MTXCh *x)
   }
 }
 
+static void mTXChList (MTXCh *x, t_symbol*s, int argc, t_atom*argv)
+{
+  (void)s;
+  unsigned int rows = 1, columns = argc;
+  unsigned int size = rows * columns;
+
+  if (x->l!=columns) {
+    deleteMTXChdata(x);
+    x->l=columns;
+    allocMTXChdata(x);
+  }
+  if (1) {
+    unsigned int n;
+    for (n=0; n<x->l; n++) {
+      x->phi[n]=(double) atom_getfloat(argv+n);
+    }
+  }
+
+  if (x->wc!=0) {
+    unsigned int n;
+    chebyshev12(x->phi, x->wc);
+    size=x->l*(2*x->nmax+1);
+    SETFLOAT(x->list_ch,(t_float)x->l);
+    SETFLOAT(x->list_ch+1,(t_float)(2*x->nmax+1));
+    for (n=0; n<size; n++) {
+      SETFLOAT(x->list_ch+n+2,(t_float)x->wc->t[n]);
+    }
+    mTXChBang(x);
+  } else {
+    pd_error(x, "[mtx_circular_harmonics]: memory error, no operation");
+  }
+}
+
+
 static void mTXChMatrix (MTXCh *x, t_symbol *s,
                          int argc, t_atom *argv)
 {
-  unsigned int rows, columns, size;
+  unsigned int rows, columns;
 
   /* size check */
   if(iemmatrix_check(x, s, argc, argv, 0))return;
-  rows = atom_getint (argv++);
-  columns = atom_getint (argv++);
-  size = rows * columns;
+  rows    = atom_getint (argv+0);
+  columns = atom_getint (argv+1);
 
   if ((rows!=1)||(columns<1)) {
     pd_error(x, "[mtx_circular_harmonics]: 1*L matrix expected with phi vector, but got more rows/no entries");
-  } else {
-    if (x->l!=columns) {
-      deleteMTXChdata(x);
-      x->l=columns;
-      allocMTXChdata(x);
-    }
-    if (1) {
-      unsigned int n;
-      for (n=0; n<x->l; n++) {
-        x->phi[n]=(double) atom_getfloat(argv+n);
-      }
-    }
-
-    if (x->wc!=0) {
-      unsigned int n;
-      chebyshev12(x->phi, x->wc);
-      size=x->l*(2*x->nmax+1);
-      SETFLOAT(x->list_ch,(t_float)x->l);
-      SETFLOAT(x->list_ch+1,(t_float)(2*x->nmax+1));
-      for (n=0; n<size; n++) {
-        SETFLOAT(x->list_ch+n+2,(t_float)x->wc->t[n]);
-      }
-      mTXChBang(x);
-    } else {
-      pd_error(x, "[mtx_circular_harmonics]: memory error, no operation");
-    }
+    return;
   }
+  mTXChList(x, s, argc-2, argv+2);
 
 
 }
@@ -296,6 +332,7 @@ void mtx_spherical_harmonics_setup (void)
   class_addbang (mtx_spherical_harmonics_class, (t_method) mTXShBang);
   class_addmethod (mtx_spherical_harmonics_class, (t_method) mTXShMatrix,
                    gensym("matrix"), A_GIMME,0);
+  class_addlist (mtx_spherical_harmonics_class, (t_method) mTXShList);
 }
 
 
@@ -308,6 +345,7 @@ void mtx_circular_harmonics_setup (void)
                                   sizeof (MTXCh),
                                   CLASS_DEFAULT, A_GIMME, 0);
   class_addbang (mtx_circular_harmonics_class, (t_method) mTXChBang);
+  class_addlist (mtx_circular_harmonics_class, (t_method) mTXChList);
   class_addmethod (mtx_circular_harmonics_class, (t_method) mTXChMatrix,
                    gensym("matrix"), A_GIMME,0);
 }

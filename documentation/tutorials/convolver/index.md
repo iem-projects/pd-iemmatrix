@@ -98,8 +98,9 @@ Using IRs of length `1`, we can mimic the {{<pdobj "mtx_*~">}} (with a fixed int
 Note that because the multiplication is done as convolution,
 {{<pdobj "mtx_convolver~">}} is much slower than {{<pdobj "mtx_*~">}}.
 
+## Examples
 
-# 2x2 cross-feed reverb
+### 2x2 cross-feed reverb
 
 ![2x2 cross-feed reverb: overall structure](example_2x2_crossfeed.svg)
 

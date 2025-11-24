@@ -18,9 +18,9 @@
         rect.dark-theme { fill: #000000;  stroke: #000000; }
         text.dark-theme { fill: #000000; }
         @media (prefers-color-scheme: dark) {
-            polyline { fill: none; stroke: #ffffff; }
-            rect { fill: #ffffff;  stroke: #ffffff; }
-            text { fill: #ffffff; }
+            polyline { fill: none; stroke: #BCC0C3; }
+            rect { fill: #BCC0C3;  stroke: #BCC0C3; }
+            text { fill: #BCC0C3; }
         }
     </style>
   <defs

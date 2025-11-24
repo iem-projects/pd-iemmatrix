@@ -12,6 +12,9 @@
 
     </div>
     <div id="kube-component" class="content">
+      {{ if and (isset .Params "toc") .Params.toc }}
+      {{ .TableOfContents }}
+      {{ end }}
 
     {{ .Content}}
 <!-- Inject script tag in this template  -->

@@ -1,6 +1,6 @@
 baseURL = '/'
 languageCode = 'en-us'
-title = 'Pure Data'
+title = 'iemmatrix'
 
 disableKinds = ["taxonomy", "taxonomyTerm"]
 

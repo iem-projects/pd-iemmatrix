@@ -26,7 +26,7 @@ static void legendre_first_recurrence (double *sintheta,
 
   // computes the legendre functions P_n^m(costheta) for m=n
   // from P_0^0
-  for (ssize_t n=1; n<=(ssize_t)wl->nmax; n++) {
+  for (int n=1; n<=(int)wl->nmax; n++) {
     for (l=0,l0=0; l<wl->l; l++,l0+=incr) {
       wl->p[l0+n0+n] = -(2*n-1) * wl->p[l0+nmo0+n-1] * sintheta[l];
     }

@@ -28,4 +28,5 @@ pages:
     - if: '$IEM_CI_JOBS == "" || $CI_JOB_NAME =~ $IEM_CI_JOBS'
       changes:
         - "*"
+        - "**/*"
     - when: never

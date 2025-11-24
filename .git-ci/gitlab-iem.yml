@@ -14,9 +14,10 @@ pages:
       - public
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    - changes:
+      changes:
         - .hugo/**/*
         - documentation/**/*
+    - when: never
 
 # only run other jobs if there are changes outside the documentation directories
 .run-selected:

@@ -199,6 +199,7 @@ void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
   unsigned int ins = x->ins;
   unsigned int outs = x->outs;
   const char*objname=x->x_objname->s_name;
+
 #if CLASS_MULTICHANNEL
   if (x->x_setmultiout) {
     // override with num input signals in MC mode
@@ -228,7 +229,22 @@ void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
   _debug_logpost(x, PD_DEBUG, "[%s] outs=%u, ins=%u, blocksize=%u",objname,outs,ins,x->blocksize);
   int resized;
   resized = mtx_convolver_resize(x); // check if renewed convolver is required
-  if (0) {
+
+  int n0 = (sp && *sp)?sp[0]->s_n:0;
+  /* Pd's blocksize might be non-power-of-two, which we don't support */
+  if((n0<=0) || ((n0 & (n0 - 1)) != 0)) {
+    pd_error(x, "[%s] blocksize must be a power-of-two (have:%d)", objname, n0);
+    if(0) {
+#if CLASS_MULTICHANNEL
+    } else if (x->x_setmultiout) {
+      dsp_add_zero(sp[1]->s_vec, sp[1]->s_length * sp[1]->s_nchans);
+#endif
+    } else {
+      for(unsigned int i=0; i<x->outs; i++) {
+        dsp_add_zero(sp[x->ins + i]->s_vec, sp[x->ins + i]->s_n);
+      }
+    }
+    return;
 #if CLASS_MULTICHANNEL
   } else if (x->x_setmultiout) {
     for (unsigned int i = 0; i < x->ins; i++) {

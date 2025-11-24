@@ -70,7 +70,7 @@ within a single DSP block (so the interpolation time is `blocksize` (in samples)
 
 ## special basic cases
 With special convolution matrices we can use {{<pdobj "mtx_convolver~">}} to
-mimick the behaviour of {{<pdobj "mtx_*~">}}  resp.  {{<pdobj "partconv~">}}.
+mimic the behaviour of {{<pdobj "mtx_*~">}}  resp.  {{<pdobj "partconv~">}}.
 
 
 ### SISO convolution
@@ -90,7 +90,7 @@ The main differences are:
 
 ### matrix multiplication
 
-Using IRs of length `1`, we can mimick the {{<pdobj "mtx_*~">}} (with a fixed interpolation time):
+Using IRs of length `1`, we can mimic the {{<pdobj "mtx_*~">}} (with a fixed interpolation time):
 
 ![matrix multiplication](simple_multiplication.svg)
 

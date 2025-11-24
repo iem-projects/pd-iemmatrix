@@ -12,10 +12,10 @@ see_also:
 inlets:
   1st:
   - type: matrix
-    description: iput
+    description: input
 outlets:
   1st:
   - type: matrix
-    description: input
+    description: output
 ---
 $$B_{m,n} = \sin^\circ (A_{m,n}) \quad \equiv \quad b_{i,j} = \sin(a_{i,j})$$

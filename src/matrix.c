@@ -384,7 +384,7 @@ static void *matrix_new(t_symbol *s, int argc, t_atom *argv)
 
   return (x);
 }
-
+static void _add_library_path(t_class*c);
 void matrix_setup(void)
 {
   matrix_class = class_new(gensym("matrix"), (t_newmethod)matrix_new,
@@ -432,6 +432,8 @@ void matrix_setup(void)
                     A_SYMBOL, 0);
   class_addmethod  (matrix_class, (t_method)matrix_read , gensym("read") ,
                     A_SYMBOL, 0);
+
+  _add_library_path(matrix_class);
 }
 
 void iemtx_matrix_setup(void)
@@ -447,4 +449,42 @@ void mtx_matrix_setup(void)
 void iematrix_setup(void)
 {
   matrix_setup();
+}
+
+/* iemmatrix setup helper */
+
+/* urgh. as of Pd-0.56, the "add-to-path" message refuses un-encoded strings
+ * (though there really is no reason that it should not accept them)
+ */
+static const char*_encodestring(const char*src, char*dest, const size_t len) {
+  if(!dest || len==0)return 0;
+  if(len<2) {dest[0] = 0; return dest;}
+
+  char *d = dest;
+  *d++ = '+';
+  for (const char*s = src; s && *s && (size_t)(d - dest) + 2 < len; ++s) {
+    switch (*s) {
+    default: *d++ = *s; break;
+    case ' ': *d++ = '+'; *d++ = '_'; break;
+    case '$': *d++ = '+'; *d++ = 'd'; break;
+    case ';': *d++ = '+'; *d++ = 's'; break;
+    case ',': *d++ = '+'; *d++ = 'c'; break;
+    case '+': *d++ = '+'; *d++ = '+'; break;
+    }
+  }
+  *d = 0;
+  return dest;
+}
+static void _add_library_path(t_class*c) {
+  const char*path = class_gethelpdir(c);
+  char _path[MAXPDSTRING];
+  t_atom ap[2];
+  _encodestring(path, _path, sizeof(_path));
+  SETSYMBOL(ap+0, gensym(_path));
+  SETFLOAT (ap+1, -1); /* '-1' adds the path only temporarily */
+
+  t_symbol*recv = gensym("pd");
+  if(recv->s_thing) {
+    pd_typedmess(recv->s_thing, gensym("add-to-path"), 2, ap);
+  }
 }

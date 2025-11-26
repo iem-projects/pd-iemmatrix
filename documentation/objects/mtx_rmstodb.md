@@ -3,7 +3,7 @@ title: mtx_rmstodb
 description: convert a linear value into dB for each element of a matrix
 categories:
 - object
-pdcategory: Generic
+pdcategory: Element Math
 see_also:
 inlets:
   1st:

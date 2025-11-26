@@ -3,7 +3,7 @@ title: mtx_./
 description: element-wise matrix division
 categories:
 - object
-pdcategory: Simple Math
+pdcategory: Element Math
 aliases:
 - mtx_div
 see_also:

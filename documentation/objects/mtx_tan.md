@@ -3,7 +3,7 @@ title: mtx_tan
 description: tangent (tan) of matrix elements
 categories:
 - object
-pdcategory: Trigonometric Functions
+pdcategory: Element Math
 see_also:
 - mtx_sin
 - mtx_cos

@@ -3,7 +3,7 @@ title: mtx_-
 description: matrix subtraction
 categories:
 - object
-pdcategory: Simple Math
+pdcategory: Element Math
 aliases:
 - mtx_sub
 see_also:

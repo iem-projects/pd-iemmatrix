@@ -3,7 +3,7 @@ title: mtx_+
 description: matrix addition
 categories:
 - object
-pdcategory: Simple Math
+pdcategory: Element Math
 aliases:
 - mtx_add
 see_also:

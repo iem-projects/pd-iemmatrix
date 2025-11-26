@@ -3,7 +3,7 @@ title: mtx_sin
 description: sine (sin) of each element of a matrix
 categories:
 - object
-pdcategory: Trigonometric Functions
+pdcategory: Element Math
 see_also:
 - mtx_cos
 - mtx_tan

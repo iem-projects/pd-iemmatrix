@@ -3,7 +3,7 @@ title: mtx_dbtopow
 description: calculate power value from dB for each matrix element
 categories:
 - object
-pdcategory: Generic
+pdcategory: Element Math
 see_also:
 inlets:
   1st:

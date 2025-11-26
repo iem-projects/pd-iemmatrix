@@ -3,7 +3,7 @@ title: mtx_abs
 description: calculate absolute values of matrix elements
 categories:
 - object
-pdcategory: Simple Math
+pdcategory: Element Math
 see_also:
 - abs
 inlets:

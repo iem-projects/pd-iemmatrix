@@ -3,7 +3,7 @@ title: mtx_.*
 description: element-wise matrix multiplication
 categories:
 - object
-pdcategory: Simple Math
+pdcategory: Element Math
 aliases:
 - mtx_mul
 see_also:

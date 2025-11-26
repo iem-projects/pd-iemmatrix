@@ -3,7 +3,7 @@ title: mtx_int
 description: compute integer value of each matrix element
 categories:
 - object
-pdcategory: Generic
+pdcategory: Element Math
 see_also:
 inlets:
   1st:

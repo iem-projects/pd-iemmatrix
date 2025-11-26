@@ -3,7 +3,7 @@ title: mtx_*
 description: matrix multiplication
 categories:
 - object
-pdcategory: Simple Math
+pdcategory: Matrix Math
 aliases:
 - mtx_mul
 see_also:

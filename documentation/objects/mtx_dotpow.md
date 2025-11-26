@@ -3,7 +3,7 @@ title: mtx_.^
 description: calculate element-wise raising to the power of x
 categories:
 - object
-pdcategory: Simple Math
+pdcategory: Element Math
 aliases:
 - mtx_pow
 see_also:

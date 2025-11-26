@@ -3,7 +3,7 @@ title: mtx_inverse
 description: calculate the inverse (or pseudo-inverse) of a matrix
 categories:
 - object
-pdcategory: Generic
+pdcategory: Matrix Math
 see_also:
 inlets:
   1st:

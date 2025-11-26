@@ -4,8 +4,8 @@ shorttitle: object reference
 pdcategories:
 - General
 - Matrix Creation
-- Simple Math
-- Trigonometric Functions
+- Matrix Math
+- Element Math
 - Digital Fourier Transformation
 - Misc
 - Audio Math

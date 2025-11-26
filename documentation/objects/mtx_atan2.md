@@ -3,7 +3,7 @@ title: mtx_atan2
 description: arctangent (atan) of matrix elements (four-quadrant version)
 categories:
 - object
-pdcategory: Trigonometric Functions
+pdcategory: Element Math
 see_also:
 - mtx_sin
 - mtx_cos

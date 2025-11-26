@@ -3,7 +3,7 @@ title: mtx_cos
 description: cosine (cos) of each element of a matrix
 categories:
 - object
-pdcategory: Trigonometric Functions
+pdcategory: Element Math
 see_also:
 - mtx_sin
 - mtx_tan

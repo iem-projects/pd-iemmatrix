@@ -3,7 +3,7 @@ title: mtx_powtodb
 description: convert a power value to dB for each element of a matrix
 categories:
 - object
-pdcategory: Generic
+pdcategory: Element Math
 see_also:
 inlets:
   1st:

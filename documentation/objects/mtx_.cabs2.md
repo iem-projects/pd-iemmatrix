@@ -3,15 +3,22 @@ title: mtx_.cabs2
 description: element-wise absolute value of complex-valued matrix
 categories:
 - object
-pdcategory: Generic
+pdcategory: Element Math
 see_also:
+- mtx_.cdiv
+- mtx_.cmul
+- mtx_cabs2
+- mtx_cinverse
+- mtx_cmul
 inlets:
   1st:
   - type: matrix
-    description: ...
+    description: real part of input matrix (A)
+  2nd:
+  - type: matrix
+    description: imaginary part of input matrix (B)
 outlets:
   1st:
   - type: matrix
-    description: ...
-draft: true
+    description: absolute values of A+jB
 ---

@@ -17,8 +17,6 @@ outlets:
   1st:
   - type: matrix
     description: LxM matrix
-
-draft: true
 ---
 
 {{< pdobj mtx_distance2 >}} gets all the *squared* euclidean distances between two sets of vectors.

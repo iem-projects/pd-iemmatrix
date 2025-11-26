@@ -29,7 +29,8 @@ void iemmatrix_setup()
   post("\t\tThomas Musil");
   post("\t\tFranz Zotter");
   post("\tcompiled "BUILD_DATE);
-  post("");
 
   iemmatrix_sources_setup();
+
+  post("");
 }

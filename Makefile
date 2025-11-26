@@ -320,4 +320,4 @@ clean.local:
 	-rm $(in.files:%.in=%)
 
 # build stub libraries
--include Make.stublibs
+-include src/stub/Make.stublibs

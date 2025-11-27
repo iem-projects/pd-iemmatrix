@@ -27,26 +27,23 @@ $$
 y_i[n] = \sum_{j=1}^J \mathit{IR}_{ij} * x_j[n]
 $$
 
-### the `array3` message
+### the {{<pdmsg array3>}} message
 The complete set of (equal length) impulse responses (IRs) can be seen as a three-dimensional matrix \\(\mathit{IR}_{ijk}\\).
 
-Since iemmatrix's `[matrix ...(` message is defined as a two-dimensional matrix, a new message `[array3 ...(` is used.
+Since iemmatrix's {{<pdmsg matrix "..." >}} message is defined as a two-dimensional matrix, a new message  {{<pdmsg array3 "...">}} is used.
 
 The format is
-```
-[array3 <outs> <ins> <len> <data...>(
-```
+
+{{< pdmsg array3 "<outs>" "<ins>" "<len>" "<data...>" >}}
 
 with `outs` and `ins` being the number of output channels (matrix rows) resp. input channels (matrix columns),
 and `len` being the length of each impulse-response (in samples).
 The following `data` is the actual impulse responses as a list of floats (in row-major order).
 
 E.g.
-```
-[array3  3 2 4  1 0 0 0  2 2 2 2  3 0 0 3  1.1 1.2 1.3 1.4  2.1 2.2 2.3 2.4 3.1 -3.2 3.3 -3.4(
-```
+{{< pdmsg array3  3 2 4 " " 1 0 0 0 " " 2 2 2 2 " " 3 0 0 3 " " 1.1 1.2 1.3 1.4 " " 2.1 2.2 2.3 2.4 " " 3.1 -3.2 3.3 -3.4 >}}
 
-Is a \\(3*2\\) matrix with 6 impulse responses (4 samples each):
+Is a \\(3*2\\) matrix with 6 impulse responses (\\(4\\) samples each):
 
 | IR  | values    |
 |-----|-----------|
@@ -108,13 +105,13 @@ This patch implements a dynamic 2×2 cross-feed reverb
 where the impulse responses are generated and updated in real-time during playback.
 
 
-A synthesizer subpatch ({{< pdobj "pd blip-blop" >}}) generates a short stereo test tone.
+A synthesizer subpatch ({{< pdobj pd blip-blop >}}) generates a short stereo test tone.
 This signal is fed into a subpatch containing {{< pdobj "mtx_convolver~" >}} with a the 2×2 convolution matrix.
-The subpatch is configured with a large block size ({{< pdobj "block~ 4096" >}}) (for efficiency reasons).
+The subpatch is configured with a large block size ({{< pdobj "block~" 4096 >}}) (for efficiency reasons).
 
 
 The matrix uses four impulse responses: two short IRs for the direct paths and two longer, modulated IRs for the cross-feed paths.
-These IRs are synthesized within the {{< pdobj "pd cross-reverb" >}} subpatch and sent to the convolver as a list message.
+These IRs are synthesized within the {{< pdobj pd cross-reverb >}} subpatch and sent to the convolver as a list message.
 When the user modifies the reverb parameters, the IRs are regenerated and swapped.
 
 ![2x2 cross-feed reverb: dynamically create IRs](example_2x2_crossfeed_makeIRs.svg)

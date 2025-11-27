@@ -93,22 +93,22 @@
     color-scheme: dark;
 }
 
-   
+
 BODY {
     --background: #ffffff;
     --color: #000000;
 }
 
-BODY.dark-theme {  
+BODY.dark-theme {
     --background: #202124;
     --color: #ffffff;
 }
 
-BODY.serif {   
+BODY.serif {
     --font-family: Lato, Arial, sans-serif;
 }
 
-BODY.sans-serif {  
+BODY.sans-serif {
     --font-family: Lato, Arial, sans-serif;
 }
 
@@ -127,7 +127,7 @@ li, ul {
 
 li.dark-theme, ul.dark-theme ol.dark-theme {
     --color: #BCC0C3;
-}      
+}
 
 
 H1, H2, H3, H4, H5, H6, ol, ul, mark, PRE {
@@ -135,7 +135,7 @@ H1, H2, H3, H4, H5, H6, ol, ul, mark, PRE {
 
 }
 
-H1.dark-theme, H2.dark-theme, H3.dark-theme, H4.dark-theme, H5.dark-theme, 
+H1.dark-theme, H2.dark-theme, H3.dark-theme, H4.dark-theme, H5.dark-theme,
 H6.dark-theme, ol.dark-theme, ul.dark-theme, mark.dark-theme, PRE.dark-theme {
     --ccolor: #dedede;
 }
@@ -152,11 +152,11 @@ PRE.dark-theme {
 tr:nth-child(even) {
     --background-color: #f0f0f0;
     }
-   
+
 tr.dark-theme:nth-child(even) {
     --background-color: #303136;
     }
-   
+
 table, td, th {
     --ccolor: #3E4349;
     padding: 6px;
@@ -209,12 +209,12 @@ a.dark-theme:visited {
 
 input {
     --background-color: #f2f2f2;
-    --color: #3E4349   
+    --color: #3E4349
 }
 
-input.dark-theme { 
+input.dark-theme {
     --background-color: #333333; /*#60636c;*/
-    --color: #BCC0C3   
+    --color: #BCC0C3
 }
 
 
@@ -232,7 +232,7 @@ input {
     background-color: var(--background-color);
     border-radius: 4px;
     border: 1px solid #808080;
-    color: var(--color);    
+    color: var(--color);
 }
 
 
@@ -243,28 +243,28 @@ BODY {
     font-size: 12.7pt; /* this is because there were many <p> missing. We can change this value to 7pt to easily detect missing <p> */
     line-height: 1.6;
     }
-   
+
 #corpus {
 
     margin-left: 1.2in;
-    margin-right: 1.2in;   
-    padding: 10px;   
+    margin-right: 1.2in;
+    padding: 10px;
     width: auto;
     }
-   
+
 H1 {
     font-size: 32.7pt;
     text-align: center;
-    font-weight: normal;   
+    font-weight: normal;
 }
 H2 {
     font-size: 22.7pt;
     text-align: center;
-    font-weight: normal;  
+    font-weight: normal;
 }
 H3 {
     font-size: 14.7pt;
-    text-align: left;  
+    text-align: left;
 }
 H4 {
     font-size: 12.7pt;
@@ -310,7 +310,7 @@ CODE {
     font-size: 90%;
     text-align: left;
     border-radius: 8px;
-    padding: 4px 8px;  
+    padding: 4px 8px;
 }
 
 P {
@@ -364,12 +364,12 @@ a.green:link {
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 80%;  
+    font-size: 80%;
 }
 
 a.green:hover {
     text-decoration: none;
-    background-color: #4CAF50; 
+    background-color: #4CAF50;
 }
 
 a.green:visited {
@@ -415,7 +415,7 @@ div.butt {
     left: 0;
 }
 
-blockquote { 
+blockquote {
     padding: 0;
     margin-right:0px;
 }
@@ -437,11 +437,11 @@ h1:hover a, h2:hover a, h3:hover a, h4:hover a { visibility: visible}
 
 @media screen and (max-device-width: 700px) {
     #corpus {
-    padding: 10px;   
+    padding: 10px;
     width: auto;
     margin-left: 6px;
     margin-right: 6px;
-   
+
     }
     H1 {font-size: 25pt;}
     IMG {max-width: 100%;}
@@ -451,10 +451,10 @@ h1:hover a, h2:hover a, h3:hover a, h4:hover a { visibility: visible}
 
 @media screen and (max-width: 700px) {
     #corpus {
-    padding: 10px;   
+    padding: 10px;
     width: auto;
     margin-left: 6px;
-    margin-right: 6px; 
+    margin-right: 6px;
     }
     H1 {font-size: 25pt;}
     IMG {max-width: 100%;}

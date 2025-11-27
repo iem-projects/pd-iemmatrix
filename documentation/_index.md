@@ -8,11 +8,11 @@ draft: false
 # iemmatrix
 
 `iemmatrix` is a collection of objects for [Pure Data (Pd)](https://puredata.info)
-for manipulation of simple (two dimensional) matrices.
+for manipulation of simple (two dimensional, real valued) matrices.
 
 Objects names are modelled after functions found in math toolboxes like
 [GNU Octave ](https://octave.org/),
-[Matlab](https://www.mathworks.com/products/matlab.html))
+[Matlab](https://www.mathworks.com/products/matlab.html)
 or [NumPy](https://numpy.org/),
 using Pd's patching pardigm.
 

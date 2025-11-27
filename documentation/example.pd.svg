@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg height="270" version="1.1" width="243" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <style>
+  :root { --pd-foreground: #000000; --pd-col0: #404040; } @media (prefers-color-scheme: dark) { :root { --pd-foreground: #BCC0C3; --pd-col0: #919496; } }
+ </style>
+ <polyline id="PD.x55fe5869b7f0.t55fe58762180R__msg" points="7.0 10.0 44.0 10.0 39.0 15.0 39.0 25.0 44.0 30.0 7.0 30.0 7.0 10.0" style="stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; stroke-linecap: square; fill: none;"/>
+ <rect height="2.0" id="PD.x55fe5869b7f0.t55fe58762180o0__outlet" style="stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);" width="7.0" x="7.0" y="28.0"/>
+ <rect height="2.0" id="PD.x55fe5869b7f0.t55fe58762180i0__inlet" style="stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);" width="7.0" x="7.0" y="10.0"/>
+ <text id="PD.x55fe5869b7f0.t55fe58762180__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);" textLength="28" x="9.0" y="25.0">
+  bang
+ </text>
+ <polyline id="PD.x55fe5869b7f0.t55fe58762310R__obj" points="7.0 35.0 95.0 35.0 95.0 55.0 7.0 55.0 7.0 35.0" style="stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; stroke-linecap: square; fill: none;"/>
+ <rect height="2.0" id="PD.x55fe5869b7f0.t55fe58762310o0__outlet" style="stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);" width="7.0" x="7.0" y="53.0"/>
+ <rect height="2.0" id="PD.x55fe5869b7f0.t55fe58762310i0__inlet" style="stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);" width="7.0" x="7.0" y="35.0"/>
+ <text id="PD.x55fe5869b7f0.t55fe58762310__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);" textLength="84" x="9.0" y="50.0">
+  mtx_rand 5 5
+ </text>
+ <polyline id="PD.x55fe5869b7f0.t55fe587626b0R__obj" points="7.0 115.0 88.0 115.0 88.0 135.0 7.0 135.0 7.0 115.0" style="stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; stroke-linecap: square; fill: none;"/>
+ <rect height="2.0" id="PD.x55fe5869b7f0.t55fe587626b0o0__outlet" style="stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);" width="7.0" x="7.0" y="133.0"/>
+ <rect height="2.0" id="PD.x55fe5869b7f0.t55fe587626b0o1__outlet" style="stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);" width="7.0" x="81.0" y="133.0"/>
+ <rect height="2.0" id="PD.x55fe5869b7f0.t55fe587626b0i0__inlet" style="stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);" width="7.0" x="7.0" y="115.0"/>
+ <text id="PD.x55fe5869b7f0.t55fe587626b0__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);" textLength="77" x="9.0" y="130.0">
+  mtx_inverse
+ </text>
+ <polyline id="PD.x55fe5869b7f0.t55fe587629e0R__obj" points="7.0 59.0 60.0 59.0 60.0 79.0 7.0 79.0 7.0 59.0" style="stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; stroke-linecap: square; fill: none;"/>
+ <rect height="2.0" id="PD.x55fe5869b7f0.t55fe587629e0o0__outlet" style="stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);" width="7.0" x="7.0" y="77.0"/>
+ <rect height="2.0" id="PD.x55fe5869b7f0.t55fe587629e0i0__inlet" style="stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);" width="7.0" x="7.0" y="59.0"/>
+ <rect height="2.0" id="PD.x55fe5869b7f0.t55fe587629e0i1__inlet" style="stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);" width="7.0" x="53.0" y="59.0"/>
+ <text id="PD.x55fe5869b7f0.t55fe587629e0__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);" textLength="49" x="9.0" y="74.0">
+  mtx_+ 1
+ </text>
+ <text id="PD.x55fe5869b7f0.t55fe58705cc0__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);" textLength="56" x="9.0" y="180.0">
+  mtx_show
+ </text>
+ <rect height="2.0" id="graph55fe586f6180o0__outlet" style="stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);" width="7.0" x="7.0" y="258.0"/>
+ <rect height="2.0" id="graph55fe586f6180i0__inlet" style="stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);" width="7.0" x="7.0" y="165.0"/>
+ <polyline id="graph55fe586f6180__graph" points="7.0 165.0 7.0 260.0 217.0 260.0 217.0 165.0 7.0 165.0" style="stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; stroke-linecap: square; fill: none;"/>
+ <polyline id="graph55fe5875de00__graph" points="7.0 185.0 7.0 260.0 217.0 260.0 217.0 185.0 7.0 185.0" style="stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; stroke-linecap: square; fill: none;"/>
+ <text id="PD.x55fe5869b7f0.t55fe5875e9b0__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);" textLength="7" x="11.0" y="197.0">
+  1
+ </text>
+ <text id="PD.x55fe5869b7f0.t55fe58761650__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-col0);" textLength="7" x="53.0" y="197.0">
+  0
+ </text>
+ <text id="PD.x55fe5869b7f0.t55fe58753910__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);" textLength="7" x="95.0" y="197.0">
+  0
+ </text>
+ <text id="PD.x55fe5869b7f0.t55fe58761810__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-col0);" textLength="7" x="137.0" y="197.0">
+  0
+ </text>
+ <text id="PD.x55fe5869b7f0.t55fe58757f80__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);" textLength="7" x="179.0" y="197.0">
+  0
+ </text>
+ <text id="PD.x55fe5869b7f0.t55fe58705860__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);" textLength="7" x="11.0" y="212.0">
+  0
+ </text>
+ <text id="PD.x55fe5869b7f0.t55fe587618f0__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-col0);" textLength="7" x="53.0" y="212.0">
+  1
+ </text>
+ <text id="PD.x55fe5869b7f0.t55fe5869dcb0__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);" textLength="7" x="95.0" y="212.0">
+  0
+ </text>
+ <text id="PD.x55fe5869b7f0.t55fe58763750__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-col0);" textLength="7" x="137.0" y="212.0">
+  0
+ </text>
+ <text id="PD.x55fe5869b7f0.t55fe58761f80__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);" textLength="7" x="179.0" y="212.0">
+  0
+ </text>
+ <text id="PD.x55fe5869b7f0.t55fe58761730__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);" textLength="7" x="11.0" y="227.0">
+  0
+ </text>
+ <text id="PD.x55fe5869b7f0.t55fe586cc590__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-col0);" textLength="7" x="53.0" y="227.0">
+  0
+ </text>
+ <text id="PD.x55fe5869b7f0.t55fe587526a0__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);" textLength="7" x="95.0" y="227.0">
+  1
+ </text>
+ <text id="PD.x55fe5869b7f0.t55fe5875e830__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-col0);" textLength="7" x="137.0" y="227.0">
+  0
+ </text>
+ <text id="PD.x55fe5869b7f0.t55fe58763390__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);" textLength="7" x="179.0" y="227.0">
+  0
+ </text>
+ <text id="PD.x55fe5869b7f0.t55fe586a4550__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);" textLength="7" x="11.0" y="242.0">
+  0
+ </text>
+ <text id="PD.x55fe5869b7f0.t55fe5869b3f0__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-col0);" textLength="7" x="53.0" y="242.0">
+  0
+ </text>
+ <text id="PD.x55fe5869b7f0.t55fe58764120__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);" textLength="7" x="95.0" y="242.0">
+  0
+ </text>
+ <text id="PD.x55fe5869b7f0.t55fe58761e80__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-col0);" textLength="7" x="137.0" y="242.0">
+  1
+ </text>
+ <text id="PD.x55fe5869b7f0.t55fe5875d6c0__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);" textLength="7" x="179.0" y="242.0">
+  0
+ </text>
+ <text id="PD.x55fe5869b7f0.t55fe58763640__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);" textLength="7" x="11.0" y="257.0">
+  0
+ </text>
+ <text id="PD.x55fe5869b7f0.t55fe587619d0__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-col0);" textLength="7" x="53.0" y="257.0">
+  0
+ </text>
+ <text id="PD.x55fe5869b7f0.t55fe58761b90__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);" textLength="7" x="95.0" y="257.0">
+  0
+ </text>
+ <text id="PD.x55fe5869b7f0.t55fe58763af0__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-col0);" textLength="7" x="137.0" y="257.0">
+  0
+ </text>
+ <text id="PD.x55fe5869b7f0.t55fe58705760__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);" textLength="7" x="179.0" y="257.0">
+  1
+ </text>
+ <polyline id="PD.x55fe5869b7f0.t55fe587627c0R__obj" points="7.0 140.0 109.0 140.0 109.0 160.0 7.0 160.0 7.0 140.0" style="stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; stroke-linecap: square; fill: none;"/>
+ <rect height="2.0" id="PD.x55fe5869b7f0.t55fe587627c0o0__outlet" style="stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);" width="7.0" x="7.0" y="158.0"/>
+ <rect height="2.0" id="PD.x55fe5869b7f0.t55fe587627c0i0__inlet" style="stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);" width="7.0" x="7.0" y="140.0"/>
+ <rect height="2.0" id="PD.x55fe5869b7f0.t55fe587627c0i1__inlet" style="stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);" width="7.0" x="102.0" y="140.0"/>
+ <text id="PD.x55fe5869b7f0.t55fe587627c0__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);" textLength="35" x="9.0" y="155.0">
+  mtx_*
+ </text>
+ <polyline id="PD.x55fe5869b7f0.t55fe587628d0R__obj" points="7.0 85.0 109.0 85.0 109.0 105.0 7.0 105.0 7.0 85.0" style="stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; stroke-linecap: square; fill: none;"/>
+ <rect height="2.0" id="PD.x55fe5869b7f0.t55fe587628d0o0__outlet" style="stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);" width="7.0" x="7.0" y="103.0"/>
+ <rect height="2.0" id="PD.x55fe5869b7f0.t55fe587628d0o1__outlet" style="stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);" width="7.0" x="102.0" y="103.0"/>
+ <rect height="2.0" id="PD.x55fe5869b7f0.t55fe587628d0i0__inlet" style="stroke: var(--pd-foreground); stroke-width: 1.0; fill: var(--pd-foreground);" width="7.0" x="7.0" y="85.0"/>
+ <polyline id="l0x55fe5874f1b0__cord" points="10.0 30.0 10.0 35.0" style="stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; fill: none;"/>
+ <polyline id="l0x55fe58758250__cord" points="10.0 55.0 10.0 59.0" style="stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; fill: none;"/>
+ <polyline id="l0x55fe5875a460__cord" points="10.0 135.0 10.0 140.0" style="stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; fill: none;"/>
+ <polyline id="l0x55fe587542d0__cord" points="10.0 160.0 10.0 165.0" style="stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; fill: none;"/>
+ <polyline id="l0x55fe5875a790__cord" points="10.0 105.0 10.0 115.0" style="stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; fill: none;"/>
+ <polyline id="l0x55fe58757120__cord" points="105.0 105.0 105.0 140.0" style="stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; fill: none;"/>
+ <polyline id="l0x55fe58754d20__cord" points="10.0 79.0 10.0 85.0" style="stroke: var(--pd-foreground); stroke-width: 1.0; stroke-linejoin: round; fill: none;"/>
+ <text id="PD.x55fe5869b7f0.t55fe587628d0__text" style="font-weight: bold; stroke-width: 0; font-family: DejaVu Sans Mono; font-size: 12px; fill: var(--pd-foreground);" textLength="35" x="9.0" y="100.0">
+  t a a
+ </text>
+</svg>

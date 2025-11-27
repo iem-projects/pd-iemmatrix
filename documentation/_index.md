@@ -16,6 +16,7 @@ Objects names are modelled after functions found in math toolboxes like
 or [NumPy](https://numpy.org/),
 using Pd's patching pardigm.
 
+![example iemmatrix patch](example.pd.svg)
 
 
 ## Documentation

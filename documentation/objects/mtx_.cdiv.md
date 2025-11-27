@@ -32,3 +32,5 @@ outlets:
   - type: matrix
     description: imaginary part of element-wise division of (A+jB)./(C+jD)
 ---
+
+$$X_{m,n} = (A_{m,n}+jB_{m,n}) \oslash  (C_{m,n}+jD_{m,n}) \quad \equiv \quad x_{h,i} = (a_{h,i}+j{b_{h,i}})/(c_{h,i}+j{d_{h,i}})$$

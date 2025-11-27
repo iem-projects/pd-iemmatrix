@@ -18,4 +18,5 @@ outlets:
   - type: matrix
     description: output
 ---
+
 $$B_{m,n} = \sin^\circ (A_{m,n}) \quad \equiv \quad b_{i,j} = \sin(a_{i,j})$$

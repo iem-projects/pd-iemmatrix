@@ -16,3 +16,4 @@ outlets:
     description: the result of the operation.
 draft: false
 ---
+$$C_{m,n} = A_{m,n}^{|\circ|} \quad \equiv \quad c_{i,j} = |a_{i,j}|$$

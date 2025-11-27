@@ -5,13 +5,16 @@ categories:
 - object
 pdcategory: Element Math
 see_also:
+- mtx_exp
+- mtx_.^
 inlets:
   1st:
   - type: matrix
-    description: ...
+    description: input matrix
 outlets:
   1st:
   - type: matrix
-    description: ...
-draft: true
+    description: output matrix
 ---
+
+$$B_{m,n} = \ln^\circ (A_{m,n}) \quad \equiv \quad b_{i,j} = \ln(a_{i,j})$$

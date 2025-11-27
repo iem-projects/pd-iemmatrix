@@ -26,8 +26,13 @@ inlets:
 outlets:
   1st:
   - type: matrix
-    description: real part of element-wise multiplication of (A+jB).*(C+jD)
+    description: X - real part of element-wise multiplication of (A+jB).*(C+jD)
   2nd:
   - type: matrix
-    description: imaginary part of element-wise multiplication of (A+jB).*(C+jD)
+    description: Y - imaginary part of element-wise multiplication of (A+jB).*(C+jD)
 ---
+$$
+Z_{m,n} = (A_{m,n}+jB_{m,n}) \odot  (C_{m,n}+jD_{m,n}) \quad \equiv \quad x_{h,i} = (a_{h,i}+j{b_{h,i}})(c_{h,i}+j{d_{h,i}}) \\\\
+X_{m,n} = \Re ({Z_{m,n}}) \\\\
+Y_{m,n} = \Im ({Z_{m,n}})
+$$

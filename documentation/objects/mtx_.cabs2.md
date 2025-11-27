@@ -22,3 +22,4 @@ outlets:
   - type: matrix
     description: absolute values of A+jB
 ---
+$$C_{m,n} = (A_{m,n}+jB_{m,n})^{|\circ|} \quad \equiv \quad c_{h,i} = |a_{h,i}+j{b_{h,i}}| = \sqrt{a^2_{h,i}+b^2_{h,i}}$$

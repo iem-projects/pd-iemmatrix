@@ -8,10 +8,12 @@ see_also:
 inlets:
   1st:
   - type: matrix
-    description: ...
+    description: input matrix
 outlets:
   1st:
   - type: matrix
-    description: ...
-draft: true
+    description: output matrix
 ---
+Truncates any decimals of the matrix elements, so we only have integers.
+
+$$B_{m,n} = \operatorname{int^\circ} (A_{m,n}) \quad \equiv \quad b_{i,j} = \operatorname{int}(a_{i,j})$$

@@ -1,6 +1,7 @@
 ---
 Title: mtx_convolver~
-description: MIMO convolution matrix, uniform partitions, time-varying, fftw3
+description: MIMO convolution
+#  matrix, uniform partitions, time-varying, fftw3
 categories:
 - object
 pdcategory: Audio Math

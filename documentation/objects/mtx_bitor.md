@@ -24,3 +24,5 @@ outlets:
 Each element of the input matrices is converted to integer and interpreted as a bitfield.
 Afterwards an "or" is performed on the corresponding bits within the
 corresponing matrix elements.
+
+$$C_{m,n} = A_{m,n} | ^{\circ} B_{m,n} \quad \equiv \quad c_{i,j} = a_{i,j} | b_{i,j}$$

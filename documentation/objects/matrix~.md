@@ -5,19 +5,23 @@ categories:
 - object
 pdcategory: Obsolete
 see_also:
+- mtx_*~
 inlets:
-  0..R-1:
-  - type: input signal
-    description: ...
-  R:
+  0..M-1:
+  - type: signal
+    description: input signals
+  M:
   - type: matrix
-    description: ...
-  R+1:
-  - type: interpolation time
-    description: ...
+    description: matrix to multiply input signals with
+  M+1:
+  - type: float
+    description: interpolation time
 outlets:
-  1st:
-  - type: output signals
-    description: ...
-draft: true
+  0..N-1:
+  - type: signal
+    description: output signals
 ---
+
+This object is obsolete.
+It shouldn't be used in new code anymore.
+Please use {{< pdobj "mtx_*~" >}} instead.

@@ -9,10 +9,26 @@
   {{ with .Content }}
   {{ . }}
   {{ end }}
+
+  {{ $total_objects := .Site.Params.objectdocs.total }}
+  {{ $draft_objects := .Site.Params.objectdocs.draft }}
+  {{ with (default $total_objects $draft_objects ) }}
+  {{ $percentage_objects := div (mul 100 (sub $total_objects $draft_objects)) $total_objects }}
+  {{ if ge $percentage_objects 1 }}
+  <div class="warning">
+    <p>
+      Please note that the web documentation is not yet complete.
+      There are well over 100 objects in total. The list below covers about <b>{{ $percentage_objects }}%</b> of them.
+      (Almost) all objects are documented via help patches.
+    </p>
+  </div>
+  {{ end }}
+  {{ end }}
+
   <div id="components">
     <div class="row gutters">
       {{ range $cat := .Page.Params.pdcategories}}
-      <h3 id="{{$cat | anchorize}}">{{$cat}}<a href="#{{$cat | anchorize}}" 
+      <h3 id="{{$cat | anchorize}}">{{$cat}}<a href="#{{$cat | anchorize}}"
         class="hanchor" > &#128279</a></h3>
       {{ range where $pages "Params.pdcategory" $cat }}
       <div class="col col-4 item">

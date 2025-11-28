@@ -1,0 +1,31 @@
+/* © IOhannes m zmölnig, Institute of Electronic Music and Acoustics
+* this file extends the pd-v0.1.css
+*
+* Licensed under the MIT license - https://opensource.org/licenses/MIT
+*/
+
+
+/* Pd specific styles */
+
+.pdobj, .pdmsg {
+    font-family: 'Consolas', 'Menlo', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
+    text-align: left;
+}
+.pdobj:not(h*), .pdmsg:not(h*) {
+    font-size: 90%;
+}
+
+.pdobj:before, .pdmsg:before {
+  content: "[";
+}
+.pdobj:after {
+  content: "]";
+}
+.pdmsg:after {
+  content: "(";
+}
+
+.warning {
+    border: 1px solid #ccc !important;
+    padding: 0.01em 16px;
+}

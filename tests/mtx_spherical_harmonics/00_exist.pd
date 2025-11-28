@@ -1,0 +1,13 @@
+#N canvas 0 77 396 423 10;
+#X obj 122 68 inlet bang;
+#X obj 122 385 outlet 1==OK;
+#X obj 122 327 b;
+#X msg 122 356 1;
+#X text 67 37 test for existence of [mtx_min];
+#X obj 122 161 mtx_spherical_harmonics 3;
+#X msg 122 122 matrix 2 1 0 0;
+#X connect 0 0 6 0;
+#X connect 2 0 3 0;
+#X connect 3 0 1 0;
+#X connect 5 0 2 0;
+#X connect 6 0 5 0;

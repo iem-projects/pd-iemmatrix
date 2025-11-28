@@ -286,6 +286,8 @@ mtx_size/00_exist;
 mtx_size/01_function;
 mtx_slice/00_exist;
 mtx_sort/00_exist;
+mtx_spherical_harmonics/00_exist;
+mtx_spherical_harmonics/01_function;
 mtx_spivot/00_exist;
 mtx_sub/00_exist1;
 mtx_sub/00_exist;

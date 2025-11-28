@@ -7,7 +7,9 @@ pages:
   stage: build
   script:
     - cd .hugo
-    - hugo
+    - touch generated.toml
+    - test ! -x scripts/makeextraconfig.sh || scripts/makeextraconfig.sh > generated.toml
+    - hugo --config=config.toml,generated.toml
     - mv public ..
   artifacts:
     paths:

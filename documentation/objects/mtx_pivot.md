@@ -26,8 +26,8 @@ The maximum of the matrix will be located at the upper-left corner.
 
 The first outlet is the pivot-transformed matrix.
 The other outlets are the elementary matrices \\(A\\) and \\(B\\)
-that have to be pre-multiplied (row-transform) and post-multiplied (column-tranform)
-to the original matrix to get the pivot-tranformation.
+that have to be pre-multiplied (row-transform) resp. post-multiplied (column-tranform)
+with the original matrix to get the pivot-tranformation.
 
 $$
 Y_{n\times m} = A_{n\times n} \cdot X_{n\times m} \cdot B_{m\times m}

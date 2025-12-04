@@ -4,6 +4,7 @@ shorttitle: object reference
 pdcategories:
 - General
 - Matrix Creation
+- Matrix Transformation
 - Matrix Math
 - Element Math
 - Digital Fourier Transformation

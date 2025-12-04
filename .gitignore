@@ -107,3 +107,6 @@ tags
 [._]*.un~
 
 # End of https://www.toptal.com/developers/gitignore/api/c++,autotools+strict,emacs,vim
+
+# visual studio
+.vs/

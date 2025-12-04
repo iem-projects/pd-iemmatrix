@@ -22,4 +22,4 @@ outlets:
 ---
 Each element of the input matrices is converted to an integer value.
 Afterwards right signed bit shift is performed on the elements of matrix A.
-The shift amount is read from the correspinding elements in matrix B.
+The shift amount is read from the corresponding elements in matrix B.

@@ -23,7 +23,7 @@ outlets:
 ---
 Each element of the input matrices is converted to integer and interpreted as a bitfield.
 Afterwards an "and" is performed on the corresponding bits within the
-corresponing matrix elements.
+corresponding matrix elements.
 
 
 $$C_{m,n} = A_{m,n} \And ^{\circ} B_{m,n} \quad \equiv \quad c_{i,j} = a_{i,j} \And  b_{i,j}$$

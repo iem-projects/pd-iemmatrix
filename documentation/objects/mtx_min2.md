@@ -1,6 +1,6 @@
 ---
 title: mtx_min2
-description: get the element-wise minimum of two matrices
+description: get element-wise minima of two matrices
 categories:
 - object
 pdcategory: Element Math

@@ -1,6 +1,6 @@
 ---
 title: mtx_max2
-description: get element-wise maximum of two matrices
+description: get element-wise maxima of two matrices
 categories:
 - object
 pdcategory: Element Math

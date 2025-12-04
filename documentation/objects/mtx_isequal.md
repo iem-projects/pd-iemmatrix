@@ -3,15 +3,67 @@ title: mtx_isequal
 description: compare a matrix for equality with another (scalar result)
 categories:
 - object
-pdcategory: Generic
+pdcategory: Misc
 see_also:
+- "mtx_=="
+- "mtx_!="
+- "mtx_>"
+- "mtx_>="
+- "mtx_<"
 inlets:
   1st:
   - type: matrix
-    description: ...
+    description: left-hand operand \(A_{m,n}\)
+  2nd:
+  - type: matrix
+    description: right-hand operand \(B_{m_n}\)
+  - type: float
+    description: right-hand operand \(b\)
 outlets:
   1st:
-  - type: float
-    description: ...
-draft: true
+  - type: matrix
+    description: result
 ---
+
+Returns `1` if all elements of the input matrix \\(A_{m,n}\\) are equal to the corresponding elements of \\(B_{m,n}\\) (resp. \\(b\\)), and otherwise `0`.
+
+
+$$
+c = (A_{m,n} \stackrel{?}{=} B_{m,n}) =
+\begin{cases}
+1 & \text{if } a_{i,j} = b_{i,j} \forall i,j, \cr
+0 & \text{otherwise.}
+\end{cases}
+$$
+
+
+$$
+c = (A_{m,n} \stackrel{?}{=} b) =
+\begin{cases}
+1 & \text{if } a_{i,j} = b \forall i,j, \cr
+0 & \text{otherwise.}
+\end{cases}
+$$
+
+## Examples
+
+$$
+[\begin{pmatrix}
+1 & 0 \cr
+0 & 2
+\end{pmatrix} \stackrel{?}{=} \begin{pmatrix}
+1 & 0 \cr
+0 & 2
+\end{pmatrix}] = 1
+$$
+
+$$
+[\begin{pmatrix}
+1 & 0 \cr
+0 & 2
+\end{pmatrix} \stackrel{?}{=} \begin{pmatrix}
+1 & 1 \cr
+2 & 2
+\end{pmatrix}] = 0
+$$
+

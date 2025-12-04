@@ -1,17 +1,50 @@
 ---
-title: mtx_lt
-description: compare a matrix with another for less-than
+title: "mtx_<"
+description: element-wise comparison for inferiority of two matrices
 categories:
 - object
-pdcategory: Generic
+pdcategory: Element Math
+aliases:
+- mtx_le
 see_also:
+- mtx_isequal
+- "mtx_=="
+- "mtx_!="
+- "mtx_>"
+- "mtx_>="
+- "mtx_<="
 inlets:
   1st:
   - type: matrix
-    description: ...
+    description: left-hand operand
+  2nd:
+  - type: matrix
+    description: right-hand operand
+  - type: float
+    description: right-hand operand
 outlets:
   1st:
   - type: matrix
-    description: ...
-draft: true
+    description: result
 ---
+
+Returns `1` for each element of \\(A\\) that is *less than* the corresponding element in \\(B\\).
+
+$$C_{m,n} = (A_{m,n} \stackrel{?}{\lt}^\circ B_{m,n}) \quad \equiv \quad c_{i,j} = (a_{i,j} \stackrel{?}{\lt} b_{i,j})$$
+
+$$C_{m,n} = (A_{m,n} \stackrel{?}{\lt}^\circ b) \quad \equiv \quad c_{i,j} = (a_{i,j} \stackrel{?}{\lt} b)$$
+
+## Examples
+
+$$
+[\begin{pmatrix}
+1 & 1 \cr
+0 & 2
+\end{pmatrix} \stackrel{?}{\lt}^\circ \begin{pmatrix}
+1 & 0 \cr
+2 & 2
+\end{pmatrix}] = \begin{pmatrix}
+0 & 0 \cr
+1 & 0
+\end{pmatrix}
+$$

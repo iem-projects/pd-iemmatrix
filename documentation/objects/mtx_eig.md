@@ -3,7 +3,7 @@ title: mtx_eig
 description: eigenvalue decomposition of a matrix
 categories:
 - object
-pdcategory: Matrix Math
+pdcategory: Matrix Transformation
 see_also:
 - mtx_svd
 inlets:

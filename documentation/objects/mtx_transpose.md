@@ -3,7 +3,7 @@ title: mtx_transpose
 description: transpose a matrix
 categories:
 - object
-pdcategory: Matrix Math
+pdcategory: Matrix Transformation
 see_also:
 inlets:
   1st:

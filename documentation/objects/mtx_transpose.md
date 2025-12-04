@@ -3,15 +3,16 @@ title: mtx_transpose
 description: transpose a matrix
 categories:
 - object
-pdcategory: Generic
+pdcategory: Matrix Math
 see_also:
 inlets:
   1st:
   - type: matrix
-    description: ...
+    description: \(n\times m\) input matrix
 outlets:
   1st:
   - type: matrix
-    description: ...
-draft: true
+    description: \(m\times n\) output matrix
 ---
+
+$$ Y_{m\times n} = X_{n\times m}^\mathsf{T} $$

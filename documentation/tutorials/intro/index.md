@@ -8,6 +8,7 @@ draft: false
 ## hello world
 
 A *matrix* is a two-dimensional array of numbers.
+
 *iemmatrix* uses a special {{<pdmsg matrix >}} message to send matrices from one object to another.
 This message consists of the selector `matrix` followed by the number of *rows* and *columns*, and finally the data in row-major order:
 
@@ -23,7 +24,7 @@ $$
 
 ![first patch](1.pd.svg)
 
-The actual message format usually does not concern you,
+The actual message format usually does not need to concern the user,
 as matrices are created and processed by specialized objects.
 
 

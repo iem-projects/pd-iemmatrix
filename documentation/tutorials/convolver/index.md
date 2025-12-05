@@ -27,7 +27,7 @@ $$
 y_i[n] = \sum_{j=1}^J \mathit{IR}_{ij} * x_j[n]
 $$
 
-### the {{<pdmsg array3>}} message
+### the `array3` message
 The complete set of (equal length) impulse responses (IRs) can be seen as a three-dimensional matrix \\(\mathit{IR}_{ijk}\\).
 
 Since iemmatrix's {{<pdmsg matrix "..." >}} message is defined as a two-dimensional matrix, a new message  {{<pdmsg array3 "...">}} is used.

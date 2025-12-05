@@ -29,16 +29,16 @@ draft: false
 ---
 
 ## array3
-The array3 message is `[array3 <n> <m> <len> <ir-samples>(`,
+The array3 message is {{<pdmsg array3 "<n>" "<m>" "<len>" "<ir-samples>" >}},
 with the linear index $$s+i\times len+o\times m\times len, \qquad \text{indices: } s\dots\text{sample, } i\dots\text{input, } o\dots\text{output}$$
 to shape the impulse response (ir) sample sequence.
 
 ## time-varying MIMO convolver
-The input signal \\(x_i[s]\\) of the input index \\(i\\) and sample index \\(s\\) is divided by Pd (or its local `[block~ <L>]` object's setting) into blocks \\(x_b[s]=x[bL+s]\\) of the length \\(L\\) with the local sample index \\(s=0\dots L\\).  Together with the previous block, it is being \\(2L\\) fast Fourier transformed for real-valued signals, at every DSP cycle indexed by \\(b\\):
+The input signal \\(x_i[s]\\) of the input index \\(i\\) and sample index \\(s\\) is divided by Pd (or its local {{<pdobj "block~" "<L>">}} object's setting) into blocks \\(x_b[s]=x[bL+s]\\) of the length \\(L\\) with the local sample index \\(s=0\dots L\\).  Together with the previous block, it is being \\(2L\\) fast Fourier transformed for real-valued signals, at every DSP cycle indexed by \\(b\\):
 $$
  X_{i,b}[k]=\mathrm{rFFT_{2L}}\\{[x_{b-1}[0]\dots x_{b-1}[L-1]], [x_{b}[0]\dots x_{b}[L-1]] \\}.
 $$
-The impulse responses \\(h_{i,o,c}[s]\\) for the inlet \\(i=0\dots m-1\\), outlet \\(o=0\dots n-1\\) and current/old \\(c=0,1\\) crossfade index are partitioned by `[mtx_convolver~]` into blocks of also \\(L\\), using the partition index \\(p=0\dots P-1\\) with \\(P=\lceil\mathrm{len}/L\rceil\\) and Fourier transformed after zero-padding to the size \\(2L\\), and the frequency bin index \\(k=0\dots L\\) is relevant for real-valued signals:
+The impulse responses \\(h_{i,o,c}[s]\\) for the inlet \\(i=0\dots m-1\\), outlet \\(o=0\dots n-1\\) and current/old \\(c=0,1\\) crossfade index are partitioned by {{<pdobj "mtx_convolver~" >}} into blocks of also \\(L\\), using the partition index \\(p=0\dots P-1\\) with \\(P=\lceil\mathrm{len}/L\rceil\\) and Fourier transformed after zero-padding to the size \\(2L\\), and the frequency bin index \\(k=0\dots L\\) is relevant for real-valued signals:
 $$
  H_{i,o,p,c}[k]=\mathrm{rFFT_{2L}}\\{[h_{i,o,c}[pL],\dots h_{i,o,c}[pL+L-1]], [0,\dots,0]\\}.
 $$

@@ -42,8 +42,8 @@ arguments:
 ## matrix store
 {{< pdobj mtx >}} stores a single matrix, just like {{< pdobj float >}} stores a single number.
 
-You can also save the stored matrix to a file via the message `[write <fname>(`
-to the matrix, or load a matrix via `[read <fname>(` from a file.
+You can also save the stored matrix to a file via the message {{< pdmsg write "<fname>" >}}
+to the matrix, or load a matrix via {{< pdmsg read "<fname>" >}} from a file.
 
 
 ## matrix creation
@@ -69,14 +69,12 @@ Finally you can query and change the contents of a matrix:
 | `element` | get/set element *(n,m)* | {{< pdobj mtx_element >}} |
 
 
-# the `[matrix(` message
-The {{< pdobj matrix >}} object understands (and emits) `matrix` messages.
+# the {{<pdmsg matrix >}} message
+The {{< pdobj matrix >}} object understands (and emits) {{<pdmsg matrix >}} messages.
 
 This message describes a 2d matrix and has the form
 
-```
-matrix <int:rows> <int:columns> <list[float]:entries>
-```
+> {{<pdmsg matrix "<int:rows>" "<int:columns>" "<list[float]:entries>" "..." >}}
 
 The *entries* are a list of \\(rows * columns\\) float atoms in row-major order.
 

@@ -3,7 +3,7 @@ include:
   - https://git.iem.at/pd/iem-ci/raw/main/pd-lib-builder/gitlab-iem.yml
 
 pages:
-  image: registry.gitlab.com/pages/hugo:latest
+  image: docker.io/hugomods/hugo:latest
   stage: build
   script:
     - cd .hugo

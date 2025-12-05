@@ -26,6 +26,7 @@
     min-width: 2em;
     display: inline-block;
     padding: 0 3px 0 3px;
+    margin: 3px;
 }
 .pdobj:not(h*), .pdmsg:not(h*) {
     font-size: 90%;

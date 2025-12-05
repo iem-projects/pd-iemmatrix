@@ -1,6 +1,6 @@
 ---
 title: mtx_distance2
-description: calculate the matrix of squared euclidean distances between a set of vectors
+description: calculate the matrix of squared euclidean distances between two sets of vectors
 categories:
 - object
 pdcategory: Misc

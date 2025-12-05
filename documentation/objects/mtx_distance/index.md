@@ -5,7 +5,7 @@ categories:
 - object
 pdcategory: Misc
 see_also:
-- mtx_distance
+- mtx_distance2
 inlets:
   1st:
   - type: matrix
@@ -54,7 +54,7 @@ The first row of the output matrix shows the distances between the reference vec
 \\(\begin{pmatrix}0 & 0 & 1\end{pmatrix}\\) resp.
 The distance is \\(1\\) in all cases.
 
-The first row of the output matrix uses \\(\begin{pmatrix}1 & 2 & 3\end{pmatrix}\\) as the reference vector,
+The second row of the output matrix uses \\(\begin{pmatrix}1 & 2 & 3\end{pmatrix}\\) as the reference vector,
 leading to the results
 \\(\sqrt{0^2+2^2+3^2} = \sqrt{13} = 3.605\\),
 \\(\sqrt{1^2+1^2+3^2} = \sqrt{11} = 3.316\\), and

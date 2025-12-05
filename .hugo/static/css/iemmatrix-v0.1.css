@@ -7,25 +7,52 @@
 
 /* Pd specific styles */
 
+.pdBorder {
+  filter: drop-shadow(0.5px 0px 0px black)
+          drop-shadow(-0.5px 0px 0px black)
+          drop-shadow(0px 0.5px 0px black)
+          drop-shadow(0px -0.5px 0px black)
+          drop-shadow(0.5px 0.5px 0px black)
+          drop-shadow(-0.5px -0.5px 0px black)
+          drop-shadow(-0.5px 0.5px 0px black)
+          drop-shadow(0.5px -0.5px 0px black);
+}
+
 .pdobj, .pdmsg {
+    background: var(--background);
     font-family: 'Consolas', 'Menlo', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
     text-align: left;
+
+    min-width: 2em;
+    display: inline-block;
+    padding: 0 3px 0 3px;
 }
 .pdobj:not(h*), .pdmsg:not(h*) {
     font-size: 90%;
 }
 
-.pdobj:before, .pdmsg:before {
-  content: "[";
+.pdobj {
+    clip-path: polygon(0 0,
+                       100% 0%,
+                       100% 100%,
+                       0 100%
+    );
 }
-.pdobj:after {
-  content: "]";
-}
-.pdmsg:after {
-  content: "(";
+.pdmsg {
+  padding-right: 10px;
+  clip-path: polygon(0 0,
+                     100% 0%,
+                     calc(100% - 5px) 5px,
+                     calc(100% - 5px) calc(100% - 5px),
+                     100% 100%,
+                     0 100%
+                     );
 }
 
 .warning {
     border: 1px solid #ccc !important;
     padding: 0.01em 16px;
+}
+.pdobj:before, .pdmsg:before, .pdobj:after, .pdmsg:after {
+  content: "";
 }

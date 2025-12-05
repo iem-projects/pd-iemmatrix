@@ -5,12 +5,12 @@
 {{- $aa := index (.Page.Params.aliases) 0 -}}
 {{- if eq $pdobj .Title -}}
 {{- $ok = 1 -}}
-<a href="{{ .Permalink }}" class="pdobj">{{ .Title }}{{with $pdargs}} {{ . }}{{end}}</a>
+<a href="{{ .Permalink }}" class="pdBorder"><span class="pdobj">{{ .Title }}{{with $pdargs}} {{ . }}{{end}}</span></a>
 {{- else if eq $pdobj $aa -}}
 {{- $ok = 1 -}}
-<a href="{{ .Permalink }}" class="pdobj">{{ .Title }}{{with $pdargs}} {{ . }}{{end}}</a>
+<a href="{{ .Permalink }}" class="pdBorder"><span class="pdobj">{{ .Title }}{{with $pdargs}} {{ . }}{{end}}</span></a>
 {{- end -}}
 {{- end -}}
 {{- if eq $ok 0 -}}
-<span class="pdobj">{{ $pdobj }}{{with $pdargs}} {{ . }}{{end}}</span>
+<span class="pdBorder"><span class="pdobj">{{ $pdobj }}{{with $pdargs}} {{ . }}{{end}}</span></span>
 {{- end -}}

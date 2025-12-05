@@ -30,7 +30,7 @@ outlets:
 ---
 
 $$
-Z_{m,n} = (A_{m,n}+jB_{m,n}) \cdot  (C_{m,n}+jD_{m,n}) \\\\
-X_{m,n} = \Re ({Z_{m,n}}) \\\\
-Y_{m,n} = \Im ({Z_{m,n}})
+Z_{m\times n} = (A_{m\times n}+jB_{m\times n}) \cdot  (C_{m\times n}+jD_{m\times n}) \\\\
+X_{m\times n} = \Re ({Z_{m\times n}}) \\\\
+Y_{m\times n} = \Im ({Z_{m\times n}})
 $$

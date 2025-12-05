@@ -29,6 +29,6 @@ outlets:
 
 
 
-$$C_{m,n} = A_{m,n} \oslash B_{m,n} \quad \equiv \quad c_{i,j} = a_{i,j} / b_{i,j} $$
+$$C_{m\times n} = A_{m\times n} \oslash B_{m\times n} \quad \equiv \quad c_{ij} = a_{ij} / b_{ij} $$
 
-$$C_{m,n} = A_{m,n} \oslash b \quad \equiv \quad c_{i,j} = a_{i,j} / b $$
+$$C_{m\times n} = A_{m\times n} \oslash b \quad \equiv \quad c_{ij} = a_{ij} / b $$

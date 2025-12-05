@@ -28,9 +28,9 @@ outlets:
     description: result
 ---
 
-$$C_{m,n} = (A_{m,n} \stackrel{?}{\not =}^\circ B_{m,n}) \quad \equiv \quad c_{i,j} = (a_{i,j} \stackrel{?}{\not =}^\circ b_{i,j})$$
+$$C_{m\times n} = (A_{m\times n} \stackrel{?}{\not =}^\circ B_{m\times n}) \quad \equiv \quad c_{ij} = (a_{ij} \stackrel{?}{\not =}^\circ b_{ij})$$
 
-$$C_{m,n} = (A_{m,n} \stackrel{?}{\not =}^\circ b) \quad \equiv \quad c_{i,j} = (a_{i,j} \stackrel{?}{\not =}^\circ b)$$
+$$C_{m\times n} = (A_{m\times n} \stackrel{?}{\not =}^\circ b) \quad \equiv \quad c_{ij} = (a_{ij} \stackrel{?}{\not =}^\circ b)$$
 
 $$
 [\begin{pmatrix}

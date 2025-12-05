@@ -19,4 +19,4 @@ outlets:
   - type: matrix
     description: output
 ---
-$$C_{m,n} = {\min}^\circ (A_{m,n}, B_{m,n}) \quad \equiv \quad c_{i,j} = \min(a_{i,j}, b_{i,j})$$
+$$C_{m\times n} = {\min}^\circ (A_{m\times n}, B_{m\times n}) \quad \equiv \quad c_{ij} = \min(a_{ij}, b_{ij})$$

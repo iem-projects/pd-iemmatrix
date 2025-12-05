@@ -19,4 +19,4 @@ outlets:
   - type: matrix
     description: output
 ---
-$$C_{m,n} = {\max}^\circ (A_{m,n}, B_{m,n}) \quad \equiv \quad c_{i,j} = \max(a_{i,j}, b_{i,j})$$
+$$C_{m\times n} = {\max}^\circ (A_{m\times n}, B_{m\times n}) \quad \equiv \quad c_{ij} = \max(a_{ij}, b_{ij})$$

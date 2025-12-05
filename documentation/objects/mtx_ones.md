@@ -24,7 +24,7 @@ outlets:
 
 
 $$
-J_{m,n} = \begin{pmatrix}
+J_{m\times n} = \begin{pmatrix}
 1 & 1 & \dots & 1 \cr
 1 & 1 & \dots & 1 \cr
 \vdots & \vdots & \ddots & \vdots \cr

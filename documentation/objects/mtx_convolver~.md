@@ -57,7 +57,7 @@ which, when there is an update, delivers for every output \\(o\\) the linear-con
 $$
   y_{o}[s]=w[s]\thinspace y_{o,c}[s+L]+(1-w[s])\thinspace y_{o,(c+1)\\%2}[s+L],
 $$
-or with the option \\(\mathrm{pow}\\) for power-complementary output crossfade:
+or with the option `pow` for power-complementary output crossfade:
 $$
   y_{o}[s]=\sqrt{w[s]}\thinspace y_{o,c}[s+L]+\sqrt{1-w[s]}\thinspace y_{o,(c+1)\\%2}[s+L],
 $$

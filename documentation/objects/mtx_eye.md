@@ -24,7 +24,7 @@ outlets:
 
 
 $$
-I_{m,n} = \begin{pmatrix}
+I_{m\times n} = \begin{pmatrix}
 1 & 0 & \dots & 0 \cr
 0 & 1 & \dots & 0 \cr
 \vdots & \vdots & \ddots & \vdots \cr

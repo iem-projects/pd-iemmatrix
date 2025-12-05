@@ -30,9 +30,9 @@ outlets:
 
 Returns `1` for each element of \\(A\\) that is *less than* the corresponding element in \\(B\\).
 
-$$C_{m,n} = (A_{m,n} \stackrel{?}{\lt}^\circ B_{m,n}) \quad \equiv \quad c_{i,j} = (a_{i,j} \stackrel{?}{\lt} b_{i,j})$$
+$$C_{m\times n} = (A_{m\times n} \stackrel{?}{\lt}^\circ B_{m\times n}) \quad \equiv \quad c_{ij} = (a_{ij} \stackrel{?}{\lt} b_{ij})$$
 
-$$C_{m,n} = (A_{m,n} \stackrel{?}{\lt}^\circ b) \quad \equiv \quad c_{i,j} = (a_{i,j} \stackrel{?}{\lt} b)$$
+$$C_{m\times n} = (A_{m\times n} \stackrel{?}{\lt}^\circ b) \quad \equiv \quad c_{ij} = (a_{ij} \stackrel{?}{\lt} b)$$
 
 ## Examples
 

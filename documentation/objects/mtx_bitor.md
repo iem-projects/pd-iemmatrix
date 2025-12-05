@@ -25,4 +25,4 @@ Each element of the input matrices is converted to integer and interpreted as a 
 Afterwards an "or" is performed on the corresponding bits within the
 corresponding matrix elements.
 
-$$C_{m,n} = A_{m,n} | ^{\circ} B_{m,n} \quad \equiv \quad c_{i,j} = a_{i,j} | b_{i,j}$$
+$$C_{m\times n} = A_{m\times n} | ^{\circ} B_{m\times n} \quad \equiv \quad c_{ij} = a_{ij} | b_{ij}$$

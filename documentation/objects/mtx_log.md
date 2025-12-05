@@ -17,4 +17,4 @@ outlets:
     description: output matrix
 ---
 
-$$B_{m,n} = \ln^\circ (A_{m,n}) \quad \equiv \quad b_{i,j} = \ln(a_{i,j})$$
+$$B_{m\times n} = \ln^\circ (A_{m\times n}) \quad \equiv \quad b_{ij} = \ln(a_{ij})$$

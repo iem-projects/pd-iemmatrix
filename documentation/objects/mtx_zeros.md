@@ -22,7 +22,7 @@ outlets:
 ---
 
 $$
-0_{m,n} = \begin{pmatrix}
+0_{m\times n} = \begin{pmatrix}
 0 & 0 & \dots & 0 \cr
 0 & 0 & \dots & 0 \cr
 \vdots & \vdots & \ddots & \vdots \cr

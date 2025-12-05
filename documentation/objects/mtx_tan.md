@@ -18,4 +18,4 @@ outlets:
   - type: matrix
     description: output
 ---
-$$B_{m,n} = \tan^\circ (A_{m,n}) \quad \equiv \quad b_{i,j} = \tan(a_{i,j})$$
+$$B_{m\times n} = \tan^\circ (A_{m\times n}) \quad \equiv \quad b_{ij} = \tan(a_{ij})$$

@@ -18,4 +18,4 @@ outlets:
   - type: matrix
     description: output
 ---
-$$B_{m,n} = \cos^\circ (A_{m,n}) \quad \equiv \quad b_{i,j} = \cos(a_{i,j})$$
+$$B_{m\times n} = \cos^\circ (A_{m\times n}) \quad \equiv \quad b_{ij} = \cos(a_{ij})$$

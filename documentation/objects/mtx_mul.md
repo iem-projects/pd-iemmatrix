@@ -29,6 +29,6 @@ outlets:
 ---
 
 
-$$C_{m,p} = A_{m,n} \cdot B_{n,p}$$
+$$C_{m\times p} = A_{m\times n} \cdot B_{n\times p}$$
 
-$$C_{m,n} = A_{m,n} \cdot b \quad \equiv \quad c_{i,j} = a_{i,j} \cdot b $$
+$$C_{m\times n} = A_{m\times n} \cdot b \quad \equiv \quad c_{ij} = a_{ij} \cdot b $$

@@ -33,4 +33,4 @@ outlets:
     description: imaginary part of element-wise division of (A+jB)./(C+jD)
 ---
 
-$$X_{m,n} = (A_{m,n}+jB_{m,n}) \oslash  (C_{m,n}+jD_{m,n}) \quad \equiv \quad x_{h,i} = (a_{h,i}+j{b_{h,i}})/(c_{h,i}+j{d_{h,i}})$$
+$$X_{m\times n} = (A_{m\times n}+jB_{m\times n}) \oslash  (C_{m\times n}+jD_{m\times n}) \quad \equiv \quad x_{hi} = (a_{hi}+j{b_{hi}})/(c_{hi}+j{d_{hi}})$$

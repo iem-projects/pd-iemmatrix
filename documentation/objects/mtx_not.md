@@ -24,4 +24,4 @@ The output is a boolean matrix (only ones and zeros).
 
 
 
-$$B_{m,n} = \lnot A_{m,n} \quad \equiv \quad b_{i,j} = \lnot a_{i,j}$$
+$$B_{m\times n} = \lnot A_{m\times n} \quad \equiv \quad b_{ij} = \lnot a_{ij}$$

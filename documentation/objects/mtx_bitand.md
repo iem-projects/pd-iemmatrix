@@ -26,4 +26,4 @@ Afterwards an "and" is performed on the corresponding bits within the
 corresponding matrix elements.
 
 
-$$C_{m,n} = A_{m,n} \And ^{\circ} B_{m,n} \quad \equiv \quad c_{i,j} = a_{i,j} \And  b_{i,j}$$
+$$C_{m\times n} = A_{m\times n} \And ^{\circ} B_{m\times n} \quad \equiv \quad c_{ij} = a_{ij} \And  b_{ij}$$

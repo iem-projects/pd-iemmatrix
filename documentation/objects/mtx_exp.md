@@ -18,4 +18,4 @@ outlets:
 ---
 
 
-$$B_{m,n} = e^{\circ (A_{m,n})} \quad \equiv \quad b_{i,j} = e^{a_{i,j}}$$
+$$B_{m\times n} = e^{\circ (A_{m\times n})} \quad \equiv \quad b_{ij} = e^{a_{ij}}$$

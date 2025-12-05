@@ -21,4 +21,4 @@ outlets:
   - type: matrix
     description: output
 ---
-$$C_{m,n} = \operatorname{atan^\circ} (A_{m,n} \oslash B_{m,n}) \quad \equiv \quad c_{i,j} = \operatorname{atan}(a_{i,j} / b_{i,j})$$
+$$C_{m\times n} = \operatorname{atan^\circ} (A_{m\times n} \oslash B_{m\times n}) \quad \equiv \quad c_{ij} = \operatorname{atan}(a_{ij} / b_{ij})$$

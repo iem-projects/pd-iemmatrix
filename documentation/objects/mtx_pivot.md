@@ -39,7 +39,7 @@ This is useful for things like de-pivoting.
 ## Example
 
 $$
-X_{m,n} = \begin{pmatrix}
+X_{m\times n} = \begin{pmatrix}
 1 & 2 & 3 \cr
 4 & 5 & 6 \cr
 7 & 8 & 9 \cr
@@ -48,7 +48,7 @@ X_{m,n} = \begin{pmatrix}
 $$
 
 $$
-Y_{m,n} = \begin{pmatrix}
+Y_{m\times n} = \begin{pmatrix}
 12 & 11 & 10 \cr
 9 & 8 & 7 \cr
 6 & 5 & 4 \cr

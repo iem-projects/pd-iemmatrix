@@ -16,4 +16,4 @@ outlets:
     description: output
 ---
 
-$$B_{m,n} = \sqrt[\circ] {A_{m,n}} \quad \equiv \quad b_{i,j} = \sqrt(a_{i,j})$$
+$$B_{m\times n} = \sqrt[\circ] {A_{m\times n}} \quad \equiv \quad b_{ij} = \sqrt(a_{ij})$$

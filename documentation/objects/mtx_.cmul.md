@@ -32,7 +32,7 @@ outlets:
     description: Y - imaginary part of element-wise multiplication of (A+jB).*(C+jD)
 ---
 $$
-Z_{m,n} = (A_{m,n}+jB_{m,n}) \odot  (C_{m,n}+jD_{m,n}) \quad \equiv \quad x_{h,i} = (a_{h,i}+j{b_{h,i}})(c_{h,i}+j{d_{h,i}}) \\\\
-X_{m,n} = \Re ({Z_{m,n}}) \\\\
-Y_{m,n} = \Im ({Z_{m,n}})
+Z_{m\times n} = (A_{m\times n}+jB_{m\times n}) \odot  (C_{m\times n}+jD_{m\times n}) \quad \equiv \quad x_{hi} = (a_{hi}+j{b_{hi}})(c_{hi}+j{d_{hi}}) \\\\
+X_{m\times n} = \Re ({Z_{m\times n}}) \\\\
+Y_{m\times n} = \Im ({Z_{m\times n}})
 $$

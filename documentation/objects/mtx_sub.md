@@ -29,6 +29,6 @@ outlets:
 ---
 
 
-$$C_{m,n} = A_{m,n} - B_{m,n} \quad \equiv \quad c_{i,j} = a_{i,j} - b_{i,j} $$
+$$C_{m\times n} = A_{m\times n} - B_{m\times n} \quad \equiv \quad c_{ij} = a_{ij} - b_{ij} $$
 
-$$C_{m,n} = A_{m,n} - b \quad \equiv \quad c_{i,j} = a_{i,j} - b $$
+$$C_{m\times n} = A_{m\times n} - b \quad \equiv \quad c_{ij} = a_{ij} - b $$

@@ -13,7 +13,7 @@ see_also:
 inlets:
   1st:
   - type: matrix
-    description: left-hand operand \(A_{m,n}\)
+    description: left-hand operand \(A_{m\times n}\)
   2nd:
   - type: matrix
     description: right-hand operand \(B_{m_n}\)
@@ -25,22 +25,22 @@ outlets:
     description: result
 ---
 
-Returns `1` if all elements of the input matrix \\(A_{m,n}\\) are equal to the corresponding elements of \\(B_{m,n}\\) (resp. \\(b\\)), and otherwise `0`.
+Returns `1` if all elements of the input matrix \\(A_{m\times n}\\) are equal to the corresponding elements of \\(B_{m\times n}\\) (resp. \\(b\\)), and otherwise `0`.
 
 
 $$
-c = (A_{m,n} \stackrel{?}{=} B_{m,n}) =
+c = (A_{m\times n} \stackrel{?}{=} B_{m\times n}) =
 \begin{cases}
-1 & \text{if } a_{i,j} = b_{i,j} \forall i,j, \cr
+1 & \text{if } a_{ij} = b_{ij} \forall i,j, \cr
 0 & \text{otherwise.}
 \end{cases}
 $$
 
 
 $$
-c = (A_{m,n} \stackrel{?}{=} b) =
+c = (A_{m\times n} \stackrel{?}{=} b) =
 \begin{cases}
-1 & \text{if } a_{i,j} = b \forall i,j, \cr
+1 & \text{if } a_{ij} = b \forall i,j, \cr
 0 & \text{otherwise.}
 \end{cases}
 $$

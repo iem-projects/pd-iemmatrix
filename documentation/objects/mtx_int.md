@@ -16,4 +16,4 @@ outlets:
 ---
 Truncates any decimals of the matrix elements, so we only have integers.
 
-$$B_{m,n} = \operatorname{int^\circ} (A_{m,n}) \quad \equiv \quad b_{i,j} = \operatorname{int}(a_{i,j})$$
+$$B_{m\times n} = \operatorname{int^\circ} (A_{m\times n}) \quad \equiv \quad b_{ij} = \operatorname{int}(a_{ij})$$

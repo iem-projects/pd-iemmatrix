@@ -19,4 +19,4 @@ outlets:
     description: output
 ---
 
-$$B_{m,n} = \sin^\circ (A_{m,n}) \quad \equiv \quad b_{i,j} = \sin(a_{i,j})$$
+$$B_{m\times n} = \sin^\circ (A_{m\times n}) \quad \equiv \quad b_{ij} = \sin(a_{ij})$$

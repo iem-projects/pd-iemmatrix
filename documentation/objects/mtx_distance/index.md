@@ -24,7 +24,7 @@ outlets:
 
 The euclidean distance between two vectors (of equal dimensions \\(N\\)) \\(a\\) and \\(b\\) is:
 $$
-\\| \vec a -\vec b \\| = \sqrt{\textstyle\sum_{n=1}^N (a_n-b_n)^2} = \sqrt{(a_1-b_1)^2 + (a_2-b_2)^2 + \dots}
+\| \vec a -\vec b \| = \sqrt{\textstyle\sum_{n=1}^N (a_n-b_n)^2} = \sqrt{(a_1-b_1)^2 + (a_2-b_2)^2 + \dots}
 $$
 
 
@@ -36,8 +36,8 @@ the same-index row vector \\(\vec a_l = A_{l,\*}\\) and all the row vectors in \
 
 $$
 C = \begin{pmatrix}
-\\| \vec a_1 - \vec b_1 \\| & \\| \vec a_1 - \vec b_2 \\| & \\| \vec a_1 - \vec b_3 \\| & \dots \\cr
-\\| \vec a_2 - \vec b_1 \\| & \\| \vec a_2 - \vec b_2 \\| & \\| \vec a_2 - \vec b_3 \\| & \dots \\cr
+\| \vec a_1 - \vec b_1 \| & \| \vec a_1 - \vec b_2 \| & \| \vec a_1 - \vec b_3 \| & \dots \\
+\| \vec a_2 - \vec b_1 \| & \| \vec a_2 - \vec b_2 \| & \| \vec a_2 - \vec b_3 \| & \dots \\
 \vdots & \vdots & \vdots & \ddots
 \end{pmatrix}
 $$

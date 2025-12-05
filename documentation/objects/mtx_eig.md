@@ -27,6 +27,6 @@ draft: false
 ---
 This object depends on the GNU Scientific Library. The matrices lists involved have the properties:
 
-$$ \boldsymbol A = \boldsymbol V \mathrm{diag}\\{\boldsymbol \sigma\\} \boldsymbol V^{-1} $$
+$$ \boldsymbol A = \boldsymbol V \operatorname{diag}\lbrace \boldsymbol \sigma\rbrace \boldsymbol V^{-1} $$
 
 

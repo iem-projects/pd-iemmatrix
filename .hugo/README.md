@@ -23,3 +23,30 @@ This page uses [`hugo`](https://gohugo.io) to turn a bunch of markdown files (`.
 6. Edit the `.md` files in the `documentation/` directory (*outside* of the `.hugo` directory).
    As soon as you <kbd>save</<kbd> a Markdown file, the live preview will be updated.
 7. Once finished, stop the live renderer with <kbd>Ctrl</kbd>-<kbd>C</kbd> (as shown in the startup output)
+
+
+# rebuilding the public webpage
+
+To rebuild the public webpage of iemmatrix (available at https://software.iem.at/iemmatrix)
+just push your changes to the canonical repository (https://git.iem.at/pd/iemmatrix).
+
+
+## *only* rebuild the public webpage
+
+When pushing *anything* to the canonical repository,
+a number of CI jobs are run (e.g. building/signing/notarizing `iemmatrix` for macOS, Linux & Windows,... ).
+
+If you know that your changeset only contains changes to the HTML documentation,
+you might want to skip the re-compilation jobs.
+
+To only run the `pages` job (which creates the public HTML documentation), push your changes like this:
+
+```sh
+git push -o ci.variable="IEM_CI_JOBS=pages"
+```
+
+
+Alternatively, if you want to skip the CI entirely, you can use:
+```sh
+git push -o ci.skip
+```

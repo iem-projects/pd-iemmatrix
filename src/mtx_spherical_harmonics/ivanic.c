@@ -109,7 +109,22 @@ void ivanic_s_free(ivanic_s *s)
         {
             my_matrix_free(s->R);
         }
-        free(s);
+        if (s->Rz_alpha != NULL)
+        {
+            my_matrix_free(s->Rz_alpha);
+        }
+        if (s->Ry_beta != NULL)
+        {
+            my_matrix_free(s->Ry_beta);
+        }
+        if (s->Rz_gamma != NULL)
+        {
+            my_matrix_free(s->Rz_gamma);
+        }
+        if (s->temp != NULL)
+        {
+            my_matrix_free(s->temp);
+        }
     }
 }
 
@@ -226,6 +241,7 @@ void ivanic_ruedenberg_rotation_matrix(ivanic_s *s, double alpha, double beta, d
 
     // initialize matrices
     my_matrix_set(s->R, 0, 0, 1.0);
+
     if (s->N <= 1)
     {
         return;
@@ -312,10 +328,6 @@ static t_mtx_spherical_harmonics_rotation *mtx_spherical_harmonics_rotation_new(
 
 static void mtx_spherical_harmonics_rotation_free(t_mtx_spherical_harmonics_rotation *x)
 {
-    if (x->list_rot)
-    {
-        free(x->list_rot);
-    }
     if (x->list_rot)
     {
         free(x->list_rot);

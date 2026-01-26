@@ -3,9 +3,9 @@
 #include <gsl/gsl_eigen.h>
 #include <gsl/gsl_sf_bessel.h>
 
-# undef STUB
-# define STUB(x) \
-  void* iemmatrix_##x() { return x; }
+#undef STUB
+#define STUB(x) \
+  void *iemmatrix_##x() { return x; }
 
 STUB(gsl_sf_bessel_Jn);
 STUB(gsl_sf_bessel_Yn);
@@ -20,6 +20,9 @@ STUB(gsl_linalg_QR_decomp);
 STUB(gsl_linalg_QR_unpack);
 STUB(gsl_linalg_SV_decomp);
 STUB(gsl_matrix_alloc);
+STUB(gsl_matrix_calloc);
+STUB(gsl_matrix_set);
+STUB(gsl_matrix_get);
 STUB(gsl_matrix_complex_alloc);
 STUB(gsl_matrix_complex_free);
 STUB(gsl_matrix_free);

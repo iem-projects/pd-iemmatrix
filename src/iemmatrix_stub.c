@@ -12,13 +12,13 @@
  */
 
 #ifdef _WIN32
-# include <windows.h>
+#include <windows.h>
 typedef HINSTANCE module_t;
-# define snprintf _snprintf
+#define snprintf _snprintf
 #else
-# define _GNU_SOURCE
-# include <dlfcn.h>
-typedef void* module_t;
+#define _GNU_SOURCE
+#include <dlfcn.h>
+typedef void *module_t;
 #endif
 
 #include "iemmatrix_stub.h"
@@ -26,23 +26,23 @@ typedef void* module_t;
 #include <math.h>
 #include <string.h>
 
-# if defined(__GNUC__)
-# warning iemmatrix_stub
+#if defined(__GNUC__)
+#warning iemmatrix_stub
 #endif
-
 
 /* dlopen() well-known libraries and get symbols */
-const char*extension =
+const char *extension =
 #ifdef SHARED_LIBRARY_EXTENSION
-  SHARED_LIBRARY_EXTENSION
+    SHARED_LIBRARY_EXTENSION
 #elif defined _WIN32
-  "dll"
+    "dll"
 #else
-  "so"
+    "so"
 #endif
-  ;
+    ;
 
-static module_t getmodule(const char*modulename, const char*path) {
+static module_t getmodule(const char *modulename, const char *path)
+{
   module_t mod = 0;
 #ifdef _WIN32
   if (path)
@@ -51,25 +51,26 @@ static module_t getmodule(const char*modulename, const char*path) {
 #else
   // search recursively, starting from the main program
   mod = dlopen(modulename, RTLD_NOW);
-  if(!mod && path) {
+  if (!mod && path)
+  {
     char fullmodulename[MAXPDSTRING];
-    if(snprintf(fullmodulename, MAXPDSTRING, "%s/%s", path, modulename) < MAXPDSTRING)
+    if (snprintf(fullmodulename, MAXPDSTRING, "%s/%s", path, modulename) < MAXPDSTRING)
       mod = dlopen(fullmodulename, RTLD_NOW);
   }
 #endif
   return mod;
 }
 
-static module_t getstubmodule(const char*basename, const char*path) {
+static module_t getstubmodule(const char *basename, const char *path)
+{
   char modulename[MAXPDSTRING];
-  snprintf(modulename, MAXPDSTRING-1, "libiemmatrixStub_%s.%s", basename, extension);
-  modulename[MAXPDSTRING-1] = 0;
+  snprintf(modulename, MAXPDSTRING - 1, "libiemmatrixStub_%s.%s", basename, extension);
+  modulename[MAXPDSTRING - 1] = 0;
   return getmodule(modulename, path);
 }
 
-
-typedef void*(*getfun_t)(void);
-static getfun_t getfun(module_t module, const char*name)
+typedef void *(*getfun_t)(void);
+static getfun_t getfun(module_t module, const char *name)
 {
   static module_t module0 = 0;
   getfun_t fun = 0;
@@ -84,43 +85,48 @@ static getfun_t getfun(module_t module, const char*name)
   fun = (void *)GetProcAddress(module, name);
 #else
   /* fall back to pd binary */
-  if(!module) {
+  if (!module)
+  {
 #ifdef _GNU_SOURCE
     module = RTLD_DEFAULT;
 #else
-    if(!module0)
+    if (!module0)
       module0 = dlopen(0, RTLD_NOW);
     module = module0;
 #endif
   }
   fun = dlsym(module, name);
 #endif
-  //post("%s(%p, %s) -> %p", __FUNCTION__, module, name, fun);
+  // post("%s(%p, %s) -> %p", __FUNCTION__, module, name, fun);
   return fun;
 }
 
-
-
 /* macros for retrieving the actual functions */
 
-#define DECLARE_STUB(fun)                       \
-  static void* iemmatrix_stub_##fun = 0
-#define MAKE_STUB(fun, module, function)                        \
-  do {                                                          \
-    if(!iemmatrix_stub_##fun) {                                 \
-      getfun_t f = getfun(module, "iemmatrix_" #function);      \
-      if(!f) f = getfun(module, #function);                     \
-      if(f)iemmatrix_stub_##fun = f();                          \
-    }                                                           \
-  } while(0)
-#define GET_STUB(module, fun, name, path)               \
-  do {                                                  \
-    if(!strcmp(name, #fun)) {                           \
-      if(!iemmatrix_stub_##fun) setup_##module(path);   \
-      return iemmatrix_stub_##fun;                      \
-    }                                                   \
-  } while(0)
-
+#define DECLARE_STUB(fun) \
+  static void *iemmatrix_stub_##fun = 0
+#define MAKE_STUB(fun, module, function)                   \
+  do                                                       \
+  {                                                        \
+    if (!iemmatrix_stub_##fun)                             \
+    {                                                      \
+      getfun_t f = getfun(module, "iemmatrix_" #function); \
+      if (!f)                                              \
+        f = getfun(module, #function);                     \
+      if (f)                                               \
+        iemmatrix_stub_##fun = f();                        \
+    }                                                      \
+  } while (0)
+#define GET_STUB(module, fun, name, path) \
+  do                                      \
+  {                                       \
+    if (!strcmp(name, #fun))              \
+    {                                     \
+      if (!iemmatrix_stub_##fun)          \
+        setup_##module(path);             \
+      return iemmatrix_stub_##fun;        \
+    }                                     \
+  } while (0)
 
 /* GSL */
 DECLARE_STUB(jn);
@@ -137,6 +143,9 @@ DECLARE_STUB(gsl_linalg_QR_decomp);
 DECLARE_STUB(gsl_linalg_QR_unpack);
 DECLARE_STUB(gsl_linalg_SV_decomp);
 DECLARE_STUB(gsl_matrix_alloc);
+DECLARE_STUB(gsl_matrix_calloc);
+DECLARE_STUB(gsl_matrix_get);
+DECLARE_STUB(gsl_matrix_set);
 DECLARE_STUB(gsl_matrix_complex_alloc);
 DECLARE_STUB(gsl_matrix_complex_free);
 DECLARE_STUB(gsl_matrix_free);
@@ -145,9 +154,10 @@ DECLARE_STUB(gsl_vector_complex_alloc);
 DECLARE_STUB(gsl_vector_complex_free);
 DECLARE_STUB(gsl_vector_free);
 
-static void setup_gsl(const char*path) {
+static void setup_gsl(const char *path)
+{
   static module_t mod = 0;
-  if(!mod)
+  if (!mod)
     mod = getstubmodule("gsl", path);
 
   MAKE_STUB(jn, mod, gsl_sf_bessel_Jn);
@@ -165,6 +175,9 @@ static void setup_gsl(const char*path) {
   MAKE_STUB(gsl_linalg_QR_unpack, mod, gsl_linalg_QR_unpack);
   MAKE_STUB(gsl_linalg_SV_decomp, mod, gsl_linalg_SV_decomp);
   MAKE_STUB(gsl_matrix_alloc, mod, gsl_matrix_alloc);
+  MAKE_STUB(gsl_matrix_calloc, mod, gsl_matrix_calloc);
+  MAKE_STUB(gsl_matrix_get, mod, gsl_matrix_get);
+  MAKE_STUB(gsl_matrix_set, mod, gsl_matrix_set);
   MAKE_STUB(gsl_matrix_complex_alloc, mod, gsl_matrix_complex_alloc);
   MAKE_STUB(gsl_matrix_complex_free, mod, gsl_matrix_complex_free);
   MAKE_STUB(gsl_matrix_free, mod, gsl_matrix_free);
@@ -174,9 +187,9 @@ static void setup_gsl(const char*path) {
   MAKE_STUB(gsl_vector_free, mod, gsl_vector_free);
 
   /* default to math.h */
-  if(!iemmatrix_stub_gsl_sf_bessel_Jn)
+  if (!iemmatrix_stub_gsl_sf_bessel_Jn)
     iemmatrix_stub_gsl_sf_bessel_Jn = jn;
-  if(!iemmatrix_stub_gsl_sf_bessel_Yn)
+  if (!iemmatrix_stub_gsl_sf_bessel_Yn)
     iemmatrix_stub_gsl_sf_bessel_Yn = yn;
   iemmatrix_stub_jn = iemmatrix_stub_gsl_sf_bessel_Jn;
   iemmatrix_stub_yn = iemmatrix_stub_gsl_sf_bessel_Yn;
@@ -187,9 +200,10 @@ DECLARE_STUB(sf_open);
 DECLARE_STUB(sf_close);
 DECLARE_STUB(sf_readf_float);
 
-static void setup_sndfile(const char*path) {
+static void setup_sndfile(const char *path)
+{
   static module_t mod = 0;
-  if(!mod)
+  if (!mod)
     mod = getstubmodule("sndfile", path);
 
   MAKE_STUB(sf_open, mod, sf_open);
@@ -206,9 +220,10 @@ DECLARE_STUB(fftw_plan_dft_r2c_1d);
 DECLARE_STUB(fftw_execute);
 DECLARE_STUB(fftw_destroy_plan);
 
-static void setup_fftw(const char*path) {
+static void setup_fftw(const char *path)
+{
   static module_t mod = 0;
-  if(!mod)
+  if (!mod)
     mod = getstubmodule("fftw", path);
 
   MAKE_STUB(fftw_malloc, mod, fftw_malloc);
@@ -229,7 +244,8 @@ DECLARE_STUB(fftwf_plan_dft_r2c_1d);
 DECLARE_STUB(fftwf_execute);
 DECLARE_STUB(fftwf_destroy_plan);
 
-static void setup_fftwf(const char*path) {
+static void setup_fftwf(const char *path)
+{
   static module_t mod = 0;
   if (!mod)
     mod = getstubmodule("fftwf", path);
@@ -243,12 +259,10 @@ static void setup_fftwf(const char*path) {
   MAKE_STUB(fftwf_destroy_plan, mod, fftwf_destroy_plan);
 }
 
-
-
-
-void*iemmatrix_get_stub(const char*name, struct _class*cls) {
+void *iemmatrix_get_stub(const char *name, struct _class *cls)
+{
   /* gsl */
-  const char*path = cls?class_gethelpdir(cls):0;
+  const char *path = cls ? class_gethelpdir(cls) : 0;
   GET_STUB(gsl, jn, name, path);
   GET_STUB(gsl, yn, name, path);
   GET_STUB(gsl, gsl_sf_bessel_Jn, name, path);
@@ -263,6 +277,9 @@ void*iemmatrix_get_stub(const char*name, struct _class*cls) {
   GET_STUB(gsl, gsl_linalg_QR_unpack, name, path);
   GET_STUB(gsl, gsl_linalg_SV_decomp, name, path);
   GET_STUB(gsl, gsl_matrix_alloc, name, path);
+  GET_STUB(gsl, gsl_matrix_calloc, name, path);
+  GET_STUB(gsl, gsl_matrix_get, name, path);
+  GET_STUB(gsl, gsl_matrix_set, name, path);
   GET_STUB(gsl, gsl_matrix_complex_alloc, name, path);
   GET_STUB(gsl, gsl_matrix_complex_free, name, path);
   GET_STUB(gsl, gsl_matrix_free, name, path);
@@ -296,11 +313,10 @@ void*iemmatrix_get_stub(const char*name, struct _class*cls) {
   return 0;
 }
 
-
-void iemmatrix_stub_setup() {
+void iemmatrix_stub_setup()
+{
   setup_gsl(0);
   setup_sndfile(0);
   setup_fftw(0);
   setup_fftwf(0);
-
 }

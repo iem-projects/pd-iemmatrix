@@ -230,6 +230,7 @@ mtx_spherical_harmonics.class.sources = \
 	src/mtx_spherical_harmonics/legendre_a.c \
 	src/mtx_spherical_harmonics/sharmonics.c \
 	src/mtx_spherical_harmonics/sharmonics_normalization.c \
+	src/mtx_spherical_harmonics/ivanic.c \
 	$(empty)
 
 class.sources += \

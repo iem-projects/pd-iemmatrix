@@ -226,7 +226,8 @@ mtx_spherical_radial.class.sources = \
 	$(empty)
 
 class.sources += \
-	src/mtx_spherical_harmonics.c
+	src/mtx_spherical_harmonics.c \
+	src/mtx_spherical_harmonics_rotator.c
 mtx_spherical_harmonics.class.sources = \
 	src/mtx_spherical_harmonics/chebyshev12.c \
 	src/mtx_spherical_harmonics/legendre_a.c \

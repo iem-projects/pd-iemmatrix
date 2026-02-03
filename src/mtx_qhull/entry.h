@@ -16,6 +16,9 @@
  *
  */
 
+#ifdef __sgi__
+# define index_t qhull_index_t
+#endif
 typedef size_t index_t;
 
 typedef union {

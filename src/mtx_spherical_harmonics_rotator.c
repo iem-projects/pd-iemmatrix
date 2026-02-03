@@ -42,23 +42,23 @@ matrix *matrix_calloc(size_t size1, size_t size2) {
     return _matrix;
 }
 
-double matrix_get(matrix *matrix, size_t i, size_t j)
+double matrix_get(matrix *matrix_, size_t i, size_t j)
 {
-    return matrix->data[i * matrix->size2 + j];
+    return matrix_->data[i * matrix_->size2 + j];
 }
 
-static void matrix_set_(matrix *matrix, size_t i, size_t j, double value)
+static void matrix_set_(matrix *matrix_, size_t i, size_t j, double value)
 {
-    matrix->data[i * matrix->size2 + j] = value;
+    matrix_->data[i * matrix_->size2 + j] = value;
 }
 
-matrix *matrix_free_(matrix *matrix)
+matrix *matrix_free_(matrix *matrix_)
 {
-    if (matrix != NULL) {
-        if (matrix->data != NULL) {
-            free(matrix->data);
+    if (matrix_ != NULL) {
+        if (matrix_->data != NULL) {
+            free(matrix_->data);
         }
-        free(matrix);
+        free(matrix_);
     }
     return NULL;
 }

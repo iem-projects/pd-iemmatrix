@@ -27,7 +27,7 @@ typedef struct _matrix_
     double *data;
 } matrix;
 
-matrix *matrix_calloc(size_t size1, size_t size2) {
+static matrix *matrix_calloc(size_t size1, size_t size2) {
     matrix *_matrix = (matrix *)malloc(sizeof(matrix));
     if (_matrix == NULL) {
         return NULL;
@@ -42,7 +42,7 @@ matrix *matrix_calloc(size_t size1, size_t size2) {
     return _matrix;
 }
 
-double matrix_get(matrix *matrix_, size_t i, size_t j)
+static double matrix_get(matrix *matrix_, size_t i, size_t j)
 {
     return matrix_->data[i * matrix_->size2 + j];
 }
@@ -52,7 +52,7 @@ static void matrix_set_(matrix *matrix_, size_t i, size_t j, double value)
     matrix_->data[i * matrix_->size2 + j] = value;
 }
 
-matrix *matrix_free_(matrix *matrix_)
+static matrix *matrix_free_(matrix *matrix_)
 {
     if (matrix_ != NULL) {
         if (matrix_->data != NULL) {

@@ -1,24 +1,60 @@
 #include "math.h"
 #include "iemmatrix.h"
-#include "iemmatrix_stub.h"
-#ifdef HAVE_LIBGSL
-#include <gsl/gsl_linalg.h>
-#else
-#include "stub/gsl.h"
-#endif
 
-IEMMATRIX_DECLARE_ALLOCFREE2_STUB(my_matrix);
 #define SQRT2 1.4142135623730951
-int have_gsl = 0;
+
+typedef struct _matrix_
+{
+    size_t size1_;
+    size_t size2_;
+    double *data_;
+} matrix;
+
+matrix *matrix_calloc(size_t size1, size_t size2) {
+    matrix *_matrix = (matrix *)malloc(sizeof(matrix));
+    if (_matrix == NULL) {
+        return NULL;
+    }
+    _matrix->size1_ = size1;
+    _matrix->size2_ = size2;
+    _matrix->data_ = (double *)calloc(size1 * size2, sizeof(double));
+    if (_matrix->data_ == NULL) {
+        free(_matrix);
+        return NULL;
+    }
+    return _matrix;
+}
+
+double matrix_get(matrix *matrix, size_t i, size_t j)
+{
+    return matrix->data_[i * matrix->size2_ + j];
+}
+
+static void matrix_set_(matrix *matrix, size_t i, size_t j, double value)
+{
+    matrix->data_[i * matrix->size2_ + j] = value;
+}
+
+matrix *matrix_free_(matrix *matrix)
+{
+    if (matrix != NULL) {
+        if (matrix->data_ != NULL) {
+            free(matrix->data_);
+        }
+        free(matrix);
+    }
+    return NULL;
+}
 
 typedef struct _ivanic_s_
 {
-    gsl_matrix *R; // Rotation matrix
-    gsl_matrix *Rz_alpha;
-    gsl_matrix *Ry_beta;
-    gsl_matrix *Rz_gamma;
-    gsl_matrix *temp;
-    size_t N; // Maximum degree
+    matrix *R_;
+    matrix *Rz_alpha_;
+    matrix *Rz_beta_;
+    matrix *Rz_gamma_;
+    matrix *ping_;
+    matrix *pong_;
+    size_t N_;
 } ivanic_s;
 
 static void mat_mul_3x3(double *A, double *B, double *C)
@@ -50,105 +86,66 @@ static void mat_mul_3x3(double *A, double *B, double *C)
 //     gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1.0, temp, C, 0.0, result);
 // }
 
-static void fill_Rz(gsl_matrix *Rz, double cosx, double sinx)
+static void fill_Rz(matrix *Rz, double cosx, double sinx)
 {
-    my_matrix_set(Rz, 0, 0, cosx);
-    my_matrix_set(Rz, 0, 2, sinx);
-    my_matrix_set(Rz, 1, 1, 1.0);
-    my_matrix_set(Rz, 2, 0, -sinx);
-    my_matrix_set(Rz, 2, 2, cosx);
+    matrix_set_(Rz, 0, 0, cosx);
+    matrix_set_(Rz, 0, 2, sinx);
+    matrix_set_(Rz, 1, 1, 1.0);
+    matrix_set_(Rz, 2, 0, -sinx);
+    matrix_set_(Rz, 2, 2, cosx);
 }
 
-static void fill_Ry(gsl_matrix *Ry, double cosx, double sinx)
+static void fill_Ry(matrix *Ry, double cosx, double sinx)
 {
-    my_matrix_set(Ry, 0, 0, 1.0);
-    my_matrix_set(Ry, 1, 1, cosx);
-    my_matrix_set(Ry, 1, 2, -sinx);
-    my_matrix_set(Ry, 2, 1, sinx);
-    my_matrix_set(Ry, 2, 2, cosx);
+    matrix_set_(Ry, 0, 0, 1.0);
+    matrix_set_(Ry, 1, 1, cosx);
+    matrix_set_(Ry, 1, 2, -sinx);
+    matrix_set_(Ry, 2, 1, sinx);
+    matrix_set_(Ry, 2, 2, cosx);
 }
 
-ivanic_s *ivanic_s_new(size_t N)
+static ivanic_s *ivanic_s_new(size_t N)
 {
     ivanic_s *s = (ivanic_s *)malloc(sizeof(ivanic_s));
-
     if (s == NULL)
-    {
         return NULL;
-    }
-    s->N = N;
+
+    s->N_ = N;
     int l = (N + 1) * (N + 1);
-    s->R = (gsl_matrix *)my_matrix_calloc(l, l);
-    if (s->R == NULL)
-    {
+    s->R_ = matrix_calloc(l, l);
+    s->Rz_alpha_ = matrix_calloc(3, 3);
+    s->Rz_beta_ = matrix_calloc(3, 3);
+    s->Rz_gamma_ = matrix_calloc(3, 3);
+    s->ping_ = matrix_calloc(3, 3);
+    s->pong_ = matrix_calloc(3, 3);
+
+    matrix *matrices[] = {s->R_, s->Rz_alpha_, s->Rz_beta_, s->Rz_gamma_, s->ping_, s->pong_};
+    for (int i = 0; i < 6; ++i) {
+        if (matrices[i] == NULL) {
+            for (int j = 0; j < i; ++j)
+                matrix_free_(matrices[j]);
         free(s);
         return NULL;
     }
-    s->Rz_alpha = my_matrix_calloc(3, 3);
-    if (s->Rz_alpha == NULL)
-    {
-        my_matrix_free(s->R);
-        free(s);
-        return NULL;
     }
-    s->Ry_beta = my_matrix_calloc(3, 3);
-    if (s->Ry_beta == NULL)
-    {
-        my_matrix_free(s->Rz_alpha);
-        my_matrix_free(s->R);
-        free(s);
-        return NULL;
-    }
-    s->Rz_gamma = my_matrix_calloc(3, 3);
-    if (s->Rz_gamma == NULL)
-    {
-        my_matrix_free(s->Ry_beta);
-        my_matrix_free(s->Rz_alpha);
-        my_matrix_free(s->R);
-        free(s);
-        return NULL;
-    }
-    s->temp = my_matrix_calloc(3, 3);
-    if (s->temp == NULL)
-    {
-        my_matrix_free(s->Rz_gamma);
-        my_matrix_free(s->Ry_beta);
-        my_matrix_free(s->Rz_alpha);
-        my_matrix_free(s->R);
-        free(s);
-        return NULL;
-    }
+
     return s;
 }
 
-void ivanic_s_free(ivanic_s *s)
+static void ivanic_s_free(ivanic_s *s)
 {
-    if (s != NULL)
-    {
-        if (s->R != NULL)
-        {
-            my_matrix_free(s->R);
+    if (s == NULL)
+        return;
+
+    matrix *matrices[] = {s->R_, s->Rz_alpha_, s->Rz_beta_, s->Rz_gamma_, s->ping_, s->pong_};
+    for (int i = 0; i < 6; ++i) {
+        if (matrices[i] != NULL)
+            matrix_free_(matrices[i]);
         }
-        if (s->Rz_alpha != NULL)
-        {
-            my_matrix_free(s->Rz_alpha);
-        }
-        if (s->Ry_beta != NULL)
-        {
-            my_matrix_free(s->Ry_beta);
-        }
-        if (s->Rz_gamma != NULL)
-        {
-            my_matrix_free(s->Rz_gamma);
-        }
-        if (s->temp != NULL)
-        {
-            my_matrix_free(s->temp);
-        }
-    }
+    free(s);
 }
 
-static double P(int i, int l, int mu, int m_prime, gsl_matrix *R, int R_lm1_offset)
+static double P(int i, int l, int mu, int m_prime, matrix *R, int R_lm1_offset)
 {
     i += 2; // shift i by 2 to skip R0
     mu += l - 1 + R_lm1_offset;
@@ -156,21 +153,21 @@ static double P(int i, int l, int mu, int m_prime, gsl_matrix *R, int R_lm1_offs
     int twolm2 = 2 * l - 2 + R_lm1_offset;
     if (abs(m_prime) < l)
     {
-        return (double)my_matrix_get(R, i, 2) * (double)my_matrix_get(R, mu, m_prime_lm1);
+        return matrix_get(R, i, 2) * matrix_get(R, mu, m_prime_lm1);
     }
     if (m_prime == l)
     {
-        return (double)my_matrix_get(R, i, 3) * (double)my_matrix_get(R, mu, twolm2) - (double)my_matrix_get(R, i, 1 + 0) * (double)my_matrix_get(R, mu, R_lm1_offset);
+        return matrix_get(R, i, 3) * matrix_get(R, mu, twolm2) - matrix_get(R, i, 1 + 0) * matrix_get(R, mu, R_lm1_offset);
     }
-    return (double)my_matrix_get(R, i, 3) * (double)my_matrix_get(R, mu, R_lm1_offset) + (double)my_matrix_get(R, i, 1 + 0) * (double)my_matrix_get(R, mu, twolm2);
+    return matrix_get(R, i, 3) * matrix_get(R, mu, R_lm1_offset) + matrix_get(R, i, 1 + 0) * matrix_get(R, mu, twolm2);
 }
 
-static double U(int l, int m1, int m2, gsl_matrix *R, int R_lm1_offset)
+static double U(int l, int m1, int m2, matrix *R, int R_lm1_offset)
 {
     return P(0, l, m1, m2, R, R_lm1_offset);
 }
 
-static double V(int l, int m1, int m2, gsl_matrix *R, int R_lm1_offset)
+static double V(int l, int m1, int m2, matrix *R, int R_lm1_offset)
 {
     if (m1 == 0)
     {
@@ -194,7 +191,7 @@ static double V(int l, int m1, int m2, gsl_matrix *R, int R_lm1_offset)
     }
 }
 
-static double W(int l, int m1, int m2, gsl_matrix *R, int R_lm1_offset)
+static double W(int l, int m1, int m2, matrix *R, int R_lm1_offset)
 {
     if (m1 > 0)
     {
@@ -207,8 +204,7 @@ static double W(int l, int m1, int m2, gsl_matrix *R, int R_lm1_offset)
     return NAN;
 }
 
-static void
-uvw(double buffer[3], int l, int m1, int m2)
+static void uvw(double buffer[3], int l, int m1, int m2)
 {
     static double denom;
     static const double one_half = 0.5;
@@ -403,14 +399,6 @@ void mtx_spherical_harmonics_rotator_setup(void)
         A_GIMME, 0);
     class_addbang(mtx_spherical_harmonics_rotator_class, (t_method)mtx_spherical_harmonics_rotator_bang);
     class_addlist(mtx_spherical_harmonics_rotator_class, (t_method)mtx_spherical_harmonics_rotator_list);
-
-#ifdef HAVE_LIBGSL
-    my_matrix_calloc = iemmatrix_get_stub("gsl_matrix_calloc", mtx_spherical_harmonics_rotator_class);
-    my_matrix_free = iemmatrix_get_stub("gsl_matrix_free", mtx_spherical_harmonics_rotator_class);
-    my_matrix_get = iemmatrix_get_stub("gsl_matrix_get", mtx_spherical_harmonics_rotator_class);
-    my_matrix_set = iemmatrix_get_stub("gsl_matrix_set", mtx_spherical_harmonics_rotator_class);
-#endif
-    have_gsl = (my_matrix_calloc && my_matrix_free && my_matrix_get && my_matrix_set);
 }
 
 

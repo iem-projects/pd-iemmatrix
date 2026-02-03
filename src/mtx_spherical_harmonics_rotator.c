@@ -5,9 +5,9 @@
 
 typedef struct _matrix_
 {
-    size_t size1_;
-    size_t size2_;
-    double *data_;
+    size_t size1;
+    size_t size2;
+    double *data;
 } matrix;
 
 matrix *matrix_calloc(size_t size1, size_t size2) {
@@ -15,10 +15,10 @@ matrix *matrix_calloc(size_t size1, size_t size2) {
     if (_matrix == NULL) {
         return NULL;
     }
-    _matrix->size1_ = size1;
-    _matrix->size2_ = size2;
-    _matrix->data_ = (double *)calloc(size1 * size2, sizeof(double));
-    if (_matrix->data_ == NULL) {
+    _matrix->size1 = size1;
+    _matrix->size2 = size2;
+    _matrix->data = (double *)calloc(size1 * size2, sizeof(double));
+    if (_matrix->data == NULL) {
         free(_matrix);
         return NULL;
     }
@@ -27,19 +27,19 @@ matrix *matrix_calloc(size_t size1, size_t size2) {
 
 double matrix_get(matrix *matrix, size_t i, size_t j)
 {
-    return matrix->data_[i * matrix->size2_ + j];
+    return matrix->data[i * matrix->size2 + j];
 }
 
 static void matrix_set_(matrix *matrix, size_t i, size_t j, double value)
 {
-    matrix->data_[i * matrix->size2_ + j] = value;
+    matrix->data[i * matrix->size2 + j] = value;
 }
 
 matrix *matrix_free_(matrix *matrix)
 {
     if (matrix != NULL) {
-        if (matrix->data_ != NULL) {
-            free(matrix->data_);
+        if (matrix->data != NULL) {
+            free(matrix->data);
         }
         free(matrix);
     }
@@ -48,13 +48,13 @@ matrix *matrix_free_(matrix *matrix)
 
 typedef struct _ivanic_s_
 {
-    matrix *R_;
-    matrix *Rz_alpha_;
-    matrix *Rz_beta_;
-    matrix *Rz_gamma_;
-    matrix *ping_;
-    matrix *pong_;
-    size_t N_;
+    matrix *R;
+    matrix *Rz_alpha;
+    matrix *Rz_beta;
+    matrix *Rz_gamma;
+    matrix *ping;
+    matrix *pong;
+    size_t N;
 } ivanic_s;
 
 static void mat_mul_3x3(double *A, double *B, double *C)
@@ -110,16 +110,16 @@ static ivanic_s *ivanic_s_new(size_t N)
     if (s == NULL)
         return NULL;
 
-    s->N_ = N;
+    s->N = N;
     int l = (N + 1) * (N + 1);
-    s->R_ = matrix_calloc(l, l);
-    s->Rz_alpha_ = matrix_calloc(3, 3);
-    s->Rz_beta_ = matrix_calloc(3, 3);
-    s->Rz_gamma_ = matrix_calloc(3, 3);
-    s->ping_ = matrix_calloc(3, 3);
-    s->pong_ = matrix_calloc(3, 3);
+    s->R = matrix_calloc(l, l);
+    s->Rz_alpha = matrix_calloc(3, 3);
+    s->Rz_beta = matrix_calloc(3, 3);
+    s->Rz_gamma = matrix_calloc(3, 3);
+    s->ping = matrix_calloc(3, 3);
+    s->pong = matrix_calloc(3, 3);
 
-    matrix *matrices[] = {s->R_, s->Rz_alpha_, s->Rz_beta_, s->Rz_gamma_, s->ping_, s->pong_};
+    matrix *matrices[] = {s->R, s->Rz_alpha, s->Rz_beta, s->Rz_gamma, s->ping, s->pong};
     for (int i = 0; i < 6; ++i) {
         if (matrices[i] == NULL) {
             for (int j = 0; j < i; ++j)
@@ -137,7 +137,7 @@ static void ivanic_s_free(ivanic_s *s)
     if (s == NULL)
         return;
 
-    matrix *matrices[] = {s->R_, s->Rz_alpha_, s->Rz_beta_, s->Rz_gamma_, s->ping_, s->pong_};
+    matrix *matrices[] = {s->R, s->Rz_alpha, s->Rz_beta, s->Rz_gamma, s->ping, s->pong};
     for (int i = 0; i < 6; ++i) {
         if (matrices[i] != NULL)
             matrix_free_(matrices[i]);
@@ -242,8 +242,8 @@ void ivanic_ruedenberg_rotation_matrix(ivanic_s *s, double alpha, double beta, d
     // Rz_alpha
     fill_Rz(s->Rz_alpha, cos_alpha, sin_alpha);
 
-    // Ry_beta
-    fill_Ry(s->Ry_beta, cos_beta, sin_beta);
+    // Rz_beta
+    fill_Ry(s->Rz_beta, cos_beta, sin_beta);
 
     // Rz_gamma
     fill_Rz(s->Rz_gamma, cos_gamma, sin_gamma);

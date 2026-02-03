@@ -74,34 +74,36 @@ typedef struct _ivanic_s_
     size_t N;
 } ivanic_s;
 
-static void mat_mul_3x3(double *A, double *B, double *C)
+
+static void mat_mul_three(matrix *A, matrix *B, matrix *C, matrix *temp, matrix *result)
 {
-    double temp[3][3];
-    for (int i = 0; i < 3; i++)
+    size_t i, j, k;
+    for (i = 0; i < A->size1; ++i)
     {
-        for (int j = 0; j < 3; j++)
+        for (j = 0; j < B->size2; ++j)
         {
-            temp[i][j] = 0.0;
-            for (int k = 0; k < 3; k++)
+            double sum = 0.0;
+            for (k = 0; k < A->size2; ++k)
             {
-                temp[i][j] += A[i * 3 + k] * B[k * 3 + j];
+                sum += matrix_get(A, i, k) * matrix_get(B, k, j);
             }
+            matrix_set_(temp, i, j, sum);
         }
     }
-    for (int i = 0; i < 3; i++)
+    for (i = 0; i < temp->size1; ++i)
     {
-        for (int j = 0; j < 3; j++)
+        for (j = 0; j < C->size2; ++j)
         {
-            C[i * 3 + j] = temp[i][j];
+            double sum = 0.0;
+            for (k = 0; k < temp->size2; ++k)
+            {
+                sum += matrix_get(temp, i, k) * matrix_get(C, k, j);
+            }
+            matrix_set_(result, i, j, sum);
         }
     }
 }
 
-// static void mat_mul_three(gsl_matrix *A, gsl_matrix *B, gsl_matrix *C, gsl_matrix *temp, gsl_matrix *result)
-// {
-//     gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1.0, A, B, 0.0, temp);
-//     gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1.0, temp, C, 0.0, result);
-// }
 
 static void fill_Rz(matrix *Rz, double cosx, double sinx)
 {

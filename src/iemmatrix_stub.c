@@ -85,7 +85,7 @@ static getfun_t getfun(module_t module, const char*name)
 #else
   /* fall back to pd binary */
   if(!module) {
-#ifdef _GNU_SOURCE
+#ifdef RTLD_DEFAULT
     module = RTLD_DEFAULT;
 #else
     if(!module0)

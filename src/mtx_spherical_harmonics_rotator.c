@@ -267,34 +267,36 @@ void ivanic_ruedenberg_rotation_matrix(ivanic_s *s, double alpha, double beta, d
     // Rz_gamma
     fill_Rz(s->Rz_gamma, cos_gamma, sin_gamma);
 
-    // TODO R0
-    // gsl_matrix_view R0_view = gsl_matrix_submatrix(s->R, 1, 1, 3, 3);
-    // mat_mul_three(s->Rz_gamma, s->Ry_beta, s->Rz_alpha, s->temp, &(R0_view.matrix));
-    // TODO copy into s
+    mat_mul_three(s->Rz_alpha, s->Rz_beta, s->Rz_gamma, s->ping, s->pong);
+    for (size_t i = 0; i < 3; ++i)
+    {
+        for (size_t j = 0; j < 3; ++j)
+        {
+            matrix_set_(s->R, i + 1, j + 1, matrix_get(s->pong, i, j));
+        }
+    }
 
     int n_start, n_harmonics;
 
-    // initialize matrices
-    my_matrix_set(s->R, 0, 0, 1.0);
+    matrix_set_(s->R, 0, 0, 1.0);
 
     if (s->N <= 1)
     {
         return;
     }
 
-    int R_lm1_offset = 1;
+    int R_lm1_offset;
 
     int m1, m2, nm1, nm2;
     double u_val, v_val, w_val;
-    return;
     for (size_t n = 2; n <= s->N; ++n)
     {
         n_start = n * n + n;
         n_harmonics = (2 * n) + 1;
         R_lm1_offset = (n - 1) * (n - 1);
-        for (m1 = -n; m1 <= n; ++m1)
+        for (m1 = -(int)n; m1 <= (int)n; ++m1)
         {
-            for (m2 = -n; m2 <= n; ++m2)
+            for (m2 = -(int)n; m2 <= (int)n; ++m2)
             {
                 u_val = 0.0;
                 v_val = 0.0;
@@ -304,18 +306,19 @@ void ivanic_ruedenberg_rotation_matrix(ivanic_s *s, double alpha, double beta, d
                 // ------ U ------
                 if (fabs(uvw_buffer[0]) > 1e-15)
                 {
-                    // TODO compute_function_value(U, uvw_buffer[0], n, m1, m2, n_start, R, &M, P, mode);
+                    u_val = uvw_buffer[0] * U(n, m1, m2, s->R, R_lm1_offset);
                 }
                 // ------- V ------
                 if (fabs(uvw_buffer[1]) > 1e-15)
                 {
-                    // TODO compute_function_value(V, uvw_buffer[1], n, m1, m2, n_start, R, &M, P, mode);
+                    v_val = uvw_buffer[1] * V(n, m1, m2, s->R, R_lm1_offset);
                 }
                 // ------- W ------
                 if (fabs(uvw_buffer[2]) > 1e-15)
                 {
-                    // TODO compute_function_value(W, uvw_buffer[2], n, m1, m2, n_start, R, &M, P, mode);
+                    w_val = uvw_buffer[2] * W(n, m1, m2, s->R, R_lm1_offset);
                 }
+                matrix_set_(s->R, n_start + m1, n_start + m2, u_val + v_val + w_val);
             }
         }
     }

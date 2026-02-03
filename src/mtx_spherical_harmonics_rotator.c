@@ -1,4 +1,21 @@
-#include "math.h"
+/*
+ *  iemmatrix
+ *
+ *  objects for manipulating simple matrices
+ *  mostly referring to matlab/octave matrix functions
+ *  this functions depends on the GNU scientific library
+ *
+ * Copyright (c) 2026, Thomas Röck
+ * IEM, Graz, Austria
+ *
+ * For information on usage and redistribution, and for a DISCLAIMER OF ALL
+ * WARRANTIES, see the file, "LICENSE.txt," in this distribution.
+ *
+ */
+
+
+#include <math.h>
+#include <stdlib.h>
 #include "iemmatrix.h"
 
 #define SQRT2 1.4142135623730951

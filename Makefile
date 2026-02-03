@@ -18,6 +18,8 @@ endif
 
 cflags += -I. -Isrc
 
+SHELL := /bin/sh
+
 #####################################################################
 ## external dependencies (used by STUB LIBRARIES at the end)
 
@@ -303,7 +305,7 @@ include $(PDLIBBUILDER_DIR)/Makefile.pdlibbuilder
 src/iemmatrix.c: iemmatrix_sources.h VERSION.txt iemmatrix-meta.pd
 
 iemmatrix_sources.h:
-	src/makesource.sh $(sort $(class.sources)) >$@
+	$(SHELL) src/makesource.sh $(sort $(class.sources)) >$@
 
 %: %.in
 	sed -e 's|@PACKAGE_NAME@|$(lib.name)|g' -e 's|@PACKAGE_VERSION@|$(lib.version)|g' $< > $@

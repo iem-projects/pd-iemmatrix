@@ -1,11 +1,13 @@
 default: nogui
 
+SHELL:=sh
+
 
 nogui:
-	sh runtests.sh
+	$(SHELL) runtests.sh
 
 gui:
-	sh runtests.sh -gui
+	$(SHELL) runtests.sh -gui
 
 clean:
 	-rm runtests.log*

@@ -276,7 +276,7 @@ void ivanic_ruedenberg_rotation_matrix(ivanic_s *s, double alpha, double beta, d
         }
     }
 
-    int n_start, n_harmonics;
+    int n_start;
 
     matrix_set_(s->R, 0, 0, 1.0);
 
@@ -287,12 +287,11 @@ void ivanic_ruedenberg_rotation_matrix(ivanic_s *s, double alpha, double beta, d
 
     int R_lm1_offset;
 
-    int m1, m2, nm1, nm2;
+    int m1, m2;
     double u_val, v_val, w_val;
     for (size_t n = 2; n <= s->N; ++n)
     {
         n_start = n * n + n;
-        n_harmonics = (2 * n) + 1;
         R_lm1_offset = (n - 1) * (n - 1);
         for (m1 = -(int)n; m1 <= (int)n; ++m1)
         {
@@ -339,6 +338,7 @@ static t_class *mtx_spherical_harmonics_rotator_class;
 
 static t_mtx_spherical_harmonics_rotator *mtx_spherical_harmonics_rotator_new(t_symbol *s, int argc, t_atom *argv)
 {
+    (void)s; // To suppress unused variable warning
     int N;
     t_mtx_spherical_harmonics_rotator *x = (t_mtx_spherical_harmonics_rotator *)pd_new(mtx_spherical_harmonics_rotator_class);
     x->list_rot_out = outlet_new(&x->x_obj, gensym("matrix"));
@@ -386,6 +386,7 @@ static void mtx_spherical_harmonics_rotator_bang(t_mtx_spherical_harmonics_rotat
 static void mtx_spherical_harmonics_rotator_list(t_mtx_spherical_harmonics_rotator *x, t_symbol *s,
                                                   int argc, t_atom *argv)
 {
+    (void)s;
     size_t num_harmonics, n;
     if (argc >= 1)
     {

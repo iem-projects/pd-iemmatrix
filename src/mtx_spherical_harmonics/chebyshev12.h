@@ -18,6 +18,10 @@
 #include <math.h>
 #include <stdlib.h>
 
+#ifndef M_PI
+# define M_PI 3.141592653589793238462643383279502884L
+#endif
+
 typedef enum _CHNormType_ {
         N2D,
         N2D2PI,

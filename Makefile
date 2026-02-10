@@ -10,7 +10,7 @@ lib.name = iemmatrix
 # mtx_*~ and friends make problems...
 make-lib-executable=yes
 
-cflags = -std=gnu99
+cflags =
 ldlibs =
 ifneq ($(strip $(lib.version)),)
 cflags += -DVERSION='"$(lib.version)"'

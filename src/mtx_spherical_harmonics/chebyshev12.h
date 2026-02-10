@@ -10,7 +10,7 @@
  http://iem.at/Members/zotter, 2008.
 
  This code is published under the Gnu General Public License, see
- "LICENSE.txt"
+ the "LICENSE" file.
 */
 
 #ifndef _chebyshev12_h__

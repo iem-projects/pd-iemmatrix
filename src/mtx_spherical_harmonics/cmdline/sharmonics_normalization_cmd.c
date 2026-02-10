@@ -1,6 +1,6 @@
 
 /* command line test for sharmonics_normalization.c
- * Franz Zotter, 2009, see ../LICENSE.txt */
+ * Franz Zotter, 2009, see the "LICENSE" file. */
 
 #include <stdio.h>
 

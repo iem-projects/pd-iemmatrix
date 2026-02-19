@@ -3,7 +3,7 @@ title: mtx_circular_harmonics
 description: evaluate the circular harmonics as matrix
 categories:
 - object
-pdcategory: Audio Math
+pdcategory: Spherical Harmonics
 see_also:
 - mtx_spherical_harmonics
 inlets:

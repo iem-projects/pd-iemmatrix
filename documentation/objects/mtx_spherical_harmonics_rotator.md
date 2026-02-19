@@ -1,6 +1,6 @@
 ---
 title: mtx_spherical_harmonics_rotator
-description: evaluate the spherical harmonics as matrix
+description: create a rotation matrix for spherical harmonics
 categories:
 - object
 pdcategory: Spherical Harmonics

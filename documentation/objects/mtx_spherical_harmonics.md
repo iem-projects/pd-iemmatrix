@@ -6,6 +6,7 @@ categories:
 pdcategory: Spherical Harmonics
 see_also:
 - mtx_circular_harmonics
+- mtx_spherical_harmonics_rotator
 inlets:
   1st:
   - type: matrix

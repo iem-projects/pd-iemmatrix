@@ -11,8 +11,8 @@
 #X obj 106 187 mtx_roty;
 #X obj 141 159 mtx_rotz;
 #X obj 72 208 mtx_rotx;
-#X obj 72 21 inlet alpha_z \; [alpha_x \, beta_y \, gamma_z(;
 #X obj 229 278 declare -lib iemmatrix;
+#X obj 72 21 inlet alpha_z \; [alpha_x \, beta_y \, gamma_z];
 #X connect 0 0 3 1;
 #X connect 1 0 3 2;
 #X connect 3 0 6 0;
@@ -24,4 +24,4 @@
 #X connect 8 0 4 0;
 #X connect 9 0 4 1;
 #X connect 10 0 5 0;
-#X connect 11 0 3 0;
+#X connect 12 0 3 0;

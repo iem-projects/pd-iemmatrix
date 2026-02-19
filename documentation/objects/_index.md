@@ -8,6 +8,7 @@ pdcategories:
 - Matrix Math
 - Element Math
 - Digital Fourier Transformation
+- Coordinates
 - Spherical Harmonics
 - Misc
 - Audio Math

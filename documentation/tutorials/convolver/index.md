@@ -43,7 +43,7 @@ The following `data` is the actual impulse responses as a list of floats (in row
 E.g.
 {{< pdmsg array3  3 2 4 " " 1 0 0 0 " " 2 2 2 2 " " 3 0 0 3 " " 1.1 1.2 1.3 1.4 " " 2.1 2.2 2.3 2.4 " " 3.1 -3.2 3.3 -3.4 >}}
 
-Is a \\(3*2\\) matrix with 6 impulse responses (\\(4\\) samples each):
+This describes a \\(3*2\\) matrix with 6 impulse responses (\\(4\\) samples each):
 
 | IR  | values    |
 |-----|-----------|
@@ -116,7 +116,7 @@ When the user modifies the reverb parameters, the IRs are regenerated and swappe
 
 ![2x2 cross-feed reverb: dynamically create IRs](example_2x2_crossfeed_makeIRs.svg)
 
-The left-hand side of the patch creates two unit impulses (so the left and right input channel will pass through unaltered on their resp. channel).
+The right-hand side of the patch creates two unit impulses (so the left and right input channel will pass through unaltered on their resp. channel).
 For the cross-over, two more IRs are generated (on the right-hand side),
 by using a random burst with an exponential decay curve, based on the input parameter (middle)
 that is modulated with a cosine wave (far right). The modulation of the right resp. left IRs use different period lengths.

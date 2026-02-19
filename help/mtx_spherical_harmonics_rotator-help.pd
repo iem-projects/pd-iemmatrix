@@ -53,7 +53,7 @@
 #X text 533 160 conversion deg->rad;
 #X text 34 25 Computes Wigner-D matrix to rotate spherical harmonics. The function receives a list containing the alpha \, beta \, and gamma parameters (in rad) for a ZYZ rotation around the Euler angles., f 129;
 #X text 34 104 Initialize Cartesian Base (X \, Y \, Z);
-#X text 312 105 Zylindrical grid for plotting;
+#X text 312 105 Cylindrical grid for plotting;
 #X text 866 79 Rotation parameters;
 #X text 763 330 Initial rotation sequence: R_0 = R_z(alpha)R_y(beta)R_z(gamma);
 #N canvas 429 253 494 171 META 0;

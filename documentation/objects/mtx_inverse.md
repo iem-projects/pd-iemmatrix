@@ -20,7 +20,7 @@ $$ Y_{n\times n} = X_{n\times n}^{-1} $$
 
 so that \\(Y_{n\times n} *  X_{n\times n} = I\\).
 
-If the input matrix  \\(X_{n\times m}\\) is not square (that is: \\(n != m\\)),
+If the input matrix  \\(X_{n\times m}\\) is not square (that is: \\(n \neq m\\)),
 {{<pdobj mtx_inverse >}} will automatically calculate the *pseudo-inverse* instead:
 
 

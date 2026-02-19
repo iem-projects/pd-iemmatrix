@@ -1,4 +1,5 @@
-#N canvas 724 186 552 611 10;
+#N canvas 724 186 552 538 10;
+#X declare -lib iemmatrix;
 #X obj 94 57 inlet;
 #X obj 143 57 inlet;
 #X obj 190 57 inlet;
@@ -45,14 +46,14 @@
 #X text 189 261 force zero-crossing at start and end;
 #X obj 94 441 outlet;
 #X text 103 422 sweep vector;
-#X text 185 396 forming matrix with blocksize columns for playback
-;
+#X text 185 396 forming matrix with blocksize columns for playback;
 #X text 102 38 wstart;
 #X text 147 36 wstop;
 #X text 195 35 len;
 #X obj 94 117 pack \$1 \$2 \$3;
 #X obj 94 315 mtx_sin;
 #X obj 94 208 mtx_logspace;
+#X obj 235 506 declare -lib iemmatrix;
 #X connect 0 0 16 0;
 #X connect 1 0 16 1;
 #X connect 2 0 16 2;

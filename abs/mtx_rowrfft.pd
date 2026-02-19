@@ -1,4 +1,5 @@
-#N canvas 0 0 895 300 12;
+#N canvas 0 0 657 300 12;
+#X declare -lib iemmatrix;
 #X obj 91 150 mtx_rfft;
 #X obj 91 60 inlet;
 #X obj 91 202 outlet;
@@ -8,6 +9,7 @@
 #X obj 269 150 print;
 #X text 291 202 changed name mtx_rowrfft to mtx_rfft Jul \, 22nd;
 #X text 291 222 Franz Zotter;
+#X obj 435 236 declare -lib iemmatrix;
 #X connect 0 0 2 0;
 #X connect 0 1 3 0;
 #X connect 1 0 0 0;

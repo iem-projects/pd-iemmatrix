@@ -1,4 +1,5 @@
-#N canvas 60 0 555 503 10;
+#N canvas 60 0 500 421 10;
+#X declare -lib iemmatrix;
 #X obj 33 154 inlet;
 #X obj 108 154 inlet;
 #X obj 33 358 outlet;
@@ -102,6 +103,7 @@
 #X connect 37 1 36 2;
 #X restore 33 327 pd mtx_tab;
 #X text 105 38 arguments: \$1 ... table name;
+#X obj 235 346 declare -lib iemmatrix;
 #X connect 0 0 9 0;
 #X connect 1 0 9 1;
 #X connect 9 0 2 0;

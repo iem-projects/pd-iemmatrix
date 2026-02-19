@@ -1,4 +1,5 @@
-#N canvas 0 0 555 380 10;
+#N canvas 0 0 555 317 10;
+#X declare -lib iemmatrix;
 #X obj 129 110 mtx_.*;
 #X obj 212 108 mtx_.*;
 #X obj 397 125 mtx_.*;
@@ -14,6 +15,7 @@
 #X obj 426 30 inlet imagB;
 #X obj 129 182 outlet real;
 #X obj 349 180 outlet imag;
+#X obj 235 246 declare -lib iemmatrix;
 #X connect 0 0 4 0;
 #X connect 1 0 4 1;
 #X connect 2 0 5 1;

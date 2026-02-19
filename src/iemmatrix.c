@@ -24,7 +24,7 @@ void iemmatrix_setup()
   post("");
   post("iemmatrix "VERSION);
   post("\tobjects for manipulating 2d-matrices");
-  post("\t(c) 2001-2025 iem");
+  post("\t(c) 2001-2026 iem");
   post("\t\tIOhannes m zmölnig");
   post("\t\tThomas Musil");
   post("\t\tFranz Zotter");

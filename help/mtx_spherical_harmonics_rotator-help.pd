@@ -56,7 +56,7 @@
 #X text 312 105 Zylindrical grid for plotting;
 #X text 866 79 Rotation parameters;
 #X text 763 330 Initial rotation sequence: R_0 = R_z(alpha)R_y(beta)R_z(gamma);
-#N canvas 429 253 494 171 META 1;
+#N canvas 429 253 494 171 META 0;
 #X text 12 85 OUTLET_0 matrix;
 #X text 12 25 LICENSE GPL-2+;
 #X text 12 65 INLET_0 matrix;

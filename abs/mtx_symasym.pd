@@ -14,7 +14,7 @@
 #X text 240 120 A=0.5*(M-M');
 #X text 240 76 M=S+A;
 #X text 38 289 (c) 2005 by IOhannes m zmoelnig \, IEM KUG \, graz austria;
-#X text 38 306 for license-details see LICENSE.txt that must come with iemmatrix.;
+#X text 38 306 for license-details see LICENSE.txt that should come with iemmatrix.;
 #X obj 235 336 declare -lib iemmatrix;
 #X connect 0 0 4 0;
 #X connect 3 0 8 0;

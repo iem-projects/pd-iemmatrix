@@ -15,7 +15,7 @@
 #X text 22 45 each square matrix can be decomposed into a symmetric and an asymmetric part \, with;
 #X text 205 79 M=S+A;
 #X text 70 336 (c) 2005 by IOhannes m zmoelnig \, IEM KUG \, graz austria;
-#X text 70 353 for license-details see LICENSE.txt that must come with iemmatrix.;
+#X text 70 353 for license-details see LICENSE.txt that should come with iemmatrix.;
 #N canvas 477 377 494 171 META 0;
 #X text 12 105 AUTHOR IOhannes m zmoelnig;
 #X text 12 85 OUTLET_0 matrix;

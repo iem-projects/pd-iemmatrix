@@ -58,7 +58,7 @@
 #X obj 381 413 mtx_spivot;
 #X text 52 19 mtx_spivot:: semi-pivot transform a matrix;
 #X text 88 639 (c) 2005 by IOhannes m zmoelnig \, IEM KUG \, graz austria;
-#X text 88 656 for license-details see LICENSE.txt that must come with iemmatrix.;
+#X text 88 656 for license-details see LICENSE.txt that should come with iemmatrix.;
 #N canvas 477 377 494 171 META 0;
 #X text 12 105 AUTHOR IOhannes m zmoelnig;
 #X text 12 85 OUTLET_0 matrix;

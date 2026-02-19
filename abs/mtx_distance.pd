@@ -1,7 +1,7 @@
 #N canvas 323 233 549 392 10;
 #X declare -lib iemmatrix;
 #X text 72 316 (c) 2005 by IOhannes m zmoelnig \, IEM KUG \, graz austria;
-#X text 72 333 for license-details see LICENSE.txt that must come with iemmatrix.;
+#X text 72 333 for license-details see LICENSE.txt that should come with iemmatrix.;
 #X obj 115 164 mtx_distance2;
 #X obj 115 78 inlet matrix1;
 #X obj 264 78 inlet matrix2;

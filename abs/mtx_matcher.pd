@@ -28,7 +28,7 @@
 #X text 220 224 this algorithm is _far_ from being perfect! the [mtx_rowpermutate] does not really guarantee that the trace of the result is a global minimum \; if it is not \, than the match will be sub-optimal! this will be even worse \, if there are several _equal_ (sub)minima in the distance-matrix.;
 #X text 158 184 greater distances have an extra penalty (^2) \; is this ok?;
 #X text 120 346 (c) 2005 by IOhannes m zmoelnig \, IEM KUG \, graz austria;
-#X text 120 363 for license-details see LICENSE.txt that must come with iemmatrix.;
+#X text 120 363 for license-details see LICENSE.txt that should come with iemmatrix.;
 #X text 57 12 mtx_matcher:: match 2 sets of vectors;
 #X text 46 42 2 vectors are matching if their euclidean distance is a minimum. each "source" vector is assigned to a "dest" vector in order to get a maximum matching. the output is a permutation "matched" of the "source" vector-field \, and a permutation matrix "matcher".;
 #X obj 265 386 declare -lib iemmatrix;

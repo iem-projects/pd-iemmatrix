@@ -46,7 +46,7 @@
 #X connect 16 0 12 0;
 #X restore 154 187 pd resizer;
 #X text 72 316 (c) 2005 by IOhannes m zmoelnig \, IEM KUG \, graz austria;
-#X text 72 333 for license-details see LICENSE.txt that must come with iemmatrix.;
+#X text 72 333 for license-details see LICENSE.txt that should come with iemmatrix.;
 #X text 62 38 semi-pivotize a matrix;
 #X obj 235 366 declare -lib iemmatrix;
 #X connect 0 0 10 0;

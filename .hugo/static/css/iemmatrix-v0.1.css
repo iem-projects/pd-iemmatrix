@@ -57,3 +57,8 @@
 .pdobj:before, .pdmsg:before, .pdobj:after, .pdmsg:after {
   content: "";
 }
+
+.hanchor {
+  font-size: 50%;
+  filter: grayscale(100%);
+}

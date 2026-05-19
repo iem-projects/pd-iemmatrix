@@ -163,6 +163,7 @@ static void matrix_multilde_matrix_set(t_matrix_multilde *x, int argc,
 {
   unsigned int col, row, length;
   t_float *matcur, *matend;
+  int restart_dsp = 0;
 
   if(argc<2) {
     pd_error(x, "[%s]: bad matrix: <int:out_rows> <int:in_cols> !", x->x_name->s_name);
@@ -182,30 +183,25 @@ static void matrix_multilde_matrix_set(t_matrix_multilde *x, int argc,
     col=dummy;
   }
 
-  if (x->x_dsp) {
-    /* matrix dimensions must match while DSP is running */
-    if ((col != x->x_cols) || (row != x->x_rows)) {
-      pd_error(x, "[%s]: matrix dimensions must not change (%dx%d != %dx%d) while DSP is running!!",
-               x->x_name->s_name,
-               row, col, (int)x->x_rows, (int)x->x_cols);
-      return;
-    }
-  } else {
-    /* DSP is not running, check if we have a fixed number of iolets */
-    if(x->x_inports && x->x_inports != col) {
-      pd_error(x, "[%s]: cannot change fixed number of input channels (%d) to %d",
-               x->x_name->s_name, (int)x->x_inports, col);
-      return;
-    }
-    if(x->x_outports && x->x_outports != row) {
-      pd_error(x, "[%s]: cannot change fixed number of output channels (%d) to %d",
-               x->x_name->s_name, (int)x->x_outports, row);
-      return;
-    }
-
-    if(!matrix_multilde_resize(x, row, col))
-      return;
+  /* matrix dimensions must match while DSP is running */
+  if ((col != x->x_cols) || (row != x->x_rows)) {
+    restart_dsp = 1;
   }
+
+  /* DSP is not running, check if we have a fixed number of iolets */
+  if(x->x_inports && x->x_inports != col) {
+    pd_error(x, "[%s]: cannot change fixed number of input channels (%d) to %d",
+             x->x_name->s_name, (int)x->x_inports, col);
+    return;
+  }
+  if(x->x_outports && x->x_outports != row) {
+    pd_error(x, "[%s]: cannot change fixed number of output channels (%d) to %d",
+             x->x_name->s_name, (int)x->x_outports, row);
+    return;
+  }
+
+  if(!matrix_multilde_resize(x, row, col))
+    return;
 
   matcur = x->x_matcur;
   matend = x->x_matend;
@@ -236,6 +232,10 @@ static void matrix_multilde_matrix_set(t_matrix_multilde *x, int argc,
     x->x_remaining_ticks = x->x_retarget = 0;
   } else {
     x->x_retarget = 1;
+  }
+
+  if(restart_dsp) {
+     canvas_update_dsp();
   }
 }
 static void matrix_multilde_matrix(t_matrix_multilde *x, t_symbol *s,

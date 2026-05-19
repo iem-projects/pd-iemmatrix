@@ -464,6 +464,17 @@ void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
   return (void *)x;
 }
 
+static void mtx_convolver_addmethods(t_class*c) {
+  class_addmethod(c, (t_method)mtx_convolver_tilde_dsp,
+                  gensym("dsp"), A_CANT, 0);
+  class_addmethod(c, (t_method)mtx_convolver_tilde_array3,
+                  gensym("array3"), A_GIMME, 0);
+  class_addmethod(c, (t_method)mtx_convolver_tilde_array3,
+                  gensym("#array3"), A_GIMME, 0);
+  class_addmethod(c, (t_method)mtx_convolver_tilde_read,
+                  gensym("read"), A_SYMBOL, 0);
+}
+
 void mtx_convolver_tilde_setup(void) {
   mtx_convolver_tilde_class =
     class_new(gensym("mtx_convolver~"), (t_newmethod)mtx_convolver_tilde_new,
@@ -476,21 +487,8 @@ void mtx_convolver_tilde_setup(void) {
     CLASS_MULTICHANNEL, A_GIMME, 0);
   class_sethelpsymbol(mtx_convolver_tilde_mclass, gensym("mtx_convolver~"));
 
-  class_addmethod(mtx_convolver_tilde_class, (t_method)mtx_convolver_tilde_dsp,
-                  gensym("dsp"), A_CANT, 0);
-  class_addmethod(mtx_convolver_tilde_class, (t_method)mtx_convolver_tilde_array3,
-                  gensym("array3"), A_GIMME, 0);
-  class_addmethod(mtx_convolver_tilde_class, (t_method)mtx_convolver_tilde_array3,
-                  gensym("#array3"), A_GIMME, 0);
-
-  class_addmethod(mtx_convolver_tilde_mclass, (t_method)mtx_convolver_tilde_dsp,
-                  gensym("dsp"), A_CANT, 0);
-  class_addmethod(mtx_convolver_tilde_mclass, (t_method)mtx_convolver_tilde_array3,
-                  gensym("array3"), A_GIMME, 0);
-  class_addmethod(mtx_convolver_tilde_mclass, (t_method)mtx_convolver_tilde_read,
-                  gensym("read"), A_SYMBOL, 0);
-  class_addmethod(mtx_convolver_tilde_class, (t_method)mtx_convolver_tilde_read,
-                  gensym("read"), A_SYMBOL, 0);
+  mtx_convolver_addmethods(mtx_convolver_tilde_class);
+  mtx_convolver_addmethods(mtx_convolver_tilde_mclass);
 }
 void iemtx_convolver__setup(void)
 {

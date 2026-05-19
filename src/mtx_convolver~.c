@@ -123,7 +123,7 @@ static t_int *mtx_convolver_tilde_perform(t_int *w) {
     if (IEMCONVOLVE(wasCrossFadeRegistered) (x->conv))
       logpost(x, PD_DEBUG, "[%s] have to crossfade to a new IR",objname);
     _debug_logpost(x, PD_DEBUG, "[%s] L=%d, P=%d, ins=%d, outs=%d",objname,x->conv->blocksize,x->conv->num_partitions,x->conv->num_inputs,x->conv->num_outputs);
-    _debug_logpost(x, PD_DEBUG, "[%s] conv=%d, inbuf=%d, outpuf=%d",objname,x->conv,x->conv_input_buffer, x->conv_output_buffer);
+    _debug_logpost(x, PD_DEBUG, "[%s] conv=%p, inbuf=%p, outbuf=%p",objname,x->conv,x->conv_input_buffer, x->conv_output_buffer);
     IEMCONVOLVE(convProcess) (x->conv, x->conv_input_buffer, x->conv_output_buffer);
     for (unsigned int i = 0; i < available_outputs; i++) {
       t_float *out = x->conv_output_buffer[i];

@@ -398,10 +398,14 @@ static void mtx_convolver_tilde_read(t_mtx_convolver_tilde *x, t_symbol *filenam
   }
   ap=binbuf_getvec(bbuf);
   n =binbuf_getnatom(bbuf)-1;
-  if ((ap->a_type == A_SYMBOL) &&
-      (!strcmp(ap->a_w.w_symbol->s_name,"array3")
-       || !strcmp(ap->a_w.w_symbol->s_name,"#array3")) ) {
-    mtx_convolver_tilde_array3(x, gensym("array3"), n, ap+1);
+  if (ap->a_type == A_SYMBOL) {
+    if (!strcmp(ap->a_w.w_symbol->s_name,"array3")
+        || !strcmp(ap->a_w.w_symbol->s_name,"#array3")) {
+      mtx_convolver_tilde_array3(x, gensym("array3"), n, ap+1);
+    } else if (!strcmp(ap->a_w.w_symbol->s_name,"matrix")
+        || !strcmp(ap->a_w.w_symbol->s_name,"#matrix")) {
+      mtx_convolver_tilde_matrix(x, gensym("matrix"), n, ap+1);
+    }
   }
   binbuf_free(bbuf);
 }

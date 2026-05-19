@@ -371,6 +371,21 @@ static void mtx_convolver_tilde_array3(t_mtx_convolver_tilde *x, t_symbol *s, in
   }
 }
 
+static void mtx_convolver_tilde_matrix(t_mtx_convolver_tilde *x, t_symbol *s, int argc,
+                                       t_atom *argv) {
+  t_atom*ap;
+  if(iemmatrix_check(x, s, argc, argv, 0))return;
+
+  ap = (t_atom*)getbytes((argc + 1) * sizeof(t_atom));
+  SETFLOAT(ap + 0, atom_getfloat(argv+0));
+  SETFLOAT(ap + 1, atom_getfloat(argv+1));
+  SETFLOAT(ap + 2, 1);
+  memcpy(ap + 3, argv + 2, (argc-2) * sizeof(t_atom));
+  mtx_convolver_tilde_array3(x, s, argc+1, ap);
+  freebytes(ap, (argc + 1) * sizeof(t_atom));
+}
+
+
 static void mtx_convolver_tilde_read(t_mtx_convolver_tilde *x, t_symbol *filename)
 {
   const char *objname=x->x_objname->s_name;
@@ -474,6 +489,8 @@ static void mtx_convolver_addmethods(t_class*c) {
                   gensym("#array3"), A_GIMME, 0);
   class_addmethod(c, (t_method)mtx_convolver_tilde_read,
                   gensym("read"), A_SYMBOL, 0);
+  class_addmethod(c, (t_method)mtx_convolver_tilde_matrix,
+                  gensym("matrix"), A_GIMME, 0);
 }
 
 void mtx_convolver_tilde_setup(void) {

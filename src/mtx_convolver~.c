@@ -88,7 +88,7 @@ typedef struct _mtx_convolver_tilde {
   int set_ir_at_dsp_start; // retarded updated of input IR on dsp start
 } t_mtx_convolver_tilde;
 
-unsigned int ceildiv(unsigned int a, unsigned int b) {
+static unsigned int ceildiv(unsigned int a, unsigned int b) {
   if (b == 0)
     return 0;
   unsigned int c = a / b;
@@ -98,7 +98,7 @@ unsigned int ceildiv(unsigned int a, unsigned int b) {
 }
 
 
-t_int *mtx_convolver_tilde_perform(t_int *w) {
+static t_int *mtx_convolver_tilde_perform(t_int *w) {
   t_mtx_convolver_tilde *x = (t_mtx_convolver_tilde *)w[1];
   const char*objname=x->x_objname->s_name;
   unsigned int available_inputs = (x->h_num_ins < x->ins) ? x->h_num_ins : x->ins;
@@ -144,7 +144,7 @@ t_int *mtx_convolver_tilde_perform(t_int *w) {
   return (w + 2);
 }
 
-void mtx_convolver_init(t_mtx_convolver_tilde *x) {
+static void mtx_convolver_init(t_mtx_convolver_tilde *x) {
   if (x->conv)
     IEMCONVOLVE(freeConvolution) (x->conv);
   x->conv = 0;
@@ -154,7 +154,7 @@ void mtx_convolver_init(t_mtx_convolver_tilde *x) {
   }
 }
 
-int mtx_convolver_resize(t_mtx_convolver_tilde *x) {
+static int mtx_convolver_resize(t_mtx_convolver_tilde *x) {
   const char*objname=x->x_objname->s_name;
   if (x->conv) {
     unsigned int num_partitions = ceildiv(x->h_len,x->blocksize);
@@ -195,7 +195,7 @@ int mtx_convolver_resize(t_mtx_convolver_tilde *x) {
   return 1;
 }
 
-void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
+static void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
   unsigned int ins = x->ins;
   unsigned int outs = x->outs;
   const char*objname=x->x_objname->s_name;
@@ -270,7 +270,7 @@ void mtx_convolver_tilde_dsp(t_mtx_convolver_tilde *x, t_signal **sp) {
   dsp_add(mtx_convolver_tilde_perform, 1, x);
 }
 
-void mtx_convolver_tilde_free(t_mtx_convolver_tilde *x) {
+static void mtx_convolver_tilde_free(t_mtx_convolver_tilde *x) {
   if (x->inout_buffers)
     free(x->inout_buffers);
   if (x->h)
@@ -283,7 +283,8 @@ void mtx_convolver_tilde_free(t_mtx_convolver_tilde *x) {
     IEMCONVOLVE(free2DArray) (x->conv_output_buffer, x->h_num_outs);
 }
 
-int mtx_convolver_check(t_mtx_convolver_tilde*x, int argc, t_atom*argv, unsigned int tests) {
+static int mtx_convolver_check(t_mtx_convolver_tilde*x, int argc, t_atom*argv,
+                               unsigned int tests) {
   const char*objname=x->x_objname->s_name;
   int outputs=(argc>2)?atom_getfloat(argv+0):0;
   int inputs=(argc>2)?atom_getfloat(argv+1):0;
@@ -308,8 +309,8 @@ int mtx_convolver_check(t_mtx_convolver_tilde*x, int argc, t_atom*argv, unsigned
   return 0;
 }
 
-void mtx_convolver_tilde_array3(t_mtx_convolver_tilde *x, t_symbol *s, int argc,
-                                t_atom *argv) {
+static void mtx_convolver_tilde_array3(t_mtx_convolver_tilde *x, t_symbol *s, int argc,
+                                       t_atom *argv) {
   const char*objname=x->x_objname->s_name;
   unsigned int h_num_ins, h_num_outs, h_len;
   int resized_outs=0;
@@ -370,7 +371,7 @@ void mtx_convolver_tilde_array3(t_mtx_convolver_tilde *x, t_symbol *s, int argc,
   }
 }
 
-void mtx_convolver_tilde_read(t_mtx_convolver_tilde *x, t_symbol *filename)
+static void mtx_convolver_tilde_read(t_mtx_convolver_tilde *x, t_symbol *filename)
 {
   const char *objname=x->x_objname->s_name;
   t_binbuf *bbuf = binbuf_new();
@@ -390,7 +391,7 @@ void mtx_convolver_tilde_read(t_mtx_convolver_tilde *x, t_symbol *filename)
   binbuf_free(bbuf);
 }
 
-void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
+static void *mtx_convolver_tilde_new(t_symbol *s, int argc, t_atom *argv) {
   setmultiout_f setmultiout = (CLASS_MULTICHANNEL)?iemmatrix_getpdfun("signal_setmultiout"):0;
   t_mtx_convolver_tilde *x = 0;
   t_class *selected_class = mtx_convolver_tilde_class;
